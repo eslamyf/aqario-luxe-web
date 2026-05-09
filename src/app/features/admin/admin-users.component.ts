@@ -222,7 +222,9 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
       user.permissions = user.permissions.filter(p => p !== permission);
     }
     
-    this.adminService.updateUserPermissions(user._id, user.permissions).subscribe({
+    const permissionsToSend = Array.isArray(user.permissions) ? user.permissions : [];
+    
+    this.adminService.updateUserPermissions(user._id, permissionsToSend).subscribe({
       next: () => {
         this.notificationService.show('Permissions updated successfully', 'success');
       },
@@ -231,6 +233,33 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
         user.permissions = oldPermissions;
         // Revert the UI checkbox
         input.checked = !isChecked;
+      }
+    });
+  }
+  
+  onHardCancel(user: AdminUser, data: { reason: string; archiveListings: boolean }): void {
+    if (!user.activeSubscription) return;
+    
+    this.activeUserId = user._id;
+    
+    this.adminService.hardCancelSubscription(user.activeSubscription, {
+      reason: data.reason,
+      forceDeactivateListings: data.archiveListings
+    }).subscribe({
+      next: (res) => {
+        user.subscriptionStatus = 'none';
+        user.activeSubscription = null;
+        
+        let msg = `Subscription for ${user.name} has been revoked.`;
+        if (res.listingsArchived > 0) {
+          msg += ` ${res.listingsArchived} listings were archived.`;
+        }
+        
+        this.notificationService.show(msg, 'success');
+        this.activeUserId = null;
+      },
+      error: () => {
+        this.activeUserId = null;
       }
     });
   }

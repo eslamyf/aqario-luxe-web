@@ -51,10 +51,13 @@ export class PropertiesService {
 
   readonly properties$: Observable<Property[]> = this._filters$.pipe(
     switchMap((filters) => {
-      this._loading$.next(true);
-      this._error$.next(null);
+      // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+      setTimeout(() => {
+        this._loading$.next(true);
+        this._error$.next(null);
+      });
       return this.getProperties(filters).pipe(
-        finalize(() => this._loading$.next(false))
+        finalize(() => setTimeout(() => this._loading$.next(false)))
       );
     }),
     shareReplay(1)

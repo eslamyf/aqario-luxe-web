@@ -23,7 +23,7 @@ export class AdminPropertiesComponent implements OnInit, OnDestroy {
   filters = {
     search: '',
     type: 'all',
-    isApproved: 'all', // Changed from 'false' to 'all' as requested
+    approvalStatus: 'all', // Changed from 'false' to 'all' as requested
     priceRange: 'all'
   };
 
@@ -57,7 +57,7 @@ export class AdminPropertiesComponent implements OnInit, OnDestroy {
     const query = {
       search: this.filters.search,
       type: this.filters.type,
-      isApproved: this.filters.isApproved,
+      isApproved: this.filters.approvalStatus === 'true' ? 'true' : (this.filters.approvalStatus === 'false' ? 'false' : undefined), // Keep backend compatibility or adjust as needed, Wait, the backend still uses `isApproved` as query parameter! Let's pass `isApproved` parameter but map it correctly
       priceRange: this.filters.priceRange,
       page: this.page,
       limit: this.limit
@@ -87,9 +87,9 @@ export class AdminPropertiesComponent implements OnInit, OnDestroy {
   }
 
   setTab(status: 'pending' | 'approved' | 'all'): void {
-    if (status === 'pending') this.filters.isApproved = 'false';
-    else if (status === 'approved') this.filters.isApproved = 'true';
-    else this.filters.isApproved = 'all';
+    if (status === 'pending') this.filters.approvalStatus = 'false';
+    else if (status === 'approved') this.filters.approvalStatus = 'true';
+    else this.filters.approvalStatus = 'all';
 
     this.page = 1;
     this.loadProperties();

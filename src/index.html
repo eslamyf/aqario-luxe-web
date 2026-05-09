@@ -28,23 +28,22 @@
   <script>
     (function () {
       var KEY = 'luxe_theme';
+      var theme = 'light'; // Requirement: Default to Light Mode
       try {
         var stored = localStorage.getItem(KEY);
-        var theme;
         if (stored === 'light' || stored === 'dark') {
           theme = stored;
         } else if (
           window.matchMedia &&
-          window.matchMedia('(prefers-color-scheme: light)').matches
+          window.matchMedia('(prefers-color-scheme: dark)').matches
         ) {
-          theme = 'light';
-        } else {
-          theme = 'dark'; // safe default
+          // If no preference is set, we still default to light per user request, 
+          // but we could respect OS preference here if desired. 
+          // Keeping 'light' as the primary fallback.
         }
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {
-        // localStorage blocked (private browsing, security policy) — use dark default
-        document.documentElement.setAttribute('data-theme', 'dark');
+        document.documentElement.setAttribute('data-theme', 'light');
       }
     })();
   </script>

@@ -9,12 +9,14 @@ import { AdminUser } from '../../admin.service';
 export type UserRole = 'buyer' | 'owner' | 'agent' | 'admin';
 
 interface ConfirmationConfig {
-  type: 'ban' | 'role';
+  type: 'ban' | 'role' | 'hard-cancel';
   title: string;
   message: string;
   confirmLabel: string;
   danger: boolean;
   newRole?: UserRole;
+  reason?: string;
+  forceDeactivateListings?: boolean;
 }
 
 @Component({
@@ -61,6 +63,19 @@ interface ConfirmationConfig {
             {{ user.isBanned ? 'Unban User' : 'Ban User' }}
           </button>
         </div>
+
+        <div class="dropdown-divider" *ngIf="user.subscriptionStatus === 'active'"></div>
+
+        <div class="dropdown-section" *ngIf="user.subscriptionStatus === 'active'">
+          <p class="section-label">Subscription</p>
+          <button
+            class="dropdown-item hard-cancel-action"
+            [disabled]="loading"
+            (click)="requestHardCancel()">
+            <i class="fa-solid fa-radiation"></i>
+            Hard Cancel Sub
+          </button>
+        </div>
       </div>
     </div>
 
@@ -72,6 +87,21 @@ interface ConfirmationConfig {
         </div>
         <h3 class="modal-title">{{ confirmation.title }}</h3>
         <p class="modal-message">{{ confirmation.message }}</p>
+
+        <!-- Hard Cancel Specific Fields -->
+        <div class="modal-fields" *ngIf="confirmation.type === 'hard-cancel'">
+          <textarea
+            class="reason-input"
+            placeholder="Reason for revocation..."
+            [(ngModel)]="confirmation.reason"
+            rows="3">
+          </textarea>
+          
+          <label class="checkbox-field">
+            <input type="checkbox" [(ngModel)]="confirmation.forceDeactivateListings">
+            <span>Also archive all active listings</span>
+          </label>
+        </div>
 
         <div class="modal-actions">
           <button class="btn-cancel" (click)="cancelConfirmation()" [disabled]="loading">
@@ -308,6 +338,39 @@ interface ConfirmationConfig {
         &:hover:not(:disabled) { background: rgba(248,113,113,0.25); }
       }
     }
+
+    .modal-fields {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .reason-input {
+      width: 100%;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #fff;
+      padding: 12px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      resize: none;
+      &:focus { border-color: #f87171; outline: none; }
+    }
+
+    .checkbox-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      &:hover { color: #fff; }
+    }
+
+    .hard-cancel-action:hover:not(:disabled) {
+      background: rgba(248,113,113,0.1) !important;
+      color: #f87171 !important;
+    }
   `]
 })
 export class UserActionsComponent {
@@ -316,6 +379,7 @@ export class UserActionsComponent {
 
   @Output() roleChanged = new EventEmitter<UserRole>();
   @Output() banToggled  = new EventEmitter<void>();
+  @Output() hardCancel  = new EventEmitter<{ reason: string; archiveListings: boolean }>();
 
   private el = inject(ElementRef);
 
@@ -375,6 +439,19 @@ export class UserActionsComponent {
     };
   }
 
+  requestHardCancel() {
+    this.isOpen = false;
+    this.confirmation = {
+      type:         'hard-cancel',
+      title:        'Revoke Subscription',
+      message:      `This will immediately terminate ${this.user.name}'s subscription. They will lose access to pro features instantly.`,
+      confirmLabel: 'Confirm Revocation',
+      danger:       true,
+      reason:       '',
+      forceDeactivateListings: false,
+    };
+  }
+
   cancelConfirmation() {
     if (!this.loading) {
       this.confirmation = null;
@@ -388,6 +465,11 @@ export class UserActionsComponent {
       this.roleChanged.emit(this.confirmation.newRole);
     } else if (this.confirmation.type === 'ban') {
       this.banToggled.emit();
+    } else if (this.confirmation.type === 'hard-cancel') {
+      this.hardCancel.emit({
+        reason: this.confirmation.reason || 'Admin Revocation',
+        archiveListings: !!this.confirmation.forceDeactivateListings
+      });
     }
 
     this.confirmation = null;

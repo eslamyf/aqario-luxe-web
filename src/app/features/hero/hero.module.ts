@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { HeroComponent } from './hero.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { HomeSectionsComponent } from './home-sections/home-sections.component';
 
 const routes: Routes = [
   { path: '', component: HeroComponent },
@@ -14,11 +15,12 @@ const routes: Routes = [
   declarations: [
     HeroComponent,
     SearchBarComponent,
+    HomeSectionsComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes), // ✅ forChild — لا تغيرها لـ forRoot أبداً
+    RouterModule.forChild(routes),
   ],
 })
 export class HeroModule {}

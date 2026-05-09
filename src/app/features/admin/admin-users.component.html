@@ -105,7 +105,7 @@
                   <label class="permission-toggle" *ngFor="let p of permissionsConfig">
                     <input 
                       type="checkbox" 
-                      [checked]="user.permissions.includes(p)"
+                      [checked]="user.permissions?.includes(p)"
                       (change)="onPermissionToggle(user, p, $event)">
                     <span class="permission-label">{{ p.replace('_', ' ') }}</span>
                   </label>
@@ -140,7 +140,8 @@
               [user]="user"
               [loading]="activeUserId === user._id"
               (roleChanged)="onRoleChange_action(user, $event)"
-              (banToggled)="onBanToggle(user)">
+              (banToggled)="onBanToggle(user)"
+              (hardCancel)="onHardCancel(user, $event)">
             </app-user-actions>
           </td>
         </tr>

@@ -1,6 +1,5 @@
 <section class="upgrade-section">
   <div class="upgrade-container">
-
     <div class="upgrade-content reveal">
       <div class="section-eyebrow">Elite Network</div>
       <h1 class="section-title">List Your <em>Properties</em></h1>
@@ -35,24 +34,26 @@
 
     <div class="upgrade-form-wrapper reveal reveal-delay-1">
       <form [formGroup]="upgradeForm" (ngSubmit)="onSubmit()" class="luxe-form">
-        
         <div class="form-group-title">Professional Details</div>
-        
+
         <div class="form-row">
           <div class="auth-field">
             <label class="auth-label">Agency / Company Name</label>
             <input type="text" class="auth-input" [class.invalid]="isFieldInvalid('companyName')" formControlName="companyName" placeholder="Luxe Realty Co." />
+            <span class="auth-validation" *ngIf="isFieldInvalid('companyName')">Company name is required</span>
           </div>
 
           <div class="auth-field">
             <label class="auth-label">Phone Number</label>
             <input type="text" class="auth-input" [class.invalid]="isFieldInvalid('phone')" formControlName="phone" placeholder="+1 234 567 8900" />
+            <span class="auth-validation" *ngIf="isFieldInvalid('phone')">Enter a valid phone number</span>
           </div>
         </div>
 
         <div class="auth-field">
           <label class="auth-label">Short Bio / Agency Profile</label>
           <textarea class="auth-input" rows="3" [class.invalid]="isFieldInvalid('bio')" formControlName="bio" placeholder="Tell buyers about your expertise..."></textarea>
+          <span class="auth-validation" *ngIf="isFieldInvalid('bio')">Bio must be at least 20 characters</span>
         </div>
 
         <div class="form-group-title" style="margin-top: 30px;">Financial Details</div>
@@ -63,7 +64,7 @@
         </div>
 
         <div class="form-group-title" style="margin-top: 30px;">Verification Documents</div>
-        
+
         <div class="auth-field">
           <label class="auth-label">Government ID (Passport / National ID)</label>
           <div class="file-upload-box" [class.has-file]="selectedIdCard">
@@ -73,6 +74,7 @@
               <span *ngIf="selectedIdCard" class="file-success">✓ {{ selectedIdCard.name }}</span>
             </label>
           </div>
+          <span class="auth-validation" *ngIf="upgradeForm.touched && !selectedIdCard">Government ID is required</span>
         </div>
 
         <div class="auth-field">
@@ -84,15 +86,14 @@
               <span *ngIf="selectedLogo" class="file-success">✓ {{ selectedLogo.name }}</span>
             </label>
           </div>
+          <span class="auth-validation" *ngIf="upgradeForm.touched && !selectedLogo">Agency logo is required</span>
         </div>
 
         <button type="submit" class="auth-submit btn-primary" [disabled]="isLoading" style="margin-top: 40px; width: 100%;">
           <span *ngIf="!isLoading">SUBMIT APPLICATION</span>
           <span *ngIf="isLoading" class="auth-spinner"></span>
         </button>
-
       </form>
     </div>
-
   </div>
 </section>

@@ -48,6 +48,7 @@ export interface OwnerAgentDashboard {
     listingsUsed: number;
     listingsLimit: number;
     endDate: string;
+    paymentVerified: boolean;
   } | null;
   // ── KYC ──
   isVerified: boolean;
@@ -144,10 +145,41 @@ export class UserDashboardService {
     );
   }
 
-  cancelBooking(bookingId: string): Observable<any> {
-    return this.http.patch<ApiResponse<any>>(`${this.base}/bookings/${bookingId}/cancel`, {}).pipe(
+  cancelBooking(bookingId: string, reason?: string): Observable<any> {
+    return this.http.patch<ApiResponse<any>>(`${this.base}/bookings/${bookingId}/cancel`, { reason: reason || '' }).pipe(
       map((res) => res.data),
       catchError(this.handleError('Failed to cancel booking'))
+    );
+  }
+
+  // ── Owner: Incoming Booking Requests ─────────────────────────────────────
+  getOwnerBookings(page = 1, limit = 20): Observable<any> {
+    return this.http.get<ApiResponse<any>>(`${this.base}/bookings/owner-requests`, {
+      params: { page, limit }
+    }).pipe(
+      map((res) => res.data ?? res),
+      catchError(this.handleError('Failed to load owner booking requests'))
+    );
+  }
+
+  approveBooking(bookingId: string): Observable<any> {
+    return this.http.patch<ApiResponse<any>>(`${this.base}/bookings/${bookingId}/approve`, {}).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to approve booking'))
+    );
+  }
+
+  rejectBooking(bookingId: string, reason?: string): Observable<any> {
+    return this.http.patch<ApiResponse<any>>(`${this.base}/bookings/${bookingId}/reject`, { reason }).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to reject booking'))
+    );
+  }
+
+  getBookingDetails(bookingId: string): Observable<any> {
+    return this.http.get<ApiResponse<any>>(`${this.base}/bookings/${bookingId}`).pipe(
+      map((res) => res.data?.booking ?? res.data),
+      catchError(this.handleError('Failed to load booking details'))
     );
   }
 
@@ -164,9 +196,14 @@ export class UserDashboardService {
 
   // ── Upload property (owner/agent) ──────────────────────────────────────────
   createProperty(payload: FormData): Observable<any> {
-    return this.http.post<ApiResponse<any>>(`${this.base}/properties`, payload).pipe(
+    const key = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
+    return this.http.post<ApiResponse<any>>(`${this.base}/properties`, payload, {
+      headers: { 'Idempotency-Key': key }
+    }).pipe(
       map((res) => res.data),
-      catchError(this.handleError('Failed to create property'))
+      // Do NOT use handleError here — the component shows the specific backend error message.
+      // handleError would fire a generic toast AND the component would fire a specific one (double toast).
+      catchError((err) => throwError(() => err))
     );
   }
 
@@ -203,6 +240,14 @@ export class UserDashboardService {
     );
   }
 
+  // ── Subscription Checkout (gateway payment) ─────────────────────────────
+  subscriptionCheckout(plan: string, paymentMethod: 'paymob' | 'paypal'): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.base}/subscriptions/checkout`, { plan, paymentMethod }).pipe(
+      map((res) => res.data),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
   subscribe(plan: string): Observable<any> {
     return this.http.post<ApiResponse<any>>(`${this.base}/subscriptions/subscribe`, { plan }).pipe(
       map((res) => res.data),
@@ -214,6 +259,63 @@ export class UserDashboardService {
     return this.http.post<ApiResponse<any>>(`${this.base}/subscriptions/cancel`, {}).pipe(
       map((res) => res.data),
       catchError(this.handleError('Failed to cancel subscription'))
+    );
+  }
+
+  // ── Payment Checkout (for approved bookings) ─────────────────────────────
+  initiateBookingPayment(bookingId: string, paymentMethod: 'paymob' | 'paypal'): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.base}/payments/checkout`, {
+      bookingId,
+      paymentMethod,
+    }).pipe(
+      map((res) => res.data),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  getPaymentStatus(paymentId: string): Observable<any> {
+    return this.http.get<ApiResponse<any>>(`${this.base}/payments/${paymentId}/status`).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to get payment status'))
+    );
+  }
+
+  // ── Viewing Requests ──────────────────────────────────────────────────────
+  // Backend response shape: { status, results, data: { requests: [...] } }
+  getMyViewingRequests(): Observable<any[]> {
+    return this.http.get<any>(`${this.base}/viewing-requests/my`).pipe(
+      map((res) => res.data?.requests ?? res.data ?? []),
+      catchError(this.handleError('Failed to load viewing requests'))
+    );
+  }
+
+  getOwnerViewingRequests(): Observable<any[]> {
+    return this.http.get<any>(`${this.base}/viewing-requests/owner`).pipe(
+      map((res) => res.data?.requests ?? res.data ?? []),
+      catchError(this.handleError('Failed to load owner viewing requests'))
+    );
+  }
+
+  // PATCH /viewing-requests/:id/status  { status: 'approved' | 'rejected' }
+  approveViewingRequest(id: string): Observable<any> {
+    return this.http.patch<any>(`${this.base}/viewing-requests/${id}/status`, { status: 'approved' }).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to approve viewing request'))
+    );
+  }
+
+  rejectViewingRequest(id: string): Observable<any> {
+    return this.http.patch<any>(`${this.base}/viewing-requests/${id}/status`, { status: 'rejected' }).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to reject viewing request'))
+    );
+  }
+
+  // PATCH /viewing-requests/:id/cancel
+  cancelViewingRequest(id: string): Observable<any> {
+    return this.http.patch<any>(`${this.base}/viewing-requests/${id}/cancel`, {}).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to cancel viewing request'))
     );
   }
 

@@ -81,26 +81,189 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--mist);
-  // cursor: none — global styles.scss handles this
   border-bottom: 2px solid transparent;
-  margin-bottom: -1px;         // overlap the container border
+  margin-bottom: -1px;
   background: none;
   border-left: none;
   border-right: none;
   border-top: none;
   transition: color 0.3s var(--transition), border-color 0.3s var(--transition);
 
-  // Active state — Template line 1294
   &.active {
     color: var(--gold);
     border-bottom-color: var(--gold);
   }
 
-  // Hover state — Template line 1295
   &:hover {
     color: var(--white);
   }
 }
+
+// ── Search & Filter Bar ────────────────────────────────────────────────────────
+.properties-search-bar {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  margin-bottom: 40px;
+  
+  .search-inputs {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .input-group {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0 16px;
+      transition: border-color 0.3s ease;
+
+      &:focus-within {
+        border-color: var(--gold);
+      }
+
+      .input-icon {
+        font-size: 14px;
+        color: var(--gold);
+        margin-right: 12px;
+      }
+
+      input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--white);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        padding: 16px 0;
+        outline: none;
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.3);
+        }
+      }
+    }
+
+    .btn-toggle-filters {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover, &.active {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--obsidian);
+      border: none;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 16px 40px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .advanced-filters {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    
+    &.expanded {
+      max-height: 200px;
+      opacity: 1;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+
+      .filter-group {
+        flex: 1;
+        min-width: 150px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        label {
+          font-family: var(--font-mono);
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: var(--mist);
+        }
+
+        input, select {
+          background: rgba(0, 0, 0, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: var(--white);
+          font-family: var(--font-mono);
+          font-size: 12px;
+          padding: 12px 16px;
+          outline: none;
+          transition: border-color 0.3s ease;
+
+          &:focus {
+            border-color: var(--gold);
+          }
+
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+          }
+        }
+        
+        select {
+          appearance: none;
+          cursor: pointer;
+          option {
+            background: var(--obsidian);
+            color: var(--white);
+          }
+        }
+      }
+
+      .filter-actions {
+        padding-bottom: 2px; // Align with inputs
+        .btn-secondary {
+          padding: 12px 24px;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+
 
 // ── Properties grid — Template lines 413–416 ─────────────────────────────────
 // repeat(3, 1fr), gap: 2px — the 2px gap creates the panel-grid luxury look

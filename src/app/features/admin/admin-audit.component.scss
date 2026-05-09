@@ -247,13 +247,13 @@ $muted:      rgba(232,232,240,0.5);
   white-space: nowrap;
 
   $colors: (
-    emerald: (#064e3b, #34d399, rgba(52,211,153,0.15)),
-    rose:    (#4c0519, #fb7185, rgba(251,113,133,0.15)),
-    amber:   (#451a03, #fbbf24, rgba(251,191,36,0.15)),
-    sky:     (#0c4a6e, #38bdf8, rgba(56,189,248,0.15)),
-    violet:  (#2e1065, #a78bfa, rgba(167,139,250,0.15)),
-    orange:  (#431407, #fb923c, rgba(251,146,60,0.15)),
-    slate:   (#1e293b, #94a3b8, rgba(148,163,184,0.15)),
+    "emerald": (#064e3b, #34d399, rgba(52,211,153,0.15)),
+    "rose":    (#4c0519, #fb7185, rgba(251,113,133,0.15)),
+    "amber":   (#451a03, #fbbf24, rgba(251,191,36,0.15)),
+    "sky":     (#0c4a6e, #38bdf8, rgba(56,189,248,0.15)),
+    "violet":  (#2e1065, #a78bfa, rgba(167,139,250,0.15)),
+    "orange":  (#431407, #fb923c, rgba(251,146,60,0.15)),
+    "slate":   (#1e293b, #94a3b8, rgba(148,163,184,0.15)),
   );
 
   @each $name, $vals in $colors {

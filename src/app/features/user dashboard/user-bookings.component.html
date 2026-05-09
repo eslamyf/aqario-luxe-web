@@ -37,10 +37,11 @@
         <thead>
           <tr>
             <th>Property</th>
-            <th>Check-in</th>
-            <th>Check-out</th>
+            <th>Type</th>
+            <th>Dates</th>
             <th>Amount</th>
             <th>Status</th>
+            <th>Payment</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -54,23 +55,75 @@
                 <span>{{ propertyTitle(b) }}</span>
               </div>
             </td>
-            <td>{{ b.start_date | date:'mediumDate' }}</td>
-            <td>{{ b.end_date | date:'mediumDate' }}</td>
-            <td>{{ b.amount | currency:'EGP':'symbol':'1.0-0' }}</td>
+            <td>
+              <span class="booking-type-badge {{ b.bookingType }}">{{ b.bookingType === 'rent' ? 'Rent' : 'Sale' }}</span>
+            </td>
+            <td>
+              <div *ngIf="b.bookingType === 'rent'" class="dates-col">
+                <div>IN: {{ b.start_date | date:'dd MMM yy' }}</div>
+                <div>OUT: {{ b.end_date | date:'dd MMM yy' }}</div>
+              </div>
+              <div *ngIf="b.bookingType === 'sale'" class="dates-col">
+                <span class="muted">N/A</span>
+              </div>
+            </td>
+            <td>
+              <div class="amount-col">
+                <div class="base-price" [class.strike]="b.offerPrice">{{ b.amount | currency:'EGP':'symbol':'1.0-0' }}</div>
+                <div *ngIf="b.offerPrice" class="offer-price">{{ b.offerPrice | currency:'EGP':'symbol':'1.0-0' }} (Offer)</div>
+              </div>
+            </td>
             <td><span class="status-badge {{ b.status }}">{{ b.status | uppercase }}</span></td>
+            <td>
+              <span class="payment-badge {{ b.paymentStatus || 'not_initiated' }}">
+                {{ (b.paymentStatus || 'not_initiated') | uppercase }}
+              </span>
+            </td>
             <td>
               <div class="action-group">
                 <button
-                  class="action-btn danger"
-                  [disabled]="activeId === b._id || !canCancel(b)"
-                  (click)="cancel(b)">
-                  {{ activeId === b._id ? '...' : 'Cancel' }}
+                  class="action-btn success pay-btn"
+                  *ngIf="b.status === 'approved' && (!b.paymentStatus || b.paymentStatus === 'not_initiated' || b.paymentStatus === 'pending')"
+                  (click)="goToCheckout(b)">
+                  💳 Pay Now
                 </button>
+                <button
+                  class="action-btn danger"
+                  *ngIf="canCancel(b)"
+                  [disabled]="loadingMap[b._id]"
+                  (click)="openCancelDialog(b)">
+                  <span *ngIf="loadingMap[b._id]" class="spinner-xs"></span>
+                  {{ loadingMap[b._id] ? '...' : 'Cancel' }}
+                </button>
+                <span class="muted-text small-text" *ngIf="b.status === 'approved' && b.paymentStatus === 'paid'">
+                  To cancel, <a routerLink="/support">contact support</a>
+                </span>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Cancel Dialog -->
+  <div class="dialog-overlay" *ngIf="cancelDialogBooking" (click)="closeCancelDialog()">
+    <div class="dialog-box" (click)="$event.stopPropagation()">
+      <h3>Cancel Booking</h3>
+      <p>Are you sure you want to cancel this booking? Please provide a reason.</p>
+      <textarea
+        class="reject-reason-input"
+        placeholder="Reason for cancellation..."
+        [(ngModel)]="cancelReason"
+        rows="3">
+      </textarea>
+      <div class="dialog-actions">
+        <button class="btn-ghost" (click)="closeCancelDialog()">Close</button>
+        <button class="btn-danger" (click)="confirmCancel()" [disabled]="isCancelling || !cancelReason.trim()">
+          <span *ngIf="isCancelling" class="spinner-xs"></span>
+          Confirm Cancel
+        </button>
+      </div>
     </div>
   </div>
 </div>

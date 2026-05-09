@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UserDashboardService } from './user-dashboard.service';
+import { Router } from '@angular/router';
+import { UserDashboardService, OwnerAgentDashboard } from './user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
 
 @Component({
@@ -15,16 +16,22 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
   isLoading = false;
   showAddForm = false;
   isSubmitting = false;
-  selectedFile: File | null = null;
+
+  // ── Multi-Image Upload State ──
+  selectedFiles: File[] = [];
+  imagePreviews: string[] = [];
+
   form!: FormGroup;
 
   // ── Subscription State ──
   plans: any[] = [];
   activeSub: any = null;
   isSubscribed = false;
+  isPaymentPending = false;
   isAtLimit = false;
 
   private destroy$ = new Subject<void>();
+  private router = inject(Router);
 
   constructor(
     private userService: UserDashboardService,
@@ -41,16 +48,25 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void { this.destroy$.next(); this.destroy$.complete(); }
 
   loadSubscriptionContext(): void {
-    this.userService.dashboardData$
+    // We fetch fresh data to ensure we see the latest subscription state from DB
+    this.userService.getMe()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((dash: any) => {
-        if (dash) {
-          const ownerDash = dash as any;
+      .subscribe(res => {
+        const dash = res.dashboard;
+        if (dash && 'subscription' in dash) {
+          const ownerDash = dash as OwnerAgentDashboard;
           this.activeSub = ownerDash.subscription;
-          this.isSubscribed = !!this.activeSub;
+          this.isSubscribed = !!this.activeSub && this.activeSub.status === 'active' && this.activeSub.paymentVerified;
+          this.isPaymentPending = !!this.activeSub && !this.activeSub.paymentVerified;
           this.isAtLimit = this.activeSub && 
                           this.activeSub.listingsLimit !== -1 && 
                           this.activeSub.listingsUsed >= this.activeSub.listingsLimit;
+          
+          console.log('✅ Subscription context loaded:', {
+            isSubscribed: this.isSubscribed,
+            isPaymentPending: this.isPaymentPending,
+            plan: this.activeSub?.plan
+          });
         }
       });
 
@@ -61,15 +77,18 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
 
   buildForm(): void {
     this.form = this.fb.group({
-      title:       ['', [Validators.required, Validators.minLength(5)]],
+      title:       ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.minLength(20)]],
       price:       [null, [Validators.required, Validators.min(1)]],
       area:        [null],
       bedrooms:    [null],
       bathrooms:   [null],
       city:        ['', Validators.required],
+      district:    ['', Validators.required],
       address:     [''],
       type:        ['apartment', Validators.required],
+      listingType: ['sale', Validators.required],
+      currency:    ['USD'],
     });
   }
 
@@ -84,64 +103,119 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
   }
 
   onSubscribe(planId: string): void {
-    this.userService.subscribe(planId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.notif.show('Subscription activated!', 'success');
-          // Refresh everything
-          this.userService.getMe().subscribe();
-        }
-      });
+    this.router.navigate(['/subscribe'], { queryParams: { plan: planId } });
   }
 
-  onFileChange(event: Event): void {
+  resumePayment(): void {
+    if (this.activeSub?.plan) {
+      this.router.navigate(['/subscribe'], { queryParams: { plan: this.activeSub.plan } });
+    }
+  }
+
+  // ── Multi-image selection ──
+  onFilesChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.selectedFile = input.files?.[0] ?? null;
+    if (!input.files || input.files.length === 0) return;
+
+    const newFiles = Array.from(input.files);
+    const totalAfter = this.selectedFiles.length + newFiles.length;
+
+    if (totalAfter > 10) {
+      this.notif.show('You can upload a maximum of 10 images.', 'error');
+      return;
+    }
+
+    newFiles.forEach(file => {
+      if (!file.type.startsWith('image/')) {
+        this.notif.show(`"${file.name}" is not a valid image file.`, 'error');
+        return;
+      }
+      this.selectedFiles.push(file);
+
+      // Generate preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.imagePreviews.push(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Reset file input so same files can be re-added after removal
+    input.value = '';
+  }
+
+  removeImage(index: number): void {
+    this.selectedFiles.splice(index, 1);
+    this.imagePreviews.splice(index, 1);
+  }
+
+  resetForm(): void {
+    this.form.reset({ type: 'apartment', listingType: 'sale', currency: 'USD' });
+    this.selectedFiles = [];
+    this.imagePreviews = [];
+    this.showAddForm = false;
   }
 
   submitProperty(): void {
+    if (this.isSubmitting) return; // Guard: prevent programmatic double-submit bypassing button disabled state
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.notif.show('Please fill in all required fields.', 'error');
       return;
     }
+
     this.isSubmitting = true;
-
     const fd = new FormData();
-    const formValue = { ...this.form.value };
+    const v = this.form.value;
 
-    // Map flat form fields to Property model's nested location structure
-    if (formValue.city || formValue.address) {
-      fd.append('location[city]', formValue.city || '');
-      fd.append('location[street]', formValue.address || '');
-      delete formValue.city;
-      delete formValue.address;
-    }
+    // ── Required fields ──
+    fd.append('title', v.title);
+    fd.append('description', v.description);
+    fd.append('price', String(v.price));
+    fd.append('type', v.type);
+    fd.append('listingType', v.listingType);
+    fd.append('currency', v.currency || 'USD');
 
-    Object.entries(formValue).forEach(([k, v]) => {
-      if (v !== null && v !== '') fd.append(k, String(v));
-    });
-    if (this.selectedFile) fd.append('photo', this.selectedFile);
+    // ── Location (nested object → bracket notation) ──
+    fd.append('location[city]', v.city);
+    fd.append('location[district]', v.district);
+    if (v.address) fd.append('location[street]', v.address);
+
+    // ── Optional numeric fields ──
+    if (v.area != null && v.area !== '')     fd.append('area', String(v.area));
+    if (v.bedrooms != null && v.bedrooms !== '') fd.append('bedrooms', String(v.bedrooms));
+    if (v.bathrooms != null && v.bathrooms !== '') fd.append('bathrooms', String(v.bathrooms));
+
+    // ── Images (multiple) ──
+    this.selectedFiles.forEach(file => fd.append('images', file));
 
     this.userService.createProperty(fd)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.notif.show('Property submitted for review!', 'success');
+          this.notif.show('Property submitted for review! ✅', 'success');
           this.isSubmitting = false;
-          this.showAddForm = false;
-          this.form.reset({ type: 'apartment' });
-          this.selectedFile = null;
+          this.resetForm();
           this.load();
+          // Refresh dashboard data so usage counter updates immediately
+          this.userService.getMe().pipe(takeUntil(this.destroy$)).subscribe();
         },
-        error: () => { this.isSubmitting = false; },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('❌ Property Submission Error:', err);
+          
+          const errArr = err?.error?.errors;
+          const msg = (Array.isArray(errArr) && errArr.length > 0 ? errArr[0] : null)
+                   || err?.error?.message
+                   || err?.message
+                   || 'Failed to submit property. Check console for details.';
+          
+          this.notif.show(msg, 'error');
+        },
       });
   }
 
   getApproval(p: any): string {
-    if (p.approvalStatus) return p.approvalStatus;
-    if (p.isApproved === true) return 'approved';
-    if (p.isApproved === false) return 'rejected';
-    return 'pending';
+    return p.approvalStatus || 'pending';
   }
 }

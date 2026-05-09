@@ -3,6 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { FormBuilder } from '@angular/forms';
 
 import { PropertiesService } from '../../services/properties.service';
 import { FavoritesService } from '../../services/favorites.service';
@@ -37,6 +38,17 @@ export class PropertiesPageComponent implements OnInit {
 
   // UI state
   selectedProperty: Property | null = null;
+  isFilterExpanded = false;
+
+  // ── Filter Form ───────────────────────────────────────────────────────────
+  private fb = inject(FormBuilder);
+  filterForm = this.fb.group({
+    search:   [''],
+    city:     [''],
+    minPrice: [''],
+    maxPrice: [''],
+    bedrooms: ['']
+  });
 
   // ── Filter tabs — aligned with backend enum exactly ───────────────────────
   filterTabs = [
@@ -61,6 +73,15 @@ export class PropertiesPageComponent implements OnInit {
       )
       .subscribe((filters) => {
         this.currentPage = filters.page ?? 1;
+        // Patch form without triggering infinite loop
+        this.filterForm.patchValue({
+          search:   filters.search || '',
+          city:     filters.city || '',
+          minPrice: filters.minPrice ? filters.minPrice.toString() : '',
+          maxPrice: filters.maxPrice ? filters.maxPrice.toString() : '',
+          bedrooms: filters.bedrooms ? filters.bedrooms.toString() : '',
+        }, { emitEvent: false });
+        
         this.svc.setFilters(filters);
       });
 
@@ -69,7 +90,6 @@ export class PropertiesPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(meta => {
         if (meta) {
-          // Delay to avoid ExpressionChangedAfterItHasBeenCheckedError
           setTimeout(() => {
             this.totalPages   = meta.pages;
             this.totalResults = meta.total;
@@ -80,9 +100,13 @@ export class PropertiesPageComponent implements OnInit {
   }
 
   private mapToFilters(params: Params): PropertyFilters {
-    if (Object.keys(params).length === 0) return {};
+    // Always request up to 1000 properties to display them all on one page
+    const baseFilters: PropertyFilters = { limit: 1000 };
+    
+    if (Object.keys(params).length === 0) return baseFilters;
 
     return {
+      ...baseFilters,
       search:   params['search']   || undefined,
       city:     params['location'] || params['city'] || undefined,
       type:     params['type']     as PropertyType | undefined,
@@ -90,6 +114,7 @@ export class PropertiesPageComponent implements OnInit {
                 params['listingType'] === 'sale' ? 'for-sale' : undefined,
       minPrice: params['minPrice'] ? Number(params['minPrice']) : undefined,
       maxPrice: params['maxPrice'] ? Number(params['maxPrice']) : undefined,
+      bedrooms: params['bedrooms'] ? Number(params['bedrooms']) : undefined,
       page:     params['page']     ? Number(params['page'])     : 1,
       cursor:   params['cursor']   || undefined,
     };
@@ -105,8 +130,45 @@ export class PropertiesPageComponent implements OnInit {
   }
 
   onFilterChange(filter: string): void {
-    this.currentPage = 1;
-    this.svc.setFilter(filter);
+    const queryParams: any = { ...this.route.snapshot.queryParams, page: 1 };
+    
+    // Clear type and listingType to reset tab state properly
+    delete queryParams.type;
+    delete queryParams.listingType;
+
+    const statusMap: Record<string, string> = { 'for-sale': 'sale', 'for-rent': 'rent' };
+    const typeMap: Record<string, string> = {
+      apartment: 'apartment', villa: 'villa', house: 'house',
+      studio: 'studio', office: 'office', shop: 'shop',
+      land: 'land', commercial: 'commercial',
+    };
+
+    if (statusMap[filter]) queryParams.listingType = statusMap[filter];
+    else if (typeMap[filter]) queryParams.type = typeMap[filter];
+
+    this.router.navigate([], { queryParams });
+  }
+
+  applyFilters(): void {
+    const val = this.filterForm.value;
+    const queryParams: any = { ...this.route.snapshot.queryParams, page: 1 };
+
+    if (val.search)   queryParams.search = val.search;     else delete queryParams.search;
+    if (val.city)     queryParams.city = val.city;         else delete queryParams.city;
+    if (val.minPrice) queryParams.minPrice = val.minPrice; else delete queryParams.minPrice;
+    if (val.maxPrice) queryParams.maxPrice = val.maxPrice; else delete queryParams.maxPrice;
+    if (val.bedrooms) queryParams.bedrooms = val.bedrooms; else delete queryParams.bedrooms;
+
+    this.router.navigate([], { queryParams });
+  }
+
+  clearFilters(): void {
+    this.filterForm.reset();
+    this.router.navigate([]);
+  }
+
+  toggleFilterPanel(): void {
+    this.isFilterExpanded = !this.isFilterExpanded;
   }
 
   onFavoriteToggled(propertyId: string): void {
@@ -134,8 +196,7 @@ export class PropertiesPageComponent implements OnInit {
   }
 
   onViewAll(): void {
-    this.currentPage = 1;
-    this.svc.setFilters({});
+    this.clearFilters();
   }
 
   onModalClosed(): void {
@@ -144,9 +205,7 @@ export class PropertiesPageComponent implements OnInit {
 
   onPageChange(page: number): void {
     if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-    const currentFilters = this.svc.getCurrentFilters();
-    this.svc.setFilters({ ...currentFilters, page });
+    this.router.navigate([], { queryParams: { page }, queryParamsHandling: 'merge' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 

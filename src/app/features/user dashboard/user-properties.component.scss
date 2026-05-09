@@ -1,1 +1,112 @@
 @import './user-dashboard.component.scss';
+
+// ── Field validation errors ────────────────────────────────────────────────────
+.req {
+  color: #f87171;
+  margin-left: 2px;
+}
+
+.field-error {
+  font-size: 11px;
+  color: #f87171;
+  font-family: var(--font-mono);
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+// ── Image Upload Section ───────────────────────────────────────────────────────
+.image-upload-section {
+  label.upload-drop-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 2px dashed rgba(201, 169, 110, 0.3);
+    border-radius: 12px;
+    padding: 2rem 1rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: rgba(201, 169, 110, 0.03);
+    color: rgba(250, 250, 248, 0.5);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+
+    i { color: rgba(201, 169, 110, 0.5); }
+
+    &:hover {
+      border-color: rgba(201, 169, 110, 0.6);
+      background: rgba(201, 169, 110, 0.06);
+      color: var(--gold);
+
+      i { color: var(--gold); }
+    }
+  }
+}
+
+// ── Image Preview Grid ─────────────────────────────────────────────────────────
+.image-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.preview-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  aspect-ratio: 4/3;
+  background: var(--obsidian);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .remove-img-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    color: #f87171;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    padding: 0;
+
+    &:hover {
+      background: #f87171;
+      color: #fff;
+      border-color: #f87171;
+    }
+  }
+
+  .img-badge {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    padding: 2px 6px;
+    background: var(--gold);
+    color: var(--obsidian);
+    font-size: 9px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+}

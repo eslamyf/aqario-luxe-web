@@ -56,6 +56,29 @@ const routes: Routes = [
     pathMatch: 'full'
   },
 
+  // ── Payment Routes ────────────────────────────────────────────────────────
+  {
+    path: 'checkout/:bookingId',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/payments/checkout.component').then(m => m.CheckoutComponent)
+  },
+  {
+    path: 'payment/success',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/payments/payment-success.component').then(m => m.PaymentSuccessComponent)
+  },
+  {
+    path: 'payment/failed',
+    loadComponent: () => import('./features/payments/payment-failed.component').then(m => m.PaymentFailedComponent)
+  },
+
+  // ── Subscription Checkout Route ───────────────────────────────────────────
+  {
+    path: 'subscribe',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/subscriptions/subscription-checkout.component').then(m => m.SubscriptionCheckoutComponent)
+  },
+
   // مسار إعادة تعيين كلمة المرور
   {
     path: 'reset-password/:token',

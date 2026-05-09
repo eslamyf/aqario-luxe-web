@@ -6,7 +6,7 @@
 <section class="properties-section" #sectionRef>
 
   <!-- ── Section header ──────────────────────────────────────────────────── -->
-  <div class="properties-header reveal">
+  <div class="properties-header">
     <div>
       <div class="section-eyebrow">Curated Selection</div>
       <h2 class="section-title">Featured <em>Properties</em></h2>
@@ -19,7 +19,7 @@
   </div>
 
   <!-- ── Filter tabs ─────────────────────────────────────────────────────── -->
-  <div class="properties-tabs reveal">
+  <div class="properties-tabs">
     <button
       *ngFor="let tab of filterTabs"
       class="prop-tab"
@@ -30,13 +30,64 @@
     </button>
   </div>
 
+  <!-- ── Advanced Search & Filter Bar ──────────────────────────────────────── -->
+  <div class="properties-search-bar">
+    <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="search-form">
+      <div class="search-inputs">
+        <div class="input-group">
+          <span class="input-icon">🔍</span>
+          <input type="text" formControlName="search" placeholder="Search properties..." />
+        </div>
+        
+        <div class="input-group">
+          <span class="input-icon">📍</span>
+          <input type="text" formControlName="city" placeholder="City or location" />
+        </div>
+
+        <button type="button" class="btn-toggle-filters" (click)="toggleFilterPanel()" [class.active]="isFilterExpanded">
+          <span class="filter-icon">⚙️</span> Filters
+        </button>
+        
+        <button type="submit" class="btn-gold" data-cursor-hover>Search</button>
+      </div>
+
+      <!-- Expandable advanced filters -->
+      <div class="advanced-filters" [class.expanded]="isFilterExpanded">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label>Min Price ($)</label>
+            <input type="number" formControlName="minPrice" placeholder="Any" />
+          </div>
+          <div class="filter-group">
+            <label>Max Price ($)</label>
+            <input type="number" formControlName="maxPrice" placeholder="Any" />
+          </div>
+          <div class="filter-group">
+            <label>Bedrooms</label>
+            <select formControlName="bedrooms">
+              <option value="">Any</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+              <option value="4">4+</option>
+              <option value="5">5+</option>
+            </select>
+          </div>
+          <div class="filter-actions">
+            <button type="button" class="btn-secondary" (click)="clearFilters()">Clear All</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
   <!-- ── Loading state ───────────────────────────────────────────────────── -->
   <div *ngIf="isLoading$ | async" class="properties-loading">
     <div class="loading-bar"></div>
   </div>
 
   <!-- ── Error state ─────────────────────────────────────────────────────── -->
-  <div *ngIf="(error$ | async) as err" class="properties-error reveal">
+  <div *ngIf="(error$ | async) as err" class="properties-error">
     <div class="error-card">
       <span class="error-icon">⚠</span>
       <p class="error-message">{{ err }}</p>
@@ -59,7 +110,7 @@
     </div>
 
     <!-- Empty state -->
-    <div *ngIf="!(properties$ | async)?.length" class="properties-empty reveal">
+    <div *ngIf="!(properties$ | async)?.length" class="properties-empty">
       <p class="properties-empty-text">No properties match this filter.</p>
       <button class="btn-secondary" (click)="onViewAll()" data-cursor-hover>
         View All Properties
@@ -67,7 +118,7 @@
     </div>
 
     <!-- ── Pagination ─────────────────────────────────────────────────────── -->
-    <div *ngIf="totalPages > 1" class="properties-pagination reveal">
+    <div *ngIf="totalPages > 1" class="properties-pagination">
       <button
         class="pagination-btn"
         [disabled]="currentPage <= 1"
@@ -92,7 +143,7 @@
   </ng-container>
 
   <!-- ── View All button ─────────────────────────────────────────────────── -->
-  <div class="properties-footer reveal">
+  <div class="properties-footer">
     <button class="btn-secondary" (click)="onViewAll()" data-cursor-hover>
       View All Properties →
     </button>

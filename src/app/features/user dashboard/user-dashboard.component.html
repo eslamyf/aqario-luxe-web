@@ -58,9 +58,29 @@
         </ng-container>
       </a>
 
+      <!-- Owner Bookings -->
+      <a routerLink="owner-bookings" routerLinkActive="active" class="nav-item"
+         *ngIf="canListProperties(user)">
+        <i class="ph ph-bell-ringing"></i>
+        <span>Incoming Requests</span>
+      </a>
+
+      <!-- Owner: Viewing Requests Schedule -->
+      <a routerLink="owner-viewing-requests" routerLinkActive="active" class="nav-item"
+         *ngIf="canListProperties(user)">
+        <i class="ph ph-calendar-dots"></i>
+        <span>Viewing Schedule</span>
+      </a>
+
       <a routerLink="saved" routerLinkActive="active" class="nav-item" *ngIf="canViewSaved(user)">
         <i class="ph ph-heart"></i>
         Saved
+      </a>
+
+      <!-- Viewing Requests (Buyer) -->
+      <a routerLink="viewing-requests" routerLinkActive="active" class="nav-item">
+        <i class="ph ph-eye"></i>
+        Viewing Requests
       </a>
 
       <a routerLink="payments" routerLinkActive="active" class="nav-item">

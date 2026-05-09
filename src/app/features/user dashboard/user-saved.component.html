@@ -28,6 +28,12 @@
             <td>{{ propertyPrice(item) | currency:'USD':'symbol':'1.0-0' }}</td>
             <td>
               <div class="action-group">
+                <a
+                  class="action-btn view"
+                  [routerLink]="['/properties', propertyId(item)]"
+                  title="View Property">
+                  View
+                </a>
                 <button
                   class="action-btn danger"
                   [disabled]="activeId !== null"

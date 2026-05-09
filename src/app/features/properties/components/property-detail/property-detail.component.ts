@@ -36,7 +36,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   private kycService = inject(KycService);
   private loadingService = inject(LoadingService);
 
-  property$: Observable<Property | null> = of(null);
+  property: Property | null = null;
   reviews$: Observable<any[]> = of([]);
   isFavorited$: Observable<boolean> = of(false);
   kycStatus$: Observable<KYCStatusResponse | null> = of(null);
@@ -64,7 +64,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       );
     }
 
-    this.property$ = this.route.paramMap.pipe(
+    this.route.paramMap.pipe(
       takeUntil(this.destroy$),
       map(params => params.get('id')),
       tap(() => {
@@ -72,7 +72,10 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
         this.error = null;
       }),
       switchMap(id => {
-        if (!id) return of(null);
+        if (!id) {
+          this.isLoading = false;
+          return of(null);
+        }
         return this.propertiesService.getPropertyById(id).pipe(
           catchError(err => {
             this.error = 'Failed to load property details. Please try again later.';
@@ -80,14 +83,14 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
             return of(null);
           })
         );
-      }),
-      tap(property => {
-        if (property) {
-          this.isLoading = false;
-          this.loadAdditionalData(property._id);
-        }
       })
-    );
+    ).subscribe(property => {
+      this.property = property;
+      this.isLoading = false;
+      if (property) {
+        this.loadAdditionalData(property._id);
+      }
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,1 +1,73 @@
 @import './user-dashboard.component.scss';
+
+.table-wrap {
+  overflow-x: auto;
+  table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+    th, td { padding: 1rem; text-align: left; vertical-align: middle; }
+    th { color: #aaa; font-size: 0.8rem; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    td { border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff; font-size: 0.9rem; }
+  }
+}
+
+.property-cell {
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.property-thumb {
+  width: 48px; height: 36px; border-radius: 6px; object-fit: cover;
+}
+
+.booking-type-badge {
+  font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 4px;
+  &.rent { background: rgba(99,179,237,0.15); color: #63b3ed; }
+  &.sale { background: rgba(201,169,110,0.15); color: #c9a96e; }
+}
+
+.dates-col {
+  display: flex; flex-direction: column; font-size: 0.8rem; color: #ccc;
+  .muted { color: #666; font-style: italic; }
+}
+
+.amount-col {
+  display: flex; flex-direction: column;
+  .base-price { font-weight: 500; }
+  .base-price.strike { text-decoration: line-through; color: #aaa; font-size: 0.8rem; }
+  .offer-price { color: #4ade80; font-weight: 600; }
+}
+
+.status-badge {
+  font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px;
+  &.pending { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  &.approved { background: rgba(74,222,128,0.15); color: #4ade80; }
+  &.rejected { background: rgba(239,68,68,0.15); color: #ef4444; }
+  &.cancelled { background: rgba(156,163,175,0.15); color: #9ca3af; }
+  &.completed { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+}
+
+.payment-badge {
+  font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; display: inline-block;
+  &.not_initiated { background: rgba(156,163,175,0.1); color: #9ca3af; }
+  &.pending { background: rgba(251,191,36,0.1); color: #fbbf24; }
+  &.paid { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+  &.refunded { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+}
+
+.action-group {
+  display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
+}
+.action-btn {
+  padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; border: none; transition: all 0.2s;
+  &.danger { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  &.danger:hover:not(:disabled) { background: rgba(239,68,68,0.2); }
+  
+  &.success.pay-btn {
+    background: linear-gradient(135deg, #4ade80, #22c55e); color: #fff;
+    box-shadow: 0 2px 4px rgba(34,197,94,0.3);
+  }
+  &.success.pay-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(34,197,94,0.4); }
+  
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}

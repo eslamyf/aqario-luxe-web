@@ -53,4 +53,9 @@ export class UserSavedComponent implements OnInit, OnDestroy {
   propertyPrice(item: any): number {
     return item.property_id?.price ?? item.property?.price ?? item.price ?? 0;
   }
+
+  // Resolves the Mongo _id used for navigation to /properties/:id
+  propertyId(item: any): string {
+    return item.property_id?._id ?? item.property?._id ?? item.propertyId ?? item._id ?? '';
+  }
 }

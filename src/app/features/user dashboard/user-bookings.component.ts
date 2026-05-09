@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { UserDashboardService } from './user-dashboard.service';
 
 @Component({
@@ -12,9 +13,16 @@ export class UserBookingsComponent implements OnInit, OnDestroy {
   bookings: any[] = [];
   isLoading = true;
   hasError = false;
-  activeId: string | null = null;
+  loadingMap: Record<string, boolean> = {};
+
+  // For cancellation
+  cancelDialogBooking: any = null;
+  cancelReason = '';
+  isCancelling = false;
+
   filter = 'all';
   private destroy$ = new Subject<void>();
+  private router = inject(Router);
 
   constructor(private userService: UserDashboardService) {}
 
@@ -43,18 +51,41 @@ export class UserBookingsComponent implements OnInit, OnDestroy {
     return b.property?.title ?? b.property_id?.title ?? 'N/A';
   }
 
-  cancel(booking: any): void {
-    if (!booking?._id || this.activeId) return;
-    this.activeId = booking._id;
-    this.userService.cancelBooking(booking._id)
+  openCancelDialog(booking: any): void {
+    this.cancelDialogBooking = booking;
+    this.cancelReason = '';
+  }
+
+  closeCancelDialog(): void {
+    this.cancelDialogBooking = null;
+    this.cancelReason = '';
+  }
+
+  confirmCancel(): void {
+    if (!this.cancelDialogBooking) return;
+    const id = this.cancelDialogBooking._id;
+    this.isCancelling = true;
+
+    this.userService.cancelBooking(id, this.cancelReason)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => { this.activeId = null; this.load(); },
-        error: () => { this.activeId = null; },
+        next: () => {
+          // Instant sync
+          this.bookings = this.bookings.map(b => b._id === id ? { ...b, status: 'cancelled' } : b);
+          this.closeCancelDialog();
+          this.isCancelling = false;
+        },
+        error: () => { this.isCancelling = false; },
       });
   }
 
   canCancel(b: any): boolean {
-    return b.status !== 'cancelled' && b.status !== 'rejected';
+    return b.status !== 'cancelled' && b.status !== 'rejected' && b.status !== 'completed' && b.paymentStatus !== 'paid';
+  }
+
+  goToCheckout(booking: any): void {
+    if (booking && booking._id) {
+      this.router.navigate(['/checkout', booking._id]);
+    }
   }
 }

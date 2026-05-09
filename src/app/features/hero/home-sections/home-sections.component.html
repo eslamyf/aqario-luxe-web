@@ -1,0 +1,246 @@
+<!-- ============================================================
+     LUXE ESTATES — Home Sections
+     Layout inspired by Homyz template with Luxe Estates luxury design
+     Sections: Partners · Featured Properties · Value Props · Contact
+============================================================ -->
+
+<!-- ── SECTION 1: Partners / Trust Strip ─────────────────────────── -->
+<section class="partners-section home-reveal stagger-container">
+  <div class="section-container">
+    <p class="partners-label">TRUSTED BY THE WORLD'S LEADING FIRMS</p>
+    <div class="partners-grid">
+      <div class="partner-item stagger-item" *ngFor="let p of partners">
+        <span class="partner-abbr">{{ p.abbr }}</span>
+        <span class="partner-name">{{ p.name }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 2: Featured / Popular Properties ──────────────────── -->
+<section class="featured-section" id="properties">
+  <div class="section-container">
+
+    <!-- Header row -->
+    <div class="section-header home-reveal">
+      <div>
+        <div class="section-eyebrow">BEST CHOICES</div>
+        <h2 class="section-title">Popular <em>Residencies</em></h2>
+      </div>
+      <div class="section-nav">
+        <button class="nav-arrow" (click)="navigateToProperties()" id="btn-prev-props" aria-label="Previous">‹</button>
+        <button class="nav-arrow" (click)="navigateToProperties()" id="btn-next-props" aria-label="Next">›</button>
+      </div>
+    </div>
+
+    <!-- Loading skeleton -->
+    <div class="props-grid" *ngIf="isLoading">
+      <div class="prop-card prop-skeleton" *ngFor="let i of [1,2,3,4]"></div>
+    </div>
+
+    <!-- Error state -->
+    <div class="empty-state" *ngIf="!isLoading && hasError">
+      <p>Unable to load properties. Check your connection.</p>
+      <button class="btn-gold" (click)="retry()" id="btn-retry-props">Try Again</button>
+    </div>
+
+    <!-- Properties grid — real data from MongoDB Atlas -->
+    <div class="props-grid home-reveal stagger-container" *ngIf="!isLoading && !hasError && featuredProperties.length > 0">
+      <div
+        class="prop-card stagger-item"
+        *ngFor="let prop of featuredProperties"
+        (click)="navigateToProperty(prop._id)"
+        [id]="'prop-card-' + prop._id"
+      >
+        <!-- Image resolved from DB -->
+        <div class="prop-img-wrap">
+          <img
+            *ngIf="prop.primaryImage"
+            [src]="prop.primaryImage"
+            [alt]="prop.title"
+            class="prop-img"
+            loading="lazy"
+            (error)="prop.primaryImage = ''"
+          />
+          <div *ngIf="!prop.primaryImage" class="prop-img-placeholder">
+            <span class="placeholder-icon">🏠</span>
+          </div>
+          <div class="prop-tag" [class.rent]="prop.status === 'for-rent'">
+            {{ prop.status === 'for-rent' ? 'For Rent' : 'For Sale' }}
+          </div>
+        </div>
+
+        <!-- Info from DB -->
+        <div class="prop-info">
+          <div class="prop-price">{{ prop.formattedPrice }}</div>
+          <div class="prop-title">{{ prop.title }}</div>
+          <div class="prop-location">
+            <span class="loc-icon">📍</span>
+            {{ prop.city }}
+          </div>
+          <div class="prop-specs">
+            <span *ngIf="prop.bedrooms">🛏 {{ prop.bedrooms }} Bed</span>
+            <span *ngIf="prop.bathrooms">🚿 {{ prop.bathrooms }} Bath</span>
+            <span *ngIf="prop.area">📐 {{ prop.area }}m²</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="!isLoading && !hasError && featuredProperties.length === 0">
+      <p>No approved properties available right now.</p>
+      <button class="btn-gold" (click)="navigateToProperties()" id="btn-view-all-empty">Browse All</button>
+    </div>
+
+    <!-- View all CTA -->
+    <div class="view-all-wrap home-reveal" *ngIf="!isLoading && featuredProperties.length > 0">
+      <button class="btn-gold" (click)="navigateToProperties()" id="btn-view-all-props">
+        VIEW ALL PROPERTIES
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── SECTION 3: Value Proposition ──────────────────────────────── -->
+<section class="value-section">
+  <div class="section-container value-inner">
+
+    <!-- Left: Property Image -->
+    <div class="value-image home-reveal">
+      <div class="value-img-frame">
+        <div class="value-img-bg"></div>
+        <div class="value-img-card">
+          <div class="value-img-icon">🏛</div>
+          <div class="value-img-label">Architectural Excellence</div>
+          <div class="value-img-sub">World-class design & quality</div>
+        </div>
+      </div>
+      <!-- Floating badge -->
+      <div class="value-badge">
+        <span class="badge-number">45</span>
+        <span class="badge-text">Global Cities</span>
+      </div>
+    </div>
+
+    <!-- Right: Accordion -->
+    <div class="value-content home-reveal">
+      <div class="section-eyebrow">OUR VALUE</div>
+      <h2 class="section-title">Value We <em>Give to You</em></h2>
+      <p class="value-sub">
+        We are always ready to help by providing the best service.
+        We believe a good place to live can make your life better.
+      </p>
+
+      <div class="accordion">
+        <div
+          class="accordion-item"
+          *ngFor="let feat of valueFeatures; let i = index"
+          [class.open]="openAccordion === i"
+          [id]="'accordion-' + i"
+        >
+          <button
+            class="accordion-trigger"
+            (click)="toggleAccordion(i)"
+            [attr.aria-expanded]="openAccordion === i"
+          >
+            <span class="accordion-icon">{{ feat.icon }}</span>
+            <span class="accordion-title">{{ feat.title }}</span>
+            <span class="accordion-arrow">{{ openAccordion === i ? '−' : '+' }}</span>
+          </button>
+          <div class="accordion-body" [style.maxHeight]="openAccordion === i ? '200px' : '0'">
+            <p class="accordion-desc">{{ feat.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── SECTION 4: Contact / Get in Touch ─────────────────────────── -->
+<section class="contact-section">
+  <div class="section-container contact-inner">
+
+    <!-- Left: Options grid -->
+    <div class="contact-content home-reveal">
+      <div class="section-eyebrow">OUR CONTACT US</div>
+      <h2 class="section-title">Easy to <em>Contact Us</em></h2>
+      <p class="contact-sub">
+        We are always ready to help by providing the best service for you.
+        We believe a good place is where you call home.
+      </p>
+
+      <div class="contact-grid stagger-container">
+        <div
+          *ngFor="let opt of contactOptions; let i = index"
+          class="contact-card stagger-item"
+          [id]="'contact-' + i"
+        >
+          <span class="contact-icon" [ngSwitch]="opt.id">
+            <!-- Call Icon -->
+            <svg *ngSwitchCase="'call'" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <!-- Chat Icon -->
+            <svg *ngSwitchCase="'chat'" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <!-- Video Icon -->
+            <svg *ngSwitchCase="'video'" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+            <!-- Message Icon -->
+            <svg *ngSwitchCase="'message'" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </span>
+          <div class="contact-info">
+            <div class="contact-title">{{ opt.title }}</div>
+            <div class="contact-detail">{{ opt.detail }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Decorative visual -->
+    <div class="contact-image home-reveal">
+      <div class="contact-img-frame">
+        <div class="contact-img-inner">
+          <div class="contact-orb"></div>
+          <div class="contact-building-icon">🏙</div>
+          <div class="contact-stats-card">
+            <div class="cs-item">
+              <div class="cs-num">9,000+</div>
+              <div class="cs-label">Premium Properties</div>
+            </div>
+            <div class="cs-item">
+              <div class="cs-num">2,000+</div>
+              <div class="cs-label">Happy Clients</div>
+            </div>
+            <div class="cs-item">
+              <div class="cs-num">28+</div>
+              <div class="cs-label">Awards Won</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── SECTION 5: Newsletter CTA ─────────────────────────────────── -->
+<section class="cta-section home-reveal">
+  <div class="cta-inner">
+    <h2 class="cta-title">Get Started with <em>Luxe Estates</em></h2>
+    <p class="cta-sub">Subscribe to get first access to ultra-premium listings from us. Find your perfect home now.</p>
+    <button class="cta-btn" (click)="navigateToProperties()" id="btn-get-started">
+      GET STARTED
+    </button>
+  </div>
+</section>

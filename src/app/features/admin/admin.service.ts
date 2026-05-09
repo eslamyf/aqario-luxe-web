@@ -36,9 +36,11 @@ export interface AdminUser {
   isBanned: boolean;
   isVerified: boolean;
   kycStatus: 'not_submitted' | 'pending' | 'approved' | 'rejected';
-  permissions: string[];
+  permissions?: string[];
   createdAt: string;
   photo: string | null;
+  activeSubscription?: string | null;
+  subscriptionStatus?: string;
 }
 
 export type AuditAction =
@@ -396,5 +398,14 @@ export class AdminService {
     
     // Direct window open or hidden link for download
     window.open(`${this.base}/bookings/admin/export?${params.toString()}`, '_blank');
+  }
+
+  // ── Subscriptions Management ──────────────────────────────
+
+  hardCancelSubscription(subscriptionId: string, data: { reason: string; forceDeactivateListings: boolean }): Observable<any> {
+    return this.http.patch<ApiResponse<any>>(`${this.base}/subscriptions/admin/${subscriptionId}/hard-cancel`, data).pipe(
+      map(res => res.data),
+      catchError(this.handleError('Failed to hard cancel subscription'))
+    );
   }
 }

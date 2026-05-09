@@ -411,6 +411,32 @@ tbody tr:hover {
     color: #f87171;
   }
 
+  &.view {
+    background: rgba(201, 169, 110, 0.08);
+    border-color: rgba(201, 169, 110, 0.3);
+    color: #c9a96e;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+
+    &:hover {
+      background: rgba(201, 169, 110, 0.18);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+  }
+
+  &.success {
+    background: rgba(74, 222, 128, 0.12);
+    border-color: rgba(74, 222, 128, 0.4);
+    color: #4ade80;
+
+    &:hover:not(:disabled) {
+      background: rgba(74, 222, 128, 0.22);
+      border-color: #4ade80;
+    }
+  }
+
   &.primary {
     background: var(--gold);
     border-color: var(--gold);

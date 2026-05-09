@@ -11,14 +11,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./become-agent.component.scss']
 })
 export class BecomeAgentComponent implements OnInit {
-  
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
   upgradeForm!: FormGroup;
   isLoading = false;
+  submitError: string | null = null;
 
-  // ─── متغيرات لحفظ الملفات (الصور) قبل الرفع ───
   selectedIdCard: File | null = null;
   selectedLogo: File | null = null;
 
@@ -26,85 +25,97 @@ export class BecomeAgentComponent implements OnInit {
     this.buildForm();
   }
 
-  // ─── بناء الفورم وقواعد التحقق (Validators) ───
   private buildForm(): void {
     this.upgradeForm = this.fb.group({
       companyName: ['', Validators.required],
-      // رقم التليفون: أرقام فقط من 10 لـ 15 رقم
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]],
-      // رقم الحساب البنكي (IBAN): حروف وأرقام فقط 
-      iban: ['', [Validators.required, Validators.pattern('^[A-Z0-9]{15,34}$')]],
-      // نبذة تعريفية: على الأقل 30 حرف عشان يكون شكلها بروفيشنال
-      bio: ['', [Validators.required, Validators.minLength(30)]]
+      phone: ['', [Validators.required, Validators.pattern(/^(\+?[0-9][0-9\s-]{8,19})$/)]],
+      iban: ['', [Validators.required, Validators.pattern(/^[A-Z0-9\s]{15,40}$/i)]],
+      bio: ['', [Validators.required, Validators.minLength(20)]]
     });
   }
 
-  // ─── دالة التقاط الملفات لما اليوزر يختار صورة ───
-  onFileSelected(event: any, fileType: 'idCard' | 'logo'): void {
-    const file = event.target.files[0];
-    if (file) {
-      // التأكد إن الملف صورة
-      if (!file.type.match(/image\/*/)) {
-        this.showNotification('Please upload valid image files only.', 'error');
-        return;
-      }
-      
-      // حفظ الملف في المتغير المناسب
-      if (fileType === 'idCard') {
-        this.selectedIdCard = file;
-      } else {
-        this.selectedLogo = file;
-      }
+  onFileSelected(event: Event, fileType: 'idCard' | 'logo'): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.match(/image\/*/)) {
+      this.showNotification('Please upload valid image files only.', 'error');
+      input.value = '';
+      return;
+    }
+
+    if (fileType === 'idCard') {
+      this.selectedIdCard = file;
+    } else {
+      this.selectedLogo = file;
     }
   }
 
-  // ─── دالة الإرسال (Submit) ───
   onSubmit(): void {
-    // 1. لو الفورم ناقصة أو مفيش صور مرفوعة
+    this.submitError = null;
+
     if (this.upgradeForm.invalid || !this.selectedIdCard || !this.selectedLogo) {
       this.upgradeForm.markAllAsTouched();
-      this.showNotification('Please fill all required fields and upload documents.', 'error');
+      this.submitError = this.getSubmitErrorMessage();
+      this.showNotification(this.submitError, 'error');
       return;
     }
 
     this.isLoading = true;
 
-    // 2. استخدام FormData لدمج النصوص مع الصور (عشان نقدر نبعتها للباك إند)
     const formData = new FormData();
-    formData.append('companyName', this.upgradeForm.value.companyName);
-    formData.append('phone', this.upgradeForm.value.phone);
-    formData.append('iban', this.upgradeForm.value.iban);
-    formData.append('bio', this.upgradeForm.value.bio);
+    const companyName = String(this.upgradeForm.value.companyName ?? '').trim();
+    const phone = String(this.upgradeForm.value.phone ?? '').trim();
+    const iban = String(this.upgradeForm.value.iban ?? '').replace(/\s+/g, '').toUpperCase();
+    const bio = String(this.upgradeForm.value.bio ?? '').trim();
+
+    formData.append('companyName', companyName);
+    formData.append('phone', phone);
+    formData.append('iban', iban);
+    formData.append('bio', bio);
     formData.append('idCard', this.selectedIdCard);
     formData.append('logo', this.selectedLogo);
 
-    // 💡 هنا هنحاكي إرسال البيانات للباك إند (مؤقتاً لحد ما نربط الـ API)
     setTimeout(() => {
       this.isLoading = false;
       this.showNotification('Welcome to the Elite! Your account is now upgraded to agent.', 'success');
-      
-      // ✅ تحديث الجلسة في الـ LocalStorage برمجياً (السحر اللي اتكلمنا عليه)
-      // TODO: Task 3.3 — wire real HTTP call to PATCH /api/v1/users/upgrade-role
+
       const userData = localStorage.getItem('luxe_user');
       if (userData) {
         const parsedUser = JSON.parse(userData);
-        parsedUser.role = 'agent'; // ترقية الدور
+        parsedUser.role = 'agent';
         localStorage.setItem('luxe_user', JSON.stringify(parsedUser));
       }
 
-      // ✅ توجيه اليوزر لصفحة إضافة عقار جديد
-      // (تأكد إن الراوت ده موجود عندك، أو غيره لاسم لوحة التحكم بتاعتك)
       this.router.navigate(['/add-property']);
     }, 2000);
   }
 
-  // ─── دوال مساعدة للواجهة ───
   isFieldInvalid(field: string): boolean {
     const ctrl = this.upgradeForm.get(field);
     return !!(ctrl && ctrl.invalid && ctrl.touched);
   }
 
-  // ─── إشعار الـ Toast المطابق للـ Design System ───
+  private getSubmitErrorMessage(): string {
+    const missing: string[] = [];
+    const controls = this.upgradeForm.controls;
+
+    if (controls['companyName']?.invalid) missing.push('agency/company name');
+    if (controls['phone']?.invalid) missing.push('phone number');
+    if (controls['bio']?.invalid) missing.push('bio');
+    if (controls['iban']?.invalid) missing.push('IBAN');
+    if (!this.selectedIdCard) missing.push('government ID');
+    if (!this.selectedLogo) missing.push('agency logo');
+
+    return missing.length
+      ? `Please complete: ${missing.join(', ')}.`
+      : 'Please review the form and try again.';
+  }
+
   private showNotification(message: string, type: 'success' | 'error'): void {
     const el = document.createElement('div');
     const color = type === 'success' ? '#27AE60' : '#C0392B';
@@ -121,6 +132,10 @@ export class BecomeAgentComponent implements OnInit {
     `;
     el.innerHTML = `<div style="display: flex; align-items: center; gap: 12px;"><span style="color: ${color}; font-weight: bold; font-size: 16px;">${icon}</span><span>${message}</span></div>`;
     document.body.appendChild(el);
-    setTimeout(() => { if (document.body.contains(el)) el.remove(); }, 4000);
+    setTimeout(() => {
+      if (document.body.contains(el)) {
+        el.remove();
+      }
+    }, 4000);
   }
 }
