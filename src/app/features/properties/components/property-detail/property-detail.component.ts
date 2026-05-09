@@ -249,8 +249,12 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
     }
 
     if (kycStatus?.status !== 'approved') {
-      this.router.navigate(['/kyc']);
-      this.notificationService.show('Please verify your identity to book properties', 'error');
+      if (kycStatus?.status === 'pending') {
+        this.notificationService.show('Your identity verification is currently under review.', 'info');
+      } else {
+        this.router.navigate(['/kyc']);
+        this.notificationService.show('Please verify your identity to book properties', 'error');
+      }
       return;
     }
 

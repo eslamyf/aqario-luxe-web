@@ -28,4 +28,21 @@ export class BookingsService {
   cancelBooking(id: string): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/${id}/cancel`, {}, { withCredentials: true });
   }
+
+  // ── Owner / Agent Booking Methods ─────────────────────────────────────────
+
+  getOwnerBookings(page: number = 1, limit: number = 20): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/owner`, { 
+      params: { page: page.toString(), limit: limit.toString() },
+      withCredentials: true 
+    });
+  }
+
+  approveBooking(id: string): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/${id}/approve`, {}, { withCredentials: true });
+  }
+
+  rejectBooking(id: string, reason?: string): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/${id}/reject`, { reason }, { withCredentials: true });
+  }
 }

@@ -110,7 +110,7 @@
           <h3 class="card-title">Book This Property</h3>
           
           <ng-container *ngIf="(kycStatus$ | async) as kyc; else kycCheck">
-            <div *ngIf="kyc.status === 'approved'; else verifyIdentity">
+            <div *ngIf="kyc.status === 'approved' || kyc.status === 'pending'; else verifyIdentity">
               <form [formGroup]="bookingForm" (ngSubmit)="onBookProperty(property, kyc)">
                 <div class="form-group">
                   <label for="booking-start">Check-in</label>
@@ -128,10 +128,12 @@
                   </div>
                 </div>
 
-                <button type="submit" class="btn-gold full-width" [disabled]="bookingForm.invalid || isSubmittingBooking">
-                  <span *ngIf="!isSubmittingBooking">Request to Book</span>
+                <button type="submit" class="btn-gold full-width" [disabled]="bookingForm.invalid || isSubmittingBooking || kyc.status === 'pending'">
+                  <span *ngIf="kyc.status === 'pending'">Verification Pending</span>
+                  <span *ngIf="!isSubmittingBooking && kyc.status !== 'pending'">Request to Book</span>
                   <div *ngIf="isSubmittingBooking" class="spinner dark"></div>
                 </button>
+                <p *ngIf="kyc.status === 'pending'" class="error-text text-center mt-2" style="color: #fbbf24; margin-top: 10px;">Your identity verification is currently under review.</p>
               </form>
             </div>
             
