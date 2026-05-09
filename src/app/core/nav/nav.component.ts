@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { ThemeService } from '../services/theme.service';
+import { NotificationsApiService } from '../services/notifications-api.service';
 
 @Component({
   selector: 'app-nav',
@@ -10,7 +11,8 @@ import { ThemeService } from '../services/theme.service';
 })
 export class NavComponent {
   isScrolled = false;
-  showDropdown = false; // إسلام: حالة القائمة المنسدلة
+  showDropdown = false; // User dropdown
+  showNotifications = false; // Notifications dropdown
 
   get theme$() {
     return this.themeService.theme$;
@@ -20,7 +22,8 @@ export class NavComponent {
   constructor(
     public auth: AuthService,
     private router: Router,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    public notificationsApi: NotificationsApiService
   ) {}
 
   @HostListener('window:scroll', [])
@@ -28,15 +31,30 @@ export class NavComponent {
     this.isScrolled = window.scrollY > 50;
   }
 
-  // إسلام: دالة التبديل لإظهار/إخفاء القائمة المنسدلة
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
+    if (this.showDropdown) this.showNotifications = false;
+  }
+
+  toggleNotifications(): void {
+    this.showNotifications = !this.showNotifications;
+    if (this.showNotifications) this.showDropdown = false;
+  }
+
+  markAsRead(id: string): void {
+    this.notificationsApi.markAsRead(id).subscribe();
+  }
+
+  markAllAsRead(): void {
+    this.notificationsApi.markAllAsRead().subscribe();
+    this.showNotifications = false;
   }
 
   // إسلام: تسجيل الخروج وتصفير الحالة
   onLogout(): void {
     this.auth.logout();
     this.showDropdown = false;
+    this.showNotifications = false;
     this.router.navigate(['/']);
   }
 

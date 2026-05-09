@@ -8,6 +8,7 @@ import { PropertiesService } from '../../services/properties.service';
 import { FavoritesService } from '../../services/favorites.service';
 import { ReviewsService } from '../../services/reviews.service';
 import { PropertyActionsService, ViewingRequestPayload } from '../../services/property-actions.service';
+import { InquiryService } from '../../../../core/services/inquiry.service';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { Property } from '../../models/property.model';
@@ -29,6 +30,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   private favoritesService = inject(FavoritesService);
   private reviewsService = inject(ReviewsService);
   private propertyActionsService = inject(PropertyActionsService);
+  private inquiryService = inject(InquiryService);
   
   private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
@@ -219,7 +221,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
     this.isSubmittingInquiry = true;
     const message = this.inquiryForm.get('message')?.value;
 
-    this.propertyActionsService.makeInquiry(propertyId, message).subscribe({
+    this.inquiryService.makeInquiry(propertyId, message).subscribe({
       next: (success) => {
         this.isSubmittingInquiry = false;
         if (success) {

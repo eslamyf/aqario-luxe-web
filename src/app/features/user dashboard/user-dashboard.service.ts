@@ -242,7 +242,7 @@ export class UserDashboardService {
 
   // ── Subscription Checkout (gateway payment) ─────────────────────────────
   subscriptionCheckout(plan: string, paymentMethod: 'paymob' | 'paypal'): Observable<any> {
-    return this.http.post<ApiResponse<any>>(`${this.base}/subscriptions/checkout`, { plan, paymentMethod }).pipe(
+    return this.http.post<ApiResponse<any>>(`${this.base}/subscriptions/subscribe`, { plan, paymentMethod }).pipe(
       map((res) => res.data),
       catchError((err) => throwError(() => err))
     );
