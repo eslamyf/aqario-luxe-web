@@ -114,9 +114,10 @@ export class CheckoutComponent implements OnInit {
     // Defaulting to Paymob as requested
     this.paymentService.checkout(this.bookingId!, 'paymob').subscribe({
       next: (res) => {
-        if (res.data?.url) {
+        const url = res.data?.paymentUrl || res.data?.url;
+        if (url) {
           localStorage.setItem('lastCheckoutBookingId', this.bookingId!);
-          window.location.href = res.data.url;
+          window.location.href = url;
         } else {
           this.showError('Could not generate Paymob secure URL.');
         }

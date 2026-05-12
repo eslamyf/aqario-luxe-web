@@ -120,6 +120,14 @@ export class AuctionsComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
       this.socketService.onAuctionClosed(a._id).subscribe((payload: any) => {
+        const auction = this.auctions.find(item => item._id === a._id);
+        if (auction) {
+          auction.status = 'closed';
+          if (payload.finalBid) {
+            auction.currentBid = payload.finalBid;
+          }
+          this.cdr.detectChanges();
+        }
         this.notificationService.show(`Auction ${a.title} has closed!`, 'info');
       });
     });

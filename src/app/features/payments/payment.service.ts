@@ -7,11 +7,12 @@ interface CheckoutResponse {
   status: string;
   data: {
     paymentId: string;
-    url: string;
-    amount: number;
-    platformFee: number;
-    currency: string;
-    expiresAt: string;
+    paymentUrl?: string;
+    url?: string;
+    totalAmount?: number;
+    platformFee?: number;
+    currency?: string;
+    expiresAt?: string;
     existing?: boolean;
   };
 }
@@ -32,13 +33,24 @@ interface PaymentStatusResponse {
   };
 }
 
+export interface VerifyPaymentStatusResponse {
+  status: string;
+  data: {
+    paid: boolean;
+    paymentStatus: string;
+    verified: boolean;
+    transactionId: string | null;
+    provider: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PaymentService {
   private apiUrl = `${environment.apiUrl}/payments`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Create a checkout session.
@@ -48,7 +60,7 @@ export class PaymentService {
   checkout(bookingId: string, provider: 'stripe' | 'paymob' = 'stripe'): Observable<CheckoutResponse> {
     return this.http.post<CheckoutResponse>(`${this.apiUrl}/checkout`, {
       bookingId,
-      provider
+      paymentMethod: provider
     });
   }
 
@@ -57,5 +69,11 @@ export class PaymentService {
    */
   getPaymentStatus(paymentId: string): Observable<PaymentStatusResponse> {
     return this.http.get<PaymentStatusResponse>(`${this.apiUrl}/${paymentId}`);
+  }
+  /**
+   * Secure backend verification endpoint for the frontend success polling
+   */
+  verifyPaymentStatus(bookingId: string): Observable<VerifyPaymentStatusResponse> {
+    return this.http.get<VerifyPaymentStatusResponse>(`${this.apiUrl}/verify/${bookingId}`);
   }
 }

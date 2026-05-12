@@ -82,7 +82,19 @@ textarea,
   background: var(--brand-gold-dark);
   border-radius: 2px;
 }
+// ── Global skeleton shimmer — used by loading placeholders across the app
+.skeleton-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.16) 50%, transparent 100%);
+  transform: translateX(-120%);
+  animation: globalShimmer 1.5s ease-in-out infinite;
+}
 
+@keyframes globalShimmer {
+  to { transform: translateX(120%); }
+}
 // ── Cursor: none on interactive elements (desktop only) ──────
 @media (hover: hover) {
   a,

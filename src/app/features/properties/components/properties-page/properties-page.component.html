@@ -82,8 +82,16 @@
   </div>
 
   <!-- ── Loading state ───────────────────────────────────────────────────── -->
-  <div *ngIf="isLoading$ | async" class="properties-loading">
-    <div class="loading-bar"></div>
+  <div *ngIf="isLoading$ | async" class="properties-loading properties-skeleton-grid" aria-busy="true" aria-label="Loading properties">
+    <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6]">
+      <div class="skeleton-image shimmer"></div>
+      <div class="skeleton-copy">
+        <div class="skeleton-line title shimmer"></div>
+        <div class="skeleton-line short shimmer"></div>
+        <div class="skeleton-line shimmer"></div>
+        <div class="skeleton-line button shimmer"></div>
+      </div>
+    </div>
   </div>
 
   <!-- ── Error state ─────────────────────────────────────────────────────── -->

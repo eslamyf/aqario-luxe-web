@@ -130,7 +130,7 @@
 
                 <button type="submit" class="btn-gold full-width" [disabled]="bookingForm.invalid || isSubmittingBooking || kyc.status === 'pending'">
                   <span *ngIf="kyc.status === 'pending'">Verification Pending</span>
-                  <span *ngIf="!isSubmittingBooking && kyc.status !== 'pending'">Request to Book</span>
+                  <span *ngIf="!isSubmittingBooking && kyc.status !== 'pending'">Book Now</span>
                   <div *ngIf="isSubmittingBooking" class="spinner dark"></div>
                 </button>
                 <p *ngIf="kyc.status === 'pending'" class="error-text text-center mt-2" style="color: #fbbf24; margin-top: 10px;">Your identity verification is currently under review.</p>

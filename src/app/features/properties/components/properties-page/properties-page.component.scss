@@ -275,32 +275,82 @@
 
 // ── Loading state ─────────────────────────────────────────────────────────────
 .properties-loading {
-  padding: 80px 0;
-  display: flex;
-  justify-content: center;
+  padding: 40px 0 60px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.loading-bar {
-  width: 200px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.1);
+.properties-skeleton-grid {
+  align-items: stretch;
+}
+
+.skeleton-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+.skeleton-image {
+  width: 100%;
+  min-height: 220px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.skeleton-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset-inline-start: -100%;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    background: var(--gold);
-    animation: loaderFill 1.4s var(--transition) infinite;
-  }
 }
 
-@keyframes loaderFill {
-  to { inset-inline-start: 100%; }
+.skeleton-line.title {
+  width: 70%;
+  height: 18px;
+}
+
+.skeleton-line.short {
+  width: 40%;
+}
+
+.skeleton-line.button {
+  width: 55%;
+  height: 14px;
+  margin-top: 8px;
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  transform: translateX(-120%);
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(120%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 // ── Empty state ───────────────────────────────────────────────────────────────

@@ -19,6 +19,7 @@ export interface Auction {
     endsAt: Date;
     location?: string;
     image?: string;
+    status?: string;
 }
 
 @Injectable({

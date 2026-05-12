@@ -5,10 +5,11 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpErrorResponse,
-  HttpClient
+  HttpClient,
+  HttpBackend
 } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../environments/environment';
@@ -17,10 +18,17 @@ import { environment } from '../../../environments/environment';
 export class TokenRefreshInterceptor implements HttpInterceptor {
   private authService = inject(AuthService);
   private router = inject(Router);
-  private http = inject(HttpClient);
+  
+  // Use HttpBackend to bypass interceptors for the refresh request
+  private httpBackend = inject(HttpBackend);
+  private http: HttpClient;
 
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
+  constructor() {
+    this.http = new HttpClient(this.httpBackend);
+  }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
@@ -39,38 +47,53 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
   }
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log('[AuthInterceptor] Intercepted 401 error for:', request.url);
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
+      console.log('[AuthInterceptor] Starting token refresh process...');
 
+      // Call refresh token endpoint, ensuring cookies are sent
       return this.http.post<any>(`${environment.apiUrl}/auth/refresh-token`, {}, { withCredentials: true }).pipe(
         switchMap((res: any) => {
+          console.log('[AuthInterceptor] Refresh token response received:', res);
           this.isRefreshing = false;
           const token = res.token;
           
           if (token) {
+            console.log('[AuthInterceptor] Successfully obtained new token. Retrying original request...');
+            // Update token in storage
             localStorage.setItem('luxe_token', token);
-            // We use the same key as AuthService
-            this.refreshTokenSubject.next(token);
             
-            // Retry the original request with the new token
+            // Sync with AuthService user state
+            const currentUser = this.authService.getCurrentUser<any>();
+            if (currentUser) {
+              currentUser.token = token;
+              localStorage.setItem('luxe_user', JSON.stringify(currentUser));
+              this.authService.setCurrentUser(currentUser);
+            }
+
+            this.refreshTokenSubject.next(token);
             return next.handle(this.addToken(request, token));
           }
 
-          // If no token in response, logout
-          return this.logoutAndRedirect();
+          return this.logoutAndRedirect('No token returned');
         }),
         catchError((err) => {
           this.isRefreshing = false;
-          return this.logoutAndRedirect();
+          return this.logoutAndRedirect(err);
         })
       );
     } else {
+      console.log('[AuthInterceptor] Refresh in progress. Queueing request:', request.url);
       // Queue the request while refreshing
       return this.refreshTokenSubject.pipe(
         filter((token) => token !== null),
         take(1),
-        switchMap((token) => next.handle(this.addToken(request, token!)))
+        switchMap((token) => {
+          console.log('[AuthInterceptor] Queue released! Retrying queued request:', request.url);
+          return next.handle(this.addToken(request, token!));
+        })
       );
     }
   }
@@ -83,7 +106,8 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
     });
   }
 
-  private logoutAndRedirect(): Observable<never> {
+  private logoutAndRedirect(err: any): Observable<never> {
+    console.error('[Auth] Token refresh failed, logging out', err);
     this.authService.logout();
     this.router.navigate(['/']);
     return throwError(() => new Error('Session expired'));

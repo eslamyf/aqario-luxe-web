@@ -9,31 +9,42 @@ import { environment } from '../../../environments/environment';
 // ─────────────────────────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class SocketService {
-  // Use 'any' to avoid fighting socket.io-client's type exports across versions
   private socket: any = null;
+  private socketPromise: Promise<any> | null = null;
   private readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
 
   connect(token: string): void {
-    if (this.socket?.connected) return;
+    if (this.socket?.connected || this.socketPromise) return;
+    this.getSocket(token);
+  }
 
-    // Dynamic import avoids CommonJS/AMD optimization bailout warning
-    import('socket.io-client').then(({ io }) => {
-      this.socket = io(this.baseUrl, {
-        auth:            { token },
-        withCredentials: true,
-        transports:      ['websocket', 'polling'],
-      });
+  private getSocket(token?: string): Promise<any> {
+    if (this.socket) return Promise.resolve(this.socket);
+    
+    if (!this.socketPromise) {
+      this.socketPromise = import('socket.io-client').then(({ io }) => {
+        this.socket = io(this.baseUrl, {
+          auth:            { token: token || localStorage.getItem('luxe_token') },
+          withCredentials: true,
+          transports:      ['websocket', 'polling'],
+        });
 
-      this.socket.on('connect', () => {
-        console.log('[Socket] connected');
-      });
+        this.socket.on('connect', () => {
+          console.log('[Socket] connected');
+        });
 
-      this.socket.on('connect_error', (error: Error) => {
-        console.warn('[Socket] connection error:', error?.message ?? error);
+        this.socket.on('connect_error', (error: Error) => {
+          console.warn('[Socket] connection error:', error?.message ?? error);
+        });
+
+        return this.socket;
+      }).catch((err) => {
+        console.warn('[Socket] socket.io-client not available', err);
+        return null;
       });
-    }).catch(() => {
-      console.warn('[Socket] socket.io-client not available');
-    });
+    }
+    
+    return this.socketPromise;
   }
 
   disconnect(): void {
@@ -41,32 +52,73 @@ export class SocketService {
       this.socket.disconnect();
       this.socket = null;
     }
+    this.socketPromise = null;
   }
 
   joinAuction(auctionId: string): void {
-    this.socket?.emit('joinAuction', auctionId);
+    this.getSocket().then(socket => {
+      if (socket) socket.emit('joinAuction', auctionId);
+    });
   }
 
   leaveAuction(auctionId: string): void {
-    this.socket?.emit('leaveAuction', auctionId);
+    this.getSocket().then(socket => {
+      if (socket) socket.emit('leaveAuction', auctionId);
+    });
   }
 
   onNewBid(auctionId: string): Observable<any> {
-    if (!this.socket) return EMPTY;
-    return fromEvent(this.socket, 'newBid').pipe(
-      filter((data: any) => data?.auctionId === auctionId)
-    );
+    return new Observable(subscriber => {
+      let socketRef: any = null;
+      const handler = (data: any) => {
+        if (data?.auctionId === auctionId) subscriber.next(data);
+      };
+
+      this.getSocket().then(socket => {
+        if (!socket) return;
+        socketRef = socket;
+        socket.on('newBid', handler);
+      });
+
+      return () => {
+        if (socketRef) socketRef.off('newBid', handler);
+      };
+    });
   }
 
   onAuctionClosed(auctionId: string): Observable<any> {
-    if (!this.socket) return EMPTY;
-    return fromEvent(this.socket, 'auctionClosed').pipe(
-      filter((data: any) => data?.auctionId === auctionId)
-    );
+    return new Observable(subscriber => {
+      let socketRef: any = null;
+      const handler = (data: any) => {
+        if (data?.auctionId === auctionId) subscriber.next(data);
+      };
+
+      this.getSocket().then(socket => {
+        if (!socket) return;
+        socketRef = socket;
+        socket.on('auctionClosed', handler);
+      });
+
+      return () => {
+        if (socketRef) socketRef.off('auctionClosed', handler);
+      };
+    });
   }
 
   onNotification(): Observable<any> {
-    if (!this.socket) return EMPTY;
-    return fromEvent(this.socket, 'notification');
+    return new Observable(subscriber => {
+      let socketRef: any = null;
+      const handler = (data: any) => subscriber.next(data);
+
+      this.getSocket().then(socket => {
+        if (!socket) return;
+        socketRef = socket;
+        socket.on('notification', handler);
+      });
+
+      return () => {
+        if (socketRef) socketRef.off('notification', handler);
+      };
+    });
   }
 }

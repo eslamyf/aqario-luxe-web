@@ -281,11 +281,16 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
     };
 
     this.bookingsService.createBooking(req).subscribe({
-      next: () => {
+      next: (res) => {
         this.isSubmittingBooking = false;
         this.loadingService.hide();
-        this.notificationService.show('Booking request sent! Awaiting owner approval.', 'success');
+        this.notificationService.show('Booking confirmed! Redirecting to secure checkout...', 'success');
         this.bookingForm.reset();
+        
+        // Instant Booking Flow: Redirect to Checkout immediately
+        if (res?.data?.booking?._id) {
+          this.router.navigate(['/checkout', res.data.booking._id]);
+        }
       },
       error: (err) => {
         this.isSubmittingBooking = false;

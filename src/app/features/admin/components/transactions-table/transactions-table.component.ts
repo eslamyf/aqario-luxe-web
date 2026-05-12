@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { AdminService } from '../../admin.service';
 
 @Component({
   selector: 'app-transactions-table',
@@ -20,6 +21,7 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
               <th>DATE</th>
               <th>STATUS</th>
               <th>AMOUNT</th>
+              <th>ACTIONS</th>
             </tr>
           </thead>
           <tbody>
@@ -33,14 +35,24 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
               <td class="property-name">{{ txn.booking_id?.property_id?.title || 'Property #' + txn.booking_id?.property_id?.toString().slice(-4) }}</td>
               <td>{{ txn.createdAt | date:'mediumDate' }}</td>
               <td>
-                <span class="status-badge" [class.confirmed]="txn.status === 'paid'" [class.pending]="txn.status !== 'paid'">
-                  {{ txn.status === 'paid' ? 'CONFIRMED' : 'PENDING' }}
+                <span class="status-badge" [class.confirmed]="txn.status === 'completed'" [class.pending]="txn.status !== 'completed'" [class.refunded]="txn.status === 'refunded'">
+                  {{ getStatusLabel(txn.status) }}
                 </span>
               </td>
-              <td class="amount">{{ txn.amount | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td class="amount">{{ txn.totalAmount | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td>
+                <button 
+                  *ngIf="txn.status === 'completed' && !isProcessingRefund(txn._id)"
+                  class="refund-btn"
+                  (click)="initiateRefund(txn)"
+                  data-cursor-hover>
+                  REFUND
+                </button>
+                <span *ngIf="isProcessingRefund(txn._id)" class="processing">Processing...</span>
+              </td>
             </tr>
             <tr *ngIf="!transactions?.length">
-              <td colspan="5" class="empty-state">No recent transactions found.</td>
+              <td colspan="6" class="empty-state">No recent transactions found.</td>
             </tr>
           </tbody>
         </table>
@@ -144,9 +156,31 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
       background: rgba(201, 169, 110, 0.1);
       color: var(--gold);
     }
-    .amount {
-      font-weight: 600;
+    .status-badge.refunded {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    .refund-btn {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 6px 12px;
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+    .refund-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+    }
+    .processing {
+      font-family: var(--font-mono);
+      font-size: 10px;
       color: var(--gold);
+      letter-spacing: 1px;
     }
     .empty-state {
       text-align: center;
@@ -158,8 +192,43 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 export class TransactionsTableComponent {
   @Input() transactions: any[] = [];
 
+  private adminService = inject(AdminService);
+  private processingRefunds = new Set<string>();
+
   getInitials(name: string): string {
     if (!name) return '??';
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  }
+
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'completed': return 'CONFIRMED';
+      case 'refunded': return 'REFUNDED';
+      case 'pending': return 'PENDING';
+      case 'failed': return 'FAILED';
+      case 'expired': return 'EXPIRED';
+      default: return status.toUpperCase();
+    }
+  }
+
+  isProcessingRefund(paymentId: string): boolean {
+    return this.processingRefunds.has(paymentId);
+  }
+
+  initiateRefund(txn: any): void {
+    if (confirm(`Are you sure you want to refund $${txn.totalAmount} to ${txn.user_id?.name}?`)) {
+      this.processingRefunds.add(txn._id);
+      
+      this.adminService.refundPayment(txn._id, 'Admin initiated refund').subscribe({
+        next: () => {
+          // Update the transaction status locally
+          txn.status = 'refunded';
+          this.processingRefunds.delete(txn._id);
+        },
+        error: () => {
+          this.processingRefunds.delete(txn._id);
+        }
+      });
+    }
   }
 }

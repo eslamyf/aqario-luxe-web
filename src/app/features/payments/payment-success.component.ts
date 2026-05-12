@@ -139,7 +139,7 @@ export class PaymentSuccessComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.bookingId = params['bookingId'];
-      
+
       if (!this.bookingId) {
         this.bookingId = localStorage.getItem('lastCheckoutBookingId');
       }

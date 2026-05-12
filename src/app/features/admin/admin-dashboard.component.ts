@@ -48,4 +48,8 @@ export class AdminDashboardComponent implements OnInit {
   setPeriod(period: 'monthly' | 'yearly') {
     this.periodSubject.next(period);
   }
+
+  exportBookings() {
+    this.adminService.exportBookings();
+  }
 }

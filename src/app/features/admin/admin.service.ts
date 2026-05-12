@@ -400,6 +400,15 @@ export class AdminService {
     window.open(`${this.base}/bookings/admin/export?${params.toString()}`, '_blank');
   }
 
+  // ── Payment Management ───────────────────────────────────────
+
+  refundPayment(paymentId: string, reason: string): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.base}/payments/${paymentId}/refund`, { reason }).pipe(
+      map(res => res.data),
+      catchError(this.handleError('Failed to process refund'))
+    );
+  }
+
   // ── Subscriptions Management ──────────────────────────────
 
   hardCancelSubscription(subscriptionId: string, data: { reason: string; forceDeactivateListings: boolean }): Observable<any> {
