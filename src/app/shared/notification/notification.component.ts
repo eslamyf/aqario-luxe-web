@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
   NotificationService,
@@ -9,17 +9,22 @@ import {
   selector: 'app-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationComponent implements OnInit, OnDestroy {
   notifications: (Notification & { visible: boolean })[] = [];
   private subs = new Subscription();
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.subs.add(
       this.notificationService.notifications$.subscribe((n) => {
         this.notifications.push({ ...n, visible: true });
+        this.cdr.markForCheck();
       })
     );
 
@@ -28,9 +33,11 @@ export class NotificationComponent implements OnInit, OnDestroy {
         const item = this.notifications.find((n) => n.id === id);
         if (item) {
           item.visible = false;
+          this.cdr.markForCheck();
           // Remove from array after animation
           setTimeout(() => {
             this.notifications = this.notifications.filter((n) => n.id !== id);
+            this.cdr.markForCheck();
           }, 400);
         }
       })

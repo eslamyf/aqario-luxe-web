@@ -5,11 +5,6 @@ import { ModalEscapeService } from './core/services/modal-escape.service';
 import { ThemeService } from './core/services/theme.service';
 import { filter } from 'rxjs/operators';
 
-/**
- * Routes that must always display in dark mode regardless of user theme preference.
- * These are authenticated dashboard/account routes with intentionally dark professional UI.
- */
-const DARK_LOCKED_ROUTES = ['/account', '/dashboard'];
 
 @Component({
   selector: 'app-root',
@@ -21,7 +16,7 @@ const DARK_LOCKED_ROUTES = ['/account', '/dashboard'];
       
       <router-outlet></router-outlet>
       
-      <app-footer></app-footer>
+      <app-footer *ngIf="!isHideFooter"></app-footer>
       
       <app-notification></app-notification>
       <app-auth-modal></app-auth-modal>
@@ -40,6 +35,7 @@ const DARK_LOCKED_ROUTES = ['/account', '/dashboard'];
 export class AppComponent {
   title = 'luxe-estates';
   isAdminRoute = false;
+  isHideFooter = false;
 
   private auth = inject(AuthService);
   private modalEscapeService = inject(ModalEscapeService);
@@ -55,18 +51,15 @@ export class AppComponent {
       // Admin sidebar layout toggle
       this.isAdminRoute = url.includes('/admin');
 
-      // ── Route-Locked Dark Mode ──────────────────────────────────
-      // /account and /dashboard retain dark professional UI regardless
-      // of the global theme preference. We override data-theme on <html>
-      // without modifying the user's stored preference so it restores
-      // correctly when they navigate back to public pages.
-      const isDarkLocked = DARK_LOCKED_ROUTES.some(route => url.startsWith(route));
+      // Hide footer on dashboard, account, and admin pages
+      this.isHideFooter = url.includes('/dashboard') || 
+                         url.includes('/account') || 
+                         url.includes('/admin') ||
+                         url.includes('/profile');
 
-      if (isDarkLocked) {
-        this.themeService.lockRoute('dark');
-      } else {
-        this.themeService.unlockRoute();
-      }
+      // The previous Route-Locked Dark Mode has been removed at the user's request.
+      // Dashboard and account pages will now respect the global theme preference.
+      this.themeService.unlockRoute();
     });
   }
 

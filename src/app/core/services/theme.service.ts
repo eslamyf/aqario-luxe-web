@@ -7,7 +7,19 @@ export type ThemeMode = 'dark' | 'light';
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly THEME_KEY = 'luxe_theme';
-  private readonly _theme$ = new BehaviorSubject<ThemeMode>('light');
+
+  // Extract initialization to a static helper to use synchronously
+  private getInitialTheme(): ThemeMode {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const currentAttr = document.documentElement.getAttribute('data-theme') as ThemeMode;
+      const savedTheme = localStorage.getItem(this.THEME_KEY) as ThemeMode;
+      return currentAttr || savedTheme || 'light';
+    }
+    return 'light';
+  }
+
+  // Initialize synchronously to prevent FOUC
+  private readonly _theme$ = new BehaviorSubject<ThemeMode>(this.getInitialTheme());
   private _routeLock: ThemeMode | null = null;
 
   readonly theme$ = this._theme$.asObservable();

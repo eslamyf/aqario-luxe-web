@@ -68,7 +68,7 @@
       <!-- Logged-in: user profile + dropdown -->
       <ng-container *ngIf="auth.currentUser$ | async as user; else guestTemplate">
         <!-- Notification Bell -->
-        <div class="nav-bell-wrapper" (click)="toggleNotifications()" data-cursor-hover>
+        <div class="nav-bell-wrapper notifications-dropdown-container" (click)="toggleNotifications($event)" data-cursor-hover>
           <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -99,8 +99,8 @@
           </div>
         </div>
 
-        <div class="user-profile-wrapper">
-          <div class="user-info" (click)="toggleDropdown()" data-cursor-hover>
+        <div class="user-profile-wrapper user-dropdown-container">
+          <div class="user-info" (click)="toggleDropdown($event)" data-cursor-hover>
             <ng-container *ngIf="user.photo; else textAvatar">
               <img [src]="user.photo" alt="Avatar" class="user-avatar user-avatar-img">
             </ng-container>

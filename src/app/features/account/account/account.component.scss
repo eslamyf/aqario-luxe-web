@@ -1,13 +1,13 @@
-$gold:       #C9A96E;
-$mist:       rgba(255, 255, 255, 0.4);
-$obsidian:   #050505;
-$glass-border: rgba(255, 255, 255, 0.08);
+$gold:       var(--gold);
+$mist:       var(--mist);
+$obsidian:   var(--obsidian);
+$glass-border: color-mix(in srgb, var(--white) 8%, transparent);
 
 .account-section {
   background: $obsidian;
   min-height: 100vh;
   padding: 120px 24px 80px;
-  color: #fff;
+  color: var(--white);
   font-family: 'Inter', sans-serif;
 
   @media (max-width: 768px) { padding: 100px 16px 40px; }
@@ -56,7 +56,7 @@ $glass-border: rgba(255, 255, 255, 0.08);
 
     i { font-size: 1.1rem; transition: transform 0.2s; }
     
-    &:hover { background: rgba(255, 255, 255, 0.05); color: #fff; i { transform: translateX(3px); } }
+    &:hover { background: color-mix(in srgb, var(--white) 5%, transparent); color: var(--white); i { transform: translateX(3px); } }
     
     &.active {
       background: rgba(201, 169, 110, 0.08);
@@ -68,7 +68,7 @@ $glass-border: rgba(255, 255, 255, 0.08);
 }
 
 .content-area {
-  background: rgba(255, 255, 255, 0.02);
+  background: color-mix(in srgb, var(--white) 2%, transparent);
   border: 1px solid $glass-border;
   border-radius: 20px;
   padding: 2.5rem;

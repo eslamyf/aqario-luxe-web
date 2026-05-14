@@ -37,7 +37,6 @@ export class PropertiesPageComponent implements OnInit {
   totalResults = 0;
 
   // UI state
-  selectedProperty: Property | null = null;
   isFilterExpanded = false;
 
   // ── Filter Form ───────────────────────────────────────────────────────────
@@ -191,16 +190,8 @@ export class PropertiesPageComponent implements OnInit {
     });
   }
 
-  onViewDetails(property: Property): void {
-    this.selectedProperty = property;
-  }
-
   onViewAll(): void {
     this.clearFilters();
-  }
-
-  onModalClosed(): void {
-    this.selectedProperty = null;
   }
 
   onPageChange(page: number): void {

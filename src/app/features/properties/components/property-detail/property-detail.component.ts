@@ -245,6 +245,11 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (property.listingType === 'sale') {
+      this.notificationService.show('This property is for sale. Please use the inquiry form to contact the owner.', 'info');
+      return;
+    }
+
     if (this.authService.currentUser?.role !== 'buyer') {
       this.notificationService.show('Only buyers can book properties.', 'error');
       return;

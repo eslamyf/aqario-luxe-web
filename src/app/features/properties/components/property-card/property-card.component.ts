@@ -37,8 +37,6 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
   @Input() isFirst = false;
 
   // ── Outputs ────────────────────────────────────────────────────────────────
-  @Output() viewDetails      = new EventEmitter<Property>();
-  @Output() scheduleViewing  = new EventEmitter<Property>();
   @Output() favoriteToggled  = new EventEmitter<string>();
 
   // ── Local state ────────────────────────────────────────────────────────────
@@ -81,16 +79,6 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
   onFavoriteClick(event: MouseEvent): void {
     event.stopPropagation();
     this.favoriteToggled.emit(this.property._id);
-  }
-
-  onViewDetails(event: MouseEvent): void {
-    event.stopPropagation();
-    this.viewDetails.emit(this.property);
-  }
-
-  onScheduleViewing(event: MouseEvent): void {
-    event.stopPropagation();
-    this.scheduleViewing.emit(this.property);
   }
 
   onImageError(): void {

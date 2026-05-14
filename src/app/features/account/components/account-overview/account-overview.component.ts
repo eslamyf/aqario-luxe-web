@@ -80,8 +80,8 @@ export class AccountOverviewComponent implements OnInit {
       this.notificationService.show('Please select a valid image file', 'error');
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      this.notificationService.show('Image size must be less than 5MB', 'error');
+    if (file.size > 10 * 1024 * 1024) {
+      this.notificationService.show('Image size must be less than 10MB', 'error');
       return;
     }
 

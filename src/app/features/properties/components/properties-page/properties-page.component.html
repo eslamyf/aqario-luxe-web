@@ -112,7 +112,6 @@
         *ngFor="let prop of properties$ | async; let i = index; trackBy: trackById"
         [property]="prop"
         [isFirst]="i === 0"
-        (viewDetails)="onViewDetails($event)"
         (favoriteToggled)="onFavoriteToggled($event)">
       </app-property-card>
     </div>
@@ -158,10 +157,3 @@
   </div>
 
 </section>
-
-<!-- ── Property Modal ──────────────────────────────────────────────────────── -->
-<app-property-modal
-  *ngIf="selectedProperty"
-  [property]="selectedProperty"
-  (closed)="onModalClosed()">
-</app-property-modal>

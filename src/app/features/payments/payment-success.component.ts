@@ -55,11 +55,11 @@ import { UserDashboardService } from '../user dashboard/user-dashboard.service';
       align-items: center;
       min-height: 60vh;
       text-align: center;
-      color: #fff;
+      color: var(--text-main, #fff);
     }
     .status-box {
-      background: #111;
-      border: 1px solid #c9a96e;
+      background: var(--surface-color, #111);
+      border: 1px solid var(--primary, #c9a96e);
       padding: 3rem;
       border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -67,8 +67,8 @@ import { UserDashboardService } from '../user dashboard/user-dashboard.service';
       width: 100%;
     }
     .spinner {
-      border: 4px solid rgba(201, 169, 110, 0.3);
-      border-top: 4px solid #c9a96e;
+      border: 4px solid rgba(var(--primary-rgb, 201, 169, 110), 0.3);
+      border-top: 4px solid var(--primary, #c9a96e);
       border-radius: 50%;
       width: 50px;
       height: 50px;
@@ -90,22 +90,22 @@ import { UserDashboardService } from '../user dashboard/user-dashboard.service';
       font-size: 24px;
     }
     .icon-circle.success {
-      background: rgba(40, 167, 69, 0.2);
-      color: #28a745;
-      border: 1px solid #28a745;
+      background: rgba(var(--success-rgb, 40, 167, 69), 0.2);
+      color: var(--success, #28a745);
+      border: 1px solid var(--success, #28a745);
     }
     .icon-circle.error {
-      background: rgba(220, 53, 69, 0.2);
-      color: #dc3545;
-      border: 1px solid #dc3545;
+      background: rgba(var(--error-rgb, 220, 53, 69), 0.2);
+      color: var(--error, #dc3545);
+      border: 1px solid var(--error, #dc3545);
     }
     .icon-circle.delayed {
-      background: rgba(201, 169, 110, 0.2);
-      color: #c9a96e;
-      border: 1px solid #c9a96e;
+      background: rgba(var(--primary-rgb, 201, 169, 110), 0.2);
+      color: var(--primary, #c9a96e);
+      border: 1px solid var(--primary, #c9a96e);
     }
     h2 {
-      color: #c9a96e;
+      color: var(--primary, #c9a96e);
       margin-bottom: 0.5rem;
     }
     .action-btn {
@@ -116,13 +116,13 @@ import { UserDashboardService } from '../user dashboard/user-dashboard.service';
       cursor: pointer;
     }
     .action-btn.primary {
-      background: #c9a96e;
-      color: #000;
+      background: var(--primary, #c9a96e);
+      color: var(--bg-main, #000);
     }
     .action-btn.secondary {
       background: transparent;
-      color: #c9a96e;
-      border: 1px solid #c9a96e;
+      color: var(--primary, #c9a96e);
+      border: 1px solid var(--primary, #c9a96e);
     }
   `]
 })

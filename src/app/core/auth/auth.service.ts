@@ -73,6 +73,7 @@ export class AuthService {
         const user: User = JSON.parse(userJson);
         this._currentUser$.next(user);
         this._isAuthenticated$.next(true);
+        this.socketService.connect(token);
       } catch {
         this.clearStorage();
       }
@@ -189,6 +190,7 @@ export class AuthService {
 
     this._currentUser$.next(fullUser);
     this._isAuthenticated$.next(true); // Notify the team's observable
+    this.socketService.connect(token);
 
     return fullUser;
   }

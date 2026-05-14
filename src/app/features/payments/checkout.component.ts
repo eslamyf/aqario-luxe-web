@@ -32,8 +32,8 @@ import { PaymentService } from './payment.service';
       justify-content: center;
       align-items: center;
       min-height: 80vh;
-      background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
-      color: #fff;
+      background: radial-gradient(circle at center, var(--surface-color, #1a1a1a) 0%, var(--bg-main, #0a0a0a) 100%);
+      color: var(--text-main, #fff);
     }
     .loader-box {
       text-align: center;
@@ -46,8 +46,8 @@ import { PaymentService } from './payment.service';
       max-width: 500px;
     }
     .spinner {
-      border: 4px solid rgba(201, 169, 110, 0.1);
-      border-top: 4px solid #c9a96e;
+      border: 4px solid rgba(var(--primary-rgb, 201, 169, 110), 0.1);
+      border-top: 4px solid var(--primary, #c9a96e);
       border-radius: 50%;
       width: 70px;
       height: 70px;
@@ -55,22 +55,22 @@ import { PaymentService } from './payment.service';
       margin: 0 auto 2.5rem;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    h2 { color: #c9a96e; margin-bottom: 1rem; letter-spacing: 1px; }
-    p { color: #aaa; line-height: 1.6; margin-bottom: 2rem; }
+    h2 { color: var(--primary, #c9a96e); margin-bottom: 1rem; letter-spacing: 1px; }
+    p { color: var(--text-muted, #aaa); line-height: 1.6; margin-bottom: 2rem; }
     .security-badge {
       display: inline-block;
       padding: 0.5rem 1.5rem;
-      background: rgba(201, 169, 110, 0.1);
-      border: 1px solid rgba(201, 169, 110, 0.2);
+      background: rgba(var(--primary-rgb, 201, 169, 110), 0.1);
+      border: 1px solid rgba(var(--primary-rgb, 201, 169, 110), 0.2);
       border-radius: 50px;
       font-size: 0.8rem;
-      color: #c9a96e;
+      color: var(--primary, #c9a96e);
     }
     .error-box {
       text-align: center;
       padding: 4rem;
-      background: rgba(220, 53, 69, 0.05);
-      border: 1px solid #dc3545;
+      background: rgba(var(--error-rgb, 220, 53, 69), 0.05);
+      border: 1px solid var(--error, #dc3545);
       border-radius: 32px;
     }
     .icon-circle.error {
@@ -78,8 +78,8 @@ import { PaymentService } from './payment.service';
       margin-bottom: 2rem;
     }
     .action-btn {
-      background: #c9a96e;
-      color: #000;
+      background: var(--primary, #c9a96e);
+      color: var(--bg-main, #000);
       padding: 1rem 3rem;
       border: none;
       border-radius: 12px;

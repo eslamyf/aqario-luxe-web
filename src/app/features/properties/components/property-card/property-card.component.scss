@@ -68,6 +68,11 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: 32px;
+  transition: transform 0.4s var(--transition);
+
+  .property-card:hover & {
+    transform: translateY(-40px);
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -185,39 +190,43 @@
 // ─────────────────────────────────────────────────────────────────────────────
 .property-actions {
   position: absolute;
-  inset: 0;
+  bottom: 24px;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
   opacity: 0;
-  transition: opacity 0.4s var(--transition);
+  transform: translateY(20px);
+  transition: all 0.4s var(--transition-bounce);
+  z-index: 10;
+  pointer-events: none;
 
   .property-card:hover & {
     opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
   }
 }
 
 .property-action-btn {
-  padding: 12px 24px;
+  padding: 12px 32px;
   background: var(--brand-gold);
   color: var(--bg-base);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: 700;
   border: none;
+  border-radius: 50px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s var(--transition-bounce), background 0.3s var(--transition), color 0.3s var(--transition);
 
   &:hover {
     transform: scale(1.05);
-  }
-
-  &--outline {
-    background: transparent;
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
+    background: var(--white);
+    color: var(--obsidian);
   }
 }
 

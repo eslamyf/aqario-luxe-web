@@ -4,21 +4,21 @@
 /* ========================================================================== */
 
 // Design tokens (mirror project's CSS custom props)
-$gold: #C9A96E;
-$gold-light: #E8D5B0;
-$obsidian: #0A0A0F;
-$obsidian-2: #111118;
-$obsidian-3: #1A1A24;
-$obsidian-4: #22222E;
-$mist: #8A8AA0;
-$white: #FAFAF8;
-$red: #C0392B;
+$gold: var(--gold);
+$gold-light: var(--gold-light);
+$obsidian: var(--obsidian);
+$obsidian-2: var(--obsidian-2);
+$obsidian-3: var(--obsidian-3);
+$obsidian-4: var(--obsidian-4);
+$mist: var(--mist);
+$white: var(--white);
+$red: var(--crimson);
 
 // ─── Overlay ────────────────────────────────────────────────────────────────
 .auth-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: color-mix(in srgb, #000 75%, transparent);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   display: flex;
@@ -35,7 +35,7 @@ $red: #C0392B;
   width: 100%;
   max-width: 420px;
   background: $obsidian-2;
-  border: 1px solid rgba($gold, 0.3);
+  border: 1px solid color-mix(in srgb, $gold 30%, transparent);
   padding: 40px 36px;
   border-radius: 2px;
   min-height: 620px; // Stabilizes height during tab switching
@@ -89,7 +89,7 @@ $red: #C0392B;
 // ─── Tabs ────────────────────────────────────────────────────────────────────
 .auth-tabs {
   display: flex;
-  border-bottom: 1px solid rgba($gold, 0.2);
+  border-bottom: 1px solid color-mix(in srgb, $gold 20%, transparent);
   margin-bottom: 28px;
 }
 
@@ -136,7 +136,7 @@ $red: #C0392B;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba($gold, 0.4);
+    background: color-mix(in srgb, $gold 40%, transparent);
     border-radius: 10px;
 
     &:hover {
@@ -181,7 +181,7 @@ $red: #C0392B;
 
 .auth-input {
   background: $obsidian-3;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
   color: $white;
   padding: 12px 16px;
   font-size: 14px;
@@ -194,7 +194,7 @@ $red: #C0392B;
   // ★ Gold border on focus
   &:focus {
     border-color: $gold;
-    box-shadow: 0 0 0 2px rgba($gold, 0.15);
+    box-shadow: 0 0 0 2px color-mix(in srgb, $gold 15%, transparent);
   }
 
   &.invalid {
@@ -202,7 +202,7 @@ $red: #C0392B;
   }
 
   &::placeholder {
-    color: rgba($mist, 0.5);
+    color: color-mix(in srgb, $mist 50%, transparent);
   }
 }
 
@@ -231,8 +231,8 @@ $red: #C0392B;
 
 // ─── Error Banner ─────────────────────────────────────────────────────────────
 .auth-error {
-  background: rgba($red, 0.1);
-  border: 1px solid rgba($red, 0.3);
+  background: color-mix(in srgb, $red 10%, transparent);
+  border: 1px solid color-mix(in srgb, $red 30%, transparent);
   color: #e74c3c;
   font-size: 13px;
   padding: 10px 14px;
@@ -272,7 +272,7 @@ $red: #C0392B;
 
 .auth-google-btn {
   background: transparent;
-  border: 1px solid rgba($gold, 0.35);
+  border: 1px solid color-mix(in srgb, $gold 35%, transparent);
   color: $white;
   padding: 14px 18px;
   font-family: 'Space Mono', monospace;
@@ -293,7 +293,7 @@ $red: #C0392B;
 .auth-google-btn:hover:not(:disabled) {
   border-color: $gold;
   color: $gold;
-  background: rgba($gold, 0.08);
+  background: color-mix(in srgb, $gold 8%, transparent);
 }
 
 .auth-google-btn:disabled {
@@ -306,7 +306,7 @@ $red: #C0392B;
   display: inline-block;
   width: 18px;
   height: 18px;
-  border: 2px solid rgba($obsidian, 0.3);
+  border: 2px solid color-mix(in srgb, $obsidian 30%, transparent);
   border-top-color: $obsidian;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
@@ -396,8 +396,8 @@ $red: #C0392B;
   right: 20px !important;
   left: auto !important;
   transform: none !important;
-  background: rgba($obsidian-3, 0.98) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: color-mix(in srgb, $obsidian-3 98%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--white) 10%, transparent) !important;
   color: $white !important;
   padding: 16px 20px !important;
   font-family: 'DM Sans', sans-serif;
@@ -408,7 +408,7 @@ $red: #C0392B;
   align-items: center;
   justify-content: space-between;
   min-width: 320px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 30px color-mix(in srgb, #000 60%, transparent);
   animation: slideInRight 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
 
   .toast-close-btn {
@@ -460,7 +460,7 @@ $red: #C0392B;
   .bar {
     flex: 1;
     height: 4px;
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--white) 10%, transparent);
     border-radius: 2px;
     transition: background-color 0.3s ease;
 
@@ -514,7 +514,7 @@ $red: #C0392B;
   margin-top: 12px;
   background: transparent;
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.05); // Very subtle line to separate from meter
+  border-top: 1px solid color-mix(in srgb, var(--white) 5%, transparent); // Very subtle line to separate from meter
   padding-top: 8px;
 
   .accordion-header {
@@ -532,7 +532,7 @@ $red: #C0392B;
 
     &:hover {
       color: $gold-light;
-      background: rgba($obsidian-3, 0.8);
+      background: color-mix(in srgb, $obsidian-3 80%, transparent);
     }
 
     .arrow {
@@ -560,7 +560,7 @@ $red: #C0392B;
       margin: 0;
       padding: 0 12px 12px 28px;
       list-style-type: disc;
-      color: rgba($mist, 0.7);
+      color: color-mix(in srgb, $mist 70%, transparent);
       font-size: 11px;
 
       li {

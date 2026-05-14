@@ -29,11 +29,11 @@ import { ActivatedRoute, Router } from '@angular/router';
       align-items: center;
       min-height: 60vh;
       text-align: center;
-      color: #fff;
+      color: var(--text-main, #fff);
     }
     .error-box {
-      background: #111;
-      border: 1px solid #ff4d4f;
+      background: var(--surface-color, #111);
+      border: 1px solid var(--error, #ff4d4f);
       padding: 3rem;
       border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -49,12 +49,12 @@ import { ActivatedRoute, Router } from '@angular/router';
       justify-content: center;
       margin: 0 auto 1.5rem;
       font-size: 24px;
-      background: rgba(220, 53, 69, 0.2);
-      color: #dc3545;
-      border: 1px solid #dc3545;
+      background: rgba(var(--error-rgb, 220, 53, 69), 0.2);
+      color: var(--error, #dc3545);
+      border: 1px solid var(--error, #dc3545);
     }
     h2 {
-      color: #ff4d4f;
+      color: var(--error, #ff4d4f);
       margin-bottom: 0.5rem;
     }
     .action-group {
@@ -71,13 +71,13 @@ import { ActivatedRoute, Router } from '@angular/router';
       cursor: pointer;
     }
     .action-btn.primary {
-      background: #c9a96e;
-      color: #000;
+      background: var(--primary, #c9a96e);
+      color: var(--bg-main, #000);
     }
     .action-btn.secondary {
       background: transparent;
-      color: #c9a96e;
-      border: 1px solid #c9a96e;
+      color: var(--primary, #c9a96e);
+      border: 1px solid var(--primary, #c9a96e);
     }
   `]
 })

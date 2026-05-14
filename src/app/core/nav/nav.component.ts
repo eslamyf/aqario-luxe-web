@@ -31,12 +31,24 @@ export class NavComponent {
     this.isScrolled = window.scrollY > 50;
   }
 
-  toggleDropdown(): void {
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    // Close dropdowns if clicking outside
+    if (!target.closest('.user-dropdown-container') && !target.closest('.notifications-dropdown-container')) {
+      this.showDropdown = false;
+      this.showNotifications = false;
+    }
+  }
+
+  toggleDropdown(event: MouseEvent): void {
+    event.stopPropagation(); // Prevent document:click from closing it immediately
     this.showDropdown = !this.showDropdown;
     if (this.showDropdown) this.showNotifications = false;
   }
 
-  toggleNotifications(): void {
+  toggleNotifications(event: MouseEvent): void {
+    event.stopPropagation(); // Prevent document:click from closing it immediately
     this.showNotifications = !this.showNotifications;
     if (this.showNotifications) this.showDropdown = false;
   }

@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { map, switchMap, tap, shareReplay, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth/auth.service';
+import { SocketService } from './socket.service';
 
 export interface BackendNotification {
   _id: string;
@@ -33,6 +34,7 @@ export interface NotificationsResponse {
 export class NotificationsApiService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
+  private socketService = inject(SocketService);
   private readonly base = environment.apiUrl;
 
   private unreadCountSubject = new BehaviorSubject<number>(0);
@@ -49,6 +51,18 @@ export class NotificationsApiService {
       } else {
         this.unreadCountSubject.next(0);
         this.notificationsSubject.next([]);
+      }
+    });
+
+    // Listen for real-time notifications via Sockets
+    this.socketService.onNotification().subscribe((notif: BackendNotification) => {
+      if (notif) {
+        const current = this.notificationsSubject.value;
+        // Prepend to list if not already there
+        if (!current.find(n => n._id === notif._id)) {
+          this.notificationsSubject.next([notif, ...current]);
+          this.unreadCountSubject.next(this.unreadCountSubject.value + 1);
+        }
       }
     });
   }
