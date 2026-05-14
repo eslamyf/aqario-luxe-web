@@ -14,21 +14,16 @@ import { NotificationService } from '../../shared/services/notification.service'
 export class UserPropertiesComponent implements OnInit, OnDestroy {
   properties: any[] = [];
   isLoading = false;
-  showAddForm = false;
   isSubmitting = false;
+  currentView: 'table' | 'form' | 'success' = 'table';
+  lastCreatedProperty: any = null;
 
   // ── Multi-Image Upload State ──
   selectedFiles: File[] = [];
   imagePreviews: string[] = [];
+  isDragging = false;
 
   form!: FormGroup;
-
-  // ── Subscription State ──
-  plans: any[] = [];
-  activeSub: any = null;
-  isSubscribed = false;
-  isPaymentPending = false;
-  isAtLimit = false;
 
   private destroy$ = new Subject<void>();
   private router = inject(Router);
@@ -42,38 +37,11 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildForm();
     this.load();
-    this.loadSubscriptionContext();
   }
 
   ngOnDestroy(): void { this.destroy$.next(); this.destroy$.complete(); }
 
-  loadSubscriptionContext(): void {
-    // We fetch fresh data to ensure we see the latest subscription state from DB
-    this.userService.getMe()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(res => {
-        const dash = res.dashboard;
-        if (dash && 'subscription' in dash) {
-          const ownerDash = dash as OwnerAgentDashboard;
-          this.activeSub = ownerDash.subscription;
-          this.isSubscribed = !!this.activeSub && this.activeSub.status === 'active' && this.activeSub.paymentVerified;
-          this.isPaymentPending = !!this.activeSub && !this.activeSub.paymentVerified;
-          this.isAtLimit = this.activeSub && 
-                          this.activeSub.listingsLimit !== -1 && 
-                          this.activeSub.listingsUsed >= this.activeSub.listingsLimit;
-          
-          console.log('✅ Subscription context loaded:', {
-            isSubscribed: this.isSubscribed,
-            isPaymentPending: this.isPaymentPending,
-            plan: this.activeSub?.plan
-          });
-        }
-      });
 
-    this.userService.getPlans()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(plans => this.plans = plans);
-  }
 
   buildForm(): void {
     this.form = this.fb.group({
@@ -102,30 +70,42 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
       });
   }
 
-  onSubscribe(planId: string): void {
-    this.router.navigate(['/subscribe'], { queryParams: { plan: planId } });
-  }
 
-  resumePayment(): void {
-    if (this.activeSub?.plan) {
-      this.router.navigate(['/subscribe'], { queryParams: { plan: this.activeSub.plan } });
-    }
-  }
 
   // ── Multi-image selection ──
   onFilesChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
+    this.handleFiles(Array.from(input.files));
+    input.value = ''; // Reset
+  }
 
-    const newFiles = Array.from(input.files);
-    const totalAfter = this.selectedFiles.length + newFiles.length;
+  onFileDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+    if (!event.dataTransfer || event.dataTransfer.files.length === 0) return;
+    this.handleFiles(Array.from(event.dataTransfer.files));
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+  }
+
+  private handleFiles(files: File[]): void {
+    const totalAfter = this.selectedFiles.length + files.length;
 
     if (totalAfter > 10) {
       this.notif.show('You can upload a maximum of 10 images.', 'error');
       return;
     }
 
-    newFiles.forEach(file => {
+    files.forEach(file => {
       if (!file.type.startsWith('image/')) {
         this.notif.show(`"${file.name}" is not a valid image file.`, 'error');
         return;
@@ -139,9 +119,6 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
       };
       reader.readAsDataURL(file);
     });
-
-    // Reset file input so same files can be re-added after removal
-    input.value = '';
   }
 
   removeImage(index: number): void {
@@ -153,7 +130,21 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
     this.form.reset({ type: 'apartment', listingType: 'sale', currency: 'USD' });
     this.selectedFiles = [];
     this.imagePreviews = [];
-    this.showAddForm = false;
+    this.currentView = 'table';
+  }
+
+  onPromote(type: string, paymentMethod: string): void {
+    if (!this.lastCreatedProperty) return;
+    
+    this.userService.initiatePromotion(this.lastCreatedProperty._id, type, paymentMethod)
+      .subscribe({
+        next: (res: any) => {
+          if (res.data?.paymentUrl) {
+            window.location.href = res.data.paymentUrl;
+          }
+        },
+        error: (err: any) => this.notif.show('Promotion failed to initiate.', 'error')
+      });
   }
 
   submitProperty(): void {
@@ -192,13 +183,12 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
     this.userService.createProperty(fd)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (res: any) => {
           this.notif.show('Property submitted for review! ✅', 'success');
+          this.lastCreatedProperty = res.data;
           this.isSubmitting = false;
-          this.resetForm();
+          this.currentView = 'success';
           this.load();
-          // Refresh dashboard data so usage counter updates immediately
-          this.userService.getMe().pipe(takeUntil(this.destroy$)).subscribe();
         },
         error: (err) => {
           this.isSubmitting = false;

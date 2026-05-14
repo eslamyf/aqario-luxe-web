@@ -46,6 +46,27 @@
 
 // ── Logo ─────────────────────────────────────────────────────
 // Upgraded: SVG icon + LUXE (Cormorant serif) + · + ESTATES (thin DM Sans)
+.nav-logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-burger {
+  display: none;
+  @media (max-width: 992px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--brand-gold);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+  }
+}
+
 .nav-logo {
   display: inline-flex;
   align-items: center;
@@ -562,66 +583,155 @@
   background: var(--surface-glass);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
-  border-inline-end: none;
-  z-index: 999;
+  z-index: 1001; // Above everything
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
+  padding: 1.5rem;
   opacity: 0;
-  transform: translateY(-12px);
+  transform: translateX(100%);
   pointer-events: none;
-  transition:
-    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
 
   &.open {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
     pointer-events: auto;
+  }
+
+  .mobile-menu-user-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+    position: relative;
+
+    .user-avatar, .user-avatar-img {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--brand-gold);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border: 2px solid var(--brand-gold);
+    }
+
+    .user-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      .name { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-main); }
+      .role { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--brand-gold); }
+    }
+
+    .close-menu-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+  }
+
+  .nav-section-label {
+    display: block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    opacity: 0.6;
   }
 
   .mobile-nav-links {
     list-style: none;
     padding: 0;
     margin: 0;
-    text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 1rem;
+    margin-bottom: 3rem;
 
-    a {
+    li a {
       font-family: var(--font-display);
-      font-size: 28px;
+      font-size: 1.5rem;
       font-weight: 300;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--text-muted);     // Semantic — adapts to theme
+      letter-spacing: 1px;
       text-decoration: none;
-      transition: color 0.3s var(--transition);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: color 0.3s;
 
-      &:hover,
-      &.active {
-        color: var(--brand-gold);
-      }
+      i { font-size: 1.2rem; color: var(--brand-gold); opacity: 0.7; }
+      
+      &:active { color: var(--brand-gold); }
+    }
+
+    .admin-highlight {
+      color: var(--brand-gold) !important;
+      font-weight: 500;
     }
   }
 
   .mobile-nav-actions {
+    margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 280px;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
 
-    .btn-signin,
-    .btn-list,
+    .back-to-site-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--brand-gold);
+      text-decoration: none;
+      margin-bottom: 1rem;
+    }
+
     .btn-theme-toggle--mobile {
       width: 100%;
       text-align: center;
-      padding: 14px;
-      font-size: 11px;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+    }
+
+    .btn-logout-mobile {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(220, 38, 38, 0.1);
+      color: #ff4d4d;
+      border: 1px solid rgba(220, 38, 38, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-signin, .btn-list {
+      width: 100%;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 8px;
     }
   }
 }
@@ -630,7 +740,6 @@
 @media (max-width: 1024px) {
   .nav {
     padding: 16px 20px;
-
     &.scrolled { padding: 12px 20px; }
   }
 
@@ -638,10 +747,42 @@
   .btn-list {
     display: none;
   }
+}
 
-  .hamburger { display: flex; }
+@media (max-width: 768px) {
+  .user-name {
+    display: none; // Hide name on small screens for more space
+  }
+
+  .nav-actions {
+    gap: 8px; // Tighter gap
+  }
+
+  .nav-bell-wrapper {
+    padding: 6px; // Tighter padding
+  }
+
+  .hamburger {
+    display: flex;
+    padding: 10px; // Increase touch target (Total area around 44x44px)
+    margin-inline-start: 4px;
+    z-index: 1002;
+
+    .bar {
+      background: var(--brand-gold); // Clear gold contrast
+      width: 24px;
+      height: 2px;
+    }
+  }
+
+  .btn-signin {
+    padding: 8px 16px;
+    font-size: 9px;
+  }
 }
 
 @media (max-width: 480px) {
-  .btn-signin { display: none; } // Only hamburger on very small screens
+  .nav-logo {
+    .logo-word, .logo-dot { display: none; } // Ultra minimal logo
+  }
 }

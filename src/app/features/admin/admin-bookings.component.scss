@@ -48,7 +48,8 @@
 
 // ── Table Styling ─────────────────────────────────────────────
 .table-container { 
-  background: #111; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); overflow: hidden; position: relative;
+  background: #111; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); overflow-x: auto; position: relative;
+  width: 100%; -webkit-overflow-scrolling: touch;
   &.loading::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #C9A96E; animation: loading-bar 2s infinite; }
 }
 

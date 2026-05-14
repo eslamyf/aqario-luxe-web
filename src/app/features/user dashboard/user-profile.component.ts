@@ -80,6 +80,26 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       });
   }
 
+  onPhotoChange(event: any): void {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const fd = new FormData();
+    fd.append('photo', file);
+
+    this.isSavingProfile = true;
+    this.userService.updateMe(fd)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (user) => {
+          this.user = user;
+          this.notif.show('Profile photo updated', 'success');
+          this.isSavingProfile = false;
+        },
+        error: () => { this.isSavingProfile = false; }
+      });
+  }
+
   savePassword(): void {
     if (this.passwordForm.invalid) { this.passwordForm.markAllAsTouched(); return; }
     this.isSavingPassword = true;

@@ -26,6 +26,19 @@
   <div *ngIf="!property.images?.length || imageError" class="property-img-placeholder"></div>
 
   <!-- ── Badge — top left (Template line 445–457) ────────────────────────── -->
+  <!-- ── Promotion Badges ────────────────────────────────────────────── -->
+  <div class="promotion-badges">
+    <div class="promo-badge featured" *ngIf="property.promotion?.isFeatured">
+      <i class="ph ph-star-fill"></i> FEATURED
+    </div>
+    <div class="promo-badge boosted" *ngIf="property.promotion?.isBoosted && !property.promotion?.isFeatured">
+      <i class="ph ph-lightning-fill"></i> BOOSTED
+    </div>
+    <div class="promo-badge premium" *ngIf="property.promotion?.hasPremiumBadge" title="Premium Listing">
+      <i class="ph ph-seal-check-fill"></i>
+    </div>
+  </div>
+
   <div class="property-tag" [class.rent]="property.status === 'for-rent'">
     {{ tagLabel }}
   </div>

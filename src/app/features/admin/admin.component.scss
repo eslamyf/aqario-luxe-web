@@ -8,6 +8,8 @@
 
 .admin-sidebar {
   width: 280px;
+  min-width: 280px;
+  flex-shrink: 0;
   background: var(--obsidian-2);
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
@@ -17,6 +19,7 @@
   top: 80px; /* Stick below public navbar */
   height: calc(100vh - 80px);
   z-index: 10;
+  overflow-y: auto;
 }
 
 .sidebar-brand {
@@ -194,9 +197,64 @@
 }
 
 .admin-main {
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0;
   padding: 1.5rem;
   overflow-y: auto;
+}
+
+// ── Mobile Responsiveness ──────────────────────────────────────────────────────
+@media (max-width: 992px) {
+  .admin-layout {
+    flex-direction: column;
+    margin-top: 80px !important;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    left: -280px;
+    top: 80px;
+    height: calc(100vh - 80px);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 20px 0 40px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+
+    &.open {
+      left: 0;
+    }
+  }
+
+  .admin-main {
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .sidebar-overlay {
+    &.active {
+      display: block;
+      position: fixed;
+      inset: 0;
+      top: 80px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+    }
+  }
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+// ── Shared Table Primitives ──────────────────────────────────────────────
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.5rem;
+  
+  &::-webkit-scrollbar { height: 4px; }
+  &::-webkit-scrollbar-thumb { background: rgba(201, 169, 110, 0.2); border-radius: 4px; }
 }
 
 // ── Shared Admin Styles ─────────────────────────────────────────

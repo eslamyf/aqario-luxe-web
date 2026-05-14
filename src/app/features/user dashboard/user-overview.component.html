@@ -30,54 +30,7 @@
   <!-- ── Owner / Agent Dashboard ─────────────────────────────────── -->
   <ng-container *ngIf="!isLoading && isOwnerOrAgent && ownerDash">
     
-    <!-- Subscription Card -->
-    <div class="panel-card subscription-details" *ngIf="ownerDash.subscription">
-      <div class="sub-header">
-        <span class="plan-name">{{ ownerDash.subscription.plan }} Plan</span>
-        <span class="status-badge active" *ngIf="ownerDash.subscription.status === 'active'">Active</span>
-      </div>
 
-      <div class="sub-meta">
-        <div class="meta-item">
-          <span class="label">Renew Date</span>
-          <span class="value">{{ ownerDash.subscription.endDate | date:'mediumDate' }}</span>
-        </div>
-        <div class="meta-item">
-          <span class="label">Billing Cycle</span>
-          <span class="value">Monthly</span>
-        </div>
-      </div>
-
-      <div class="usage-bar-wrap" *ngIf="ownerDash.subscription.listingsLimit !== -1">
-        <div class="bar-info">
-          <span>Monthly Listings Used</span>
-          <span>{{ ownerDash.subscription.listingsUsed }} / {{ ownerDash.subscription.listingsLimit }}</span>
-        </div>
-        <div class="bar-bg">
-          <div class="bar-fill" 
-               [style.width.%]="getUsagePercent(ownerDash.subscription)"
-               [ngClass]="getUsageClass(ownerDash.subscription)"></div>
-        </div>
-      </div>
-      <div class="usage-bar-wrap" *ngIf="ownerDash.subscription.listingsLimit === -1">
-        <div class="bar-info">
-          <span>Monthly Listings Used</span>
-          <span>{{ ownerDash.subscription.listingsUsed }} / Unlimited</span>
-        </div>
-        <div class="bar-bg">
-          <div class="bar-fill" style="width: 10%"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- No Subscription Call-to-action -->
-    <div class="kyc-alert warning" *ngIf="!ownerDash.subscription">
-      <i class="ph ph-shield-warning"></i>
-      <div>
-        <strong>No active subscription.</strong> You need a plan to list properties.
-        <a routerLink="../properties" style="color: inherit; text-decoration: underline; margin-left: 8px;">View Plans →</a>
-      </div>
-    </div>
 
     <div class="stats-grid">
       <!-- Hosting Stats -->

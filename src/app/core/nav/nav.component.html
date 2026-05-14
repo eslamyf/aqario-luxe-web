@@ -146,14 +146,61 @@
        MOBILE MENU OVERLAY
        ══════════════════════════════════════════════════ -->
   <div class="mobile-menu" [class.open]="isMobileMenuOpen" role="dialog" aria-label="Navigation menu">
-    <ul class="mobile-nav-links" role="list">
-      <li><a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">Properties</a></li>
-      <li><a routerLink="/auctions"   routerLinkActive="active" (click)="closeMobileMenu()">Auctions</a></li>
-      <li><a routerLink="/" fragment="explore"                  (click)="closeMobileMenu()">Explore</a></li>
-      <li><a routerLink="/agents"     routerLinkActive="active" (click)="closeMobileMenu()">Agents</a></li>
-    </ul>
+    
+    <!-- 1. USER CONTEXT HEADER (Always at top if logged in) -->
+    <ng-container *ngIf="auth.currentUser$ | async as user">
+      <div class="mobile-menu-user-header">
+        <div class="user-avatar" *ngIf="!user.photo">{{ user.name[0] | uppercase }}</div>
+        <img class="user-avatar-img" *ngIf="user.photo" [src]="user.photo" [alt]="user.name" />
+        <div class="user-meta">
+          <span class="name">{{ user.name }}</span>
+          <span class="role">{{ user.role | titlecase }} Account</span>
+        </div>
+        <button class="close-menu-btn" (click)="closeMobileMenu()"><i class="ph ph-x"></i></button>
+      </div>
+    </ng-container>
+
+    <!-- 2. DYNAMIC CONTENT: DASHBOARD VS GLOBAL -->
+    <ng-container *ngIf="(dashboardUi.isDashboardRoute | async); else globalMobileNav">
+      <!-- DASHBOARD SPECIFIC LINKS -->
+      <div class="mobile-dashboard-links" *ngIf="auth.currentUser$ | async as user">
+        <span class="nav-section-label">Account Management</span>
+        <ul class="mobile-nav-links" role="list">
+          <li><a routerLink="/dashboard/overview" (click)="closeMobileMenu()"><i class="ph ph-squares-four"></i> Overview</a></li>
+          <li><a routerLink="/dashboard/bookings" (click)="closeMobileMenu()"><i class="ph ph-calendar-check"></i> My Bookings</a></li>
+          
+          <!-- Owner/Agent Links -->
+          <ng-container *ngIf="user.role === 'owner' || user.role === 'agent'">
+            <li><a routerLink="/dashboard/properties" (click)="closeMobileMenu()"><i class="ph ph-buildings"></i> My Properties</a></li>
+            <li><a routerLink="/dashboard/owner-bookings" (click)="closeMobileMenu()"><i class="ph ph-bell-ringing"></i> Requests</a></li>
+          </ng-container>
+
+          <li><a routerLink="/dashboard/saved" (click)="closeMobileMenu()"><i class="ph ph-heart"></i> Saved</a></li>
+          <li><a routerLink="/dashboard/payments" (click)="closeMobileMenu()"><i class="ph ph-credit-card"></i> Payments</a></li>
+          
+          <li *ngIf="user.role === 'admin'">
+            <a routerLink="/admin" class="admin-highlight" (click)="closeMobileMenu()"><i class="ph ph-shield-check"></i> Admin Center</a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+
+    <!-- GLOBAL LINKS TEMPLATE -->
+    <ng-template #globalMobileNav>
+      <ul class="mobile-nav-links" role="list">
+        <li><a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">Properties</a></li>
+        <li><a routerLink="/auctions"   routerLinkActive="active" (click)="closeMobileMenu()">Auctions</a></li>
+        <li><a routerLink="/" fragment="explore"                  (click)="closeMobileMenu()">Explore</a></li>
+        <li><a routerLink="/agents"     routerLinkActive="active" (click)="closeMobileMenu()">Agents</a></li>
+      </ul>
+    </ng-template>
 
     <div class="mobile-nav-actions">
+      <!-- Global links shortcut even if in dashboard -->
+      <a *ngIf="(dashboardUi.isDashboardRoute | async)" routerLink="/" class="back-to-site-link" (click)="closeMobileMenu()">
+        <i class="ph ph-arrow-left"></i> Back to Main Site
+      </a>
+
       <!-- Mobile theme toggle -->
       <button
         type="button"
@@ -165,8 +212,8 @@
 
       <!-- Logged-in on mobile -->
       <ng-container *ngIf="auth.currentUser$ | async as user">
-        <button class="btn-signin" (click)="onLogout(); closeMobileMenu()">
-          Sign Out ({{ user.name }})
+        <button class="btn-logout-mobile" (click)="onLogout(); closeMobileMenu()">
+          <i class="ph ph-sign-out"></i> Sign Out
         </button>
       </ng-container>
 
@@ -175,7 +222,7 @@
         <button class="btn-signin" (click)="openLogin(); closeMobileMenu()">Sign In</button>
       </ng-container>
 
-      <button class="btn-list" (click)="onListPropertyClick(); closeMobileMenu()">
+      <button *ngIf="!(dashboardUi.isDashboardRoute | async)" class="btn-list" (click)="onListPropertyClick(); closeMobileMenu()">
         List Property
       </button>
     </div>

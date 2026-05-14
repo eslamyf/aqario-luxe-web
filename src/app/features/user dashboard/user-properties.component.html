@@ -1,82 +1,74 @@
-<div>
+<div class="user-properties-container">
+  
   <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem">
     <div>
-      <div class="section-eyebrow">Host Panel</div>
+      <div class="section-eyebrow">Inventory</div>
       <h1>My Properties</h1>
-      <p>Manage your listings and submit new properties for review.</p>
+      <p>Manage your listings and track their visibility performance.</p>
     </div>
-    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem">
-      <button class="action-btn primary"
-              (click)="showAddForm = !showAddForm"
-              [disabled]="!isSubscribed || isAtLimit">
-        <i class="ph" [ngClass]="showAddForm ? 'ph-x' : 'ph-plus'"></i>
-        {{ showAddForm ? 'Cancel' : 'Add Property' }}
-      </button>
-      <!-- Usage Counter -->
-      <span class="text-muted" style="font-size: 11px; font-family: var(--font-mono)" *ngIf="isSubscribed">
-        USAGE: {{ activeSub.listingsUsed }} / {{ activeSub.listingsLimit === -1 ? '∞' : activeSub.listingsLimit }}
-      </span>
-    </div>
-  </div>
-
-  <!-- ── Subscription Guard: Plan Selector ────────────────────── -->
-  <div class="panel-card" *ngIf="!isSubscribed && !isPaymentPending && !isLoading">
-    <div style="text-align: center; margin-bottom: 2rem;">
-      <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Choose Your Listing Plan</h2>
-      <p class="text-muted">You need an active subscription to start listing properties on LUXE.</p>
-    </div>
-
-    <div class="plans-grid">
-      <div class="plan-card" *ngFor="let plan of plans" [ngClass]="{'featured': plan.id === 'pro'}">
-        <h3>{{ plan.name }}</h3>
-        <div class="price">
-          <span class="amount">{{ plan.price }}</span>
-          <span class="period">{{ plan.currency }} / month</span>
-        </div>
-        <ul class="features-list">
-          <li *ngFor="let feature of plan.features">
-            <i class="ph ph-check-circle"></i>
-            {{ feature }}
-          </li>
-        </ul>
-        <button class="action-btn primary" (click)="onSubscribe(plan.id)">Subscribe Now</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Payment Pending Warning ────────────────────────────────── -->
-  <div class="panel-card" *ngIf="isPaymentPending && !isLoading" style="text-align: center; padding: 4rem 2rem;">
-    <div style="font-size: 4rem; margin-bottom: 1rem;">💳</div>
-    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Payment Pending</h2>
-    <p class="text-muted" style="margin-bottom: 2rem; max-width: 400px; margin-left: auto; margin-right: auto;">
-      You have initiated a subscription to the <strong>{{ activeSub?.plan | titlecase }}</strong> plan, but we haven't received your payment confirmation yet.
-    </p>
-    <button class="action-btn success" (click)="resumePayment()" style="font-size: 1rem; padding: 0.8rem 2rem;">
-      Resume Payment Checkout
+    <button class="action-btn primary" *ngIf="currentView === 'table'" (click)="currentView = 'form'">
+      <i class="ph ph-plus"></i> Add New Property
     </button>
   </div>
 
-  <!-- ── Limit Reached Warning ────────────────────────────────── -->
-  <div class="kyc-alert warning" *ngIf="isSubscribed && isAtLimit && !showAddForm">
-    <i class="ph ph-info"></i>
-    <div>
-      <strong>Listing limit reached.</strong> You have used all {{ activeSub.listingsLimit }} listings in your current plan.
-      Upgrade to a higher plan to list more properties.
+  <!-- ── SUCCESS + PROMOTE VIEW ────────────────────────────────── -->
+  <div class="success-promote-view" *ngIf="currentView === 'success'">
+    <div class="success-hero">
+      <div class="success-icon">
+        <i class="ph ph-check-circle"></i>
+      </div>
+      <h2>Listing Submitted!</h2>
+      <p>Your property is now under review. Want to maximize its visibility and sell faster?</p>
+    </div>
+
+    <div class="promo-options-grid">
+      <!-- Featured -->
+      <div class="promo-card featured">
+        <div class="promo-label">MAX VISIBILITY</div>
+        <div class="promo-icon"><i class="ph ph-star-fill"></i></div>
+        <h3>Featured Listing</h3>
+        <p>Top placement in search results + premium gold glow effect.</p>
+        <div class="promo-price">$49.99 <small>/ month</small></div>
+        <button class="promo-btn" (click)="onPromote('featured', 'paymob')">Promote Now</button>
+      </div>
+
+      <!-- Boost -->
+      <div class="promo-card boosted">
+        <div class="promo-label">SMART REACH</div>
+        <div class="promo-icon"><i class="ph ph-lightning-fill"></i></div>
+        <h3>Boost Listing</h3>
+        <p>Higher ranking algorithm + unique lightning badge.</p>
+        <div class="promo-price">$24.99 <small>/ month</small></div>
+        <button class="promo-btn" (click)="onPromote('boosted', 'paymob')">Boost Now</button>
+      </div>
+
+      <!-- Badge -->
+      <div class="promo-card badge">
+        <div class="promo-label">TRUST</div>
+        <div class="promo-icon"><i class="ph ph-seal-check-fill"></i></div>
+        <h3>Premium Badge</h3>
+        <p>Exclusive seal-check icon to build buyer trust and credibility.</p>
+        <div class="promo-price">$14.99 <small>/ month</small></div>
+        <button class="promo-btn" (click)="onPromote('premium-badge', 'paymob')">Get Badge</button>
+      </div>
+    </div>
+
+    <div class="success-actions">
+      <button class="action-btn outline" (click)="resetForm()">Skip for now, return to dashboard</button>
     </div>
   </div>
 
-  <!-- ── Add property form ────────────────────────────────────── -->
-  <div class="panel-card" *ngIf="showAddForm" [formGroup]="form">
-    <h2>New Property Listing</h2>
+  <!-- ── FORM VIEW ──────────────────────────────────────────────── -->
+  <div class="panel-card" *ngIf="currentView === 'form'" [formGroup]="form">
+    <div class="form-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem">
+      <h2>New Property Listing</h2>
+      <button class="action-btn outline" (click)="currentView = 'table'">Cancel</button>
+    </div>
 
-    <!-- Row 1: Title + Type -->
     <div class="form-grid">
       <div class="form-group">
         <label>Title <span class="req">*</span></label>
-        <input type="text" formControlName="title" placeholder="e.g. Luxury Penthouse in Dubai Marina (min 10 chars)" />
-        <span class="field-error" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
-          Title must be between 10 and 100 characters.
-        </span>
+        <input type="text" formControlName="title" placeholder="e.g. Luxury Penthouse in Dubai Marina" />
       </div>
       <div class="form-group">
         <label>Type <span class="req">*</span></label>
@@ -88,12 +80,8 @@
           <option value="studio">Studio</option>
           <option value="office">Office</option>
           <option value="shop">Shop</option>
-          <option value="land">Land</option>
-          <option value="commercial">Commercial</option>
         </select>
       </div>
-
-      <!-- Row 2: Listing Type + Currency -->
       <div class="form-group">
         <label>Listing For <span class="req">*</span></label>
         <select formControlName="listingType">
@@ -107,147 +95,136 @@
           <option value="USD">USD</option>
           <option value="AED">AED</option>
           <option value="EUR">EUR</option>
-          <option value="GBP">GBP</option>
-          <option value="SAR">SAR</option>
           <option value="EGP">EGP</option>
         </select>
       </div>
-
-      <!-- Row 3: City + District -->
       <div class="form-group">
         <label>City <span class="req">*</span></label>
         <input type="text" formControlName="city" placeholder="e.g. Dubai" />
-        <span class="field-error" *ngIf="form.get('city')?.invalid && form.get('city')?.touched">
-          City is required.
-        </span>
       </div>
       <div class="form-group">
-        <label>District / Neighbourhood <span class="req">*</span></label>
-        <input type="text" formControlName="district" placeholder="e.g. Marina, Downtown, Maadi" />
-        <span class="field-error" *ngIf="form.get('district')?.invalid && form.get('district')?.touched">
-          District is required.
-        </span>
+        <label>District <span class="req">*</span></label>
+        <input type="text" formControlName="district" placeholder="e.g. Downtown" />
       </div>
-
-      <!-- Row 4: Address (full, optional) -->
-      <div class="form-group" style="grid-column: 1 / -1">
-        <label>Street Address <span class="text-muted" style="font-size:11px">(optional)</span></label>
-        <input type="text" formControlName="address" placeholder="Marina Walk, Tower 3" />
-      </div>
-
-      <!-- Row 5: Price + Area -->
       <div class="form-group">
         <label>Price <span class="req">*</span></label>
-        <input type="number" formControlName="price" placeholder="500000" min="1" />
-        <span class="field-error" *ngIf="form.get('price')?.invalid && form.get('price')?.touched">
-          A valid price is required.
-        </span>
+        <input type="number" formControlName="price" placeholder="500000" />
       </div>
       <div class="form-group">
         <label>Area (m²)</label>
-        <input type="number" formControlName="area" placeholder="120" min="0" />
-      </div>
-
-      <!-- Row 6: Bedrooms + Bathrooms -->
-      <div class="form-group">
-        <label>Bedrooms</label>
-        <input type="number" formControlName="bedrooms" placeholder="3" min="0" />
-      </div>
-      <div class="form-group">
-        <label>Bathrooms</label>
-        <input type="number" formControlName="bathrooms" placeholder="2" min="0" />
+        <input type="number" formControlName="area" placeholder="120" />
       </div>
     </div>
 
-    <!-- Description -->
-    <div class="form-group" style="margin-top:0.5rem">
+    <div class="form-group" style="margin-top:1rem">
       <label>Description <span class="req">*</span></label>
-      <textarea formControlName="description" placeholder="Describe the property in detail... (min 20 characters)" rows="4"></textarea>
-      <span class="field-error" *ngIf="form.get('description')?.invalid && form.get('description')?.touched">
-        Description must be at least 20 characters.
-      </span>
+      <textarea formControlName="description" placeholder="Describe the property..." rows="4"></textarea>
     </div>
 
-    <!-- ── Multi-Image Upload ── -->
-    <div class="form-group image-upload-section" style="margin-top:1rem">
-      <label>Property Photos <span class="text-muted" style="font-size:11px">(up to 10 images, max 5MB each)</span></label>
-
-      <label class="upload-drop-zone" for="prop-images">
-        <i class="ph ph-image-square" style="font-size:2rem;opacity:0.5"></i>
-        <span>Click to add photos</span>
-        <span style="font-size:11px;opacity:0.5">JPG, PNG, WEBP supported</span>
-        <input
-          id="prop-images"
-          type="file"
-          accept="image/*"
-          multiple
-          (change)="onFilesChange($event)"
-          style="display:none"
-        />
-      </label>
-
-      <!-- Image Previews -->
-      <div class="image-preview-grid" *ngIf="imagePreviews.length > 0">
-        <div class="preview-item" *ngFor="let preview of imagePreviews; let i = index">
-          <img [src]="preview" [alt]="'Property image ' + (i + 1)" />
-          <button type="button" class="remove-img-btn" (click)="removeImage(i)" title="Remove image">
-            <i class="ph ph-x"></i>
-          </button>
-          <span class="img-badge" *ngIf="i === 0">Main</span>
+    <div class="form-group image-upload-section" style="margin-top: 1.5rem">
+      <label>Property Photos <span class="text-muted" style="font-size: 11px">(Max 10 images)</span></label>
+      
+    <div class="image-section-wrapper" style="max-width: 600px">
+      <div class="image-uploader">
+        <!-- MODE 1: Initial State (Big Professional Dropzone) -->
+        <div class="upload-drop-zone main-zone" 
+             [class.active]="isDragging"
+             *ngIf="imagePreviews.length === 0" 
+             (click)="fileInput.click()" 
+             (drop)="onFileDrop($event)" 
+             (dragover)="onDragOver($event)"
+             (dragleave)="onDragLeave($event)">
+          <div class="dropzone-content">
+            <i class="ph ph-cloud-arrow-up"></i>
+            <p>Drag & drop your photos here</p>
+            <span class="sub-text">or click to browse your files (Max 10 images)</span>
+          </div>
         </div>
+
+        <!-- MODE 2: Active State (Inline Zone + Grid) -->
+        <div class="image-preview-grid" *ngIf="imagePreviews.length > 0">
+          <label for="prop-images" class="upload-drop-zone inline-zone" [class.active]="isDragging">
+            <i class="ph ph-plus-circle"></i>
+            <span>Add More</span>
+          </label>
+
+          <div class="preview-item" *ngFor="let preview of imagePreviews; let i = index">
+            <img [src]="preview" />
+            <button type="button" class="remove-img-btn" (click)="removeImage(i)" title="Remove image">
+              <i class="ph ph-x"></i>
+            </button>
+            <span class="img-badge" *ngIf="i === 0">Main Photo</span>
+          </div>
+        </div>
+
+        <input #fileInput id="prop-images" type="file" accept="image/*" multiple (change)="onFilesChange($event)" style="display:none" />
       </div>
-      <p class="text-muted" style="font-size:11px;margin-top:0.5rem" *ngIf="selectedFiles.length > 0">
-        {{ selectedFiles.length }} image{{ selectedFiles.length > 1 ? 's' : '' }} selected
-      </p>
+    </div>
     </div>
 
-    <!-- Actions -->
-    <div style="margin-top:1.5rem;display:flex;gap:0.75rem;align-items:center">
+    <div style="margin-top:2rem; display:flex; gap:1rem">
       <button class="action-btn primary" (click)="submitProperty()" [disabled]="isSubmitting">
-        <i class="ph" [ngClass]="isSubmitting ? 'ph-spinner' : 'ph-paper-plane-tilt'"></i>
-        {{ isSubmitting ? 'Submitting...' : 'Submit for Review' }}
+        {{ isSubmitting ? 'Submitting...' : 'Submit Listing' }}
       </button>
       <button class="action-btn" (click)="resetForm()" [disabled]="isSubmitting">Cancel</button>
-      <span class="text-muted" style="font-size:11px;margin-left:auto" *ngIf="form.invalid && form.touched">
-        ⚠ Please fix the highlighted fields above.
-      </span>
     </div>
   </div>
 
-  <!-- ── Properties table ───────────────────────────────────────── -->
-  <div class="panel-card">
-    <div *ngIf="isLoading" class="loading-state">Loading properties...</div>
-    <div *ngIf="!isLoading && properties.length === 0" class="empty-state">
-      <strong>No listings yet</strong>
-      <p>Add your first property to start hosting.</p>
-    </div>
+  <!-- ── TABLE VIEW ───────────────────────────────────────────── -->
+  <div class="panel-card" *ngIf="currentView === 'table'">
+    <div *ngIf="isLoading" class="loading-state">Loading portfolio...</div>
+    
     <div class="table-wrap" *ngIf="!isLoading && properties.length > 0">
       <table>
         <thead>
           <tr>
-            <th>Title</th>
-            <th>City</th>
-            <th>District</th>
-            <th>Price</th>
-            <th>Type</th>
-            <th>For</th>
+            <th>Property</th>
             <th>Status</th>
-            <th>Approval</th>
+            <th>Promotion</th>
+            <th>Price</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let p of properties">
-            <td>{{ p.title }}</td>
-            <td>{{ p.location?.city || p.city || '—' }}</td>
-            <td>{{ p.location?.district || '—' }}</td>
-            <td>{{ p.price | currency:(p.currency || 'USD'):'symbol':'1.0-0' }}</td>
-            <td>{{ p.type | titlecase }}</td>
-            <td><span class="status-badge {{ p.listingType || 'sale' }}">{{ (p.listingType || 'sale') | uppercase }}</span></td>
-            <td><span class="status-badge {{ p.status || 'available' }}">{{ (p.status || 'available') | uppercase }}</span></td>
-            <td><span class="status-badge {{ getApproval(p) }}">{{ getApproval(p) | uppercase }}</span></td>
+            <td>
+              <div class="property-cell">
+                <img [src]="p.images[0]" class="property-thumb" *ngIf="p.images?.length" />
+                <div class="property-info">
+                  <div class="property-title">{{ p.title }}</div>
+                  <div class="property-loc">{{ p.city }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="p.isApproved ? 'approved' : 'pending'">
+                {{ p.isApproved ? 'Approved' : 'Reviewing' }}
+              </span>
+            </td>
+            <td>
+              <div class="active-promos">
+                <span class="mini-promo-badge featured" *ngIf="p.promotion?.isFeatured" title="Featured">F</span>
+                <span class="mini-promo-badge boosted" *ngIf="p.promotion?.isBoosted" title="Boosted">B</span>
+                <span class="mini-promo-badge premium" *ngIf="p.promotion?.hasPremiumBadge" title="Premium Badge">P</span>
+                <span class="text-muted" *ngIf="!p.promotion?.isFeatured && !p.promotion?.isBoosted && !p.promotion?.hasPremiumBadge">-</span>
+              </div>
+            </td>
+            <td>{{ p.price | currency:p.currency }}</td>
+            <td>
+              <div class="action-group">
+                <button class="action-btn view" (click)="lastCreatedProperty = p; currentView = 'success'">Promote</button>
+                <button class="action-btn danger">Delete</button>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <div *ngIf="!isLoading && properties.length === 0" class="empty-state">
+      <strong>No properties yet.</strong>
+      <p>Start by listing your first property for free.</p>
+    </div>
   </div>
+
 </div>

@@ -15,7 +15,7 @@ export const MOCK_PROPERTIES: Property[] = [
     city: 'Dubai',
     price: 8_500_000,
     currency: 'USD',
-    type: 'apartment',           // 'penthouse' not in backend enum → apartment
+    type: 'apartment',
     status: 'for-sale',
     listingType: 'sale',
     availabilityStatus: 'available',
@@ -32,6 +32,13 @@ export const MOCK_PROPERTIES: Property[] = [
     features: ['Pool', 'Gym', 'Concierge', 'Smart Home', 'Parking'],
     featured: true,
     badge: 'For Sale',
+    isApproved: true,
+    promotionScore: 100,
+    promotion: {
+      isFeatured: true,
+      isBoosted: false,
+      hasPremiumBadge: true
+    }
   },
   {
     _id: 'p2',
@@ -56,6 +63,13 @@ export const MOCK_PROPERTIES: Property[] = [
     features: ['24/7 Porter', 'Gym', 'Garden', 'Wine Cellar'],
     featured: false,
     badge: 'For Sale',
+    isApproved: true,
+    promotionScore: 0,
+    promotion: {
+      isFeatured: false,
+      isBoosted: false,
+      hasPremiumBadge: false
+    }
   },
   {
     _id: 'p3',
@@ -80,6 +94,13 @@ export const MOCK_PROPERTIES: Property[] = [
     features: ['Doorman', 'Gym', 'Rooftop', 'Storage'],
     featured: false,
     badge: 'For Rent',
+    isApproved: true,
+    promotionScore: 50,
+    promotion: {
+      isFeatured: false,
+      isBoosted: true,
+      hasPremiumBadge: false
+    }
   },
   {
     _id: 'p4',
@@ -104,6 +125,13 @@ export const MOCK_PROPERTIES: Property[] = [
     features: ['Private Beach', 'Pool', 'Tennis Court', 'Wine Cave', 'Staff Quarters'],
     featured: true,
     badge: 'For Sale',
+    isApproved: true,
+    promotionScore: 100,
+    promotion: {
+      isFeatured: true,
+      isBoosted: false,
+      hasPremiumBadge: false
+    }
   },
   {
     _id: 'p5',
@@ -128,6 +156,13 @@ export const MOCK_PROPERTIES: Property[] = [
     features: ['Infinity Pool', 'Sky Garden', 'Concierge', 'Gym'],
     featured: false,
     badge: 'For Rent',
+    isApproved: true,
+    promotionScore: 20,
+    promotion: {
+      isFeatured: false,
+      isBoosted: false,
+      hasPremiumBadge: true
+    }
   },
   {
     _id: 'p6',
@@ -152,5 +187,12 @@ export const MOCK_PROPERTIES: Property[] = [
     features: ['Balcony', 'Cave', 'Concierge', 'Parking'],
     featured: false,
     badge: 'For Sale',
+    isApproved: true,
+    promotionScore: 0,
+    promotion: {
+      isFeatured: false,
+      isBoosted: false,
+      hasPremiumBadge: false
+    }
   },
 ];

@@ -11,8 +11,15 @@
     <!-- ── Profile info card ────────────────────────────────── -->
     <div class="panel-card profile-info-card">
       <div class="profile-avatar-row">
-        <div class="avatar-lg" *ngIf="!user.photo">{{ initials }}</div>
-        <img class="avatar-lg-img" *ngIf="user.photo" [src]="user.photo" [alt]="user.name" />
+        <div class="avatar-container">
+          <div class="avatar-lg" *ngIf="!user.photo">{{ initials }}</div>
+          <img class="avatar-lg-img" *ngIf="user.photo" [src]="user.photo" [alt]="user.name" />
+          <label for="profile-upload" class="avatar-overlay" data-cursor-hover>
+            <i class="ph ph-camera"></i>
+            <span>Change</span>
+          </label>
+          <input type="file" id="profile-upload" (change)="onPhotoChange($event)" accept="image/*" style="display:none" />
+        </div>
         <div class="profile-header-info">
           <h2 class="profile-name">{{ user.name }}</h2>
           <span class="status-badge {{ user.kycStatus }}">

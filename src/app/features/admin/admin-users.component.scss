@@ -236,6 +236,9 @@
   border-radius: 14px;
   position: relative;
   z-index: 1;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .users-table {

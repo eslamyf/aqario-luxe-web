@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UserDashboardService, UserProfile, UserRole } from './user-dashboard.service';
-
+import { UserDashboardService } from './user-dashboard.service';
 import { AuthService, User } from '../../core/auth/auth.service';
-import { Observable } from 'rxjs';
+import { DashboardUiService } from '../../shared/services/dashboard-ui.service';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -14,13 +13,28 @@ import { Observable } from 'rxjs';
 export class UserDashboardComponent implements OnInit, OnDestroy {
   user$: Observable<User | null>;
   isLoggingOut = false;
+  sidebarOpen = false; // We'll sync this with service
   private destroy$ = new Subject<void>();
 
   constructor(
     private userService: UserDashboardService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dashboardUi: DashboardUiService
   ) {
     this.user$ = this.authService.currentUser$;
+    
+    // Sync sidebar state from service
+    this.dashboardUi.sidebarOpen
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(open => this.sidebarOpen = open);
+  }
+
+  toggleSidebar(): void {
+    this.dashboardUi.toggleSidebar();
+  }
+
+  closeSidebar(): void {
+    this.dashboardUi.closeSidebar();
   }
 
   ngOnInit(): void {

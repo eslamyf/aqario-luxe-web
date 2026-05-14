@@ -1,5 +1,9 @@
 <div class="admin-layout">
-  <aside class="admin-sidebar">
+
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+
+  <aside class="admin-sidebar" [class.open]="sidebarOpen">
     <div class="sidebar-brand" *ngIf="auth.currentUser$ | async as user">
       <ng-container *ngIf="user.photo; else brandLogoFallback">
         <img [src]="user.photo" alt="Brand Logo" class="brand-logo-avatar" />
@@ -14,24 +18,24 @@
 
     <nav class="admin-nav">
       <div class="nav-section">MAIN</div>
-      <a routerLink="overview" routerLinkActive="active" class="nav-item">
+      <a routerLink="overview" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="fa-solid fa-chart-line"></i> Dashboard
       </a>
-      <a routerLink="users" routerLinkActive="active" class="nav-item">
+      <a routerLink="users" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="fa-solid fa-users"></i> Users
       </a>
-      <a routerLink="kyc" routerLinkActive="active" class="nav-item">
+      <a routerLink="kyc" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="fa-solid fa-id-card-clip"></i> KYC Center
       </a>
-      <a routerLink="properties" routerLinkActive="active" class="nav-item">
+      <a routerLink="properties" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="fa-solid fa-building"></i> Properties
       </a>
-      <a routerLink="bookings" routerLinkActive="active" class="nav-item">
+      <a routerLink="bookings" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="fa-solid fa-calendar-check"></i> Bookings
       </a>
 
       <div class="nav-section">GOVERNANCE</div>
-      <a routerLink="audit" routerLinkActive="active" class="nav-item">
+      <a routerLink="audit" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="fa-solid fa-scroll"></i> Audit Trail
       </a>
     </nav>

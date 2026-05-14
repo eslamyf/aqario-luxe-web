@@ -64,6 +64,14 @@ export interface Property {
     photo?: string;
     bio?: string;
   };
+  isApproved: boolean;
+  promotionScore: number;
+  promotion: {
+    isFeatured: boolean;
+    isBoosted: boolean;
+    hasPremiumBadge: boolean;
+    expiresAt?: string;
+  };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { ThemeService } from '../services/theme.service';
 import { NotificationsApiService } from '../services/notifications-api.service';
+import { DashboardUiService } from '../../shared/services/dashboard-ui.service';
 
 @Component({
   selector: 'app-nav',
@@ -23,8 +24,13 @@ export class NavComponent {
     public auth: AuthService,
     private router: Router,
     private themeService: ThemeService,
-    public notificationsApi: NotificationsApiService
+    public notificationsApi: NotificationsApiService,
+    public dashboardUi: DashboardUiService
   ) {}
+
+  toggleDashboardSidebar(): void {
+    this.dashboardUi.toggleSidebar();
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
@@ -34,8 +40,15 @@ export class NavComponent {
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    // Close dropdowns if clicking outside
-    if (!target.closest('.user-dropdown-container') && !target.closest('.notifications-dropdown-container')) {
+    
+    // Select the wrapper elements
+    const userWrapper = document.querySelector('.user-dropdown-container');
+    const notifWrapper = document.querySelector('.notifications-dropdown-container');
+
+    const clickedInsideUser = userWrapper?.contains(target);
+    const clickedInsideNotif = notifWrapper?.contains(target);
+
+    if (!clickedInsideUser && !clickedInsideNotif) {
       this.showDropdown = false;
       this.showNotifications = false;
     }

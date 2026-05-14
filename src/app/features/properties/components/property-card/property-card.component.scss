@@ -76,17 +76,79 @@
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// PROMOTION BADGES
+// ─────────────────────────────────────────────────────────────────────────────
+.promotion-badges {
+  position: absolute;
+  top: 24px;
+  inset-inline-start: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 5;
+}
+
+.promo-badge {
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+  i { font-size: 14px; }
+
+  &.featured {
+    background: var(--brand-gold);
+    color: var(--bg-base);
+    box-shadow: 0 0 15px var(--brand-gold-soft);
+    animation: glow 2s infinite alternate;
+  }
+
+  &.boosted {
+    background: var(--bg-surface);
+    color: var(--brand-gold);
+    border: 1px solid var(--brand-gold-soft);
+  }
+
+  &.premium {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    justify-content: center;
+    background: var(--bg-base);
+    color: var(--brand-gold);
+    border: 1px solid var(--brand-gold);
+    border-radius: 50%;
+
+    i { font-size: 18px; }
+  }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 5px var(--brand-gold-soft); }
+  to { box-shadow: 0 0 20px var(--brand-gold); }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // BADGE (property-tag) — Template lines 445–457
 // ─────────────────────────────────────────────────────────────────────────────
 .property-tag {
   position: absolute;
-  top: 24px;
-  inset-inline-start: 24px;      // RTL-safe — template uses left: 24px
-  padding: 6px 16px;
-  background: var(--brand-gold);
-  color: var(--bg-base);
+  top: 60px; // Offset below promotion badges if they exist
+  inset-inline-start: 24px;
+  padding: 4px 12px;
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  color: var(--white);
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 8px;
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: 700;

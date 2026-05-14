@@ -10,6 +10,8 @@
 // ── Sidebar ───────────────────────────────────────────────────────────────────
 .user-sidebar {
   width: 280px;
+  min-width: 280px;
+  flex-shrink: 0;
   background: var(--bg-surface);
   border-right: 1px solid var(--border-color);
   display: flex;
@@ -210,7 +212,8 @@
 
 // ── Main area ─────────────────────────────────────────────────────────────────
 .user-main {
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0; // CRITICAL: prevents child elements from expanding parent beyond viewport
   padding: 2rem;
   overflow-y: auto;
   min-height: calc(100vh - 80px);
@@ -315,7 +318,18 @@
 
 // Table
 .table-wrap {
+  width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+  
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--brand-gold-soft);
+    border-radius: 4px;
+  }
 }
 
 table {
@@ -518,7 +532,9 @@ tbody tr:hover {
 
     &:focus {
       outline: none;
-      border-color: rgba(201, 169, 110, 0.5);
+      border-color: var(--brand-gold);
+      box-shadow: 0 0 0 4px rgba(201, 169, 110, 0.1);
+      background: var(--bg-deep);
     }
 
     &::placeholder { color: color-mix(in srgb, var(--white) 25%, transparent); }
@@ -882,6 +898,107 @@ tbody tr:hover {
       margin-bottom: 0.75rem;
 
       i { color: var(--gold); font-size: 1rem; }
+    }
+  }
+}
+
+// ── Mobile Responsiveness ──────────────────────────────────────────────────────
+@media (max-width: 992px) {
+  .user-layout {
+    flex-direction: column;
+    margin-top: 80px !important; 
+    min-height: calc(100vh - 80px);
+  }
+
+  .user-sidebar {
+    position: fixed;
+    left: -280px;
+    top: 80px;
+    width: 280px;
+    height: calc(100vh - 80px);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 20px 0 40px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+
+    &.open {
+      left: 0;
+    }
+  }
+
+  .user-main {
+    padding: 1.5rem;
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .user-main {
+    padding: 1rem;
+  }
+}
+
+// Sidebar Overlay for mobile
+.sidebar-overlay {
+  display: none;
+  @media (max-width: 992px) {
+    &.active {
+      display: block;
+      position: fixed;
+      inset: 0;
+      top: 80px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+    }
+  }
+}
+
+// ── Mobile Dashboard Toolbar ──────────────────────────────────────────────────
+.mobile-dashboard-toolbar {
+  display: none;
+  @media (max-width: 992px) {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 60px;
+    padding: 0 1.5rem;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+
+    .burger-btn {
+      background: transparent;
+      border: none;
+      color: var(--gold);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .mobile-logo {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 1px;
+      color: var(--white);
     }
   }
 }

@@ -273,6 +273,17 @@ export class UserDashboardService {
     );
   }
 
+  // ── Promotion Checkout (Monetization) ──────────────────────────────────
+  initiatePromotion(propertyId: string, type: string, paymentMethod: string): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.base}/payments/promotion-checkout`, {
+      propertyId,
+      type,
+      paymentMethod
+    }).pipe(
+      catchError((err) => throwError(() => err))
+    );
+  }
+
   getPaymentStatus(paymentId: string): Observable<any> {
     return this.http.get<ApiResponse<any>>(`${this.base}/payments/${paymentId}/status`).pipe(
       map((res) => res.data),

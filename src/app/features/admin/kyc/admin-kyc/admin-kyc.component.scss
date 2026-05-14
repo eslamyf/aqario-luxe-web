@@ -449,6 +449,84 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
+// ── Mobile Responsiveness ──────────────────────────────────────────────────────
+@media (max-width: 992px) {
+  .kyc-center {
+    height: auto;
+    overflow: visible;
+
+    .kyc-header {
+      height: auto;
+      padding: 1.5rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+
+      .header-stats {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+    }
+
+    .split-layout {
+      flex-direction: column;
+      height: auto;
+      overflow: visible;
+
+      .users-list-pane {
+        width: 100%;
+        height: 400px; // Limit list height on mobile
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .details-view {
+        width: 100%;
+        height: auto;
+
+        .detail-content-scroll {
+          padding: 1.5rem;
+        }
+
+        .identity-hero {
+          flex-direction: column;
+          gap: 2rem;
+          margin-bottom: 3rem;
+
+          .large-name-serif {
+            font-size: 2.5rem;
+          }
+
+          .risk-profile {
+            text-align: left;
+          }
+        }
+
+        .scans-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .action-bar {
+          height: auto;
+          padding: 1.5rem;
+          flex-direction: column;
+          gap: 1.5rem;
+
+          .main-actions {
+            width: 100%;
+            flex-direction: column;
+            button { width: 100%; }
+          }
+        }
+      }
+    }
+  }
+}
+
 // Scrollbar styling
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
