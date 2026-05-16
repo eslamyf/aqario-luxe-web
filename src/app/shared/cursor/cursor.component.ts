@@ -29,7 +29,7 @@ export class CursorComponent implements OnInit, OnDestroy {
     if (!this.isMobile) {
       this.renderer.setStyle(document.body, 'cursor', 'none');
       
-      // تشغيل المستمعات خارج الـ Zone لتحسين الأداء
+      // Run listeners outside the Zone for performance optimization
       this.ngZone.runOutsideAngular(() => {
         window.addEventListener('mousemove', this.onMouseMove.bind(this));
         window.addEventListener('mouseover', this.onMouseOver.bind(this));
@@ -72,7 +72,7 @@ export class CursorComponent implements OnInit, OnDestroy {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const tick = () => {
-      // تنعيم الحركة (Smoothing)
+      // Smoothing the movement
       this.dotX = lerp(this.dotX, this.targetX, 0.35);
       this.dotY = lerp(this.dotY, this.targetY, 0.35);
       

@@ -8,9 +8,9 @@ import { ModalEscapeService } from '../../services/modal-escape.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 import { environment } from '../../../../environments/environment';
 
-// ─── Custom Validators (متحققات مخصصة) ──────────────────────────────────
+// ─── Custom Validators ───────────────────────────────────
 
-// 1. التحقق من قوة كلمة المرور (لازم 8 حروف، حرف كبير، صغير، رقم، ورمز)
+// 1. Password strength validation (8 characters, uppercase, lowercase, number, and symbol)
 export function strongPasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
@@ -20,18 +20,18 @@ export function strongPasswordValidator(): ValidatorFn {
       /[A-Z]/.test(value) && /[a-z]/.test(value) &&
       /[0-9]/.test(value) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
 
-    // لو الباسورد ضعيف بنرجع إيرور اسمه strongPassword، لو قوي بنرجع null (سليم)
+    // If password is weak, return 'strongPassword' error; otherwise return null (valid)
     return !isStrong ? { strongPassword: true } : null;
   };
 }
 
-// 2. التحقق من تطابق كلمتي المرور في شاشة التسجيل
+// 2. Validate that passwords match in registration screen
 export function passwordsMatchValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
 
-    // لو مش متطابقين، بنحط الإيرور على حقل confirmPassword تحديداً عشان يظهر تحته رسالة الغلط
+    // If they don't match, set error on confirmPassword field to show the error message below it
     if (password && confirmPassword && password !== confirmPassword) {
       control.get('confirmPassword')?.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
@@ -42,45 +42,45 @@ export function passwordsMatchValidator(): ValidatorFn {
 
 // ─── Component Setup ──────────────────────────────────────────────────
 
-// تحديد التابات المتاحة في المودال عشان نمنع أي أخطاء إملائية في الكود
+// Define available tabs in the modal to prevent typos in the code
 type AuthTab = 'login' | 'register' | 'forgot' | 'verify-otp';
 
 @Component({
   selector: 'app-auth-modal',
-  standalone: true, // بنستخدم Standalone Component عشان يكون خفيف وسريع
+  standalone: true, // Use Standalone Component for lightweight and fast performance
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './auth-modal.component.html',
   styleUrls: ['./auth-modal.component.scss'],
 })
 export class AuthModalComponent implements OnInit, OnDestroy {
 
-  // حقن الخدمات (Dependency Injection) بالطريقة الحديثة في Angular
+  // Dependency Injection using modern Angular way
   private auth = inject(AuthService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private modalEscape = inject(ModalEscapeService); // ESC global bus
   private notificationSvc = inject(NotificationService); // §5.5
 
-  // ─── State Variables (متغيرات الحالة) ───
-  isOpen = false;           // للتحكم في ظهور أو إخفاء المودال
-  activeTab: AuthTab = 'login'; // التاب المفتوح حالياً (افتراضياً تسجيل الدخول)
-  isLoading = false;           // لتشغيل الأنيميشن بتاع التحميل جوه الزرار
+  // ─── State Variables ───
+  isOpen = false;           // Controls modal visibility
+  activeTab: AuthTab = 'login'; // Currently active tab (default: login)
+  isLoading = false;           // Triggers loading animation inside buttons
   isGoogleLoading = false;
   isFormSubmitted = false; // Flag to silence errors until first click
-  errorMsg = '';              // لعرض رسائل الخطأ العامة (زي: الإيميل مسجل مسبقاً)
+  errorMsg = '';              // To display general error messages (e.g., Email already registered)
 
   // Guard: true only when a real (non-placeholder) Google Client ID is set
   readonly isGoogleConfigured = environment.googleClientId !== 'your_google_client_id_here'
     && environment.googleClientId.trim().length > 0;
 
-  // ─── Forms (تعريف الفورمز) ───
+  // ─── Forms ───
   loginForm!: FormGroup;
   registerForm!: FormGroup;
   forgotForm!: FormGroup;
   verifyOtpForm!: FormGroup;
 
   // ─── Verification State ───
-  registeredEmail: string = ''; // الايميل الخاص بالـ user المسجل عشان نفعله
+  registeredEmail: string = ''; // Registered email for OTP verification
   otpInputs = [0, 1, 2, 3, 4, 5];
 
   // ─── Password UI State ───
@@ -90,7 +90,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   passwordStrength = 0;
   isRequirementsExpanded = false;
 
-  // Subject لإنهاء الاشتراكات (Subscriptions) لما الكومبوننت يتقفل عشان نمنع تسريب الميموري
+  // Subject to end subscriptions when component is destroyed to prevent memory leaks
   private destroy$ = new Subject<void>();
   private googleAccountsInitialized = false;
   private googleButtonRendered = false;
@@ -205,9 +205,9 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.buildForms(); // أول ما المودال يفتح، بنبني الفورمز
+    this.buildForms(); // Build forms when modal opens
 
-    // بنراقب خدمة الـ Auth عشان نعرف إمتى نظهر أو نخفي المودال
+    // Monitor Auth service to know when to show or hide the modal
     this.auth.isModalOpen$.pipe(takeUntil(this.destroy$)).subscribe(open => {
       this.isOpen = open;
       if (open) {
@@ -233,14 +233,14 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // تنظيف الميموري لما الكومبوننت يتم تدميره
+    // Cleanup memory when component is destroyed
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  // دالة بناء الفورمز وربطها بالـ Validators
+  // Function to build forms and bind them to Validators
   private buildForms(): void {
-    // Regex قوي للتأكد إن الإيميل مكتوب بصيغة صحيحة (زي name@domain.com)
+    // Strong Regex to ensure email format is correct (e.g., name@domain.com)
     const emailRegex = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$';
 
     this.loginForm = this.fb.group({
@@ -251,10 +251,10 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern(emailRegex)]],
-      password: ['', [Validators.required, strongPasswordValidator()]], // استخدام الـ Validator المخصص
+      password: ['', [Validators.required, strongPasswordValidator()]], // Use custom validator
       confirmPassword: ['', Validators.required],
-      // 💡 ملحوظة: تم حذف حقل الـ Role من هنا لتسهيل التسجيل على المستخدم
-    }, { validators: passwordsMatchValidator() }); // التأكد من تطابق الباسوردين
+      // Note: Role field removed to simplify registration for users
+    }, { validators: passwordsMatchValidator() }); // Ensure passwords match
 
     // Subscribe to password changes to calculate strength
     this.registerForm.get('password')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
@@ -333,7 +333,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  // دالة للتنقل بين التابات (Login, Register, OTP...)
+  // Switch between tabs (Login, Register, Forgot...)
   switchTab(tab: 'login' | 'register' | 'forgot' | 'verify-otp'): void {
     this.activeTab = tab;
     this.errorMsg = '';
@@ -354,12 +354,12 @@ export class AuthModalComponent implements OnInit, OnDestroy {
 
   // ─── Forgot Password Flow ──────────────────────────────────────────
 
-  // 1. الانتقال لشاشة نسيان الباسورد
+  // 1. Navigate to forgot password screen
   goForgot(): void {
     this.switchTab('forgot');
   }
 
-  // 2. إرسال الإيميل لطلب رابط التغيير
+  // 2. Send email to request reset link
   onForgotSubmit(): void {
     if (this.forgotForm.invalid) { this.forgotForm.markAllAsTouched(); return; }
     this.isLoading = true;
@@ -375,14 +375,14 @@ export class AuthModalComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.isLoading = false;
-        // لدواعي أمنية بنظهر نفس الرسالة حتى لو الايميل مش موجود
+        // For security reasons, show the same message even if email doesn't exist
         this.notificationSvc.show(`If registered, a reset link was sent to ${email}`, 'info');
         this.switchTab('login');
       }
     });
   }
 
-  // ─── Auth Logic (تسجيل الدخول وإنشاء حساب) ─────────────────────
+  // ─── Auth Logic (Login & Register) ─────────────────────
 
   onLogin(): void {
     this.isFormSubmitted = true;
@@ -398,7 +398,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         const userObj = res?.data?.user || res?.user;
         const userName = userObj?.name || 'there';
         this.notificationSvc.show(`Welcome back, ${userName}!`, 'success');
-        this.close(); // لو النجاح، بنقفل المودال خالص
+        this.close(); // If success, close the modal
       },
       error: (err: any) => {
         this.isLoading = false;
@@ -421,7 +421,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
       next: (user: any) => {
         this.isLoading = false;
         this.notificationSvc.show(`Account created! Please check your email to verify your account.`, 'info');
-        this.registeredEmail = email; // نحفظ الإيميل للتفعيل
+        this.registeredEmail = email; // Save email for verification
         this.registerForm.reset();
 
         // Navigate to OTP verification page
@@ -435,7 +435,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     });
   }
 
-  // التحقق من الإيميل باستخدام كود التفعيل
+  // Verify email using OTP code
   onVerifyOtpSubmit(): void {
     if (this.verifyOtpForm.invalid) { this.verifyOtpForm.markAllAsTouched(); return; }
     this.isLoading = true;
@@ -469,16 +469,16 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ─── UI Helpers (دوال مساعدة للواجهة) ─────────────────────
+  // ─── UI Helpers ─────────────────────
 
   close(): void { this.auth.closeModal(); }
 
-  // دالة لقفل المودال لو اليوزر داس في المساحة الفاضية براه
+  // Close modal if user clicks on the overlay (outside area)
   onOverlayClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('auth-overlay')) this.close();
   }
 
-  // دالة للتحقق لو الحقل فيه خطأ (تظهر فقط عند الضغط على زر الإرسال - Task 1)
+  // Check if field is invalid (show only after form submission)
   isFieldInvalid(form: FormGroup, field: string): boolean {
     const ctrl = form.get(field);
     return !!(ctrl && ctrl.invalid && this.isFormSubmitted);

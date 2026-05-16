@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // LUXE ESTATES — Auctions Component
-// Author: مينا — Auctions Module
+// Author: Mina — Auctions Module
 // Tasks: 01 (Auction Cards) + 02 (Countdown) + 03 (Place Bid)
 // Branch: feature/mina-auctions
 // ─────────────────────────────────────────────────────────────────────────────

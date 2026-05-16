@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// ✅ استدعاء كومبوننت الترقية الجديد
+// Import the new BecomeAgent component
 import { BecomeAgentComponent } from './features/become-agent/become-agent.component';
 
 import { authGuard } from './core/auth/auth.guard';
@@ -79,33 +79,33 @@ const routes: Routes = [
     loadComponent: () => import('./features/subscriptions/subscription-checkout.component').then(m => m.SubscriptionCheckoutComponent)
   },
 
-  // مسار إعادة تعيين كلمة المرور
+  // Password reset route
   {
     path: 'reset-password/:token',
     loadComponent: () => import('./core/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
   },
   
-  // مسار تأكيد الحساب (OTP)
+  // Account verification route (OTP)
   {
     path: 'verify-otp',
     loadComponent: () => import('./core/auth/otp-verify/otp-verify.component').then(m => m.OtpVerifyComponent)
   },
 
-  // مسار الـ KYC
+  // KYC route
   {
     path: 'kyc',
     canActivate: [authGuard],
     loadComponent: () => import('./features/kyc/kyc.component').then(m => m.KycComponent)
   },
 
-  // مسار الـ Admin
+  // Admin route
   {
     path: 'admin',
     canActivate: [authGuard, adminGuard],
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule)
   },
 
-  // مسار الـ Wildcard لاصطياد أي روابط خاطئة (يجب أن يظل في النهاية دائمًا)
+  // Wildcard route to catch all invalid links (must always remain at the end)
   {
     path: '**',
     redirectTo: '',

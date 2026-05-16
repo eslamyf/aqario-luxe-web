@@ -19,7 +19,7 @@ export class NavComponent {
     return this.themeService.theme$;
   }
 
-  // إسلام: حقن الخدمات باستخدام constructor
+  // Inject services via constructor
   constructor(
     public auth: AuthService,
     private router: Router,
@@ -75,7 +75,7 @@ export class NavComponent {
     this.showNotifications = false;
   }
 
-  // إسلام: تسجيل الخروج وتصفير الحالة
+  // Logout and reset state
   onLogout(): void {
     this.auth.logout();
     this.showDropdown = false;
@@ -83,23 +83,23 @@ export class NavComponent {
     this.router.navigate(['/']);
   }
 
-  // إسلام: دالة ذكية للتحكم في زر إضافة العقار بناءً على الصلاحيات
+  // Intelligent function to control "List Property" button based on roles
   onListPropertyClick(): void {
     const currentUser = this.auth.currentUser;
 
     if (!currentUser) {
-      // لو مفيش يوزر مسجل دخول، افتح مودال اللوجين
+      // If no user is logged in, open the login modal
       this.auth.openModal();
     } else if (currentUser.role === 'buyer') {
-      // لو مشتري عادي، وجهه لصفحة الترقية
+      // If regular buyer, redirect to "Become Agent" page
       this.router.navigate(['/become-agent']);
     } else if (currentUser.role === 'owner' || currentUser.role === 'agent') {
-      // لو بائع، وجهه لصفحة إضافة العقار
+      // If owner/agent, redirect to "Add Property" page
       this.router.navigate(['/add-property']);
     }
   }
 
-  // إسلام: دالة فتح مودال التسجيل
+  // Open registration modal
   openLogin(): void {
     this.auth.openModal();
   }
