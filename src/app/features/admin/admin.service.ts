@@ -48,13 +48,13 @@ export type AuditAction =
   | 'APPROVE_BOOKING'  | 'REJECT_BOOKING' | 'BULK_UPDATE_BOOKINGS'
   | 'BAN_USER' | 'UNBAN_USER' | 'CHANGE_ROLE' | 'UPDATE_PERMISSIONS'
   | 'APPROVE_KYC' | 'REJECT_KYC' | 'REVERT_KYC' | 'RESET_KYC'
-  | 'DELETE_REVIEW' | 'APPROVE_AUCTION';
+  | 'DELETE_REVIEW';
 
 export interface AuditLog {
   _id: string;
   actor: { _id: string; name: string; email: string; role: string; photo?: string };
   action: AuditAction;
-  targetType: 'Property' | 'Booking' | 'User' | 'Review' | 'Auction';
+  targetType: 'Property' | 'Booking' | 'User' | 'Review';
   targetId: string;
   changes: { before?: any; after?: any };
   metadata: { ip?: string; userAgent?: string; reason?: string };
@@ -74,7 +74,7 @@ export const AVAILABLE_PERMISSIONS = [
   'ban_user',         'change_role',      'update_permissions',
   'approve_kyc',      'reject_kyc',
   'delete_review',    'view_audit_logs',
-  'manage_auctions',  'export_data',      'bulk_actions',
+  'export_data',      'bulk_actions',
 ] as const;
 
 export type Permission = typeof AVAILABLE_PERMISSIONS[number];

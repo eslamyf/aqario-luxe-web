@@ -24,7 +24,7 @@ export class SocketService {
     if (!this.socketPromise) {
       this.socketPromise = import('socket.io-client').then(({ io }) => {
         this.socket = io(this.baseUrl, {
-          auth:            { token: token || localStorage.getItem('luxe_token') },
+          auth: (cb) => cb({ token: localStorage.getItem('luxe_token') }),
           withCredentials: true,
           transports:      ['websocket', 'polling'],
         });
@@ -55,55 +55,6 @@ export class SocketService {
     this.socketPromise = null;
   }
 
-  joinAuction(auctionId: string): void {
-    this.getSocket().then(socket => {
-      if (socket) socket.emit('joinAuction', auctionId);
-    });
-  }
-
-  leaveAuction(auctionId: string): void {
-    this.getSocket().then(socket => {
-      if (socket) socket.emit('leaveAuction', auctionId);
-    });
-  }
-
-  onNewBid(auctionId: string): Observable<any> {
-    return new Observable(subscriber => {
-      let socketRef: any = null;
-      const handler = (data: any) => {
-        if (data?.auctionId === auctionId) subscriber.next(data);
-      };
-
-      this.getSocket().then(socket => {
-        if (!socket) return;
-        socketRef = socket;
-        socket.on('newBid', handler);
-      });
-
-      return () => {
-        if (socketRef) socketRef.off('newBid', handler);
-      };
-    });
-  }
-
-  onAuctionClosed(auctionId: string): Observable<any> {
-    return new Observable(subscriber => {
-      let socketRef: any = null;
-      const handler = (data: any) => {
-        if (data?.auctionId === auctionId) subscriber.next(data);
-      };
-
-      this.getSocket().then(socket => {
-        if (!socket) return;
-        socketRef = socket;
-        socket.on('auctionClosed', handler);
-      });
-
-      return () => {
-        if (socketRef) socketRef.off('auctionClosed', handler);
-      };
-    });
-  }
 
   onNotification(): Observable<any> {
     return new Observable(subscriber => {

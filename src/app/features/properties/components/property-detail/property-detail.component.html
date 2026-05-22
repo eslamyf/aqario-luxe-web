@@ -16,7 +16,7 @@
 
   <!-- Main Content -->
   <div *ngIf="!isLoading && !error && property" class="content-grid">
-    
+
     <!-- Left Column: Gallery & Description -->
     <div class="main-content">
       <!-- Gallery Section -->
@@ -28,10 +28,10 @@
           </button>
           <div class="property-badge">{{ property.badge }}</div>
         </div>
-        
+
         <div class="thumbnail-strip">
-          <div *ngFor="let img of property.images; let i = index" 
-               class="thumb-wrap" 
+          <div *ngFor="let img of property.images; let i = index"
+               class="thumb-wrap"
                [class.active]="i === activeImageIndex"
                (click)="setActiveImage(i)">
             <img [src]="img" [alt]="property.title + ' thumbnail ' + i" loading="lazy">
@@ -105,57 +105,143 @@
     <!-- Right Column: Actions Sidebar -->
     <aside class="sidebar">
       <div class="sticky-sidebar">
-        <!-- Booking Card (Rentals Only) -->
-        <div *ngIf="property.listingType === 'rent'" class="action-card booking-card">
-          <h3 class="card-title">Book This Property</h3>
-          
-          <ng-container *ngIf="(kycStatus$ | async) as kyc; else kycCheck">
-            <div *ngIf="kyc.status === 'approved' || kyc.status === 'pending'; else verifyIdentity">
-              <form [formGroup]="bookingForm" (ngSubmit)="onBookProperty(property, kyc)">
-                <div class="form-group">
-                  <label for="booking-start">Check-in</label>
-                  <input type="date" id="booking-start" formControlName="start_date" [min]="minDate" class="luxury-input">
-                </div>
-                <div class="form-group">
-                  <label for="booking-end">Check-out</label>
-                  <input type="date" id="booking-end" formControlName="end_date" [min]="minEndDate" class="luxury-input">
-                </div>
+        <!-- Agent / Owner Card -->
+        <div class="agent-compact-card" *ngIf="property.owner">
+          <div class="agent-avatar">
+            <img *ngIf="property.owner.photo" [src]="property.owner.photo" [alt]="property.owner.name">
+            <span *ngIf="!property.owner.photo">{{ property.owner.name.charAt(0) | uppercase }}</span>
+          </div>
+          <div class="agent-info">
+            <p class="agent-name">{{ property.owner.name }}</p>
+            <p class="agent-status">✨ Fast Response</p>
+          </div>
+          <div class="agent-actions">
+            <!-- WhatsApp -->
+            <button class="btn-action whatsapp" (click)="openWhatsApp(property)" title="WhatsApp">
+               <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.666.598 1.236.784 1.41.871.174.087.275.073.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.082 21.312c-1.503 0-2.97-.384-4.281-1.111l-.307-.17-3.181.833.847-3.101-.187-.297c-.799-1.271-1.222-2.736-1.223-4.239.001-4.42 3.595-8.015 8.021-8.016 2.143 0 4.156.834 5.672 2.35 1.514 1.514 2.348 3.528 2.347 5.672-.002 4.42-3.597 8.016-8.016 8.016z"/></svg>
+            </button>
+            <!-- Call -->
+            <button class="btn-action call" (click)="openCallModal()" title="Call">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+               Call
+            </button>
+            <!-- Email -->
+            <a class="btn-action email" [href]="getEmailUrl(property)" title="Email" target="_blank" style="text-decoration: none; display: flex;">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+               Email
+            </a>
+          </div>
+        </div>
 
-                <div class="price-breakdown" *ngIf="nights > 0">
-                  <div class="breakdown-row">
-                    <span>{{ property.price | currency:property.currency:'symbol':'1.0-0' }} x {{ nights }} nights</span>
-                    <span class="total-price">{{ getBookingTotal(property.price) | currency:property.currency:'symbol':'1.0-0' }}</span>
-                  </div>
-                </div>
+        <!-- ─── Booking Card — Viewing-Gated ────────────────────────── -->
+        <div class="action-card booking-card">
+          <h3 class="card-title">Reserve This Property</h3>
 
-                <button type="submit" class="btn-gold full-width" [disabled]="bookingForm.invalid || isSubmittingBooking || kyc.status === 'pending'">
-                  <span *ngIf="kyc.status === 'pending'">Verification Pending</span>
-                  <span *ngIf="!isSubmittingBooking && kyc.status !== 'pending'">Book Now</span>
-                  <div *ngIf="isSubmittingBooking" class="spinner dark"></div>
-                </button>
-                <p *ngIf="kyc.status === 'pending'" class="error-text text-center mt-2" style="color: #fbbf24; margin-top: 10px;">Your identity verification is currently under review.</p>
-              </form>
-            </div>
-            
-            <ng-template #verifyIdentity>
+          <ng-container *ngIf="(viewingStatus$ | async) as viewingStatus">
+
+            <!-- Unauthenticated -->
+            <ng-container *ngIf="!authService.isAuthenticated()">
               <div class="kyc-gate">
-                <p>Identity verification is required before booking luxury properties.</p>
-                <button class="btn-primary full-width" routerLink="/kyc">Verify Identity</button>
+                <div class="gate-icon">🔑</div>
+                <p>Sign in to schedule a viewing and reserve this property.</p>
+                <button class="btn-gold full-width" (click)="onBookProperty(property, viewingStatus)">Sign In to Continue</button>
               </div>
-            </ng-template>
+            </ng-container>
+
+            <!-- Authenticated -->
+            <ng-container *ngIf="authService.isAuthenticated()">
+
+              <!-- STATE A — Locked: no viewing request -->
+              <ng-container *ngIf="getBookingState(viewingStatus) === 'locked'">
+                <div class="booking-gate-wrapper">
+                  <div class="booking-gate-icon">🔒</div>
+                  <h4 class="booking-gate-title">Viewing Required</h4>
+                  <p class="booking-gate-hint">Schedule and complete a property viewing to unlock booking</p>
+                  <button class="btn-book btn-book--locked" id="book-btn-locked" disabled>
+                    <span class="btn-book-lock-icon">🔒</span>
+                    <span>Reserve Property</span>
+                  </button>
+                  <p class="booking-gate-subtext">Complete the form below to schedule your viewing</p>
+                </div>
+              </ng-container>
+
+              <!-- STATE B — Pending: viewing under review -->
+              <ng-container *ngIf="getBookingState(viewingStatus) === 'pending'">
+                <div class="booking-gate-wrapper">
+                  <div class="booking-gate-icon pending-pulse">⏳</div>
+                  <h4 class="booking-gate-title">Viewing Under Review</h4>
+                  <p class="booking-gate-hint">Your viewing request is awaiting owner approval</p>
+                  <button class="btn-book btn-book--pending" id="book-btn-pending" disabled>
+                    <span>⏳ Awaiting Viewing Approval</span>
+                  </button>
+                  <p class="booking-gate-subtext">You'll receive a notification once your viewing is approved</p>
+                </div>
+              </ng-container>
+
+              <!-- STATE C — Eligible: viewing approved or completed -->
+              <ng-container *ngIf="getBookingState(viewingStatus) === 'eligible'">
+                <div class="eligible-badge">
+                  <span class="eligible-icon">✅</span>
+                  <span>Viewing {{ viewingStatus.viewingStatus === 'completed' ? 'Completed' : 'Approved' }} — You Can Reserve</span>
+                </div>
+
+                <form [formGroup]="bookingForm" (ngSubmit)="onBookProperty(property, viewingStatus)">
+                  <ng-container *ngIf="property.status !== 'for-sale'">
+                    <div class="form-group">
+                      <label for="booking-start">Check-in</label>
+                      <input type="date" id="booking-start" formControlName="start_date" [min]="minDate" class="luxury-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="booking-end">Check-out</label>
+                      <input type="date" id="booking-end" formControlName="end_date" [min]="minEndDate" class="luxury-input">
+                    </div>
+
+                    <div class="price-breakdown" *ngIf="nights > 0">
+                      <div class="breakdown-row">
+                        <span>{{ property.price | currency:property.currency:'symbol':'1.0-0' }} × {{ nights }} nights</span>
+                        <span class="total-price">{{ getBookingTotal(property.price) | currency:property.currency:'symbol':'1.0-0' }}</span>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <div class="price-breakdown" *ngIf="property.status === 'for-sale'">
+                    <div class="breakdown-row">
+                      <span>Purchase Price</span>
+                      <span class="total-price">{{ property.price | currency:property.currency:'symbol':'1.0-0' }}</span>
+                    </div>
+                  </div>
+
+                  <button type="submit"
+                          class="btn-book btn-book--eligible full-width"
+                          id="book-btn-eligible"
+                          [disabled]="(property.status !== 'for-sale' && bookingForm.invalid) || isSubmittingBooking">
+                    <span *ngIf="!isSubmittingBooking">✨ Reserve Now</span>
+                    <div *ngIf="isSubmittingBooking" class="spinner dark"></div>
+                  </button>
+                </form>
+              </ng-container>
+
+            </ng-container>
           </ng-container>
 
-          <ng-template #kycCheck>
-            <div class="kyc-gate">
-              <p>Sign in to securely book this property.</p>
-              <button class="btn-primary full-width" (click)="onBookProperty(property, null)">Sign In</button>
-            </div>
-          </ng-template>
         </div>
+        <!-- ─── End Booking Card ──────────────────────────────────────── -->
+
 
         <!-- Viewing Card -->
         <div class="action-card">
           <h3 class="card-title">Schedule a Viewing</h3>
+
+          <!-- If viewing is pending or approved/completed, show status badge -->
+          <ng-container *ngIf="(viewingStatus$ | async) as vs">
+            <div *ngIf="vs.viewingStatus === 'approved' || vs.viewingStatus === 'completed'" class="viewing-done-notice">
+              <span>✅ Viewing {{ vs.viewingStatus === 'completed' ? 'Completed' : 'Approved' }}</span>
+            </div>
+            <div *ngIf="vs.viewingStatus === 'pending'" class="viewing-pending-notice">
+              <span>⏳ Viewing request submitted and under review</span>
+            </div>
+          </ng-container>
+
           <form [formGroup]="viewingForm" (ngSubmit)="onScheduleViewing(property._id)">
             <div class="form-group">
               <label for="viewing-date">Preferred Date</label>
@@ -184,8 +270,8 @@
           <form [formGroup]="inquiryForm" (ngSubmit)="onSendInquiry(property._id)">
             <div class="form-group">
               <label for="inquiry-message">Your Message</label>
-              <textarea id="inquiry-message" formControlName="message" 
-                        placeholder="Tell us what you're looking for..." 
+              <textarea id="inquiry-message" formControlName="message"
+                        placeholder="Tell us what you're looking for..."
                         class="luxury-textarea"></textarea>
               <div *ngIf="inquiryForm.get('message')?.touched && inquiryForm.get('message')?.errors?.['minlength']" class="error-text">
                 Message must be at least 10 characters long.
@@ -198,16 +284,33 @@
           </form>
         </div>
 
-        <!-- Agent Info Placeholder -->
-        <div class="agent-compact-card">
-          <div class="agent-avatar">LE</div>
-          <div class="agent-info">
-            <p class="agent-name">Luxe Estates Concierge</p>
-            <p class="agent-status">Available Now</p>
-          </div>
-        </div>
       </div>
     </aside>
 
+  </div>
+</div>
+
+<!-- Call Modal Overlay -->
+<div class="call-modal-overlay" *ngIf="showCallModal" (click)="closeCallModal()">
+  <div class="call-modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeCallModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <h3 class="modal-title">Contact Agent</h3>
+    <p class="modal-property-title">{{ property?.title }}</p>
+    
+    <div class="phone-number" dir="ltr">
+      <a [href]="'tel:' + property?.owner?.phone" class="phone-link">{{ property?.owner?.phone }}</a>
+    </div>
+
+    <div class="agent-details" *ngIf="property?.owner">
+      <p class="agent-label">Property Agent:</p>
+      <p class="agent-name-large">{{ property?.owner?.name }}</p>
+    </div>
+
+    <div class="modal-footer">
+      <p class="reference-label">Please mention the reference number when calling:</p>
+      <p class="reference-number">{{ generateReferenceNumber(property) }}</p>
+    </div>
   </div>
 </div>

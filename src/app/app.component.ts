@@ -51,11 +51,12 @@ export class AppComponent {
       // Admin sidebar layout toggle
       this.isAdminRoute = url.includes('/admin');
 
-      // Hide footer on dashboard, account, and admin pages
+      // Hide footer on dashboard, account, admin, and checkout pages
       this.isHideFooter = url.includes('/dashboard') || 
                          url.includes('/account') || 
                          url.includes('/admin') ||
-                         url.includes('/profile');
+                         url.includes('/profile') ||
+                         url.includes('/checkout');
 
       // The previous Route-Locked Dark Mode has been removed at the user's request.
       // Dashboard and account pages will now respect the global theme preference.

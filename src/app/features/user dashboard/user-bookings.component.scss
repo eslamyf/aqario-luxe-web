@@ -70,3 +70,101 @@
   
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
+
+// ── Cancel Dialog Overlay ──
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+
+  .dialog-box {
+    background: #1a1a1a;
+    border: 1px solid color-mix(in srgb, #c9a96e 30%, transparent);
+    width: 90%;
+    max-width: 450px;
+    border-radius: 8px;
+    padding: 32px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+
+    h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: #c9a96e;
+      margin-bottom: 12px;
+      margin-top: 0;
+    }
+
+    p {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .reject-reason-input {
+      width: 100%;
+      background: #111;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      padding: 12px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      resize: vertical;
+      margin-bottom: 24px;
+      
+      &:focus {
+        outline: none;
+        border-color: #c9a96e;
+      }
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+
+      button {
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &.btn-ghost {
+          background: transparent;
+          color: #aaa;
+          &:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        }
+
+        &.btn-danger {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+          border: 1px solid rgba(239, 68, 68, 0.3);
+          &:hover:not(:disabled) {
+            background: #ef4444;
+            color: #fff;
+          }
+          &:disabled { opacity: 0.5; cursor: not-allowed; }
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

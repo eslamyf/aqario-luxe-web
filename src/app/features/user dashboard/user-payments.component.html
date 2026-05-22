@@ -58,10 +58,15 @@
             </td>
             <td>{{ p.method || p.paymentMethod || 'Card' }}</td>
             <td>{{ p.totalAmount | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
-            <td>
+            <td style="display: flex; gap: 8px; align-items: center;">
               <span class="status-badge {{ p.status }}">
                 {{ p.status | uppercase }}
               </span>
+              <button *ngIf="p.status === 'pending' && p.booking?._id" 
+                      class="btn-pay-small" 
+                      (click)="goToCheckout(p.booking._id)">
+                Pay Now
+              </button>
             </td>
           </tr>
         </tbody>

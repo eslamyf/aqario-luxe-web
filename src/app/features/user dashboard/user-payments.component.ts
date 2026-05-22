@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserDashboardService } from './user-dashboard.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-payments',
@@ -14,7 +15,7 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
   hasError = false;
   private destroy$ = new Subject<void>();
 
-  constructor(private userService: UserDashboardService) {}
+  constructor(private userService: UserDashboardService, private router: Router) {}
 
   ngOnInit(): void { this.load(); }
 
@@ -43,5 +44,11 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
 
   propertyTitle(p: any): string {
     return p.booking?.property_id?.title ?? p.property?.title ?? 'Unknown Property';
+  }
+
+  goToCheckout(bookingId: string): void {
+    if (bookingId) {
+      this.router.navigate(['/checkout', bookingId]);
+    }
   }
 }

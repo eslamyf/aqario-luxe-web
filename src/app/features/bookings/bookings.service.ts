@@ -25,6 +25,10 @@ export class BookingsService {
     return this.http.get<any>(this.apiUrl, { withCredentials: true });
   }
 
+  getBooking(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`, { withCredentials: true });
+  }
+
   cancelBooking(id: string): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/${id}/cancel`, {}, { withCredentials: true });
   }

@@ -21,13 +21,7 @@ const routes: Routes = [
         (m) => m.PropertiesModule
       ),
   },
-  {
-    path: 'auctions',
-    loadChildren: () =>
-      import('./features/auctions/auctions.module').then(
-        (m) => m.AuctionsModule
-      ),
-  },
+
   {
     path: 'agents',
     loadChildren: () =>

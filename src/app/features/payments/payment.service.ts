@@ -38,6 +38,7 @@ export interface VerifyPaymentStatusResponse {
   data: {
     paid: boolean;
     paymentStatus: string;
+
     verified: boolean;
     transactionId: string | null;
     provider: string;
@@ -55,9 +56,9 @@ export class PaymentService {
   /**
    * Create a checkout session.
    * @param bookingId The booking ID
-   * @param provider The payment provider ('stripe' or 'paymob')
+   * @param provider The payment provider ('paymob', 'paypal', 'bank_transfer', etc.)
    */
-  checkout(bookingId: string, provider: 'stripe' | 'paymob' = 'stripe'): Observable<CheckoutResponse> {
+  checkout(bookingId: string, provider: string = 'paymob'): Observable<CheckoutResponse> {
     return this.http.post<CheckoutResponse>(`${this.apiUrl}/checkout`, {
       bookingId,
       paymentMethod: provider
@@ -70,6 +71,7 @@ export class PaymentService {
   getPaymentStatus(paymentId: string): Observable<PaymentStatusResponse> {
     return this.http.get<PaymentStatusResponse>(`${this.apiUrl}/${paymentId}`);
   }
+
   /**
    * Secure backend verification endpoint for the frontend success polling
    */
