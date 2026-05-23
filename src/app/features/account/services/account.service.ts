@@ -42,7 +42,7 @@ export class AccountService {
         
         // Also update localStorage so it persists on refresh
         const mergedUser = { ...currentUser, photo: user.photo, name: user.name };
-        localStorage.setItem('luxe_user', JSON.stringify(mergedUser));
+        localStorage.setItem('aqario_user', JSON.stringify(mergedUser));
       }
     }
   }

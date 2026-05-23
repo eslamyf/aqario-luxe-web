@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, Observable, of, BehaviorSubject } from 'rxjs';
 import { takeUntil, switchMap, map, catchError, tap } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 import { PropertiesService } from '../../services/properties.service';
 import { FavoritesService } from '../../services/favorites.service';
@@ -37,6 +38,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   private notificationService = inject(NotificationService);
   private bookingsService     = inject(BookingsService);
   private loadingService      = inject(LoadingService);
+  private translateService    = inject(TranslateService);
 
   property: Property | null = null;
   reviews$:    Observable<any[]>              = of([]);
@@ -66,8 +68,19 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  private rawProperty: Property | null = null;
+
   ngOnInit(): void {
     this.buildForms();
+
+    // Listen for language changes to update translation in place
+    this.translateService.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        if (this.rawProperty) {
+          this.property = this.propertiesService.translateProperty(this.rawProperty, event.lang);
+        }
+      });
 
     this.route.paramMap.pipe(
       takeUntil(this.destroy$),
@@ -83,14 +96,15 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
         }
         return this.propertiesService.getPropertyById(id).pipe(
           catchError(err => {
-            this.error = 'Failed to load property details. Please try again later.';
+            this.error = this.translateService.instant('PROPERTIES.DETAIL.NOTIF.FAILED_LOAD');
             this.isLoading = false;
             return of(null);
           })
         );
       })
     ).subscribe(property => {
-      this.property = property;
+      this.rawProperty = property;
+      this.property = property ? this.propertiesService.translateProperty(property) : null;
       this.isLoading = false;
       if (property) {
         this.loadAdditionalData(property._id);
@@ -176,15 +190,15 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   onToggleFavorite(propertyId: string): void {
     if (!this.authService.isAuthenticated()) {
       this.authService.openModal('login');
-      this.notificationService.show('Sign in to save favorites', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.NOTIF.SIGN_IN_FAVORITES'), 'info');
       return;
     }
     this.favoritesService.toggleFavorite(propertyId).subscribe({
       next: (isFav) => this.notificationService.show(
-        isFav ? 'Added to favorites' : 'Removed from favorites',
+        this.translateService.instant(isFav ? 'PROPERTIES.NOTIF.ADDED_FAVORITES' : 'PROPERTIES.NOTIF.REMOVED_FAVORITES'),
         isFav ? 'success' : 'info'
       ),
-      error: () => this.notificationService.show('Failed to update favorite', 'error')
+      error: () => this.notificationService.show(this.translateService.instant('PROPERTIES.NOTIF.FAILED_FAVORITES'), 'error')
     });
   }
 
@@ -209,17 +223,17 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       next: (success) => {
         this.isSubmittingViewing = false;
         if (success) {
-          this.notificationService.show('Viewing request submitted! You\'ll be notified once approved.', 'success');
+          this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.VIEWING_REQUESTED'), 'success');
           this.viewingForm.reset();
           // Refresh state so button transitions to 'pending'
           this.refreshViewingStatus(propertyId);
         } else {
-          this.notificationService.show('Failed to schedule viewing', 'error');
+          this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.FAILED_VIEWING'), 'error');
         }
       },
       error: (err) => {
         this.isSubmittingViewing = false;
-        this.notificationService.show(err.error?.message || 'An error occurred. Please try again.', 'error');
+        this.notificationService.show(err.error?.message || this.translateService.instant('PROPERTIES.DETAIL.NOTIF.ERROR_OCCURRED'), 'error');
       }
     });
   }
@@ -227,7 +241,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   onSendInquiry(propertyId: string): void {
     if (!this.authService.isAuthenticated()) {
       this.authService.openModal('login');
-      this.notificationService.show('Sign in to send an inquiry', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.SIGN_IN_INQUIRY'), 'info');
       return;
     }
 
@@ -240,15 +254,15 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       next: (success) => {
         this.isSubmittingInquiry = false;
         if (success) {
-          this.notificationService.show('Inquiry sent successfully!', 'success');
+          this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.INQUIRY_SENT'), 'success');
           this.inquiryForm.reset();
         } else {
-          this.notificationService.show('Failed to send inquiry', 'error');
+          this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.FAILED_INQUIRY'), 'error');
         }
       },
       error: (err) => {
         this.isSubmittingInquiry = false;
-        this.notificationService.show(err.error?.message || 'An error occurred. Please try again.', 'error');
+        this.notificationService.show(err.error?.message || this.translateService.instant('PROPERTIES.DETAIL.NOTIF.ERROR_OCCURRED'), 'error');
       }
     });
   }
@@ -256,21 +270,21 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   onBookProperty(property: Property, viewingStatus: ViewingStatus): void {
     if (!this.authService.isAuthenticated()) {
       this.authService.openModal('login');
-      this.notificationService.show('Sign in to book this property', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.SIGN_IN_BOOK'), 'info');
       return;
     }
 
     if (this.authService.currentUser?.role !== 'buyer') {
-      this.notificationService.show('Only buyers can book properties.', 'error');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.BUYER_ONLY'), 'error');
       return;
     }
 
     // ── Viewing Gate (client-side check) ─────────────────────
     if (!viewingStatus.eligible) {
       if (viewingStatus.viewingStatus === 'pending') {
-        this.notificationService.show('Your viewing request is still under review. Please wait for approval.', 'info');
+        this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.VIEWING_UNDER_REVIEW_HINT'), 'info');
       } else {
-        this.notificationService.show('Please schedule and complete a viewing before booking this property.', 'info');
+        this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.VIEWING_REQUIRED_HINT'), 'info');
       }
       return;
     }
@@ -292,7 +306,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       end   = new Date(this.bookingForm.get('end_date')?.value);
       
       if (start >= end) {
-        this.notificationService.show('Check-out date must be after check-in date.', 'error');
+        this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.CHECKOUT_AFTER_CHECKIN'), 'error');
         return;
       }
     }
@@ -311,7 +325,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.isSubmittingBooking = false;
         this.loadingService.hide();
-        this.notificationService.show('Booking confirmed! Redirecting to secure checkout...', 'success');
+        this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.BOOKING_CONFIRMED'), 'success');
         this.bookingForm.reset();
         if (res?.data?.booking?._id) {
           this.router.navigate(['/checkout', res.data.booking._id]);
@@ -322,7 +336,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
         this.loadingService.hide();
         const msg = err.error?.code === 'VIEWING_REQUIRED'
           ? err.error.message
-          : (err.error?.message || 'Failed to submit booking');
+          : (err.error?.message || this.translateService.instant('PROPERTIES.DETAIL.NOTIF.FAILED_BOOKING'));
         this.notificationService.show(msg, 'error');
       }
     });
@@ -334,7 +348,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
 
   openCallModal(): void {
     if (!this.property?.owner?.phone) {
-      this.notificationService.show('Phone number not available for this agent.', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.PHONE_NOT_AVAILABLE'), 'info');
       return;
     }
     this.showCallModal = true;
@@ -346,7 +360,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
 
   openWhatsApp(property: Property): void {
     if (!property?.owner?.phone) {
-      this.notificationService.show('WhatsApp number not available for this agent.', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.WHATSAPP_NOT_AVAILABLE'), 'info');
       return;
     }
     let phone = property.owner.phone.replace(/\D/g, '');
@@ -358,7 +372,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
     }
     
     const refNumber = this.generateReferenceNumber(property);
-    const message = `مرحبًا، أنا مهتم بهذا العقار ( MLS ID رقم: ${refNumber}). يرجى التواصل معي لمزيد من التفاصيل.`;
+    const message = this.translateService.instant('PROPERTIES.DETAIL.NOTIF.WHATSAPP_MESSAGE', { refNumber });
     
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
@@ -369,8 +383,8 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       return 'javascript:void(0)';
     }
     const refNumber = this.generateReferenceNumber(property);
-    const subject = `Inquiry regarding property: ${property.title}`;
-    const body = `Hello ${property.owner.name},\n\nI am interested in your property listed on Luxe Estates (Reference: ${refNumber}). Please contact me with more details.\n\nThank you.`;
+    const subject = this.translateService.instant('PROPERTIES.DETAIL.NOTIF.EMAIL_SUBJECT', { title: property.title });
+    const body = this.translateService.instant('PROPERTIES.DETAIL.NOTIF.EMAIL_BODY', { name: property.owner.name, refNumber });
     // Using Gmail Web Compose URL to bypass issues where the user has no default OS mail client configured
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${property.owner.email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }

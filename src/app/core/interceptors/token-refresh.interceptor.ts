@@ -63,13 +63,13 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
           if (token) {
             console.log('[AuthInterceptor] Successfully obtained new token. Retrying original request...');
             // Update token in storage
-            localStorage.setItem('luxe_token', token);
+            localStorage.setItem('aqario_token', token);
             
             // Sync with AuthService user state
             const currentUser = this.authService.getCurrentUser<any>();
             if (currentUser) {
               currentUser.token = token;
-              localStorage.setItem('luxe_user', JSON.stringify(currentUser));
+              localStorage.setItem('aqario_user', JSON.stringify(currentUser));
               this.authService.setCurrentUser(currentUser);
             }
 

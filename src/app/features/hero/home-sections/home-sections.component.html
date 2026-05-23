@@ -7,11 +7,11 @@
 <!-- ── SECTION 1: Partners / Trust Strip ─────────────────────────── -->
 <section class="partners-section home-reveal stagger-container">
   <div class="section-container">
-    <p class="partners-label">TRUSTED BY THE WORLD'S LEADING FIRMS</p>
+    <p class="partners-label">{{ 'HOME.SECTIONS.PARTNERS_LABEL' | translate }}</p>
     <div class="partners-grid">
       <div class="partner-item stagger-item" *ngFor="let p of partners">
-        <span class="partner-abbr">{{ p.abbr }}</span>
-        <span class="partner-name">{{ p.name }}</span>
+        <span class="partner-abbr">{{ p.abbrKey | translate }}</span>
+        <span class="partner-name">{{ p.nameKey | translate }}</span>
       </div>
     </div>
   </div>
@@ -24,8 +24,8 @@
     <!-- Header row -->
     <div class="section-header home-reveal">
       <div>
-        <div class="section-eyebrow">BEST CHOICES</div>
-        <h2 class="section-title">Popular <em>Residencies</em></h2>
+        <div class="section-eyebrow">{{ 'HOME.SECTIONS.BEST_CHOICES' | translate }}</div>
+        <h2 class="section-title">{{ 'HOME.SECTIONS.POPULAR_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.POPULAR_EMPHASIS' | translate }}</em></h2>
       </div>
       <div class="section-nav">
         <button class="nav-arrow" (click)="navigateToProperties()" id="btn-prev-props" aria-label="Previous">‹</button>
@@ -40,8 +40,8 @@
 
     <!-- Error state -->
     <div class="empty-state" *ngIf="!isLoading && hasError">
-      <p>Unable to load properties. Check your connection.</p>
-      <button class="btn-gold" (click)="retry()" id="btn-retry-props">Try Again</button>
+      <p>{{ 'HOME.SECTIONS.ERROR_LOAD' | translate }}</p>
+      <button class="btn-gold" (click)="retry()" id="btn-retry-props">{{ 'HOME.SECTIONS.TRY_AGAIN' | translate }}</button>
     </div>
 
     <!-- Properties grid — real data from MongoDB Atlas -->
@@ -66,7 +66,7 @@
             <span class="placeholder-icon">🏠</span>
           </div>
           <div class="prop-tag" [class.rent]="prop.status === 'for-rent'">
-            {{ prop.status === 'for-rent' ? 'For Rent' : 'For Sale' }}
+            {{ (prop.status === 'for-rent' ? 'REAL_ESTATE.FOR_RENT' : 'REAL_ESTATE.FOR_SALE') | translate }}
           </div>
         </div>
 
@@ -79,9 +79,9 @@
             {{ prop.city }}
           </div>
           <div class="prop-specs">
-            <span *ngIf="prop.bedrooms">🛏 {{ prop.bedrooms }} Bed</span>
-            <span *ngIf="prop.bathrooms">🚿 {{ prop.bathrooms }} Bath</span>
-            <span *ngIf="prop.area">📐 {{ prop.area }}m²</span>
+            <span *ngIf="prop.bedrooms">🛏 {{ prop.bedrooms }} {{ 'REAL_ESTATE.BED_SHORT' | translate }}</span>
+            <span *ngIf="prop.bathrooms">🚿 {{ prop.bathrooms }} {{ 'REAL_ESTATE.BATH_SHORT' | translate }}</span>
+            <span *ngIf="prop.area">📐 {{ prop.area }}{{ 'REAL_ESTATE.AREA_UNIT' | translate }}</span>
           </div>
         </div>
       </div>
@@ -89,14 +89,14 @@
 
     <!-- Empty state -->
     <div class="empty-state" *ngIf="!isLoading && !hasError && featuredProperties.length === 0">
-      <p>No approved properties available right now.</p>
-      <button class="btn-gold" (click)="navigateToProperties()" id="btn-view-all-empty">Browse All</button>
+      <p>{{ 'HOME.SECTIONS.EMPTY_PROPERTIES' | translate }}</p>
+      <button class="btn-gold" (click)="navigateToProperties()" id="btn-view-all-empty">{{ 'HOME.SECTIONS.BROWSE_ALL' | translate }}</button>
     </div>
 
     <!-- View all CTA -->
     <div class="view-all-wrap home-reveal" *ngIf="!isLoading && featuredProperties.length > 0">
       <button class="btn-gold" (click)="navigateToProperties()" id="btn-view-all-props">
-        VIEW ALL PROPERTIES
+        {{ 'HOME.SECTIONS.VIEW_ALL_PROPERTIES' | translate }}
         <span class="btn-arrow">→</span>
       </button>
     </div>
@@ -114,24 +114,23 @@
         <div class="value-img-bg"></div>
         <div class="value-img-card">
           <div class="value-img-icon">🏛</div>
-          <div class="value-img-label">Architectural Excellence</div>
-          <div class="value-img-sub">World-class design & quality</div>
+          <div class="value-img-label">{{ 'HOME.SECTIONS.ARCH_EXCELLENCE' | translate }}</div>
+          <div class="value-img-sub">{{ 'HOME.SECTIONS.ARCH_SUB' | translate }}</div>
         </div>
       </div>
       <!-- Floating badge -->
       <div class="value-badge">
         <span class="badge-number">45</span>
-        <span class="badge-text">Global Cities</span>
+        <span class="badge-text">{{ 'HOME.SECTIONS.GLOBAL_CITIES' | translate }}</span>
       </div>
     </div>
 
     <!-- Right: Accordion -->
     <div class="value-content home-reveal">
-      <div class="section-eyebrow">OUR VALUE</div>
-      <h2 class="section-title">Value We <em>Give to You</em></h2>
+      <div class="section-eyebrow">{{ 'HOME.SECTIONS.OUR_VALUE' | translate }}</div>
+      <h2 class="section-title">{{ 'HOME.SECTIONS.VALUE_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.VALUE_EMPHASIS' | translate }}</em></h2>
       <p class="value-sub">
-        We are always ready to help by providing the best service.
-        We believe a good place to live can make your life better.
+        {{ 'HOME.SECTIONS.VALUE_SUB' | translate }}
       </p>
 
       <div class="accordion">
@@ -147,11 +146,11 @@
             [attr.aria-expanded]="openAccordion === i"
           >
             <span class="accordion-icon">{{ feat.icon }}</span>
-            <span class="accordion-title">{{ feat.title }}</span>
+            <span class="accordion-title">{{ feat.titleKey | translate }}</span>
             <span class="accordion-arrow">{{ openAccordion === i ? '−' : '+' }}</span>
           </button>
           <div class="accordion-body" [style.maxHeight]="openAccordion === i ? '200px' : '0'">
-            <p class="accordion-desc">{{ feat.desc }}</p>
+            <p class="accordion-desc">{{ feat.descKey | translate }}</p>
           </div>
         </div>
       </div>
@@ -166,11 +165,10 @@
 
     <!-- Left: Options grid -->
     <div class="contact-content home-reveal">
-      <div class="section-eyebrow">OUR CONTACT US</div>
-      <h2 class="section-title">Easy to <em>Contact Us</em></h2>
+      <div class="section-eyebrow">{{ 'HOME.SECTIONS.OUR_CONTACT' | translate }}</div>
+      <h2 class="section-title">{{ 'HOME.SECTIONS.CONTACT_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.CONTACT_EMPHASIS' | translate }}</em></h2>
       <p class="contact-sub">
-        We are always ready to help by providing the best service for you.
-        We believe a good place is where you call home.
+        {{ 'HOME.SECTIONS.CONTACT_SUB' | translate }}
       </p>
 
       <div class="contact-grid stagger-container">
@@ -200,7 +198,7 @@
             </svg>
           </span>
           <div class="contact-info">
-            <div class="contact-title">{{ opt.title }}</div>
+            <div class="contact-title">{{ opt.titleKey | translate }}</div>
             <div class="contact-detail">{{ opt.detail }}</div>
           </div>
         </div>
@@ -216,15 +214,15 @@
           <div class="contact-stats-card">
             <div class="cs-item">
               <div class="cs-num">9,000+</div>
-              <div class="cs-label">Premium Properties</div>
+              <div class="cs-label">{{ 'HOME.SECTIONS.PREMIUM_PROPERTIES' | translate }}</div>
             </div>
             <div class="cs-item">
               <div class="cs-num">2,000+</div>
-              <div class="cs-label">Happy Clients</div>
+              <div class="cs-label">{{ 'HOME.SECTIONS.HAPPY_CLIENTS' | translate }}</div>
             </div>
             <div class="cs-item">
               <div class="cs-num">28+</div>
-              <div class="cs-label">Awards Won</div>
+              <div class="cs-label">{{ 'HOME.SECTIONS.AWARDS_WON' | translate }}</div>
             </div>
           </div>
         </div>
@@ -237,10 +235,10 @@
 <!-- ── SECTION 5: Newsletter CTA ─────────────────────────────────── -->
 <section class="cta-section home-reveal">
   <div class="cta-inner">
-    <h2 class="cta-title">Get Started with <em>Luxe Estates</em></h2>
-    <p class="cta-sub">Subscribe to get first access to ultra-premium listings from us. Find your perfect home now.</p>
+    <h2 class="cta-title">{{ 'HOME.SECTIONS.GET_STARTED_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.GET_STARTED_EMPHASIS' | translate }}</em></h2>
+    <p class="cta-sub">{{ 'HOME.SECTIONS.GET_STARTED_SUB' | translate }}</p>
     <button class="cta-btn" (click)="navigateToProperties()" id="btn-get-started">
-      GET STARTED
+      {{ 'HOME.SECTIONS.GET_STARTED_BTN' | translate }}
     </button>
   </div>
 </section>

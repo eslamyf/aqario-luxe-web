@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// LUXE ESTATES — Auth Service (Fully Implemented by Islam)
+// AQARIO LUXE — Auth Service (Fully Implemented by Islam)
 // Includes: Real LocalStorage DB, OTP Flow, and Team Interface Compatibility
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -33,9 +33,9 @@ export interface AuthModalRequest {
 export class AuthService {
 
   // ── Storage Keys (Agreed upon with the team) ─────────────────────────────
-  private readonly TOKEN_KEY = 'luxe_token';
-  private readonly USER_KEY = 'luxe_user';
-  private readonly DB_KEY = 'luxe_all_users';
+  private readonly TOKEN_KEY = 'aqario_token';
+  private readonly USER_KEY = 'aqario_user';
+  private readonly DB_KEY = 'aqario_all_users';
 
   // ── Global User State ────────────────────────────────────────────────────
   private _currentUser$ = new BehaviorSubject<User | null>(null);

@@ -2,15 +2,15 @@
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-overlay">
     <div class="luxury-spinner"></div>
-    <p>Curating details...</p>
+    <p>{{ 'PROPERTIES.DETAIL.CURATING' | translate }}</p>
   </div>
 
   <!-- Error State -->
   <div *ngIf="error" class="error-container">
     <div class="error-card">
-      <h2>Something went wrong</h2>
+      <h2>{{ 'PROPERTIES.DETAIL.ERROR_TITLE' | translate }}</h2>
       <p>{{ error }}</p>
-      <button class="btn-primary" routerLink="/properties">Back to Listings</button>
+      <button class="btn-primary" routerLink="/properties">{{ 'PROPERTIES.DETAIL.BACK_LISTINGS' | translate }}</button>
     </div>
   </div>
 
@@ -51,27 +51,27 @@
           <div class="stat-item">
             <span class="stat-icon">🛏️</span>
             <span class="stat-value">{{ property.bedrooms }}</span>
-            <span class="stat-label">Beds</span>
+            <span class="stat-label">{{ 'REAL_ESTATE.BED_SHORT' | translate }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-icon">🚿</span>
             <span class="stat-value">{{ property.bathrooms }}</span>
-            <span class="stat-label">Baths</span>
+            <span class="stat-label">{{ 'REAL_ESTATE.BATH_SHORT' | translate }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-icon">📐</span>
             <span class="stat-value">{{ property.area }}</span>
-            <span class="stat-label">m²</span>
+            <span class="stat-label">{{ 'REAL_ESTATE.AREA_UNIT' | translate }}</span>
           </div>
         </div>
 
         <div class="description-box">
-          <h3 class="section-title">Overview</h3>
+          <h3 class="section-title">{{ 'PROPERTIES.DETAIL.OVERVIEW' | translate }}</h3>
           <p class="description-text">{{ property.description }}</p>
         </div>
 
         <div class="features-box" *ngIf="property.features && property.features.length > 0">
-          <h3 class="section-title">Features &amp; Amenities</h3>
+          <h3 class="section-title">{{ 'PROPERTIES.DETAIL.FEATURES' | translate }}</h3>
           <div class="features-grid">
             <span *ngFor="let feature of property.features" class="feature-chip">{{ feature }}</span>
           </div>
@@ -79,12 +79,12 @@
 
         <!-- Reviews Section -->
         <div class="reviews-section">
-          <h3 class="section-title">Guest Reviews</h3>
+          <h3 class="section-title">{{ 'PROPERTIES.DETAIL.GUEST_REVIEWS' | translate }}</h3>
           <div *ngIf="(reviews$ | async) as reviews; else reviewsLoading">
             <div *ngIf="reviews.length > 0; else noReviews" class="reviews-list">
               <div *ngFor="let review of reviews" class="review-card">
                 <div class="review-header">
-                  <span class="reviewer-name">{{ review.user?.name || 'Anonymous' }}</span>
+                  <span class="reviewer-name">{{ review.user?.name || ('PROPERTIES.DETAIL.ANONYMOUS' | translate) }}</span>
                   <span class="review-rating">⭐ {{ review.rating }}</span>
                 </div>
                 <p class="review-comment">{{ review.comment }}</p>
@@ -92,7 +92,7 @@
               </div>
             </div>
             <ng-template #noReviews>
-              <p class="empty-state">Be the first to review after your visit</p>
+              <p class="empty-state">{{ 'PROPERTIES.DETAIL.NO_REVIEWS' | translate }}</p>
             </ng-template>
           </div>
           <ng-template #reviewsLoading>
@@ -113,7 +113,7 @@
           </div>
           <div class="agent-info">
             <p class="agent-name">{{ property.owner.name }}</p>
-            <p class="agent-status">✨ Fast Response</p>
+            <p class="agent-status">✨ {{ 'PROPERTIES.DETAIL.FAST_RESPONSE' | translate }}</p>
           </div>
           <div class="agent-actions">
             <!-- WhatsApp -->
@@ -121,21 +121,21 @@
                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.666.598 1.236.784 1.41.871.174.087.275.073.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.082 21.312c-1.503 0-2.97-.384-4.281-1.111l-.307-.17-3.181.833.847-3.101-.187-.297c-.799-1.271-1.222-2.736-1.223-4.239.001-4.42 3.595-8.015 8.021-8.016 2.143 0 4.156.834 5.672 2.35 1.514 1.514 2.348 3.528 2.347 5.672-.002 4.42-3.597 8.016-8.016 8.016z"/></svg>
             </button>
             <!-- Call -->
-            <button class="btn-action call" (click)="openCallModal()" title="Call">
+            <button class="btn-action call" (click)="openCallModal()" [title]="'PROPERTIES.DETAIL.CALL' | translate">
                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-               Call
+               {{ 'PROPERTIES.DETAIL.CALL' | translate }}
             </button>
             <!-- Email -->
-            <a class="btn-action email" [href]="getEmailUrl(property)" title="Email" target="_blank" style="text-decoration: none; display: flex;">
+            <a class="btn-action email" [href]="getEmailUrl(property)" [title]="'PROPERTIES.DETAIL.EMAIL' | translate" target="_blank" style="text-decoration: none; display: flex;">
                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-               Email
+               {{ 'PROPERTIES.DETAIL.EMAIL' | translate }}
             </a>
           </div>
         </div>
 
         <!-- ─── Booking Card — Viewing-Gated ────────────────────────── -->
         <div class="action-card booking-card">
-          <h3 class="card-title">Reserve This Property</h3>
+          <h3 class="card-title">{{ 'PROPERTIES.DETAIL.RESERVE_TITLE' | translate }}</h3>
 
           <ng-container *ngIf="(viewingStatus$ | async) as viewingStatus">
 
@@ -143,8 +143,8 @@
             <ng-container *ngIf="!authService.isAuthenticated()">
               <div class="kyc-gate">
                 <div class="gate-icon">🔑</div>
-                <p>Sign in to schedule a viewing and reserve this property.</p>
-                <button class="btn-gold full-width" (click)="onBookProperty(property, viewingStatus)">Sign In to Continue</button>
+                <p>{{ 'PROPERTIES.DETAIL.SIGN_IN_PROMPT' | translate }}</p>
+                <button class="btn-gold full-width" (click)="onBookProperty(property, viewingStatus)">{{ 'PROPERTIES.DETAIL.SIGN_IN_BTN' | translate }}</button>
               </div>
             </ng-container>
 
@@ -155,13 +155,13 @@
               <ng-container *ngIf="getBookingState(viewingStatus) === 'locked'">
                 <div class="booking-gate-wrapper">
                   <div class="booking-gate-icon">🔒</div>
-                  <h4 class="booking-gate-title">Viewing Required</h4>
-                  <p class="booking-gate-hint">Schedule and complete a property viewing to unlock booking</p>
+                  <h4 class="booking-gate-title">{{ 'PROPERTIES.DETAIL.VIEWING_REQUIRED' | translate }}</h4>
+                  <p class="booking-gate-hint">{{ 'PROPERTIES.DETAIL.VIEWING_REQUIRED_DESC' | translate }}</p>
                   <button class="btn-book btn-book--locked" id="book-btn-locked" disabled>
                     <span class="btn-book-lock-icon">🔒</span>
-                    <span>Reserve Property</span>
+                    <span>{{ 'PROPERTIES.DETAIL.RESERVE_PROPERTY' | translate }}</span>
                   </button>
-                  <p class="booking-gate-subtext">Complete the form below to schedule your viewing</p>
+                  <p class="booking-gate-subtext">{{ 'PROPERTIES.DETAIL.VIEWING_FORM_HINT' | translate }}</p>
                 </div>
               </ng-container>
 
@@ -169,12 +169,12 @@
               <ng-container *ngIf="getBookingState(viewingStatus) === 'pending'">
                 <div class="booking-gate-wrapper">
                   <div class="booking-gate-icon pending-pulse">⏳</div>
-                  <h4 class="booking-gate-title">Viewing Under Review</h4>
-                  <p class="booking-gate-hint">Your viewing request is awaiting owner approval</p>
+                  <h4 class="booking-gate-title">{{ 'PROPERTIES.DETAIL.VIEWING_UNDER_REVIEW' | translate }}</h4>
+                  <p class="booking-gate-hint">{{ 'PROPERTIES.DETAIL.VIEWING_UNDER_REVIEW_DESC' | translate }}</p>
                   <button class="btn-book btn-book--pending" id="book-btn-pending" disabled>
-                    <span>⏳ Awaiting Viewing Approval</span>
+                    <span>⏳ {{ 'PROPERTIES.DETAIL.AWAITING_APPROVAL' | translate }}</span>
                   </button>
-                  <p class="booking-gate-subtext">You'll receive a notification once your viewing is approved</p>
+                  <p class="booking-gate-subtext">{{ 'PROPERTIES.DETAIL.NOTIF_ON_APPROVE' | translate }}</p>
                 </div>
               </ng-container>
 
@@ -182,23 +182,23 @@
               <ng-container *ngIf="getBookingState(viewingStatus) === 'eligible'">
                 <div class="eligible-badge">
                   <span class="eligible-icon">✅</span>
-                  <span>Viewing {{ viewingStatus.viewingStatus === 'completed' ? 'Completed' : 'Approved' }} — You Can Reserve</span>
+                  <span>{{ 'PROPERTIES.DETAIL.ELIGIBLE_NOTICE' | translate:{ status: (viewingStatus.viewingStatus === 'completed' ? ('PROPERTIES.DETAIL.COMPLETED' | translate) : ('PROPERTIES.DETAIL.APPROVED' | translate)) } }}</span>
                 </div>
 
                 <form [formGroup]="bookingForm" (ngSubmit)="onBookProperty(property, viewingStatus)">
                   <ng-container *ngIf="property.status !== 'for-sale'">
                     <div class="form-group">
-                      <label for="booking-start">Check-in</label>
+                      <label for="booking-start">{{ 'PROPERTIES.DETAIL.CHECK_IN' | translate }}</label>
                       <input type="date" id="booking-start" formControlName="start_date" [min]="minDate" class="luxury-input">
                     </div>
                     <div class="form-group">
-                      <label for="booking-end">Check-out</label>
+                      <label for="booking-end">{{ 'PROPERTIES.DETAIL.CHECK_OUT' | translate }}</label>
                       <input type="date" id="booking-end" formControlName="end_date" [min]="minEndDate" class="luxury-input">
                     </div>
 
                     <div class="price-breakdown" *ngIf="nights > 0">
                       <div class="breakdown-row">
-                        <span>{{ property.price | currency:property.currency:'symbol':'1.0-0' }} × {{ nights }} nights</span>
+                        <span>{{ 'PROPERTIES.DETAIL.NIGHTS_X' | translate:{ price: (property.price | currency:property.currency:'symbol':'1.0-0'), count: nights } }}</span>
                         <span class="total-price">{{ getBookingTotal(property.price) | currency:property.currency:'symbol':'1.0-0' }}</span>
                       </div>
                     </div>
@@ -206,7 +206,7 @@
 
                   <div class="price-breakdown" *ngIf="property.status === 'for-sale'">
                     <div class="breakdown-row">
-                      <span>Purchase Price</span>
+                      <span>{{ 'PROPERTIES.DETAIL.PURCHASE_PRICE' | translate }}</span>
                       <span class="total-price">{{ property.price | currency:property.currency:'symbol':'1.0-0' }}</span>
                     </div>
                   </div>
@@ -215,7 +215,7 @@
                           class="btn-book btn-book--eligible full-width"
                           id="book-btn-eligible"
                           [disabled]="(property.status !== 'for-sale' && bookingForm.invalid) || isSubmittingBooking">
-                    <span *ngIf="!isSubmittingBooking">✨ Reserve Now</span>
+                    <span *ngIf="!isSubmittingBooking">✨ {{ 'PROPERTIES.DETAIL.RESERVE_NOW' | translate }}</span>
                     <div *ngIf="isSubmittingBooking" class="spinner dark"></div>
                   </button>
                 </form>
@@ -230,35 +230,35 @@
 
         <!-- Viewing Card -->
         <div class="action-card">
-          <h3 class="card-title">Schedule a Viewing</h3>
+          <h3 class="card-title">{{ 'PROPERTIES.DETAIL.SCHEDULE_TITLE' | translate }}</h3>
 
           <!-- If viewing is pending or approved/completed, show status badge -->
           <ng-container *ngIf="(viewingStatus$ | async) as vs">
             <div *ngIf="vs.viewingStatus === 'approved' || vs.viewingStatus === 'completed'" class="viewing-done-notice">
-              <span>✅ Viewing {{ vs.viewingStatus === 'completed' ? 'Completed' : 'Approved' }}</span>
+              <span>✅ {{ vs.viewingStatus === 'completed' ? ('PROPERTIES.DETAIL.VIEWING_COMPLETED_NOTICE' | translate) : ('PROPERTIES.DETAIL.VIEWING_APPROVED_NOTICE' | translate) }}</span>
             </div>
             <div *ngIf="vs.viewingStatus === 'pending'" class="viewing-pending-notice">
-              <span>⏳ Viewing request submitted and under review</span>
+              <span>⏳ {{ 'PROPERTIES.DETAIL.VIEWING_SUBMITTED' | translate }}</span>
             </div>
           </ng-container>
 
           <form [formGroup]="viewingForm" (ngSubmit)="onScheduleViewing(property._id)">
             <div class="form-group">
-              <label for="viewing-date">Preferred Date</label>
+              <label for="viewing-date">{{ 'PROPERTIES.DETAIL.PREFERRED_DATE' | translate }}</label>
               <input type="date" id="viewing-date" formControlName="preferredDate" [min]="minDate" class="luxury-input">
               <div *ngIf="viewingForm.get('preferredDate')?.touched && viewingForm.get('preferredDate')?.errors?.['required']" class="error-text">
-                Please select a date.
+                {{ 'PROPERTIES.DETAIL.ERROR_DATE' | translate }}
               </div>
             </div>
             <div class="form-group">
-              <label for="viewing-time">Preferred Time</label>
+              <label for="viewing-time">{{ 'PROPERTIES.DETAIL.PREFERRED_TIME' | translate }}</label>
               <input type="time" id="viewing-time" formControlName="preferredTime" class="luxury-input">
               <div *ngIf="viewingForm.get('preferredTime')?.touched && viewingForm.get('preferredTime')?.errors?.['required']" class="error-text">
-                Please select a time.
+                {{ 'PROPERTIES.DETAIL.ERROR_TIME' | translate }}
               </div>
             </div>
             <button type="submit" class="btn-primary full-width" [disabled]="viewingForm.invalid || isSubmittingViewing">
-              <span *ngIf="!isSubmittingViewing">Request Viewing</span>
+              <span *ngIf="!isSubmittingViewing">{{ 'PROPERTIES.DETAIL.REQUEST_VIEWING' | translate }}</span>
               <div *ngIf="isSubmittingViewing" class="spinner"></div>
             </button>
           </form>
@@ -266,19 +266,19 @@
 
         <!-- Inquiry Card -->
         <div class="action-card">
-          <h3 class="card-title">Send an Inquiry</h3>
+          <h3 class="card-title">{{ 'PROPERTIES.DETAIL.INQUIRY_TITLE' | translate }}</h3>
           <form [formGroup]="inquiryForm" (ngSubmit)="onSendInquiry(property._id)">
             <div class="form-group">
-              <label for="inquiry-message">Your Message</label>
+              <label for="inquiry-message">{{ 'PROPERTIES.DETAIL.YOUR_MESSAGE' | translate }}</label>
               <textarea id="inquiry-message" formControlName="message"
-                        placeholder="Tell us what you're looking for..."
+                        [placeholder]="'PROPERTIES.DETAIL.INQUIRY_PLACEHOLDER' | translate"
                         class="luxury-textarea"></textarea>
               <div *ngIf="inquiryForm.get('message')?.touched && inquiryForm.get('message')?.errors?.['minlength']" class="error-text">
-                Message must be at least 10 characters long.
+                {{ 'PROPERTIES.DETAIL.ERROR_MESSAGE_LEN' | translate }}
               </div>
             </div>
             <button type="submit" class="btn-gold full-width" [disabled]="inquiryForm.invalid || isSubmittingInquiry">
-              <span *ngIf="!isSubmittingInquiry">Send Message</span>
+              <span *ngIf="!isSubmittingInquiry">{{ 'PROPERTIES.DETAIL.SEND_MESSAGE' | translate }}</span>
               <div *ngIf="isSubmittingInquiry" class="spinner dark"></div>
             </button>
           </form>
@@ -296,7 +296,7 @@
     <button class="close-btn" (click)="closeCallModal()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
-    <h3 class="modal-title">Contact Agent</h3>
+    <h3 class="modal-title">{{ 'PROPERTIES.DETAIL.CONTACT_AGENT' | translate }}</h3>
     <p class="modal-property-title">{{ property?.title }}</p>
     
     <div class="phone-number" dir="ltr">
@@ -304,12 +304,12 @@
     </div>
 
     <div class="agent-details" *ngIf="property?.owner">
-      <p class="agent-label">Property Agent:</p>
+      <p class="agent-label">{{ 'PROPERTIES.DETAIL.PROPERTY_AGENT' | translate }}</p>
       <p class="agent-name-large">{{ property?.owner?.name }}</p>
     </div>
 
     <div class="modal-footer">
-      <p class="reference-label">Please mention the reference number when calling:</p>
+      <p class="reference-label">{{ 'PROPERTIES.DETAIL.REF_NUM_HINT' | translate }}</p>
       <p class="reference-number">{{ generateReferenceNumber(property) }}</p>
     </div>
   </div>

@@ -13,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const token = localStorage.getItem('luxe_token');
+    const token = localStorage.getItem('aqario_token');
 
     // ✅ Clone request to enable withCredentials for ALL requests
     // This ensures cookies (like refreshToken) are sent securely to the backend

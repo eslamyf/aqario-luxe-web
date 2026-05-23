@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SocialLoginModule, SocialAuthServiceConfig, GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from '../environments/environment';
 
@@ -16,8 +18,30 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { TokenRefreshInterceptor } from './core/interceptors/token-refresh.interceptor';
 import { KycInterceptor } from './core/interceptors/kyc.interceptor';
 
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+}
+
 // ✅ FIX: import standalone component
 import { AuthModalComponent } from './core/auth/auth-modal/auth-modal.component';
+
+// Dynamic locale support
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeAr from '@angular/common/locales/ar';
+import { TranslateService } from '@ngx-translate/core';
+
+registerLocaleData(localeAr);
+
+export class DynamicLocaleId extends String {
+  constructor(private translate: TranslateService) {
+    super();
+  }
+  override toString(): string {
+    return this.translate.currentLang || this.translate.defaultLang || 'en';
+  }
+}
 
 @NgModule({
   declarations: [
@@ -42,6 +66,15 @@ import { AuthModalComponent } from './core/auth/auth-modal/auth-modal.component'
 
     // Task 1.4 — Google Sign-In SDK
     SocialLoginModule,
+
+    // Translation support
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
 
   providers: [
@@ -75,6 +108,12 @@ import { AuthModalComponent } from './core/auth/auth-modal/auth-modal.component'
         ],
         onError: (err: any) => console.error('[GoogleAuth] Provider error:', err),
       } as SocialAuthServiceConfig,
+    },
+    // Dynamic LOCALE_ID provider for reactive date/time formatting
+    {
+      provide: LOCALE_ID,
+      useClass: DynamicLocaleId,
+      deps: [TranslateService],
     },
   ],
 

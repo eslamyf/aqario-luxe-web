@@ -5,10 +5,10 @@
     <button
       *ngFor="let chip of chips"
       class="chip"
-      [class.active]="activeChip === chip"
+      [class.active]="activeChip === chip.value"
       type="button"
-      (click)="selectChip(chip)"
-    >{{ chip }}</button>
+      (click)="selectChip(chip.value)"
+    >{{ chip.labelKey | translate }}</button>
   </div>
 
   <!-- Search Fields Row -->
@@ -16,11 +16,11 @@
 
     <!-- Search Query -->
     <div class="field-group">
-      <label class="field-label">Search</label>
+      <label class="field-label">{{ 'SEARCH.LABEL_SEARCH' | translate }}</label>
       <input
         class="field-input"
         type="text"
-        placeholder="Search properties, cities, features..."
+        [placeholder]="'SEARCH.PLACEHOLDER' | translate"
         formControlName="searchQuery"
       />
     </div>
@@ -29,9 +29,9 @@
 
     <!-- Property Type -->
     <div class="field-group">
-      <label class="field-label">Property Type</label>
+      <label class="field-label">{{ 'SEARCH.LABEL_PROP_TYPE' | translate }}</label>
       <select class="field-input" formControlName="propertyType">
-        <option *ngFor="let t of propertyTypes" [value]="t">{{ t }}</option>
+        <option *ngFor="let t of propertyTypes" [value]="t.value">{{ t.labelKey | translate }}</option>
       </select>
     </div>
 
@@ -39,9 +39,9 @@
 
     <!-- Listing Type -->
     <div class="field-group">
-      <label class="field-label">Listing Type</label>
+      <label class="field-label">{{ 'SEARCH.LABEL_LIST_TYPE' | translate }}</label>
       <select class="field-input" formControlName="listingType">
-        <option *ngFor="let lt of listingTypes" [value]="lt">{{ lt }}</option>
+        <option *ngFor="let lt of listingTypes" [value]="lt.value">{{ lt.labelKey | translate }}</option>
       </select>
     </div>
 
@@ -49,18 +49,18 @@
 
     <!-- Max Budget -->
     <div class="field-group">
-      <label class="field-label">Max Budget</label>
+      <label class="field-label">{{ 'SEARCH.LABEL_BUDGET' | translate }}</label>
       <select class="field-input" formControlName="budget">
-        <option *ngFor="let b of budgets" [value]="b">{{ b }}</option>
+        <option *ngFor="let b of budgets" [value]="b.value">{{ b.labelKey | translate }}</option>
       </select>
     </div>
 
     <!-- Search Button -->
     <button class="btn-search" type="button" (click)="onExplore()">
-      <span>EXPLORE PROPERTIES</span>
+      <span>{{ 'SEARCH.BTN_EXPLORE' | translate }}</span>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="m21 21-4.35-4.35"/>
+         <circle cx="11" cy="11" r="8"/>
+         <path d="m21 21-4.35-4.35"/>
       </svg>
     </button>
 
@@ -68,8 +68,8 @@
 
   <!-- Secondary Row: List Property -->
   <div class="secondary-row">
-    <span class="secondary-text">Own a luxury property?</span>
-    <button class="btn-list-prop" type="button">LIST YOUR PROPERTY</button>
+    <span class="secondary-text">{{ 'SEARCH.OWN_LUXURY' | translate }}</span>
+    <button class="btn-list-prop" type="button">{{ 'SEARCH.BTN_LIST' | translate }}</button>
   </div>
 
 </div>

@@ -23,6 +23,7 @@ import { PropertiesService } from '../../services/properties.service';
 import { PropertyActionsService, ViewingRequestPayload } from '../../services/property-actions.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 // ── Which inline form is currently visible ────────────────────────────────────
 type ActiveForm = 'none' | 'viewing' | 'inquiry';
@@ -38,6 +39,7 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
   private propertyActionsService = inject(PropertyActionsService);
   private notificationService = inject(NotificationService);
   private authService = inject(AuthService);
+  private translateService = inject(TranslateService);
 
   // ── Inputs / Outputs ──────────────────────────────────────────────────────
   @Input() property!: Property;
@@ -55,6 +57,8 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  private rawProperty!: Property;
+
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
     // Lock body scroll
@@ -62,6 +66,19 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
 
     // Entry animation — next frame so CSS transition fires correctly
     requestAnimationFrame(() => { this.isActive = true; });
+
+    // Save raw property and translate it
+    this.rawProperty = this.property;
+    this.property = this.propertiesService.translateProperty(this.rawProperty);
+
+    // Listen for language changes to update translation in place
+    this.translateService.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        if (this.rawProperty) {
+          this.property = this.propertiesService.translateProperty(this.rawProperty, event.lang);
+        }
+      });
 
     // ── Reactive forms (Style B inputs per coding-rules.md §3.5) ─────────
     this.viewingForm = this.fb.group({
@@ -113,7 +130,7 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
   onScheduleViewingClick(): void {
     if (!this.authService.isAuthenticated()) {
       this.authService.openModal('login');
-      this.notificationService.show('Sign in to schedule a viewing', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.SIGN_IN_VIEWING'), 'info');
       return;
     }
     this.activeForm = this.activeForm === 'viewing' ? 'none' : 'viewing';
@@ -137,13 +154,13 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
           this.isSubmitting = false;
           if (success) {
             this.notificationService.show(
-              'Viewing scheduled! Our agent will confirm shortly.',
+              this.translateService.instant('PROPERTIES.DETAIL.NOTIF.VIEWING_SCHEDULED_CONFIRM'),
               'success'
             );
             this.activeForm = 'none';
             this.viewingForm.reset();
           } else {
-            this.notificationService.show('Failed to schedule. Try again.', 'error');
+            this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.FAILED_VIEWING_TRY'), 'error');
           }
         },
         error: (err) => {
@@ -156,7 +173,7 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
   onMakeInquiryClick(): void {
     if (!this.authService.isAuthenticated()) {
       this.authService.openModal('login');
-      this.notificationService.show('Sign in to send an inquiry', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.SIGN_IN_INQUIRY'), 'info');
       return;
     }
     this.activeForm = this.activeForm === 'inquiry' ? 'none' : 'inquiry';
@@ -169,7 +186,7 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
     const message = (this.inquiryForm.get('message')!.value as string).trim();
 
     if (!message) {
-      this.notificationService.show('Message cannot be empty', 'error');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.MESSAGE_EMPTY'), 'error');
       this.isSubmitting = false;
       return;
     }
@@ -181,11 +198,11 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
         next: (success) => {
           this.isSubmitting = false;
           if (success) {
-            this.notificationService.show('Inquiry sent!', 'success');
+            this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.INQUIRY_SENT_SHORT'), 'success');
             this.activeForm = 'none';
             this.inquiryForm.reset();
           } else {
-            this.notificationService.show('Failed to send. Try again.', 'error');
+            this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.FAILED_SEND_TRY'), 'error');
           }
         },
         error: (err) => {

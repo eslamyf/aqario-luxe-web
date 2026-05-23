@@ -172,7 +172,7 @@ export class KycStatusBannerComponent {
     switch (this.status) {
       case 'pending': return 'We are currently reviewing your documents. This usually takes 24h.';
       case 'rejected': return 'We could not verify your identity. Please check your documents.';
-      default: return 'To list properties or start bidding, you must verify your identity.';
+      default: return 'To list properties or make booking requests, you must verify your identity.';
     }
   }
 }

@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormBuilder } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 
 import { PropertiesService } from '../../services/properties.service';
 import { FavoritesService } from '../../services/favorites.service';
@@ -23,6 +24,7 @@ export class PropertiesPageComponent implements OnInit {
   private favoritesService    = inject(FavoritesService);
   private authService         = inject(AuthService);
   private notificationService = inject(NotificationService);
+  private translateService    = inject(TranslateService);
   private destroyRef          = inject(DestroyRef);
 
   // ── Reactive State ────────────────────────────────────────────────────────
@@ -51,14 +53,14 @@ export class PropertiesPageComponent implements OnInit {
 
   // ── Filter tabs — aligned with backend enum exactly ───────────────────────
   filterTabs = [
-    { label: 'All',         key: 'all' },
-    { label: 'For Sale',    key: 'for-sale' },
-    { label: 'For Rent',    key: 'for-rent' },
-    { label: 'Apartments',  key: 'apartment' },
-    { label: 'Villas',      key: 'villa' },
-    { label: 'Houses',      key: 'house' },
-    { label: 'Studios',     key: 'studio' },
-    { label: 'Commercial',  key: 'commercial' },
+    { labelKey: 'PROPERTIES.TABS.ALL',         key: 'all' },
+    { labelKey: 'REAL_ESTATE.FOR_SALE',        key: 'for-sale' },
+    { labelKey: 'REAL_ESTATE.FOR_RENT',        key: 'for-rent' },
+    { labelKey: 'REAL_ESTATE.APARTMENTS_CHIP', key: 'apartment' },
+    { labelKey: 'REAL_ESTATE.VILLAS_CHIP',     key: 'villa' },
+    { labelKey: 'PROPERTIES.TABS.HOUSES',      key: 'house' },
+    { labelKey: 'PROPERTIES.TABS.STUDIOS',     key: 'studio' },
+    { labelKey: 'REAL_ESTATE.COMMERCIAL',      key: 'commercial' },
   ];
 
   ngOnInit(): void {
@@ -173,19 +175,19 @@ export class PropertiesPageComponent implements OnInit {
   onFavoriteToggled(propertyId: string): void {
     if (!this.authService.isAuthenticated()) {
       this.authService.openModal('login');
-      this.notificationService.show('Sign in to save favorites', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.NOTIF.SIGN_IN_FAVORITES'), 'info');
       return;
     }
 
     this.favoritesService.toggleFavorite(propertyId).subscribe({
       next: (isFav) => {
         this.notificationService.show(
-          isFav ? 'Added to favorites' : 'Removed from favorites',
+          this.translateService.instant(isFav ? 'PROPERTIES.NOTIF.ADDED_FAVORITES' : 'PROPERTIES.NOTIF.REMOVED_FAVORITES'),
           isFav ? 'success' : 'info'
         );
       },
       error: () => {
-        this.notificationService.show('Failed to update favorite', 'error');
+        this.notificationService.show(this.translateService.instant('PROPERTIES.NOTIF.FAILED_FAVORITES'), 'error');
       }
     });
   }

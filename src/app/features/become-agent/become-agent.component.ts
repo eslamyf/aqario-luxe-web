@@ -84,11 +84,11 @@ export class BecomeAgentComponent implements OnInit {
       this.isLoading = false;
       this.showNotification('Welcome to the Elite! Your account is now upgraded to agent.', 'success');
 
-      const userData = localStorage.getItem('luxe_user');
+      const userData = localStorage.getItem('aqario_user');
       if (userData) {
         const parsedUser = JSON.parse(userData);
         parsedUser.role = 'agent';
-        localStorage.setItem('luxe_user', JSON.stringify(parsedUser));
+        localStorage.setItem('aqario_user', JSON.stringify(parsedUser));
       }
 
       this.router.navigate(['/add-property']);

@@ -43,37 +43,37 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // ── Static data ────────────────────────────────────────────────────────────
   partners = [
-    { name: 'PROLOGIS',        abbr: 'PLD'  },
-    { name: 'AMERICAN TOWER',  abbr: 'AMT'  },
-    { name: 'EQUINIX',         abbr: 'EQIX' },
-    { name: 'DIGITAL REALTY',  abbr: 'DLR'  },
-    { name: 'SIMON PROPERTY',  abbr: 'SPG'  },
-    { name: 'WELLTOWER',       abbr: 'WELL' },
+    { nameKey: 'HOME.PARTNERS.PLD.NAME', abbrKey: 'HOME.PARTNERS.PLD.ABBR' },
+    { nameKey: 'HOME.PARTNERS.AMT.NAME', abbrKey: 'HOME.PARTNERS.AMT.ABBR' },
+    { nameKey: 'HOME.PARTNERS.EQIX.NAME', abbrKey: 'HOME.PARTNERS.EQIX.ABBR' },
+    { nameKey: 'HOME.PARTNERS.DLR.NAME', abbrKey: 'HOME.PARTNERS.DLR.ABBR' },
+    { nameKey: 'HOME.PARTNERS.SPG.NAME', abbrKey: 'HOME.PARTNERS.SPG.ABBR' },
+    { nameKey: 'HOME.PARTNERS.WELL.NAME', abbrKey: 'HOME.PARTNERS.WELL.ABBR' },
   ];
 
   valueFeatures = [
     {
       icon: '◈',
-      title: 'Best Interest Rates on the Market',
-      desc: 'We work with top financial institutions to secure the most competitive mortgage rates available globally, saving you thousands over the life of your investment.',
+      titleKey: 'HOME.VALUES.INTEREST_RATES.TITLE',
+      descKey: 'HOME.VALUES.INTEREST_RATES.DESC',
     },
     {
       icon: '◆',
-      title: 'Prevent Unstable Prices',
-      desc: 'Our AI-driven market analytics lock in fair valuations, shielding your investment from volatile fluctuations and ensuring long-term capital preservation.',
+      titleKey: 'HOME.VALUES.UNSTABLE_PRICES.TITLE',
+      descKey: 'HOME.VALUES.UNSTABLE_PRICES.DESC',
     },
     {
       icon: '◇',
-      title: 'Best Price on the Market',
-      desc: 'Access exclusive off-market listings and early access deals before they go public, negotiated directly by our expert team on your behalf.',
+      titleKey: 'HOME.VALUES.BEST_PRICE.TITLE',
+      descKey: 'HOME.VALUES.BEST_PRICE.DESC',
     },
   ];
 
   contactOptions = [
-    { id: 'call',    title: 'Call',       detail: '+20 1122 345 14' },
-    { id: 'chat',    title: 'Chat',       detail: '120 120 44 14'   },
-    { id: 'video',   title: 'Video Call', detail: '+20 122 345 11'  },
-    { id: 'message', title: 'Message',    detail: '+20 133 145 14'  },
+    { id: 'call',    titleKey: 'HOME.CONTACT.CALL',    detail: '+20 1122 345 14' },
+    { id: 'chat',    titleKey: 'HOME.CONTACT.CHAT',    detail: '120 120 44 14'   },
+    { id: 'video',   titleKey: 'HOME.CONTACT.VIDEO',   detail: '+20 122 345 11'  },
+    { id: 'message', titleKey: 'HOME.CONTACT.MESSAGE', detail: '+20 133 145 14'  },
   ];
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────

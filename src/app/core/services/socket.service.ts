@@ -24,7 +24,7 @@ export class SocketService {
     if (!this.socketPromise) {
       this.socketPromise = import('socket.io-client').then(({ io }) => {
         this.socket = io(this.baseUrl, {
-          auth: (cb) => cb({ token: localStorage.getItem('luxe_token') }),
+          auth: (cb) => cb({ token: localStorage.getItem('aqario_token') }),
           withCredentials: true,
           transports:      ['websocket', 'polling'],
         });

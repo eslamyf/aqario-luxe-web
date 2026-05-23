@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "luxe-estates": {
+    "aqario-luxe": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/luxe-estates",
+            "outputPath": "dist/aqario-luxe",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -68,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "luxe-estates:build:production"
+              "buildTarget": "aqario-luxe:build:production"
             },
             "development": {
-              "buildTarget": "luxe-estates:build:development"
+              "buildTarget": "aqario-luxe:build:development"
             }
           },
           "defaultConfiguration": "development"

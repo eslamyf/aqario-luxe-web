@@ -2,18 +2,22 @@
   LUXE ESTATES — Properties Page
   Production-ready: loading / error / empty / pagination states
 ───────────────────────────────────────────────────────────────────────────── -->
+<!-- ─────────────────────────────────────────────────────────────────────────
+  LUXE ESTATES — Properties Page
+  Production-ready: loading / error / empty / pagination states
+───────────────────────────────────────────────────────────────────────────── -->
 
 <section class="properties-section" #sectionRef>
 
   <!-- ── Section header ──────────────────────────────────────────────────── -->
   <div class="properties-header">
     <div>
-      <div class="section-eyebrow">Curated Selection</div>
-      <h2 class="section-title">Featured <em>Properties</em></h2>
+      <div class="section-eyebrow">{{ 'PROPERTIES.EYEBROW' | translate }}</div>
+      <h2 class="section-title">{{ 'PROPERTIES.TITLE' | translate }} <em>{{ 'PROPERTIES.EMPHASIS' | translate }}</em></h2>
     </div>
     <div>
       <p class="section-sub">
-        Every listing is personally vetted by our expert team of global property consultants.
+        {{ 'PROPERTIES.SUB' | translate }}
       </p>
     </div>
   </div>
@@ -26,7 +30,7 @@
       [class.active]="(activeFilter$ | async) === tab.key"
       (click)="onFilterChange(tab.key)"
       data-cursor-hover>
-      {{ tab.label }}
+      {{ tab.labelKey | translate }}
     </button>
   </div>
 
@@ -36,36 +40,36 @@
       <div class="search-inputs">
         <div class="input-group">
           <span class="input-icon">🔍</span>
-          <input type="text" formControlName="search" placeholder="Search properties..." />
+          <input type="text" formControlName="search" [placeholder]="'PROPERTIES.SEARCH_PLACEHOLDER' | translate" />
         </div>
         
         <div class="input-group">
           <span class="input-icon">📍</span>
-          <input type="text" formControlName="city" placeholder="City or location" />
+          <input type="text" formControlName="city" [placeholder]="'PROPERTIES.CITY_PLACEHOLDER' | translate" />
         </div>
 
         <button type="button" class="btn-toggle-filters" (click)="toggleFilterPanel()" [class.active]="isFilterExpanded">
-          <span class="filter-icon">⚙️</span> Filters
+          <span class="filter-icon">⚙️</span> {{ 'PROPERTIES.FILTERS_BTN' | translate }}
         </button>
         
-        <button type="submit" class="btn-gold" data-cursor-hover>Search</button>
+        <button type="submit" class="btn-gold" data-cursor-hover>{{ 'PROPERTIES.SEARCH_BTN' | translate }}</button>
       </div>
 
       <!-- Expandable advanced filters -->
       <div class="advanced-filters" [class.expanded]="isFilterExpanded">
         <div class="filter-row">
           <div class="filter-group">
-            <label>Min Price ($)</label>
-            <input type="number" formControlName="minPrice" placeholder="Any" />
+            <label>{{ 'PROPERTIES.MIN_PRICE' | translate }}</label>
+            <input type="number" formControlName="minPrice" [placeholder]="'PROPERTIES.ANY' | translate" />
           </div>
           <div class="filter-group">
-            <label>Max Price ($)</label>
-            <input type="number" formControlName="maxPrice" placeholder="Any" />
+            <label>{{ 'PROPERTIES.MAX_PRICE' | translate }}</label>
+            <input type="number" formControlName="maxPrice" [placeholder]="'PROPERTIES.ANY' | translate" />
           </div>
           <div class="filter-group">
-            <label>Bedrooms</label>
+            <label>{{ 'PROPERTIES.BEDROOMS' | translate }}</label>
             <select formControlName="bedrooms">
-              <option value="">Any</option>
+              <option value="">{{ 'PROPERTIES.ANY' | translate }}</option>
               <option value="1">1+</option>
               <option value="2">2+</option>
               <option value="3">3+</option>
@@ -74,7 +78,7 @@
             </select>
           </div>
           <div class="filter-actions">
-            <button type="button" class="btn-secondary" (click)="clearFilters()">Clear All</button>
+            <button type="button" class="btn-secondary" (click)="clearFilters()">{{ 'PROPERTIES.CLEAR_ALL' | translate }}</button>
           </div>
         </div>
       </div>
@@ -100,7 +104,7 @@
       <span class="error-icon">⚠</span>
       <p class="error-message">{{ err }}</p>
       <button class="btn-secondary" (click)="retryLoad()" data-cursor-hover>
-        Try Again
+        {{ 'PROPERTIES.TRY_AGAIN' | translate }}
       </button>
     </div>
   </div>
@@ -117,10 +121,10 @@
     </div>
 
     <!-- Empty state -->
-    <div *ngIf="!(properties$ | async)?.length" class="properties-empty">
-      <p class="properties-empty-text">No properties match this filter.</p>
+    <div class="properties-empty" *ngIf="!(properties$ | async)?.length">
+      <p class="properties-empty-text">{{ 'PROPERTIES.EMPTY_TEXT' | translate }}</p>
       <button class="btn-secondary" (click)="onViewAll()" data-cursor-hover>
-        View All Properties
+        {{ 'PROPERTIES.VIEW_ALL' | translate }}
       </button>
     </div>
 
@@ -131,12 +135,12 @@
         [disabled]="currentPage <= 1"
         (click)="onPageChange(currentPage - 1)"
         data-cursor-hover>
-        ← Prev
+        {{ 'PROPERTIES.PREV' | translate }}
       </button>
 
       <span class="pagination-info">
-        Page {{ currentPage }} of {{ totalPages }}
-        <span class="pagination-total">({{ totalResults }} properties)</span>
+        {{ 'PROPERTIES.PAGE_INFO' | translate:{ page: currentPage, pages: totalPages } }}
+        <span class="pagination-total">{{ 'PROPERTIES.TOTAL_INFO' | translate:{ total: totalResults } }}</span>
       </span>
 
       <button
@@ -144,7 +148,7 @@
         [disabled]="currentPage >= totalPages"
         (click)="onPageChange(currentPage + 1)"
         data-cursor-hover>
-        Next →
+        {{ 'PROPERTIES.NEXT' | translate }}
       </button>
     </div>
   </ng-container>
@@ -152,7 +156,7 @@
   <!-- ── View All button ─────────────────────────────────────────────────── -->
   <div class="properties-footer">
     <button class="btn-secondary" (click)="onViewAll()" data-cursor-hover>
-      View All Properties →
+      {{ 'PROPERTIES.VIEW_ALL_BTN' | translate }}
     </button>
   </div>
 

@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <title>Luxe Estates — Global Real Estate Platform</title>
+  <title>Aqario Luxe — Global Real Estate Platform</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Discover extraordinary properties curated for the discerning — from penthouse suites in Manhattan to waterfront villas in Dubai.">
@@ -17,9 +17,9 @@
       - Layout shift from theme switch during hydration
 
     Priority order:
-      1. localStorage['luxe_theme'] — user's explicit choice
-      2. prefers-color-scheme       — OS/browser preference
-      3. 'dark'                     — safe default fallback
+      1. localStorage['aqario_theme'] — user's explicit choice
+      2. prefers-color-scheme         — OS/browser preference
+      3. 'dark'                       — safe default fallback
 
     This script is intentionally inline (not deferred) so the
     browser applies [data-theme] before the first paint.
@@ -27,7 +27,7 @@
   -->
   <script>
     (function () {
-      var KEY = 'luxe_theme';
+      var KEY = 'aqario_theme';
       var theme = 'light'; // Requirement: Default to Light Mode
       try {
         var stored = localStorage.getItem(KEY);

@@ -51,16 +51,16 @@
         <!-- Specs: beds | baths | area — repeat(3,1fr) gap: 1px -->
         <div class="prop-modal-specs">
           <div class="prop-spec">
-            <div class="prop-spec-label">Bedrooms</div>
+            <div class="prop-spec-label">{{ 'REAL_ESTATE.BEDROOMS' | translate }}</div>
             <div class="prop-spec-value">{{ property.bedrooms }}</div>
           </div>
           <div class="prop-spec">
-            <div class="prop-spec-label">Bathrooms</div>
+            <div class="prop-spec-label">{{ 'REAL_ESTATE.BATHROOMS' | translate }}</div>
             <div class="prop-spec-value">{{ property.bathrooms }}</div>
           </div>
           <div class="prop-spec">
-            <div class="prop-spec-label">Area</div>
-            <div class="prop-spec-value">{{ property.area }}m²</div>
+            <div class="prop-spec-label">{{ 'REAL_ESTATE.AREA' | translate }}</div>
+            <div class="prop-spec-value">{{ property.area }}{{ 'REAL_ESTATE.AREA_UNIT' | translate }}</div>
           </div>
         </div>
 
@@ -71,12 +71,12 @@
 
         <!-- ── TASK 06 — Inline Schedule Viewing form ──────────────────── -->
         <div *ngIf="activeForm === 'viewing'" class="modal-form-section">
-          <div class="modal-form-title">Schedule a Viewing</div>
+          <div class="modal-form-title">{{ 'PROPERTIES.DETAIL.SCHEDULE_TITLE' | translate }}</div>
           <form [formGroup]="viewingForm" (ngSubmit)="submitViewing()">
 
             <!-- Preferred Date -->
             <div class="form-group">
-              <label class="form-label" for="viewingDate">Preferred Date</label>
+              <label class="form-label" for="viewingDate">{{ 'PROPERTIES.DETAIL.PREFERRED_DATE' | translate }}</label>
               <input
                 id="viewingDate"
                 type="date"
@@ -87,13 +87,13 @@
               <span
                 *ngIf="viewingForm.get('preferredDate')?.invalid && viewingForm.get('preferredDate')?.touched"
                 class="form-error">
-                Please select a date
+                {{ 'PROPERTIES.DETAIL.ERROR_DATE' | translate }}
               </span>
             </div>
 
             <!-- Preferred Time -->
             <div class="form-group">
-              <label class="form-label" for="viewingTime">Preferred Time</label>
+              <label class="form-label" for="viewingTime">{{ 'PROPERTIES.DETAIL.PREFERRED_TIME' | translate }}</label>
               <input
                 id="viewingTime"
                 type="time"
@@ -103,7 +103,7 @@
               <span
                 *ngIf="viewingForm.get('preferredTime')?.invalid && viewingForm.get('preferredTime')?.touched"
                 class="form-error">
-                Please select a time
+                {{ 'PROPERTIES.DETAIL.ERROR_TIME' | translate }}
               </span>
             </div>
 
@@ -113,14 +113,14 @@
                 class="btn-primary"
                 [disabled]="viewingForm.invalid || isSubmitting"
                 data-cursor-hover>
-                {{ isSubmitting ? 'Scheduling…' : 'Confirm Viewing' }}
+                {{ isSubmitting ? ('PROPERTIES.DETAIL.SCHEDULING' | translate) : ('PROPERTIES.DETAIL.CONFIRM_VIEWING' | translate) }}
               </button>
               <button
                 type="button"
                 class="btn-ghost"
                 (click)="activeForm = 'none'"
                 data-cursor-hover>
-                Cancel
+                {{ 'COMMON.CANCEL' | translate }}
               </button>
             </div>
           </form>
@@ -129,23 +129,23 @@
 
         <!-- ── TASK 06 — Inline Make Inquiry form ─────────────────────── -->
         <div *ngIf="activeForm === 'inquiry'" class="modal-form-section">
-          <div class="modal-form-title">Send an Inquiry</div>
+          <div class="modal-form-title">{{ 'PROPERTIES.DETAIL.INQUIRY_TITLE' | translate }}</div>
           <form [formGroup]="inquiryForm" (ngSubmit)="submitInquiry()">
             <div class="form-group">
-              <label class="form-label" for="inquiryMessage">Your Message</label>
+              <label class="form-label" for="inquiryMessage">{{ 'PROPERTIES.DETAIL.YOUR_MESSAGE' | translate }}</label>
               <!-- Style B input — coding-rules.md §3.5 -->
               <textarea
                 id="inquiryMessage"
                 class="form-input form-textarea"
                 formControlName="message"
                 rows="4"
-                placeholder="Tell us about your interest in this property…"
+                [placeholder]="'PROPERTIES.DETAIL.INQUIRY_PLACEHOLDER_MODAL' | translate"
                 [class.form-input--error]="inquiryForm.get('message')?.invalid && inquiryForm.get('message')?.touched">
               </textarea>
               <span
                 *ngIf="inquiryForm.get('message')?.invalid && inquiryForm.get('message')?.touched"
                 class="form-error">
-                Message must be at least 10 characters
+                {{ 'PROPERTIES.DETAIL.ERROR_MESSAGE_LEN' | translate }}
               </span>
             </div>
             <div class="modal-form-actions">
@@ -154,14 +154,14 @@
                 class="btn-primary"
                 [disabled]="inquiryForm.invalid || isSubmitting"
                 data-cursor-hover>
-                {{ isSubmitting ? 'Sending…' : 'Send Inquiry' }}
+                {{ isSubmitting ? ('PROPERTIES.DETAIL.SENDING' | translate) : ('PROPERTIES.DETAIL.SEND_MESSAGE' | translate) }}
               </button>
               <button
                 type="button"
                 class="btn-ghost"
                 (click)="activeForm = 'none'"
                 data-cursor-hover>
-                Cancel
+                {{ 'COMMON.CANCEL' | translate }}
               </button>
             </div>
           </form>
@@ -176,7 +176,7 @@
         <div class="prop-modal-price">{{ formattedPrice }}</div>
 
         <div class="prop-modal-badge" [class.rent]="property.status === 'for-rent'">
-          {{ property.status === 'for-rent' ? 'For Rent' : 'For Sale' }}
+          {{ property.status === 'for-rent' ? ('REAL_ESTATE.FOR_RENT' | translate) : ('REAL_ESTATE.FOR_SALE' | translate) }}
         </div>
 
         <!-- Action buttons — Task 06: onclick triggers auth guard then shows form -->
@@ -186,14 +186,14 @@
             [class.btn-primary--active]="activeForm === 'viewing'"
             (click)="onScheduleViewingClick()"
             data-cursor-hover>
-            Schedule Viewing
+            {{ 'PROPERTIES.DETAIL.SCHEDULE_TITLE' | translate }}
           </button>
           <button
             class="btn-secondary"
             [class.btn-secondary--active]="activeForm === 'inquiry'"
             (click)="onMakeInquiryClick()"
             data-cursor-hover>
-            Make Inquiry
+            {{ 'PROPERTIES.DETAIL.INQUIRY_TITLE' | translate }}
           </button>
         </div>
 

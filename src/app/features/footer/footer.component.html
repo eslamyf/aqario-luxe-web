@@ -15,15 +15,13 @@
     <!-- Column 1: Brand ──────────────────────────────────── -->
     <div class="footer-brand reveal">
       <!-- Logo: font-display, 28px, letter-spacing 4px (reference line 950) -->
-      <div class="footer-logo" aria-label="LUXE Estates">
-        LUXE<span class="footer-logo-dot">·</span>ESTATES
+      <div class="footer-logo" aria-label="Aqario Luxe">
+        AQARIO<span class="footer-logo-dot">·</span>LUXE
       </div>
 
       <!-- Description (reference line 958) -->
       <p class="footer-desc">
-        The world's premier luxury real estate platform. Connecting
-        extraordinary properties with extraordinary people across
-        45 global cities.
+        {{ 'FOOTER.DESC' | translate }}
       </p>
 
       <!-- Social icons row (reference lines 1765–1770) -->
@@ -48,13 +46,13 @@
       [class]="'reveal-delay-' + (i + 1)"
     >
       <!-- Column header: font-mono, 10px, letter-spacing 3px, gold, uppercase -->
-      <div class="footer-col-title">{{ col.title }}</div>
+      <div class="footer-col-title">{{ col.titleKey | translate }}</div>
 
       <ul class="footer-links" role="list">
         <li *ngFor="let link of col.links" role="listitem">
           <!-- External/hash links; swap for routerLink when pages exist -->
           <a [href]="link.href" class="footer-link" [attr.data-cursor-hover]="true">
-            {{ link.label }}
+            {{ link.labelKey | translate }}
           </a>
         </li>
       </ul>
@@ -66,12 +64,12 @@
   <div class="footer-bottom">
     <!-- Left: copyright text (reference line 1806) -->
     <span class="footer-copy">
-      © {{ currentYear }} LUXE ESTATES GLOBAL. ALL RIGHTS RESERVED.
+      {{ 'FOOTER.COPYRIGHT' | translate:{ year: currentYear } }}
     </span>
 
     <!-- Right: powered-by tagline (reference line 1807) -->
     <span class="footer-powered">
-      POWERED BY AI · SECURED BY TRUST
+      {{ 'FOOTER.POWERED' | translate }}
     </span>
   </div><!-- /footer-bottom -->
 

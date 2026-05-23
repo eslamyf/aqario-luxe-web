@@ -12,18 +12,18 @@
         <path d="M10 5 L15.5 8.5 L15.5 15.5 L10 19 L4.5 15.5 L4.5 8.5 Z" stroke="currentColor" stroke-width="0.5" fill="none" opacity="0.4"/>
         <circle cx="10" cy="12" r="1.2" fill="currentColor" opacity="0.9"/>
       </svg>
-      <span class="logo-mark">LUXE</span>
+      <span class="logo-mark">AQARIO</span>
       <span class="logo-dot" aria-hidden="true">·</span>
-      <span class="logo-word">ESTATES</span>
+      <span class="logo-word">LUXE</span>
     </a>
 
     <!-- ══════════════════════════════════════════════════
          DESKTOP NAV LINKS
          ══════════════════════════════════════════════════ -->
     <ul class="nav-links" role="list">
-      <li><a routerLink="/properties" routerLinkActive="active" id="nav-link-properties">Properties</a></li>
-      <li><a routerLink="/" fragment="explore"                  id="nav-link-explore">Explore</a></li>
-      <li><a routerLink="/agents"     routerLinkActive="active" id="nav-link-agents">Agents</a></li>
+      <li><a routerLink="/properties" routerLinkActive="active" id="nav-link-properties">{{ 'NAV.PROPERTIES' | translate }}</a></li>
+      <li><a routerLink="/" fragment="explore"                  id="nav-link-explore">{{ 'NAV.EXPLORE' | translate }}</a></li>
+      <li><a routerLink="/agents"     routerLinkActive="active" id="nav-link-agents">{{ 'NAV.AGENTS' | translate }}</a></li>
     </ul>
 
     <!-- ══════════════════════════════════════════════════
@@ -31,6 +31,20 @@
          Order: Theme Toggle | Sign In | Profile | CTA Button
          ══════════════════════════════════════════════════ -->
     <div class="nav-actions">
+
+      <!-- Language Toggle -->
+      <button
+        id="btn-lang-toggle"
+        type="button"
+        class="btn-lang-toggle"
+        (click)="toggleLanguage()"
+        [attr.aria-label]="(lang$ | async) === 'en' ? 'تغيير اللغة إلى العربية' : 'Switch to English'"
+        [attr.title]="(lang$ | async) === 'en' ? 'تغيير اللغة إلى العربية' : 'Switch to English'"
+        data-cursor-hover>
+        <span class="lang-text" aria-hidden="true">
+          {{ (lang$ | async) === 'en' ? 'العربية' : 'EN' }}
+        </span>
+      </button>
 
       <!-- Theme Toggle — leftmost of action group -->
       <button
@@ -61,7 +75,7 @@
 
       <!-- Guest: Sign In button -->
       <ng-template #guestTemplate>
-        <button id="btn-sign-in" class="btn-signin" (click)="openLogin()" data-cursor-hover>Sign In</button>
+        <button id="btn-sign-in" class="btn-signin" (click)="openLogin()" data-cursor-hover>{{ 'NAV.SIGN_IN' | translate }}</button>
       </ng-template>
 
       <!-- Logged-in: user profile + dropdown -->
@@ -79,12 +93,12 @@
           <!-- Notifications Dropdown -->
           <div class="notifications-dropdown" *ngIf="showNotifications" role="menu" (click)="$event.stopPropagation()">
             <div class="notifications-header">
-              <h4>Notifications</h4>
-              <button class="btn-mark-read" (click)="markAllAsRead()" *ngIf="(notificationsApi.unreadCount$ | async)! > 0">Mark all as read</button>
+              <h4>{{ 'NAV.NOTIFICATIONS' | translate }}</h4>
+              <button class="btn-mark-read" (click)="markAllAsRead()" *ngIf="(notificationsApi.unreadCount$ | async)! > 0">{{ 'NAV.MARK_ALL_READ' | translate }}</button>
             </div>
             <div class="notifications-list" *ngIf="(notificationsApi.notifications$ | async) as notifications">
               <div *ngIf="notifications.length === 0" class="no-notifications">
-                <p>No new notifications</p>
+                <p>{{ 'NAV.NO_NOTIFICATIONS' | translate }}</p>
               </div>
               <div *ngFor="let n of notifications" class="notification-item" [class.unread]="!n.isRead" (click)="markAsRead(n._id)">
                 <div class="notification-content">
@@ -111,18 +125,18 @@
           </div>
 
           <div class="user-dropdown" *ngIf="showDropdown" role="menu">
-            <a class="dropdown-item" routerLink="/account" (click)="showDropdown = false" role="menuitem">My Account</a>
-            <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview" (click)="showDropdown = false" role="menuitem">My Dashboard</a>
-            <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false" role="menuitem">Admin Control Panel</a>
+            <a class="dropdown-item" routerLink="/account" (click)="showDropdown = false" role="menuitem">{{ 'NAV.MY_ACCOUNT' | translate }}</a>
+            <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview" (click)="showDropdown = false" role="menuitem">{{ 'NAV.MY_DASHBOARD' | translate }}</a>
+            <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false" role="menuitem">{{ 'NAV.ADMIN_PANEL' | translate }}</a>
             <div class="dropdown-divider" role="separator"></div>
-            <button class="dropdown-item logout-btn" (click)="onLogout()" role="menuitem">Sign Out</button>
+            <button class="dropdown-item logout-btn" (click)="onLogout()" role="menuitem">{{ 'NAV.SIGN_OUT' | translate }}</button>
           </div>
         </div>
       </ng-container>
 
       <!-- List Property CTA — always visible on desktop -->
       <button id="btn-list-property" class="btn-list" (click)="onListPropertyClick()" data-cursor-hover>
-        List Property
+        {{ 'NAV.LIST_PROPERTY' | translate }}
       </button>
 
       <!-- Hamburger — mobile only (CSS handles display) -->
@@ -153,7 +167,15 @@
         <img class="user-avatar-img" *ngIf="user.photo" [src]="user.photo" [alt]="user.name" />
         <div class="user-meta">
           <span class="name">{{ user.name }}</span>
-          <span class="role">{{ user.role | titlecase }} Account</span>
+          <span class="role">
+            <ng-container [ngSwitch]="user.role">
+              <span *ngSwitchCase="'buyer'">{{ 'REAL_ESTATE.BUYER' | translate }}</span>
+              <span *ngSwitchCase="'owner'">{{ 'REAL_ESTATE.OWNER' | translate }}</span>
+              <span *ngSwitchCase="'agent'">{{ 'REAL_ESTATE.AGENT' | translate }}</span>
+              <span *ngSwitchCase="'admin'">{{ 'NAV.ADMIN_CENTER' | translate }}</span>
+              <span *ngSwitchDefault>{{ user.role | titlecase }}</span>
+            </ng-container>
+          </span>
         </div>
         <button class="close-menu-btn" (click)="closeMobileMenu()"><i class="ph ph-x"></i></button>
       </div>
@@ -163,22 +185,22 @@
     <ng-container *ngIf="(dashboardUi.isDashboardRoute | async); else globalMobileNav">
       <!-- DASHBOARD SPECIFIC LINKS -->
       <div class="mobile-dashboard-links" *ngIf="auth.currentUser$ | async as user">
-        <span class="nav-section-label">Account Management</span>
+        <span class="nav-section-label">{{ 'NAV.ACCOUNT_MGMT' | translate }}</span>
         <ul class="mobile-nav-links" role="list">
-          <li><a routerLink="/dashboard/overview" (click)="closeMobileMenu()"><i class="ph ph-squares-four"></i> Overview</a></li>
-          <li><a routerLink="/dashboard/bookings" (click)="closeMobileMenu()"><i class="ph ph-calendar-check"></i> My Bookings</a></li>
+          <li><a routerLink="/dashboard/overview" (click)="closeMobileMenu()"><i class="ph ph-squares-four"></i> {{ 'NAV.OVERVIEW' | translate }}</a></li>
+          <li><a routerLink="/dashboard/bookings" (click)="closeMobileMenu()"><i class="ph ph-calendar-check"></i> {{ 'NAV.MY_BOOKINGS' | translate }}</a></li>
           
           <!-- Owner/Agent Links -->
           <ng-container *ngIf="user.role === 'owner' || user.role === 'agent'">
-            <li><a routerLink="/dashboard/properties" (click)="closeMobileMenu()"><i class="ph ph-buildings"></i> My Properties</a></li>
-            <li><a routerLink="/dashboard/owner-bookings" (click)="closeMobileMenu()"><i class="ph ph-bell-ringing"></i> Requests</a></li>
+            <li><a routerLink="/dashboard/properties" (click)="closeMobileMenu()"><i class="ph ph-buildings"></i> {{ 'NAV.MY_PROPERTIES' | translate }}</a></li>
+            <li><a routerLink="/dashboard/owner-bookings" (click)="closeMobileMenu()"><i class="ph ph-bell-ringing"></i> {{ 'NAV.REQUESTS' | translate }}</a></li>
           </ng-container>
-
-          <li><a routerLink="/dashboard/saved" (click)="closeMobileMenu()"><i class="ph ph-heart"></i> Saved</a></li>
-          <li><a routerLink="/dashboard/payments" (click)="closeMobileMenu()"><i class="ph ph-credit-card"></i> Payments</a></li>
+ 
+          <li><a routerLink="/dashboard/saved" (click)="closeMobileMenu()"><i class="ph ph-heart"></i> {{ 'NAV.SAVED' | translate }}</a></li>
+          <li><a routerLink="/dashboard/payments" (click)="closeMobileMenu()"><i class="ph ph-credit-card"></i> {{ 'NAV.PAYMENTS' | translate }}</a></li>
           
           <li *ngIf="user.role === 'admin'">
-            <a routerLink="/admin" class="admin-highlight" (click)="closeMobileMenu()"><i class="ph ph-shield-check"></i> Admin Center</a>
+            <a routerLink="/admin" class="admin-highlight" (click)="closeMobileMenu()"><i class="ph ph-shield-check"></i> {{ 'NAV.ADMIN_CENTER' | translate }}</a>
           </li>
         </ul>
       </div>
@@ -187,17 +209,16 @@
     <!-- GLOBAL LINKS TEMPLATE -->
     <ng-template #globalMobileNav>
       <ul class="mobile-nav-links" role="list">
-        <li><a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">Properties</a></li>
-        <li><a routerLink="/auctions"   routerLinkActive="active" (click)="closeMobileMenu()">Auctions</a></li>
-        <li><a routerLink="/" fragment="explore"                  (click)="closeMobileMenu()">Explore</a></li>
-        <li><a routerLink="/agents"     routerLinkActive="active" (click)="closeMobileMenu()">Agents</a></li>
+        <li><a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.PROPERTIES' | translate }}</a></li>
+        <li><a routerLink="/" fragment="explore"                  (click)="closeMobileMenu()">{{ 'NAV.EXPLORE' | translate }}</a></li>
+        <li><a routerLink="/agents"     routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.AGENTS' | translate }}</a></li>
       </ul>
     </ng-template>
 
     <div class="mobile-nav-actions">
       <!-- Global links shortcut even if in dashboard -->
       <a *ngIf="(dashboardUi.isDashboardRoute | async)" routerLink="/" class="back-to-site-link" (click)="closeMobileMenu()">
-        <i class="ph ph-arrow-left"></i> Back to Main Site
+        <i class="ph ph-arrow-left"></i> {{ 'NAV.BACK_TO_SITE' | translate }}
       </a>
 
       <!-- Mobile theme toggle -->
@@ -206,13 +227,22 @@
         class="btn-theme-toggle btn-theme-toggle--mobile"
         (click)="toggleTheme()"
         [attr.aria-label]="(theme$ | async) === 'light' ? 'Switch to dark mode' : 'Switch to light mode'">
-        {{ (theme$ | async) === 'light' ? '☀ Light Mode' : '🌙 Dark Mode' }}
+        {{ (theme$ | async) === 'light' ? ('NAV.LIGHT_MODE' | translate) : ('NAV.DARK_MODE' | translate) }}
+      </button>
+
+      <!-- Mobile language toggle -->
+      <button
+        type="button"
+        class="btn-lang-toggle btn-lang-toggle--mobile"
+        (click)="toggleLanguage()"
+        [attr.aria-label]="(lang$ | async) === 'en' ? 'تغيير اللغة إلى العربية' : 'Switch to English'">
+        {{ (lang$ | async) === 'en' ? '🌐 العربية' : '🌐 English' }}
       </button>
 
       <!-- Logged-in on mobile -->
       <ng-container *ngIf="auth.currentUser$ | async as user">
         <button class="btn-logout-mobile" (click)="onLogout(); closeMobileMenu()">
-          <i class="ph ph-sign-out"></i> Sign Out
+          <i class="ph ph-sign-out"></i> {{ 'NAV.SIGN_OUT' | translate }}
         </button>
       </ng-container>
 

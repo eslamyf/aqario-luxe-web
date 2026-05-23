@@ -233,6 +233,61 @@
   }
 }
 
+// ── Language Toggle Button ────────────────────────────────────
+.btn-lang-toggle {
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 8px;
+  transition:
+    background-color 0.3s var(--transition),
+    border-color 0.3s var(--transition),
+    color 0.3s var(--transition);
+
+  .lang-text {
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    border-color: var(--brand-gold);
+    color: var(--brand-gold);
+    background-color: var(--brand-gold-soft);
+  }
+}
+
+// Mobile language toggle variant
+.btn-lang-toggle--mobile {
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition:
+    color 0.3s var(--transition),
+    border-color 0.3s var(--transition);
+
+  &:hover {
+    color: var(--brand-gold);
+    border-color: var(--brand-gold);
+  }
+}
+
 // ── Notifications ──────────────────────────────────────────────
 .nav-bell-wrapper {
   position: relative;

@@ -4,13 +4,13 @@
     <button class="auth-close" (click)="close()">✕</button>
 
     <div class="auth-brand">
-      <span class="auth-brand-name">LUXE <span class="gold">ESTATES</span></span>
+      <span class="auth-brand-name">AQARIO <span class="gold">LUXE</span></span>
     </div>
 
     <div class="auth-tabs" *ngIf="activeTab === 'login' || activeTab === 'register'">
       <button class="auth-tab" [class.active]="activeTab === 'login'" (click)="switchTab('login')">SIGN IN</button>
       <button class="auth-tab" [class.active]="activeTab === 'register'" (click)="switchTab('register')">JOIN
-        LUXE</button>
+        AQARIO LUXE</button>
     </div>
 
     <div class="auth-scroll-container">

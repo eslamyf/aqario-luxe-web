@@ -29,10 +29,10 @@
   <!-- ── Promotion Badges ────────────────────────────────────────────── -->
   <div class="promotion-badges">
     <div class="promo-badge featured" *ngIf="property.promotion?.isFeatured">
-      <i class="ph ph-star-fill"></i> FEATURED
+      <i class="ph ph-star-fill"></i> {{ 'PROPERTIES.PROMO.FEATURED' | translate }}
     </div>
     <div class="promo-badge boosted" *ngIf="property.promotion?.isBoosted && !property.promotion?.isFeatured">
-      <i class="ph ph-lightning-fill"></i> BOOSTED
+      <i class="ph ph-lightning-fill"></i> {{ 'PROPERTIES.PROMO.BOOSTED' | translate }}
     </div>
     <div class="promo-badge premium" *ngIf="property.promotion?.hasPremiumBadge" title="Premium Listing">
       <i class="ph ph-seal-check-fill"></i>
@@ -40,7 +40,7 @@
   </div>
 
   <div class="property-tag" [class.rent]="property.status === 'for-rent'">
-    {{ tagLabel }}
+    {{ (property.status === 'for-rent' ? 'REAL_ESTATE.FOR_RENT' : 'REAL_ESTATE.FOR_SALE') | translate }}
   </div>
 
   <!-- ── Favorite button — top right (Template line 458–470) ────────────── -->
@@ -48,7 +48,7 @@
     class="property-favorite"
     [class.property-favorite--active]="isFavorited"
     (click)="onFavoriteClick($event)"
-    [attr.aria-label]="isFavorited ? 'Remove from favorites' : 'Add to favorites'"
+    [attr.aria-label]="(isFavorited ? 'PROPERTIES.NOTIF.REMOVED_FAVORITES' : 'PROPERTIES.NOTIF.ADDED_FAVORITES') | translate"
     data-cursor-hover>
     {{ isFavorited ? '♥' : '♡' }}
   </button>
@@ -69,13 +69,13 @@
     <!-- Specs: beds | baths | area — Template line 495–505 -->
     <div class="property-features">
       <div *ngIf="property.bedrooms" class="property-feature">
-        <span class="feature-icon">bed</span> {{ property.bedrooms }} Beds
+        <span class="feature-icon">bed</span> {{ property.bedrooms }} {{ 'REAL_ESTATE.BED_SHORT' | translate }}
       </div>
       <div *ngIf="property.bathrooms" class="property-feature">
-        <span class="feature-icon">bath</span> {{ property.bathrooms }} Baths
+        <span class="feature-icon">bath</span> {{ property.bathrooms }} {{ 'REAL_ESTATE.BATH_SHORT' | translate }}
       </div>
       <div *ngIf="property.area" class="property-feature">
-        <span class="feature-icon">m²</span> {{ property.area }}
+        <span class="feature-icon">m²</span> {{ property.area }}{{ 'REAL_ESTATE.AREA_UNIT' | translate }}
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@
     <button
       class="property-action-btn"
       data-cursor-hover>
-      View Details
+      {{ 'REAL_ESTATE.VIEW_DETAILS' | translate }}
     </button>
   </div>
 

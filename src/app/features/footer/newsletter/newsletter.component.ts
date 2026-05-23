@@ -7,6 +7,7 @@
 
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../shared/services/notification.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class NewsletterComponent implements OnDestroy {
   constructor(
     private fb: FormBuilder,
     private notificationService: NotificationService, // §5.5 — never alert()
+    private translateService: TranslateService,
   ) {
     this.newsletterForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -52,7 +54,7 @@ export class NewsletterComponent implements OnDestroy {
 
     // §5.5 — use NotificationService, NEVER alert()
     this.notificationService.show(
-      "You're subscribed to LUXE Market Intelligence! ✓",
+      this.translateService.instant('HOME.NEWSLETTER.SUCCESS_MSG'),
       'success'
     );
 

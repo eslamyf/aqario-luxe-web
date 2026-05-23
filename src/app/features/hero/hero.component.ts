@@ -63,16 +63,16 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroy$ = new Subject<void>();
 
   tickerItems = [
-    { label: 'DUBAI MARINA',        change: 12.4, positive: true  },
-    { label: 'MANHATTAN PENTHOUSE', change: 8.2,  positive: true  },
-    { label: 'LONDON MAYFAIR',      change: 2.1,  positive: false },
-    { label: 'PALM JUMEIRAH',       change: 15.7, positive: true  },
-    { label: 'PARIS 8ÈME',          change: 5.3,  positive: true  },
-    { label: 'HONG KONG PEAK',      change: 1.8,  positive: false },
-    { label: 'MONACO WATERFRONT',   change: 9.1,  positive: true  },
-    { label: 'MILAN CENTRO',        change: 3.4,  positive: true  },
-    { label: 'TOKYO ROPPONGI',      change: 0.7,  positive: false },
-    { label: 'SYDNEY HARBOUR',      change: 6.9,  positive: true  },
+    { key: 'DUBAI_MARINA',          label: 'DUBAI MARINA',        change: 12.4, positive: true  },
+    { key: 'MANHATTAN_PENTHOUSE',   label: 'MANHATTAN PENTHOUSE', change: 8.2,  positive: true  },
+    { key: 'LONDON_MAYFAIR',        label: 'LONDON MAYFAIR',      change: 2.1,  positive: false },
+    { key: 'PALM_JUMEIRAH',         label: 'PALM JUMEIRAH',       change: 15.7, positive: true  },
+    { key: 'PARIS_8EME',            label: 'PARIS 8ÈME',          change: 5.3,  positive: true  },
+    { key: 'HONG_KONG_PEAK',        label: 'HONG KONG PEAK',      change: 1.8,  positive: false },
+    { key: 'MONACO_WATERFRONT',     label: 'MONACO WATERFRONT',   change: 9.1,  positive: true  },
+    { key: 'MILAN_CENTRO',          label: 'MILAN CENTRO',        change: 3.4,  positive: true  },
+    { key: 'TOKYO_ROPPONGI',        label: 'TOKYO ROPPONGI',      change: 0.7,  positive: false },
+    { key: 'SYDNEY_HARBOUR',        label: 'SYDNEY HARBOUR',      change: 6.9,  positive: true  },
   ];
 
   get allTickerItems() {

@@ -6,7 +6,7 @@ export type ThemeMode = 'dark' | 'light';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  private readonly THEME_KEY = 'luxe_theme';
+  private readonly THEME_KEY = 'aqario_theme';
 
   // Extract initialization to a static helper to use synchronously
   private getInitialTheme(): ThemeMode {

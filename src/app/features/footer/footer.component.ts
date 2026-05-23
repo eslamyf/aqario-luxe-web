@@ -8,12 +8,12 @@
 import { Component } from '@angular/core';
 
 interface FooterLink {
-  label: string;
+  labelKey: string;
   href: string;
 }
 
 interface FooterColumn {
-  title: string;
+  titleKey: string;
   links: FooterLink[];
 }
 
@@ -38,36 +38,35 @@ export class FooterComponent {
   // ── Navigation Columns (template lines 1772–1803) ────────
   readonly columns: FooterColumn[] = [
     {
-      title: 'Properties',
+      titleKey: 'FOOTER.SECTIONS.PROPERTIES',
       links: [
-        { label: 'For Sale',          href: '#' },
-        { label: 'For Rent',          href: '#' },
-        { label: 'Villas',            href: '#' },
-        { label: 'Auctions',          href: '#' },
-        { label: 'New Developments',  href: '#' },
-        { label: 'Commercial',        href: '#' },
-        { label: 'Off-Plan',          href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.FOR_SALE',          href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.FOR_RENT',          href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.VILLAS',            href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.NEW_DEVELOPMENTS',  href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.COMMERCIAL',        href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.OFF_PLAN',          href: '#' },
       ],
     },
     {
-      title: 'Company',
+      titleKey: 'FOOTER.SECTIONS.COMPANY',
       links: [
-        { label: 'About Us',  href: '#' },
-        { label: 'Our Team',  href: '#' },
-        { label: 'Careers',   href: '#' },
-        { label: 'Press',     href: '#' },
-        { label: 'Partners',  href: '#' },
-        { label: 'Contact',   href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.ABOUT_US',  href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.OUR_TEAM',  href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.CAREERS',   href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.PRESS',     href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.PARTNERS',  href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.CONTACT',   href: '#' },
       ],
     },
     {
-      title: 'Legal',
+      titleKey: 'FOOTER.SECTIONS.LEGAL',
       links: [
-        { label: 'Privacy Policy',    href: '#' },
-        { label: 'Terms of Service',  href: '#' },
-        { label: 'Cookie Policy',     href: '#' },
-        { label: 'AML Policy',        href: '#' },
-        { label: 'API Access',        href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.PRIVACY',    href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.TERMS',      href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.COOKIE',     href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.AML',        href: '#' },
+        { labelKey: 'FOOTER.SECTIONS.API',        href: '#' },
       ],
     },
   ];

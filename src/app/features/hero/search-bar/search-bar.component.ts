@@ -22,19 +22,33 @@ export class SearchBarComponent {
 
   activeChip: string | null = null;
 
-  chips = ['Villas', 'Apartments', 'Penthouses', 'Estates'];
+  chips = [
+    { value: 'Villas', labelKey: 'REAL_ESTATE.VILLAS_CHIP' },
+    { value: 'Apartments', labelKey: 'REAL_ESTATE.APARTMENTS_CHIP' },
+    { value: 'Penthouses', labelKey: 'REAL_ESTATE.PENTHOUSES_CHIP' },
+    { value: 'Estates', labelKey: 'REAL_ESTATE.ESTATES_CHIP' }
+  ];
 
   searchForm: FormGroup;
 
-  propertyTypes = ['All Types', 'Villa', 'Apartment', 'Penthouse', 'Estate'];
-  listingTypes = ['For Sale', 'For Rent'];
+  propertyTypes = [
+    { value: 'All Types', labelKey: 'SEARCH.ALL_TYPES' },
+    { value: 'Villa', labelKey: 'REAL_ESTATE.VILLA' },
+    { value: 'Apartment', labelKey: 'REAL_ESTATE.APARTMENT' },
+    { value: 'Penthouse', labelKey: 'REAL_ESTATE.PENTHOUSE' },
+    { value: 'Estate', labelKey: 'REAL_ESTATE.ESTATE' }
+  ];
+  listingTypes = [
+    { value: 'For Sale', labelKey: 'REAL_ESTATE.FOR_SALE' },
+    { value: 'For Rent', labelKey: 'REAL_ESTATE.FOR_RENT' }
+  ];
   budgets = [
-    'Any Budget',
-    'Up to $500K',
-    '$500K – $1M',
-    '$1M – $3M',
-    '$3M – $10M',
-    '$10M+',
+    { value: 'Any Budget', labelKey: 'SEARCH.ANY_BUDGET' },
+    { value: 'Up to $500K', labelKey: 'SEARCH.BUDGET_500K' },
+    { value: '$500K – $1M', labelKey: 'SEARCH.BUDGET_500K_1M' },
+    { value: '$1M – $3M', labelKey: 'SEARCH.BUDGET_1M_3M' },
+    { value: '$3M – $10M', labelKey: 'SEARCH.BUDGET_3M_10M' },
+    { value: '$10M+', labelKey: 'SEARCH.BUDGET_10M_PLUS' }
   ];
 
   constructor() {
@@ -46,8 +60,8 @@ export class SearchBarComponent {
     });
   }
 
-  selectChip(chip: string): void {
-    this.activeChip = this.activeChip === chip ? null : chip;
+  selectChip(chipValue: string): void {
+    this.activeChip = this.activeChip === chipValue ? null : chipValue;
     // Sync chip with form
     if (this.activeChip) {
       const typeMap: Record<string, string> = {

@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from './core/auth/auth.service';
 import { ModalEscapeService } from './core/services/modal-escape.service';
 import { ThemeService } from './core/services/theme.service';
+import { LanguageService } from './core/services/language.service';
 import { filter } from 'rxjs/operators';
 
 
@@ -33,7 +34,7 @@ import { filter } from 'rxjs/operators';
   `]
 })
 export class AppComponent {
-  title = 'luxe-estates';
+  title = 'aqario-luxe';
   isAdminRoute = false;
   isHideFooter = false;
 
@@ -41,6 +42,7 @@ export class AppComponent {
   private modalEscapeService = inject(ModalEscapeService);
   private router = inject(Router);
   private themeService = inject(ThemeService);
+  private languageService = inject(LanguageService);
 
   constructor() {
     this.router.events.pipe(

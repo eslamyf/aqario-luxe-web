@@ -72,6 +72,7 @@ export interface Property {
     hasPremiumBadge: boolean;
     expiresAt?: string;
   };
+  _original?: any;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

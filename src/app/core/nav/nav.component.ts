@@ -4,6 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { ThemeService } from '../services/theme.service';
 import { NotificationsApiService } from '../services/notifications-api.service';
 import { DashboardUiService } from '../../shared/services/dashboard-ui.service';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-nav',
@@ -19,13 +20,18 @@ export class NavComponent {
     return this.themeService.theme$;
   }
 
+  get lang$() {
+    return this.languageService.lang$;
+  }
+
   // Inject services via constructor
   constructor(
     public auth: AuthService,
     private router: Router,
     private themeService: ThemeService,
     public notificationsApi: NotificationsApiService,
-    public dashboardUi: DashboardUiService
+    public dashboardUi: DashboardUiService,
+    private languageService: LanguageService
   ) {}
 
   toggleDashboardSidebar(): void {
@@ -117,5 +123,9 @@ export class NavComponent {
 
   toggleTheme(): void {
     this.themeService.toggleTheme();
+  }
+
+  toggleLanguage(): void {
+    this.languageService.toggleLanguage();
   }
 }

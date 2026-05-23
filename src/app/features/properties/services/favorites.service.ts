@@ -94,13 +94,13 @@ export class FavoritesService {
 
   private getLocalFavorites(): string[] {
     try {
-      return JSON.parse(localStorage.getItem('luxe_favorites') ?? '[]');
+      return JSON.parse(localStorage.getItem('aqario_favorites') ?? '[]');
     } catch {
       return [];
     }
   }
 
   private saveLocalFavorites(ids: string[]): void {
-    localStorage.setItem('luxe_favorites', JSON.stringify(ids));
+    localStorage.setItem('aqario_favorites', JSON.stringify(ids));
   }
 }

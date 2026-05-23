@@ -21,21 +21,20 @@
 
       <!-- Eyebrow: font-mono, 11px, letter-spacing 4px, gold -->
       <div class="hero-eyebrow" [@eyebrow]="animState">
-        PREMIER GLOBAL REAL ESTATE
+        {{ 'HOME.HERO.EYEBROW' | translate }}
       </div>
 
       <!-- Headline -->
       <h1 class="hero-headline">
         <!-- Line 1: "Find Your" — weight 300, delay 0.4s -->
-        <span class="headline-light" [@headline1]="animState">Find Your</span>
+        <span class="headline-light" [@headline1]="animState">{{ 'HOME.HERO.HEADLINE_LIGHT' | translate }}</span>
         <!-- Line 2: "Perfect Home" — italic gold, delay 0.6s -->
-        <em   class="headline-gold"  [@headline2]="animState">Perfect Home</em>
+        <em   class="headline-gold"  [@headline2]="animState">{{ 'HOME.HERO.HEADLINE_GOLD' | translate }}</em>
       </h1>
 
       <!-- Sub-text -->
       <p class="hero-sub" [@subText]="animState">
-        From penthouse suites in Manhattan to waterfront villas in Dubai
-        — discover extraordinary properties curated for the discerning.
+        {{ 'HOME.HERO.SUB' | translate }}
       </p>
 
       <!-- CTA Buttons -->
@@ -45,13 +44,13 @@
           class="btn-primary"
           data-cursor-hover
           (click)="scrollToProperties()">
-          EXPLORE PROPERTIES
+          {{ 'HOME.HERO.EXPLORE' | translate }}
         </button>
         <button
           id="btn-list-property"
           class="btn-secondary"
           data-cursor-hover>
-          LIST YOUR PROPERTY
+          {{ 'HOME.HERO.LIST' | translate }}
         </button>
       </div>
 
@@ -65,7 +64,7 @@
         <img
           class="hero-visual-img"
           src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85"
-          alt="Luxury modern villa with architectural glass facade"
+          [alt]="'HOME.HERO.IMAGE_ALT' | translate"
           loading="eager"
           decoding="async"
           (error)="onImageError($event)"
@@ -74,9 +73,9 @@
         <div class="hero-visual-mask"></div>
         <!-- Floating property badge — design accent -->
         <div class="hero-visual-badge">
-          <span class="badge-label">FEATURED</span>
-          <span class="badge-price">$24.5M</span>
-          <span class="badge-location">Beverly Hills, CA</span>
+          <span class="badge-label">{{ 'HOME.HERO.FEATURED' | translate }}</span>
+          <span class="badge-price">{{ 'HOME.HERO.FEATURED_PRICE' | translate }}</span>
+          <span class="badge-location">{{ 'HOME.HERO.FEATURED_LOCATION' | translate }}</span>
         </div>
       </div>
     </div><!-- /hero-visual -->
@@ -89,25 +88,25 @@
       <div class="stat-number">
         {{ countriesVal }}<span class="stat-suffix">+</span>
       </div>
-      <div class="stat-label">Countries</div>
+      <div class="stat-label">{{ 'HOME.HERO.COUNTRIES' | translate }}</div>
     </div>
     <div class="hero-stat">
       <div class="stat-number">
         {{ propertiesVal }}K<span class="stat-suffix">+</span>
       </div>
-      <div class="stat-label">Properties</div>
+      <div class="stat-label">{{ 'HOME.HERO.PROPERTIES' | translate }}</div>
     </div>
     <div class="hero-stat">
       <div class="stat-number">
         {{ citiesVal }}
       </div>
-      <div class="stat-label">Cities</div>
+      <div class="stat-label">{{ 'HOME.HERO.CITIES' | translate }}</div>
     </div>
   </div>
 
   <!-- Scroll indicator: bottom-left -->
   <div class="hero-scroll-indicator">
-    <span class="scroll-label">Scroll to Explore</span>
+    <span class="scroll-label">{{ 'HOME.HERO.SCROLL' | translate }}</span>
     <div class="scroll-line"></div>
   </div>
 
@@ -121,11 +120,11 @@
 <!-- ═══════════════════════════════════════════════════════════
      MARKET TICKER STRIP
      Infinitely scrolling property market data
-════════════════════════════════════════════════════════════ -->
+     ════════════════════════════════════════════════════════════ -->
 <div class="ticker-wrap">
   <div class="ticker-track">
     <span class="ticker-item" *ngFor="let item of allTickerItems">
-      <span class="ticker-label">{{ item.label }}</span>
+      <span class="ticker-label">{{ 'HOME.TICKER.' + item.key | translate }}</span>
       <span class="ticker-change" [class.positive]="item.positive" [class.negative]="!item.positive">
         {{ item.positive ? '↑' : '↓' }} {{ item.change }}%
       </span>
@@ -136,5 +135,5 @@
 
 <!-- ══════════════════════════════════════════════════════════
      HOME PAGE SECTIONS (Partners · Properties · Value · Contact)
-════════════════════════════════════════════════════════════ -->
+     ════════════════════════════════════════════════════════════ -->
 <app-home-sections></app-home-sections>

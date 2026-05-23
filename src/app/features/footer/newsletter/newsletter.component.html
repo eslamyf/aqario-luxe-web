@@ -11,32 +11,31 @@
   <div class="newsletter-content reveal">
 
     <!-- Eyebrow: §3.1 — font-mono, gold, letter-spacing 4px, uppercase -->
-    <div class="newsletter-eyebrow">Stay Ahead</div>
+    <div class="newsletter-eyebrow">{{ 'HOME.NEWSLETTER.EYEBROW' | translate }}</div>
 
     <!-- Title: font-display weight 300, em → italic gold -->
     <h2 class="newsletter-title" id="newsletter-heading">
-      Market <em>Intelligence</em>
+      {{ 'HOME.NEWSLETTER.TITLE' | translate }} <em>{{ 'HOME.NEWSLETTER.EMPHASIS' | translate }}</em>
     </h2>
 
     <!-- Description: font-body, var(--mist) -->
     <p class="newsletter-desc">
-      Weekly curated insights from the global luxury real estate
-      market, delivered to your inbox.
+      {{ 'HOME.NEWSLETTER.DESC' | translate }}
     </p>
 
     <!-- Market data teaser chips — decorative data highlights -->
     <div class="newsletter-data-row">
       <div class="data-chip">
         <span class="chip-value">142</span>
-        <span class="chip-label">Markets</span>
+        <span class="chip-label">{{ 'HOME.NEWSLETTER.MARKETS' | translate }}</span>
       </div>
       <div class="data-chip">
         <span class="chip-value">+8.3%</span>
-        <span class="chip-label">Avg. Growth</span>
+        <span class="chip-label">{{ 'HOME.NEWSLETTER.GROWTH' | translate }}</span>
       </div>
       <div class="data-chip">
         <span class="chip-value">$2.4T</span>
-        <span class="chip-label">Total Volume</span>
+        <span class="chip-label">{{ 'HOME.NEWSLETTER.VOLUME' | translate }}</span>
       </div>
     </div>
 
@@ -63,7 +62,7 @@
           type="email"
           class="newsletter-input"
           formControlName="email"
-          placeholder="your@email.com"
+          [placeholder]="'HOME.NEWSLETTER.PLACEHOLDER' | translate"
           autocomplete="email"
           [attr.aria-invalid]="showError ? 'true' : null"
           aria-describedby="newsletter-error"
@@ -78,7 +77,7 @@
           [attr.data-cursor-hover]="true"
           aria-label="Subscribe to newsletter"
         >
-          {{ isSubmitting ? 'SUBSCRIBING…' : 'SUBSCRIBE →' }}
+          {{ (isSubmitting ? 'HOME.NEWSLETTER.SUBSCRIBING' : 'HOME.NEWSLETTER.SUBSCRIBE') | translate }}
         </button>
       </div><!-- /newsletter-input-row -->
 
@@ -89,14 +88,14 @@
         id="newsletter-error"
         role="alert"
       >
-        Please enter a valid email address
+        {{ 'HOME.NEWSLETTER.ERROR_EMAIL' | translate }}
       </p>
 
     </form><!-- /newsletter-form -->
 
     <!-- Subscriber count tagline ──────────────────────────── -->
     <p class="newsletter-tagline">
-      Join 25,000+ subscribers. Unsubscribe anytime.
+      {{ 'HOME.NEWSLETTER.TAGLINE' | translate }}
     </p>
 
   </div><!-- /newsletter-form-wrap -->
