@@ -18,69 +18,69 @@
       <img class="user-avatar-img" *ngIf="user.photo" [src]="user.photo" [alt]="user.name" />
       <div class="info">
         <span class="name">{{ user.name }}</span>
-        <span class="role">{{ getRoleLabel(user) }}</span>
+        <span class="role">{{ 'DASHBOARD.ROLES.' + user.role.toUpperCase() | translate }}</span>
       </div>
     </div>
 
     <!-- KYC warning banner -->
     <div class="kyc-banner" *ngIf="!user.isVerified">
       <i class="ph ph-warning"></i>
-      <span>Identity not verified</span>
+      <span>{{ 'DASHBOARD.IDENTITY_NOT_VERIFIED' | translate }}</span>
     </div>
 
     <!-- Nav -->
     <nav class="user-nav">
-      <span class="nav-section">My Account</span>
+      <span class="nav-section">{{ 'DASHBOARD.MY_ACCOUNT' | translate }}</span>
 
       <a routerLink="overview" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="ph ph-squares-four"></i>
-        Overview
+        {{ 'DASHBOARD.OVERVIEW' | translate }}
       </a>
 
       <a routerLink="bookings" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="ph ph-calendar-check"></i>
-        My Bookings
+        {{ 'DASHBOARD.MY_BOOKINGS' | translate }}
       </a>
 
       <a routerLink="properties" routerLinkActive="active" class="nav-item"
          *ngIf="canListProperties(user)" (click)="closeSidebar()">
         <i class="ph ph-buildings"></i>
-        <span>My Properties</span>
+        <span>{{ 'DASHBOARD.MY_PROPERTIES' | translate }}</span>
       </a>
 
       <a routerLink="owner-bookings" routerLinkActive="active" class="nav-item"
          *ngIf="canListProperties(user)" (click)="closeSidebar()">
         <i class="ph ph-bell-ringing"></i>
-        <span>Incoming Requests</span>
+        <span>{{ 'DASHBOARD.INCOMING_REQUESTS' | translate }}</span>
       </a>
 
       <a routerLink="owner-viewing-requests" routerLinkActive="active" class="nav-item"
          *ngIf="canListProperties(user)" (click)="closeSidebar()">
         <i class="ph ph-calendar-dots"></i>
-        <span>Viewing Schedule</span>
+        <span>{{ 'DASHBOARD.VIEWING_SCHEDULE' | translate }}</span>
       </a>
 
       <a routerLink="saved" routerLinkActive="active" class="nav-item" *ngIf="canViewSaved(user)" (click)="closeSidebar()">
         <i class="ph ph-heart"></i>
-        Saved
+        {{ 'DASHBOARD.SAVED' | translate }}
       </a>
 
       <a routerLink="viewing-requests" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="ph ph-eye"></i>
-        Viewing Requests
+        {{ 'DASHBOARD.VIEWING_REQUESTS' | translate }}
       </a>
 
       <a routerLink="payments" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <i class="ph ph-credit-card"></i>
-        Payments
+        {{ 'DASHBOARD.PAYMENTS' | translate }}
       </a>
 
       <!-- Admin Specific -->
       <ng-container *ngIf="user.role === 'admin'">
-        <span class="nav-section">Management</span>
+        <span class="nav-section">{{ 'DASHBOARD.MANAGEMENT' | translate }}</span>
         <a routerLink="/admin" class="nav-item admin-link" (click)="closeSidebar()">
           <i class="ph ph-shield-check"></i>
-          Admin Center
+          {{ 'DASHBOARD.ADMIN_CENTER' | translate }}
         </a>
       </ng-container>
     </nav>
@@ -90,7 +90,7 @@
     <div class="sidebar-footer">
       <button class="logout-link" (click)="logout()" [disabled]="isLoggingOut">
         <i class="ph ph-sign-out"></i>
-        {{ isLoggingOut ? 'Logging out...' : 'Log out' }}
+        {{ isLoggingOut ? ('DASHBOARD.LOGGING_OUT' | translate) : ('DASHBOARD.LOG_OUT' | translate) }}
       </button>
     </div>
 

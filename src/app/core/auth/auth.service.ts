@@ -65,6 +65,39 @@ export class AuthService {
   }
 
   private restoreSession(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      // Migrate Token
+      const oldToken = localStorage.getItem('luxe_token');
+      if (oldToken && !localStorage.getItem(this.TOKEN_KEY)) {
+        localStorage.setItem(this.TOKEN_KEY, oldToken);
+        localStorage.removeItem('luxe_token');
+      }
+      // Migrate User
+      const oldUser = localStorage.getItem('luxe_user');
+      if (oldUser && !localStorage.getItem(this.USER_KEY)) {
+        localStorage.setItem(this.USER_KEY, oldUser);
+        localStorage.removeItem('luxe_user');
+      }
+      // Migrate Favorites
+      const oldFavs = localStorage.getItem('luxe_favorites');
+      if (oldFavs && !localStorage.getItem('aqario_favorites')) {
+        localStorage.setItem('aqario_favorites', oldFavs);
+        localStorage.removeItem('luxe_favorites');
+      }
+      // Migrate Theme
+      const oldTheme = localStorage.getItem('luxe_theme');
+      if (oldTheme && !localStorage.getItem('aqario_theme')) {
+        localStorage.setItem('aqario_theme', oldTheme);
+        localStorage.removeItem('luxe_theme');
+      }
+      // Migrate Language
+      const oldLang = localStorage.getItem('luxe_lang');
+      if (oldLang && !localStorage.getItem('aqario_lang')) {
+        localStorage.setItem('aqario_lang', oldLang);
+        localStorage.removeItem('luxe_lang');
+      }
+    }
+
     const token = localStorage.getItem(this.TOKEN_KEY);
     const userJson = localStorage.getItem(this.USER_KEY);
 

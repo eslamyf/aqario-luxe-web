@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-kyc-status-banner',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <div class="kyc-action-banner" *ngIf="status !== 'approved'" [ngClass]="status">
       <div class="banner-inner">
@@ -20,13 +21,13 @@ import { CommonModule } from '@angular/common';
         
         <div class="action-side">
           <button class="banner-btn" *ngIf="status !== 'pending'" (click)="onAction.emit()">
-            <span>{{ status === 'rejected' ? 'RE-SUBMIT DOCUMENTS' : 'START VERIFICATION' }}</span>
+            <span>{{ (status === 'rejected' ? 'ACCOUNT.KYC_BANNER.RE_SUBMIT' : 'ACCOUNT.KYC_BANNER.START') | translate }}</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
           
           <div class="status-badge pending" *ngIf="status === 'pending'">
             <div class="pulse-dot"></div>
-            <span>PENDING REVIEW</span>
+            <span>{{ 'ACCOUNT.KYC_BANNER.PENDING_REVIEW' | translate }}</span>
           </div>
         </div>
       </div>
@@ -152,6 +153,8 @@ export class KycStatusBannerComponent {
   @Input() status: string = 'not_submitted';
   @Output() onAction = new EventEmitter<void>();
 
+  private translateService = inject(TranslateService);
+
   get statusIcon(): string {
     switch (this.status) {
       case 'pending': return 'fa-hourglass-half';
@@ -162,17 +165,17 @@ export class KycStatusBannerComponent {
 
   get statusTitle(): string {
     switch (this.status) {
-      case 'pending': return 'Verification Pending';
-      case 'rejected': return 'Identity Rejected';
-      default: return 'Identity Verification';
+      case 'pending': return this.translateService.instant('ACCOUNT.KYC_BANNER.VERIFICATION_PENDING');
+      case 'rejected': return this.translateService.instant('ACCOUNT.KYC_BANNER.IDENTITY_REJECTED');
+      default: return this.translateService.instant('ACCOUNT.KYC_BANNER.IDENTITY_VERIFICATION');
     }
   }
 
   get statusDescription(): string {
     switch (this.status) {
-      case 'pending': return 'We are currently reviewing your documents. This usually takes 24h.';
-      case 'rejected': return 'We could not verify your identity. Please check your documents.';
-      default: return 'To list properties or make booking requests, you must verify your identity.';
+      case 'pending': return this.translateService.instant('ACCOUNT.KYC_BANNER.DESC_PENDING');
+      case 'rejected': return this.translateService.instant('ACCOUNT.KYC_BANNER.DESC_REJECTED');
+      default: return this.translateService.instant('ACCOUNT.KYC_BANNER.DESC_DEFAULT');
     }
   }
 }

@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } 
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Subject, timer, takeUntil } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../auth.service';
 import { NotificationService } from '../../../shared/services/notification.service';
@@ -12,7 +13,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-otp-verify',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './otp-verify.component.html',
   styleUrls: ['./otp-verify.component.scss']
 })
@@ -23,6 +24,7 @@ export class OtpVerifyComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
   private http = inject(HttpClient);
+  private translateService = inject(TranslateService);
 
   email: string = '';
   otpForm!: FormGroup;
@@ -35,7 +37,7 @@ export class OtpVerifyComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.email = this.route.snapshot.queryParams['email'] || '';
     if (!this.email) {
-      this.notificationService.show('Invalid access. Email is required.', 'error');
+      this.notificationService.show(this.translateService.instant('AUTH.OTP_PAGE.INVALID_ACCESS'), 'error');
       this.router.navigate(['/']);
       return;
     }
@@ -101,14 +103,14 @@ export class OtpVerifyComponent implements OnInit, OnDestroy {
     this.authService.verifyAccount(this.email, otp).subscribe({
       next: () => {
         this.isLoading = false;
-        this.notificationService.show('Account verified successfully!', 'success');
+        this.notificationService.show(this.translateService.instant('AUTH.OTP_PAGE.VERIFIED_SUCCESS'), 'success');
         this.router.navigate(['/']).then(() => {
           this.authService.openModal('login');
         });
       },
       error: (err) => {
         this.isLoading = false;
-        this.notificationService.show(err.error?.message || 'Invalid OTP', 'error');
+        this.notificationService.show(err.error?.message || this.translateService.instant('AUTH.NOTIF.INVALID_OTP'), 'error');
       }
     });
   }
@@ -120,12 +122,12 @@ export class OtpVerifyComponent implements OnInit, OnDestroy {
     this.http.post(`${environment.apiUrl}/auth/resend-otp`, { email: this.email }).subscribe({
       next: () => {
         this.isResending = false;
-        this.notificationService.show('New OTP sent to your email', 'success');
+        this.notificationService.show(this.translateService.instant('AUTH.OTP_PAGE.NEW_OTP_SENT'), 'success');
         this.startCooldown(60);
       },
       error: (err) => {
         this.isResending = false;
-        this.notificationService.show(err.error?.message || 'Failed to resend OTP', 'error');
+        this.notificationService.show(err.error?.message || this.translateService.instant('AUTH.OTP_PAGE.RESEND_FAILED'), 'error');
       }
     });
   }

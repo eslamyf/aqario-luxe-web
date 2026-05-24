@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { catchError, combineLatest, finalize, map, of } from 'rxjs';
 import { AccountService } from '../services/account.service';
 import { NotificationService } from '../../../shared/services/notification.service';
@@ -8,7 +9,7 @@ import { NotificationService } from '../../../shared/services/notification.servi
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss']
 })

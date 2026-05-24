@@ -1,36 +1,36 @@
 <div class="content-header">
-  <h3>Access Control</h3>
-  <p>Update your authentication credentials securely.</p>
+  <h3>{{ 'ACCOUNT.SECURITY.TITLE' | translate }}</h3>
+  <p>{{ 'ACCOUNT.SECURITY.SUBTITLE' | translate }}</p>
 </div>
 
 <form [formGroup]="passwordForm" (ngSubmit)="submit()" class="luxury-form">
   <div class="form-grid">
     <div class="input-group full">
-      <label>Current Password</label>
+      <label>{{ 'ACCOUNT.SECURITY.CURRENT_PASS' | translate }}</label>
       <input type="password" formControlName="currentPassword" placeholder="••••••••">
     </div>
     <div class="input-group">
-      <label>New Password</label>
-      <input type="password" formControlName="newPassword" placeholder="Min 8 chars, 1 uppercase, 1 number">
+      <label>{{ 'ACCOUNT.SECURITY.NEW_PASS' | translate }}</label>
+      <input type="password" formControlName="newPassword" [placeholder]="'ACCOUNT.SECURITY.PLACEHOLDER_PASS' | translate">
       <div *ngIf="(passwordForm.get('newPassword')?.touched || passwordForm.touched) && (passwordForm.get('newPassword')?.invalid || passwordForm.errors?.['samePassword'])" class="error-msg">
-        <span *ngIf="passwordForm.get('newPassword')?.errors?.['required']">New password is required.</span>
-        <span *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">Must be at least 8 characters.</span>
-        <span *ngIf="passwordForm.get('newPassword')?.errors?.['pattern'] && !passwordForm.get('newPassword')?.errors?.['minlength']">Must contain at least 1 uppercase, 1 lowercase, and 1 number.</span>
-        <span *ngIf="passwordForm.errors?.['samePassword']">New password cannot be the same as the current password.</span>
+        <span *ngIf="passwordForm.get('newPassword')?.errors?.['required']">{{ 'ACCOUNT.SECURITY.NEW_PASS_REQ' | translate }}</span>
+        <span *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">{{ 'ACCOUNT.SECURITY.MIN_CHARS' | translate }}</span>
+        <span *ngIf="passwordForm.get('newPassword')?.errors?.['pattern'] && !passwordForm.get('newPassword')?.errors?.['minlength']">{{ 'ACCOUNT.SECURITY.PASS_PATTERN' | translate }}</span>
+        <span *ngIf="passwordForm.errors?.['samePassword']">{{ 'ACCOUNT.SECURITY.PASS_SAME_ERROR' | translate }}</span>
       </div>
     </div>
     <div class="input-group">
-      <label>Confirm Password</label>
-      <input type="password" formControlName="confirmPassword" placeholder="Must match new password">
+      <label>{{ 'ACCOUNT.SECURITY.CONFIRM_PASS' | translate }}</label>
+      <input type="password" formControlName="confirmPassword" [placeholder]="'ACCOUNT.SECURITY.PLACEHOLDER_CONFIRM' | translate">
       <div *ngIf="passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched" class="error-msg">
-        Passwords do not match.
+        {{ 'ACCOUNT.SECURITY.PASS_MISMATCH' | translate }}
       </div>
     </div>
   </div>
   
   <div class="action-row">
     <button type="submit" class="btn-gold" [disabled]="passwordForm.invalid || isUpdating">
-      {{ isUpdating ? 'UPDATING...' : 'CHANGE PASSWORD' }}
+      {{ (isUpdating ? 'ACCOUNT.SECURITY.UPDATING' : 'ACCOUNT.SECURITY.CHANGE_PASS') | translate }}
     </button>
   </div>
 </form>

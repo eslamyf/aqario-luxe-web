@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 import { UserDashboardService, UserProfile } from './user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
 
@@ -27,7 +28,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserDashboardService,
     private fb: FormBuilder,
-    private notif: NotificationService
+    private notif: NotificationService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +75,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           this.user = user;
-          this.notif.show('Profile updated successfully', 'success');
+          this.notif.show(this.translate.instant('DASHBOARD.PROFILE.NOTIF.UPDATE_SUCCESS'), 'success');
           this.isSavingProfile = false;
         },
         error: () => { this.isSavingProfile = false; },
@@ -93,7 +95,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           this.user = user;
-          this.notif.show('Profile photo updated', 'success');
+          this.notif.show(this.translate.instant('DASHBOARD.PROFILE.NOTIF.PHOTO_SUCCESS'), 'success');
           this.isSavingProfile = false;
         },
         error: () => { this.isSavingProfile = false; }
@@ -108,7 +110,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.notif.show('Password changed. Please log in again.', 'success');
+          this.notif.show(this.translate.instant('DASHBOARD.PROFILE.NOTIF.PASSWORD_SUCCESS'), 'success');
           this.isSavingPassword = false;
           this.passwordForm.reset();
           // Backend logs user out by revoking refresh tokens

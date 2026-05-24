@@ -1,82 +1,79 @@
 <div>
   <div class="page-header">
-    <div class="section-eyebrow">My Account</div>
-    <h1>Welcome back<span *ngIf="user">, {{ user.name.split(' ')[0] }}</span></h1>
-    <p>Here's a live overview of your activity on LUXE.</p>
+    <div class="section-eyebrow">{{ 'DASHBOARD.MY_ACCOUNT' | translate }}</div>
+    <h1>{{ 'DASHBOARD.OVERVIEW_TITLE' | translate }}<span *ngIf="user">, {{ user.name.split(' ')[0] }}</span></h1>
+    <p>{{ 'DASHBOARD.OVERVIEW_SUB' | translate }}</p>
   </div>
 
   <!-- KYC alerts -->
   <div class="kyc-alert warning" *ngIf="user && dashboard?.kycPending">
     <i class="ph ph-clock"></i>
     <div>
-      <strong>KYC under review.</strong> Your identity documents are being verified. This usually takes 1–2 business days.
+      <strong>{{ 'DASHBOARD.KYC.PENDING_STRONG' | translate }}</strong> {{ 'DASHBOARD.KYC.PENDING_TEXT' | translate }}
     </div>
   </div>
   <div class="kyc-alert error" *ngIf="user && dashboard?.kycRejected">
     <i class="ph ph-x-circle"></i>
     <div>
-      <strong>KYC rejected.</strong>
-      {{ dashboard?.kycRejectionReason || 'Your documents were not accepted.' }}
-      <a routerLink="../profile">Re-submit documents →</a>
+      <strong>{{ 'DASHBOARD.KYC.REJECTED_STRONG' | translate }}</strong>
+      {{ dashboard?.kycRejectionReason || ('DASHBOARD.KYC.REJECTED_DEFAULT' | translate) }}
+      <a routerLink="../profile">{{ 'DASHBOARD.KYC.RE_SUBMIT' | translate }}</a>
     </div>
   </div>
   <div class="kyc-alert success" *ngIf="user && dashboard?.kycApproved">
     <i class="ph ph-check-circle"></i>
-    <div><strong>Identity verified.</strong> Your account is fully activated.</div>
+    <div><strong>{{ 'DASHBOARD.KYC.APPROVED_STRONG' | translate }}</strong> {{ 'DASHBOARD.KYC.APPROVED_TEXT' | translate }}</div>
   </div>
 
-  <div *ngIf="isLoading" class="loading-state">Loading dashboard...</div>
+  <div *ngIf="isLoading" class="loading-state">{{ 'DASHBOARD.LOADING' | translate }}</div>
 
   <!-- ── Owner / Agent Dashboard ─────────────────────────────────── -->
   <ng-container *ngIf="!isLoading && isOwnerOrAgent && ownerDash">
-    
-
-
     <div class="stats-grid">
       <!-- Hosting Stats -->
       <article class="stat-card">
-        <span class="stat-label">Total Properties</span>
+        <span class="stat-label">{{ 'DASHBOARD.STATS.TOTAL_PROPERTIES' | translate }}</span>
         <span class="stat-value">{{ ownerDash.totalProperties }}</span>
-        <span class="stat-note">All your listed properties.</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.TOTAL_PROPERTIES_SUB' | translate }}</span>
       </article>
       <article class="stat-card">
-        <span class="stat-label">Booking Requests</span>
+        <span class="stat-label">{{ 'DASHBOARD.STATS.BOOKING_REQUESTS' | translate }}</span>
         <span class="stat-value">{{ ownerDash.bookingRequests }}</span>
-        <span class="stat-note">Pending guest approvals.</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.BOOKING_REQUESTS_SUB' | translate }}</span>
       </article>
 
       <!-- Personal Stats (Unification) -->
       <article class="stat-card">
-        <span class="stat-label">Saved Properties</span>
+        <span class="stat-label">{{ 'DASHBOARD.STATS.SAVED_PROPERTIES' | translate }}</span>
         <span class="stat-value">{{ ownerDash.savedPropertiesCount }}</span>
-        <span class="stat-note">Properties you're watching.</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.SAVED_PROPERTIES_SUB' | translate }}</span>
       </article>
       <article class="stat-card">
-        <span class="stat-label">My Bookings</span>
+        <span class="stat-label">{{ 'DASHBOARD.STATS.MY_BOOKINGS' | translate }}</span>
         <span class="stat-value">{{ ownerDash.myBookings.length || 0 }}</span>
-        <span class="stat-note">Stays you've booked.</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.MY_BOOKINGS_SUB' | translate }}</span>
       </article>
     </div>
 
     <!-- Recent hosting preview -->
     <div class="panel-card" *ngIf="ownerDash.properties?.length">
-      <h2>Recent Hosting Activity</h2>
+      <h2>{{ 'DASHBOARD.RECENT_HOSTING' | translate }}</h2>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Property</th>
-              <th>Price</th>
-              <th>Beds</th>
-              <th>City</th>
+              <th>{{ 'DASHBOARD.TABLE.PROPERTY' | translate }}</th>
+              <th>{{ 'DASHBOARD.TABLE.PRICE' | translate }}</th>
+              <th>{{ 'DASHBOARD.TABLE.BEDS' | translate }}</th>
+              <th>{{ 'DASHBOARD.FORM.CITY' | translate }}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let p of ownerDash.properties">
-              <td>{{ p.title }}</td>
+              <td>{{ p.title | translateProp }}</td>
               <td>{{ p.price | currency:'EGP':'symbol':'1.0-0' }}</td>
               <td>{{ p.bedrooms ?? '—' }}</td>
-              <td>{{ p.location?.city || '—' }}</td>
+              <td>{{ (p.location?.city || '—') | translateProp }}</td>
             </tr>
           </tbody>
         </table>
@@ -88,49 +85,49 @@
   <ng-container *ngIf="!isLoading && !isOwnerOrAgent">
     <div class="stats-grid" *ngIf="stats">
       <article class="stat-card">
-        <span class="stat-label">Total Bookings</span>
+        <span class="stat-label">{{ 'DASHBOARD.STATS.TOTAL_BOOKINGS' | translate }}</span>
         <span class="stat-value">{{ stats.totalBookings }}</span>
-        <span class="stat-note">All your reservations.</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.TOTAL_BOOKINGS_SUB' | translate }}</span>
       </article>
       <article class="stat-card">
-        <span class="stat-label">Active Bookings</span>
+        <span class="stat-label">{{ 'DASHBOARD.STATS.ACTIVE_BOOKINGS' | translate }}</span>
         <span class="stat-value">{{ stats.activeBookings }}</span>
-        <span class="stat-note">Pending or approved.</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.ACTIVE_BOOKINGS_SUB' | translate }}</span>
       </article>
       <article class="stat-card">
-        <span class="stat-label">Total Spent</span>
+        <span class="stat-label">{{ 'DASHBOARD.STATS.TOTAL_SPENT' | translate }}</span>
         <span class="stat-value">{{ stats.totalSpent | currency:'EGP':'symbol':'1.0-0' }}</span>
-        <span class="stat-note">Paid transactions only.</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.TOTAL_SPENT_SUB' | translate }}</span>
       </article>
       <article class="stat-card">
-        <span class="stat-label">Saved Properties</span>
+        <span class="stat-label">{{ 'DASHBOARD.STATS.SAVED_PROPERTIES' | translate }}</span>
         <span class="stat-value">{{ stats.savedProperties }}</span>
-        <span class="stat-note">On your wishlist.</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.WISH_LIST' | translate }}</span>
       </article>
     </div>
     <div class="empty-state" *ngIf="!stats">
-      <strong>Stats unavailable</strong>
-      <p>We couldn't load your statistics right now. Your bookings and payments are still accessible below.</p>
+      <strong>{{ 'DASHBOARD.STATS.UNAVAILABLE' | translate }}</strong>
+      <p>{{ 'DASHBOARD.STATS.UNAVAILABLE_SUB' | translate }}</p>
     </div>
 
     <!-- Recent personal bookings -->
     <div class="panel-card" *ngIf="buyerDash?.myBookings?.length || adminDash?.myBookings?.length">
-      <h2>Recent Bookings</h2>
+      <h2>{{ 'DASHBOARD.RECENT_BOOKINGS' | translate }}</h2>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Property</th>
-              <th>Period</th>
-              <th>Status</th>
-              <th>Total</th>
+              <th>{{ 'DASHBOARD.TABLE.PROPERTY' | translate }}</th>
+              <th>{{ 'DASHBOARD.TABLE.DATES' | translate }}</th>
+              <th>{{ 'DASHBOARD.TABLE.STATUS' | translate }}</th>
+              <th>{{ 'DASHBOARD.TABLE.AMOUNT' | translate }}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let b of (buyerDash?.myBookings || adminDash?.myBookings)">
-              <td>{{ b.property_id?.title || 'Unknown' }}</td>
+              <td>{{ (b.property_id?.title || 'Unknown') | translateProp }}</td>
               <td>{{ b.start_date | date:'shortDate' }} - {{ b.end_date | date:'shortDate' }}</td>
-              <td><span class="status-badge {{ b.status }}">{{ b.status }}</span></td>
+              <td><span class="status-badge {{ b.status }}">{{ 'DASHBOARD.FILTER_' + b.status.toUpperCase() | translate }}</span></td>
               <td>{{ b.amount | currency:'EGP':'symbol':'1.0-0' }}</td>
             </tr>
           </tbody>
@@ -143,25 +140,25 @@
   <ng-container *ngIf="!isLoading && isAdmin && adminDash">
     <div class="panel-card admin-summary">
       <div class="admin-header">
-        <h2>System Management</h2>
-        <a routerLink="/admin" class="action-btn outline">Go to Admin Center →</a>
+        <h2>{{ 'DASHBOARD.SYSTEM_MGMT' | translate }}</h2>
+        <a routerLink="/admin" class="action-btn outline">{{ 'DASHBOARD.ADMIN_CENTER' | translate }} →</a>
       </div>
       <div class="stats-grid mini">
         <div class="mini-stat">
           <span class="val">{{ adminDash.totalUsers || 0 }}</span>
-          <span class="lbl">Total Users</span>
+          <span class="lbl">{{ 'DASHBOARD.TOTAL_USERS' | translate }}</span>
         </div>
         <div class="mini-stat">
           <span class="val">{{ adminDash.totalProperties || 0 }}</span>
-          <span class="lbl">Properties</span>
+          <span class="lbl">{{ 'DASHBOARD.MY_PROPERTIES' | translate }}</span>
         </div>
         <div class="mini-stat">
           <span class="val">{{ adminDash.totalBookings || 0 }}</span>
-          <span class="lbl">Bookings</span>
+          <span class="lbl">{{ 'DASHBOARD.MY_BOOKINGS' | translate }}</span>
         </div>
         <div class="mini-stat warning" *ngIf="adminDash.pendingVerifications > 0">
           <span class="val">{{ adminDash.pendingVerifications }}</span>
-          <span class="lbl">Pending KYC</span>
+          <span class="lbl">{{ 'DASHBOARD.PENDING_KYC' | translate }}</span>
         </div>
       </div>
     </div>
@@ -169,27 +166,27 @@
 
   <!-- Quick actions -->
   <div class="panel-card" *ngIf="!isLoading">
-    <h2>Quick Actions</h2>
+    <h2>{{ 'DASHBOARD.QUICK_ACTIONS' | translate }}</h2>
     <div class="quick-actions">
       <a routerLink="../bookings" class="quick-card">
         <i class="ph ph-calendar-check"></i>
-        My Bookings
+        {{ 'DASHBOARD.MY_BOOKINGS' | translate }}
       </a>
       <a routerLink="../properties" class="quick-card" *ngIf="isOwnerOrAgent">
         <i class="ph ph-buildings"></i>
-        My Properties
+        {{ 'DASHBOARD.MY_PROPERTIES' | translate }}
       </a>
       <a routerLink="../saved" class="quick-card" *ngIf="isBuyer || isAdmin">
         <i class="ph ph-heart"></i>
-        Saved
+        {{ 'DASHBOARD.SAVED' | translate }}
       </a>
       <a routerLink="../payments" class="quick-card">
         <i class="ph ph-credit-card"></i>
-        Payments
+        {{ 'DASHBOARD.PAYMENTS' | translate }}
       </a>
       <a routerLink="../profile" class="quick-card">
         <i class="ph ph-user"></i>
-        Edit Profile
+        {{ 'DASHBOARD.EDIT_PROFILE' | translate }}
       </a>
     </div>
   </div>

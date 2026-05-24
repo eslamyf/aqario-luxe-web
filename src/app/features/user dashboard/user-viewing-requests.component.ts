@@ -3,15 +3,16 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserDashboardService } from './user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-viewing-requests',
   template: `
     <div class="vr-wrapper">
       <div class="page-header">
-        <div class="section-eyebrow">Schedule</div>
-        <h1>My Viewing Requests</h1>
-        <p>Track your property viewing appointments and their status.</p>
+        <div class="section-eyebrow">{{ 'DASHBOARD.SCHEDULE' | translate }}</div>
+        <h1>{{ 'DASHBOARD.MY_VIEWING_REQUESTS' | translate }}</h1>
+        <p>{{ 'DASHBOARD.MY_VIEWING_REQUESTS_SUB' | translate }}</p>
       </div>
       <div class="panel-card">
         <div *ngIf="isLoading" class="vr-loading">
@@ -20,13 +21,13 @@ import { NotificationService } from '../../shared/services/notification.service'
         <div *ngIf="errorMsg && !isLoading" class="vr-error">
           <span class="error-icon">&#9888;&#65039;</span>
           <p>{{ errorMsg }}</p>
-          <button class="btn-ghost" (click)="load()">Retry</button>
+          <button class="btn-ghost" (click)="load()">{{ 'DASHBOARD.RETRY' | translate }}</button>
         </div>
         <div *ngIf="!isLoading && !errorMsg && requests.length === 0" class="vr-empty">
           <div class="empty-icon">&#128065;&#65039;</div>
-          <h3>No viewing requests yet</h3>
-          <p>Request a viewing on any property to get started.</p>
-          <a routerLink="/properties" class="btn-browse">Browse Properties</a>
+          <h3>{{ 'DASHBOARD.NO_VR' | translate }}</h3>
+          <p>{{ 'DASHBOARD.NO_VR_SUB' | translate }}</p>
+          <a routerLink="/properties" class="btn-browse">{{ 'DASHBOARD.BROWSE_PROPERTIES' | translate }}</a>
         </div>
         <div *ngIf="!isLoading && !errorMsg && requests.length > 0" class="vr-list">
           <div class="vr-card" *ngFor="let r of requests; trackBy: trackById">
@@ -36,46 +37,46 @@ import { NotificationService } from '../../shared/services/notification.service'
               </div>
               <div class="prop-thumb placeholder" *ngIf="!r.property?.images?.length">&#127968;</div>
               <div class="prop-info">
-                <h3 class="prop-title">{{ r.property?.title || 'Property' }}</h3>
-                <p class="prop-location">&#128205; {{ r.property?.location?.city || 'N/A' }}</p>
+                <h3 class="prop-title">{{ (r.property?.title || ('DASHBOARD.TABLE.PROPERTY' | translate)) | translateProp }}</h3>
+                <p class="prop-location">&#128205; {{ (r.property?.location?.city || 'N/A') | translateProp }}</p>
               </div>
               <div class="status-badge" [class]="'status-' + r.status">
-                <span class="status-dot"></span>{{ r.status | titlecase }}
+                <span class="status-dot"></span>{{ 'DASHBOARD.FILTER_' + r.status.toUpperCase() | translate }}
               </div>
             </div>
             <div class="vr-details">
               <div class="detail-item" *ngIf="r.preferredDate">
-                <span class="detail-label">Preferred Date</span>
+                <span class="detail-label">{{ 'DASHBOARD.PREFERRED_DATE' | translate }}</span>
                 <span class="detail-value">{{ r.preferredDate | date:'dd MMM yyyy' }}</span>
               </div>
               <div class="detail-item" *ngIf="r.preferredTime">
-                <span class="detail-label">Preferred Time</span>
+                <span class="detail-label">{{ 'DASHBOARD.PREFERRED_TIME' | translate }}</span>
                 <span class="detail-value">{{ r.preferredTime }}</span>
               </div>
               <div class="detail-item">
-                <span class="detail-label">Owner</span>
+                <span class="detail-label">{{ 'DASHBOARD.OWNER' | translate }}</span>
                 <span class="detail-value">{{ r.owner?.name || '-' }}</span>
               </div>
               <div class="detail-item">
-                <span class="detail-label">Submitted</span>
+                <span class="detail-label">{{ 'DASHBOARD.SUBMITTED_DATE' | translate }}</span>
                 <span class="detail-value">{{ r.createdAt | date:'dd MMM yyyy' }}</span>
               </div>
             </div>
             <div class="vr-message" *ngIf="r.message">
-              <span class="msg-label">Your Note:</span>
+              <span class="msg-label">{{ 'DASHBOARD.YOUR_NOTE' | translate }}</span>
               <p>"{{ r.message }}"</p>
             </div>
             <div class="vr-actions" *ngIf="r.status === 'pending'">
               <button class="btn-cancel" [disabled]="loadingMap[r._id]" (click)="cancel(r._id)">
                 <span *ngIf="loadingMap[r._id]" class="spinner-xs"></span>
-                Cancel Request
+                {{ 'DASHBOARD.CANCEL_REQUEST' | translate }}
               </button>
             </div>
             <div class="vr-notice approved" *ngIf="r.status === 'approved'">
-              Approved — your viewing has been confirmed by the owner.
+              {{ 'DASHBOARD.VR_APPROVED' | translate }}
             </div>
             <div class="vr-notice rejected" *ngIf="r.status === 'rejected'">
-              Declined — the owner could not accommodate this request.
+              {{ 'DASHBOARD.VR_REJECTED' | translate }}
             </div>
           </div>
         </div>
@@ -139,13 +140,13 @@ export class UserViewingRequestsComponent implements OnInit, OnDestroy {
   requests: any[] = [];
   isLoading = true;
   errorMsg = '';
-  // Per-item loading map — prevents double-click spam on any single request
   loadingMap: Record<string, boolean> = {};
   private destroy$ = new Subject<void>();
 
   constructor(
     private svc: UserDashboardService,
-    private notif: NotificationService
+    private notif: NotificationService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void { this.load(); }
@@ -159,29 +160,27 @@ export class UserViewingRequestsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => { this.requests = data; this.isLoading = false; },
         error: (err) => {
-          this.errorMsg = err?.error?.message || 'Failed to load viewing requests.';
+          this.errorMsg = err?.error?.message || this.translate.instant('DASHBOARD.ERR_LOAD_VR');
           this.isLoading = false;
         }
       });
   }
 
   cancel(id: string): void {
-    // Guard: prevent double-click on same item
     if (this.loadingMap[id]) return;
     this.loadingMap = { ...this.loadingMap, [id]: true };
     this.svc.cancelViewingRequest(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.notif.show('Viewing request cancelled.', 'info');
-          // ✅ Instant state sync — no full reload, no flicker
+          this.notif.show(this.translate.instant('DASHBOARD.NOTIF_VR_CANCELLED'), 'info');
           this.requests = this.requests.map(r =>
             r._id === id ? { ...r, status: 'cancelled' } : r
           );
           this.loadingMap = { ...this.loadingMap, [id]: false };
         },
         error: (err) => {
-          this.notif.show(err?.error?.message || 'Failed to cancel request.', 'error');
+          this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.NOTIF_VR_CANCEL_FAILED'), 'error');
           this.loadingMap = { ...this.loadingMap, [id]: false };
         }
       });

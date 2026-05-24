@@ -1,71 +1,71 @@
 <div>
   <div class="page-header">
-    <div class="section-eyebrow">Financials</div>
-    <h1>Payment History</h1>
-    <p>A complete record of all your transactions on LUXE.</p>
+    <div class="section-eyebrow">{{ 'DASHBOARD.FINANCIALS' | translate }}</div>
+    <h1>{{ 'DASHBOARD.PAYMENT_HISTORY' | translate }}</h1>
+    <p>{{ 'DASHBOARD.PAYMENT_SUB' | translate }}</p>
   </div>
 
   <div class="stats-grid" style="grid-template-columns: repeat(3,1fr);margin-bottom:1.5rem">
     <article class="stat-card">
-      <span class="stat-label">Total Paid</span>
+      <span class="stat-label">{{ 'DASHBOARD.STATS.TOTAL_PAID' | translate }}</span>
       <span class="stat-value">{{ totalPaid | currency:'EGP':'symbol':'1.0-0' }}</span>
-      <span class="stat-note">Paid transactions only.</span>
+      <span class="stat-note">{{ 'DASHBOARD.STATS.TOTAL_SPENT_SUB' | translate }}</span>
     </article>
     <article class="stat-card">
-      <span class="stat-label">Completed</span>
+      <span class="stat-label">{{ 'DASHBOARD.STATS.COMPLETED' | translate }}</span>
       <span class="stat-value">{{ completedCount }}</span>
-      <span class="stat-note">Successful payments.</span>
+      <span class="stat-note">{{ 'DASHBOARD.STATS.COMPLETED_SUB' | translate }}</span>
     </article>
     <article class="stat-card">
-      <span class="stat-label">All Records</span>
+      <span class="stat-label">{{ 'DASHBOARD.STATS.ALL_RECORDS' | translate }}</span>
       <span class="stat-value">{{ payments.length }}</span>
-      <span class="stat-note">Total payment records.</span>
+      <span class="stat-note">{{ 'DASHBOARD.STATS.ALL_RECORDS_SUB' | translate }}</span>
     </article>
   </div>
 
   <div class="panel-card">
-    <div *ngIf="isLoading" class="loading-state">Loading payments...</div>
+    <div *ngIf="isLoading" class="loading-state">{{ 'DASHBOARD.LOADING_PAYMENTS' | translate }}</div>
     <div *ngIf="!isLoading && hasError" class="empty-state">
-      <strong>Something went wrong</strong>
-      <p>Failed to load your payments.</p>
-      <button class="action-btn primary" (click)="load()">Retry</button>
+      <strong>{{ 'DASHBOARD.STATS.UNAVAILABLE' | translate }}</strong>
+      <p>{{ 'DASHBOARD.ERR_LOAD_PAYMENTS' | translate }}</p>
+      <button class="action-btn primary" (click)="load()">{{ 'DASHBOARD.RETRY' | translate }}</button>
     </div>
     <div *ngIf="!isLoading && !hasError && payments.length === 0" class="empty-state">
-      <strong>No payment records</strong>
-      <p>Completed bookings and transactions will appear here.</p>
+      <strong>{{ 'DASHBOARD.NO_PAYMENTS' | translate }}</strong>
+      <p>{{ 'DASHBOARD.NO_PAYMENTS_SUB' | translate }}</p>
     </div>
     <div class="table-wrap" *ngIf="!isLoading && payments.length > 0">
       <table>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Property</th>
-            <th>Booking</th>
-            <th>Method</th>
-            <th>Amount</th>
-            <th>Status</th>
+            <th>{{ 'DASHBOARD.TABLE.DATE' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.PROPERTY' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.BOOKING' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.METHOD' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.AMOUNT' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.STATUS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let p of payments">
             <td>{{ p.createdAt | date:'mediumDate' }}</td>
-            <td>{{ propertyTitle(p) }}</td>
+            <td>{{ propertyTitle(p) | translateProp }}</td>
             <td>
               <span *ngIf="p.booking" class="booking-dates">
                 {{ p.booking.start_date | date:'shortDate' }} — {{ p.booking.end_date | date:'shortDate' }}
               </span>
               <span *ngIf="!p.booking" class="text-muted">—</span>
             </td>
-            <td>{{ p.method || p.paymentMethod || 'Card' }}</td>
+            <td>{{ 'DASHBOARD.PAYMENT_METHOD.' + (p.method || p.paymentMethod || 'card').toUpperCase() | translate }}</td>
             <td>{{ p.totalAmount | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
             <td style="display: flex; gap: 8px; align-items: center;">
               <span class="status-badge {{ p.status }}">
-                {{ p.status | uppercase }}
+                {{ 'DASHBOARD.FILTER_' + p.status.toUpperCase() | translate }}
               </span>
               <button *ngIf="p.status === 'pending' && p.booking?._id" 
                       class="btn-pay-small" 
                       (click)="goToCheckout(p.booking._id)">
-                Pay Now
+                {{ 'DASHBOARD.PAY_NOW' | translate }}
               </button>
             </td>
           </tr>

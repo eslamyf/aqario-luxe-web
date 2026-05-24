@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AccountService, UserProfile } from '../../services/account.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { KycStatusBannerComponent } from '../kyc-status-banner/kyc-status-banner.component';
@@ -9,7 +10,7 @@ import { KycStatusBannerComponent } from '../kyc-status-banner/kyc-status-banner
 @Component({
   selector: 'app-account-overview',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, KycStatusBannerComponent],
+  imports: [CommonModule, ReactiveFormsModule, KycStatusBannerComponent, TranslateModule],
   templateUrl: './account-overview.component.html',
   styleUrls: ['./account-overview.component.scss']
 })
@@ -17,6 +18,7 @@ export class AccountOverviewComponent implements OnInit {
   private accountService = inject(AccountService);
   private notificationService = inject(NotificationService);
   private fb = inject(FormBuilder);
+  private translateService = inject(TranslateService);
 
   user$ = this.accountService.user$;
   profileForm: FormGroup;
@@ -46,7 +48,7 @@ export class AccountOverviewComponent implements OnInit {
 
   submit(): void {
     if (this.profileForm.invalid) {
-      this.notificationService.show('Please fix the errors in the form', 'error');
+      this.notificationService.show(this.translateService.instant('ACCOUNT.NOTIF_FIX_ERRORS'), 'error');
       return;
     }
 
@@ -62,11 +64,11 @@ export class AccountOverviewComponent implements OnInit {
     this.accountService.updateProfile(updatedData).pipe(
       finalize(() => this.isUpdating = false)
     ).subscribe({
-      next: () => this.notificationService.show('Profile synchronized with database', 'success'),
+      next: () => this.notificationService.show(this.translateService.instant('ACCOUNT.NOTIF_SYNC_SUCCESS'), 'success'),
       error: (err) => {
         // Rollback on failure
         this.accountService.setUserData(previousUser);
-        this.notificationService.show(err.error?.message || 'Synchronization failed', 'error');
+        this.notificationService.show(err.error?.message || this.translateService.instant('ACCOUNT.NOTIF_SYNC_FAILED'), 'error');
       }
     });
   }
@@ -77,11 +79,11 @@ export class AccountOverviewComponent implements OnInit {
 
     // Client-side validation
     if (!file.type.startsWith('image/')) {
-      this.notificationService.show('Please select a valid image file', 'error');
+      this.notificationService.show(this.translateService.instant('ACCOUNT.NOTIF_VALID_IMAGE'), 'error');
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      this.notificationService.show('Image size must be less than 10MB', 'error');
+      this.notificationService.show(this.translateService.instant('ACCOUNT.NOTIF_IMAGE_SIZE'), 'error');
       return;
     }
 
@@ -95,16 +97,16 @@ export class AccountOverviewComponent implements OnInit {
       next: (res) => {
         // Backend returns updated user with Cloudinary URL
         this.accountService.setUserData(res.data.user);
-        this.notificationService.show('Avatar updated and saved to Cloudinary', 'success');
+        this.notificationService.show(this.translateService.instant('ACCOUNT.NOTIF_AVATAR_SAVED'), 'success');
       },
       error: (err) => {
-        this.notificationService.show(err.error?.message || 'Photo upload failed', 'error');
+        this.notificationService.show(err.error?.message || this.translateService.instant('ACCOUNT.NOTIF_PHOTO_UPLOAD_FAILED'), 'error');
       }
     });
   }
 
   removePhoto(): void {
-    if (!confirm('Are you sure you want to remove your profile picture?')) return;
+    if (!confirm(this.translateService.instant('ACCOUNT.CONFIRM_REMOVE_PHOTO'))) return;
     
     this.isUploadingPhoto = true;
     this.accountService.updateProfile({ photo: '' }).pipe(
@@ -112,10 +114,10 @@ export class AccountOverviewComponent implements OnInit {
     ).subscribe({
       next: (res) => {
         this.accountService.setUserData(res.data.user);
-        this.notificationService.show('Avatar removed successfully', 'success');
+        this.notificationService.show(this.translateService.instant('ACCOUNT.NOTIF_AVATAR_REMOVED'), 'success');
       },
       error: (err) => {
-        this.notificationService.show(err.error?.message || 'Failed to remove avatar', 'error');
+        this.notificationService.show(err.error?.message || this.translateService.instant('ACCOUNT.NOTIF_AVATAR_REMOVE_FAILED'), 'error');
       }
     });
   }

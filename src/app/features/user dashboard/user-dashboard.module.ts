@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { UserDashboardComponent }           from './user-dashboard.component';
 import { UserOverviewComponent }            from './user-overview.component';
@@ -13,6 +14,7 @@ import { UserProfileComponent }             from './user-profile.component';
 import { UserOwnerBookingsComponent }       from './user-owner-bookings.component';
 import { UserViewingRequestsComponent }     from './user-viewing-requests.component';
 import { UserOwnerViewingRequestsComponent } from './user-owner-viewing-requests.component';
+import { TranslatePropPipe } from './translate-prop.pipe';
 
 const routes: Routes = [
   {
@@ -45,12 +47,14 @@ const routes: Routes = [
     UserOwnerBookingsComponent,
     UserViewingRequestsComponent,
     UserOwnerViewingRequestsComponent,
+    TranslatePropPipe,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
+    TranslateModule,
   ],
 })
 export class UserDashboardModule {}

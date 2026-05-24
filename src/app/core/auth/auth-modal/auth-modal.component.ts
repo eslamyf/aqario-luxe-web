@@ -8,6 +8,8 @@ import { ModalEscapeService } from '../../services/modal-escape.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 import { environment } from '../../../../environments/environment';
 
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 // ─── Custom Validators ───────────────────────────────────
 
 // 1. Password strength validation (8 characters, uppercase, lowercase, number, and symbol)
@@ -48,7 +50,7 @@ type AuthTab = 'login' | 'register' | 'forgot' | 'verify-otp';
 @Component({
   selector: 'app-auth-modal',
   standalone: true, // Use Standalone Component for lightweight and fast performance
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './auth-modal.component.html',
   styleUrls: ['./auth-modal.component.scss'],
 })
@@ -60,6 +62,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private modalEscape = inject(ModalEscapeService); // ESC global bus
   private notificationSvc = inject(NotificationService); // §5.5
+  private translateService = inject(TranslateService);
 
   // ─── State Variables ───
   isOpen = false;           // Controls modal visibility
@@ -178,7 +181,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     if (this.isGoogleLoading) return; // Prevent multiple calls
     if (!response?.credential) {
       this.isGoogleLoading = false;
-      this.notificationSvc.show('Google sign-in did not return a valid credential.', 'error');
+      this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.GOOGLE_INVALID_CRED'), 'error');
       return;
     }
 
@@ -190,14 +193,14 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           this.isGoogleLoading = false;
           const userName = res?.data?.user?.name || 'there';
-          this.notificationSvc.show(`Welcome, ${userName}! Signed in with Google.`, 'success');
+          this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.GOOGLE_WELCOME', { name: userName }), 'success');
           this.close();
         },
         error: (err: any) => {
           this.isGoogleLoading = false;
           console.error('[Frontend-Google-Error]:', err);
           console.error('[Frontend-Google-Error-Body]:', err.error);
-          const msg = err.error?.message || 'Google sign-in failed. Please try again.';
+          const msg = err.error?.message || this.translateService.instant('AUTH.NOTIF.GOOGLE_FAILED');
           this.notificationSvc.show(msg, 'error');
           this.errorMsg = msg;
         }
@@ -315,10 +318,10 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   getStrengthLabel(): string {
     if (!this.registerForm?.get('password')?.value) return '';
     switch (this.passwordStrength) {
-      case 1: return 'Weak';
-      case 2: return 'Fair';
-      case 3: return 'Good';
-      case 4: return 'Strong';
+      case 1: return this.translateService.instant('AUTH.STRENGTH.WEAK');
+      case 2: return this.translateService.instant('AUTH.STRENGTH.FAIR');
+      case 3: return this.translateService.instant('AUTH.STRENGTH.GOOD');
+      case 4: return this.translateService.instant('AUTH.STRENGTH.STRONG');
       default: return '';
     }
   }
@@ -370,13 +373,13 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     this.auth.forgotPassword(email).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.isLoading = false;
-        this.notificationSvc.show(`If registered, a reset link was sent to ${email}`, 'info');
+        this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.RESET_SENT', { email }), 'info');
         this.switchTab('login');
       },
       error: () => {
         this.isLoading = false;
         // For security reasons, show the same message even if email doesn't exist
-        this.notificationSvc.show(`If registered, a reset link was sent to ${email}`, 'info');
+        this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.RESET_SENT', { email }), 'info');
         this.switchTab('login');
       }
     });
@@ -397,12 +400,12 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         // Fix: Properly extract the user's name from the normalized backend response (Task 4)
         const userObj = res?.data?.user || res?.user;
         const userName = userObj?.name || 'there';
-        this.notificationSvc.show(`Welcome back, ${userName}!`, 'success');
+        this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.WELCOME_BACK', { name: userName }), 'success');
         this.close(); // If success, close the modal
       },
       error: (err: any) => {
         this.isLoading = false;
-        this.errorMsg = err.error?.message || 'Invalid email or password. Please try again.';
+        this.errorMsg = err.error?.message || this.translateService.instant('AUTH.NOTIF.INVALID_CREDENTIALS');
       }
     });
   }
@@ -420,7 +423,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     this.auth.register(name, email, password).pipe(takeUntil(this.destroy$)).subscribe({
       next: (user: any) => {
         this.isLoading = false;
-        this.notificationSvc.show(`Account created! Please check your email to verify your account.`, 'info');
+        this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.REGISTRATION_INFO'), 'info');
         this.registeredEmail = email; // Save email for verification
         this.registerForm.reset();
 
@@ -430,7 +433,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         this.isLoading = false;
-        this.errorMsg = err.error?.message || 'Registration failed. Please try again.';
+        this.errorMsg = err.error?.message || this.translateService.instant('AUTH.NOTIF.REGISTRATION_FAILED');
       }
     });
   }
@@ -445,7 +448,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     const otp = `${val.otp0}${val.otp1}${val.otp2}${val.otp3}${val.otp4}${val.otp5}`;
 
     if (otp.length !== 6) {
-      this.errorMsg = 'Please enter all 6 digits.';
+      this.errorMsg = this.translateService.instant('AUTH.NOTIF.OTP_ALL_DIGITS');
       this.isLoading = false;
       return;
     }
@@ -453,7 +456,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     this.auth.verifyAccount(this.registeredEmail, otp).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.isLoading = false;
-        this.notificationSvc.show('Email verified successfully! You can now login.', 'success');
+        this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.EMAIL_VERIFIED'), 'success');
         const emailToPrepopulate = this.registeredEmail;
         this.registeredEmail = '';
         this.verifyOtpForm.reset();
@@ -464,7 +467,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         this.isLoading = false;
-        this.errorMsg = err.error?.message || 'Invalid or expired OTP.';
+        this.errorMsg = err.error?.message || this.translateService.instant('AUTH.NOTIF.INVALID_OTP');
       }
     });
   }
@@ -526,7 +529,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   onGoogleSignIn(): void {
     if (!this.isGoogleConfigured) {
       this.notificationSvc.show(
-        'Google Sign-In is not configured yet. Set GOOGLE_CLIENT_ID in environment.ts.',
+        this.translateService.instant('AUTH.NOTIF.GOOGLE_NOT_CONFIGURED'),
         'error'
       );
       return;
@@ -556,7 +559,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         }
 
         this.notificationSvc.show(
-          'Google Sign-In failed to initialize. Ensure your Google Client ID is configured and the browser allows cookies.',
+          this.translateService.instant('AUTH.NOTIF.GOOGLE_INIT_FAILED'),
           'error'
         );
       });

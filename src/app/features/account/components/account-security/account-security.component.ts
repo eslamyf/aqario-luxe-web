@@ -2,13 +2,14 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AccountService } from '../../services/account.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-account-security',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './account-security.component.html',
   styleUrls: ['./account-security.component.scss']
 })
@@ -16,6 +17,7 @@ export class AccountSecurityComponent {
   private accountService = inject(AccountService);
   private notificationService = inject(NotificationService);
   private fb = inject(FormBuilder);
+  private translateService = inject(TranslateService);
 
   passwordForm: FormGroup;
   isUpdating = false;
@@ -48,11 +50,11 @@ export class AccountSecurityComponent {
       finalize(() => this.isUpdating = false)
     ).subscribe({
       next: () => {
-        this.notificationService.show('Password updated successfully', 'success');
+        this.notificationService.show(this.translateService.instant('ACCOUNT.SECURITY.NOTIF_SUCCESS'), 'success');
         this.passwordForm.reset();
       },
       error: (err) => {
-        this.notificationService.show(err.error?.message || 'Failed to update password', 'error');
+        this.notificationService.show(err.error?.message || this.translateService.instant('ACCOUNT.SECURITY.NOTIF_FAILED'), 'error');
       }
     });
   }

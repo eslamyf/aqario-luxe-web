@@ -1,8 +1,8 @@
 <div class="otp-container">
   <div class="otp-card">
     <div class="otp-header">
-      <h1 class="otp-title">Verify <span class="gold">Account</span></h1>
-      <p class="otp-subtitle">We sent a 6-digit code to <br><strong>{{ email }}</strong></p>
+      <h1 class="otp-title" [innerHTML]="'AUTH.OTP_PAGE.VERIFY_ACCOUNT' | translate"></h1>
+      <p class="otp-subtitle">{{ 'AUTH.OTP_PAGE.SENT_CODE_TO' | translate }} <br><strong>{{ email }}</strong></p>
     </div>
 
     <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="otp-form">
@@ -22,20 +22,20 @@
       </div>
 
       <button type="submit" class="otp-submit" [disabled]="otpForm.invalid || isLoading">
-        <span *ngIf="!isLoading">Verify Account</span>
+        <span *ngIf="!isLoading">{{ 'AUTH.OTP_PAGE.VERIFY_ACCOUNT_BTN' | translate }}</span>
         <div *ngIf="isLoading" class="otp-spinner"></div>
       </button>
 
       <div class="otp-resend">
-        <p>Didn't receive the code?</p>
+        <p>{{ 'AUTH.OTP_PAGE.NO_CODE' | translate }}</p>
         <button type="button" class="resend-btn" (click)="resendOtp()" [disabled]="resendCooldown > 0 || isResending">
-          {{ resendCooldown > 0 ? 'Resend in ' + resendCooldown + 's' : 'Resend Code' }}
+          {{ resendCooldown > 0 ? ('AUTH.OTP_PAGE.RESEND_COOLDOWN' | translate:{seconds: resendCooldown}) : ('AUTH.OTP_PAGE.RESEND_CODE' | translate) }}
         </button>
       </div>
     </form>
 
     <div class="otp-footer">
-      <a routerLink="/" class="back-link">Return to Home</a>
+      <a routerLink="/" class="back-link">{{ 'AUTH.OTP_PAGE.RETURN_HOME' | translate }}</a>
     </div>
   </div>
 </div>

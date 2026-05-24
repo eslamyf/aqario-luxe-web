@@ -201,24 +201,22 @@ export class PropertiesService {
     const mapped = {
       ...p,
       listingType,
-      // Derive UI status from listingType
       status:             listingType === 'rent' ? 'for-rent' as const : 'for-sale' as const,
-      // Flatten nested location object → display string
-      location:           p.location?.city
-                            ? `${p.location.city}${p.location.district ? ', ' + p.location.district : ''}`
-                            : (typeof p.location === 'string' ? p.location : 'Unknown'),
-      city:               p.location?.city ?? p.city ?? 'Unknown',
-      // Preserve backend availability status separately
-      availabilityStatus: p.status,  // 'available' | 'reserved' | 'sold'
-      // Derive badge (backend also sends this as a virtual)
-      badge:              p.badge ?? (listingType === 'rent' ? 'For Rent' : 'For Sale'),
-      // Optional fields — keep whatever backend returns
+      availabilityStatus: p.status,
       currency:           p.currency,
-      features:           p.features   ?? [],
       featured:           p.featured   ?? false,
       avgRating:          p.avgRating,
       reviewCount:        p.reviewCount,
       owner:              p.owner,
+      _original: {
+        title:       p.title,
+        description: p.description,
+        location:    p.location,
+        city:        p.location?.city ?? p.city,
+        district:    p.location?.district ?? p.district,
+        badge:       p.badge ?? (listingType === 'rent' ? 'For Rent' : 'For Sale'),
+        features:    [...(p.features || [])],
+      }
     };
     return this.translateProperty(mapped);
   }
@@ -232,22 +230,10 @@ export class PropertiesService {
       description: p.description,
       location:    p.location,
       city:        p.city,
+      district:    (p as any).district,
       badge:       p.badge,
       features:    [...(p.features || [])],
     };
-
-    if (!isAr) {
-      return {
-        ...p,
-        title:       original.title,
-        description: original.description,
-        location:    original.location,
-        city:        original.city,
-        badge:       original.badge,
-        features:    original.features,
-        _original:   original,
-      };
-    }
 
     const t = (str: string | undefined): string => {
       if (!str) return '';
@@ -261,16 +247,61 @@ export class PropertiesService {
       return AR_TRANSLATIONS[str] || AR_TRANSLATIONS[str.trim()] || str;
     };
 
+    let resolvedTitle = '';
+    if (original.title && typeof original.title === 'object') {
+      resolvedTitle = original.title[activeLang] || original.title['en'] || '';
+    } else {
+      resolvedTitle = isAr ? t(original.title) : original.title;
+    }
+
+    let resolvedDesc = '';
+    if (original.description && typeof original.description === 'object') {
+      resolvedDesc = original.description[activeLang] || original.description['en'] || '';
+    } else {
+      resolvedDesc = isAr ? t(original.description) : original.description;
+    }
+
+    let resolvedCity = '';
+    if (original.city && typeof original.city === 'object') {
+      resolvedCity = original.city[activeLang] || original.city['en'] || '';
+    } else {
+      resolvedCity = isAr ? t(original.city) : original.city;
+    }
+
+    let resolvedDistrict = '';
+    if (original.district && typeof original.district === 'object') {
+      resolvedDistrict = original.district[activeLang] || original.district['en'] || '';
+    } else {
+      resolvedDistrict = isAr ? t(original.district) : original.district;
+    }
+
+    let resolvedLocation = '';
+    if (original.location && typeof original.location === 'object') {
+      const cityStr = original.location.city ? (original.location.city[activeLang] || original.location.city['en'] || '') : '';
+      const distStr = original.location.district ? (original.location.district[activeLang] || original.location.district['en'] || '') : '';
+      resolvedLocation = cityStr ? `${cityStr}${distStr ? ', ' + distStr : ''}` : '';
+    } else {
+      resolvedLocation = isAr ? t(original.location) : original.location;
+    }
+
+    const resolvedBadge = isAr
+      ? (original.badge === 'For Rent' ? 'للإيجار' : original.badge === 'For Sale' ? 'للبيع' : t(original.badge))
+      : original.badge;
+
+    const resolvedFeatures = original.features?.map((f: string) => {
+      return isAr ? t(f) : f;
+    }) ?? [];
+
     return {
       ...p,
-      title:       t(original.title),
-      description: t(original.description),
-      location:    t(original.location),
-      city:        t(original.city),
-      badge:       original.badge === 'For Rent' ? 'للإيجار' : original.badge === 'For Sale' ? 'للبيع' : t(original.badge),
-      features:    original.features?.map((f: string) => t(f)) ?? [],
+      title:       resolvedTitle,
+      description: resolvedDesc,
+      city:        resolvedCity,
+      location:    resolvedLocation,
+      badge:       resolvedBadge,
+      features:    resolvedFeatures,
       _original:   original,
-    };
+    } as any;
   }
 
   // ── Price formatting ──────────────────────────────────────────────────────
@@ -312,7 +343,7 @@ export class PropertiesService {
   }
 }
 
-const AR_TRANSLATIONS: Record<string, string> = {
+export const AR_TRANSLATIONS: Record<string, string> = {
   // Titles
   'Luxury Penthouse in Dubai Marina with Sea View': 'بنتهاوس فاخر في مرسى دبي مع إطلالة بحرية',
   'Sky Penthouse — Dubai Marina': 'بنتهاوس السماء — مرسى دبي',

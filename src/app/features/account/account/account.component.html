@@ -5,15 +5,15 @@
       <!-- Identity Sidebar -->
       <aside class="sidebar-nav">
         <div class="sidebar-header">
-          <h2>Identity & Access</h2>
-          <p>Manage your core profile</p>
+          <h2>{{ 'ACCOUNT.SIDEBAR_TITLE' | translate }}</h2>
+          <p>{{ 'ACCOUNT.SIDEBAR_SUBTITLE' | translate }}</p>
         </div>
         
         <button routerLink="overview" routerLinkActive="active">
-          <i class="fa-solid fa-user-gear"></i> Account Overview
+          <i class="fa-solid fa-user-gear"></i> {{ 'ACCOUNT.TAB_OVERVIEW' | translate }}
         </button>
         <button routerLink="security" routerLinkActive="active">
-          <i class="fa-solid fa-shield-lock"></i> Security & Password
+          <i class="fa-solid fa-shield-lock"></i> {{ 'ACCOUNT.TAB_SECURITY' | translate }}
         </button>
       </aside>
 

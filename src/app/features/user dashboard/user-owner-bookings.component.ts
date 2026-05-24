@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { UserDashboardService } from './user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-owner-bookings',
@@ -10,15 +11,15 @@ import { Router } from '@angular/router';
       <!-- Header -->
       <div class="section-header">
         <div>
-          <h2 class="section-title">Incoming Requests</h2>
-          <p class="section-sub">Manage rental and purchase requests for your properties</p>
+          <h2 class="section-title">{{ 'DASHBOARD.INCOMING_REQUESTS' | translate }}</h2>
+          <p class="section-sub">{{ 'DASHBOARD.INCOMING_REQUESTS_SUB' | translate }}</p>
         </div>
         <div class="filter-tabs">
           <button *ngFor="let f of filters"
             class="filter-tab"
             [class.active]="activeFilter === f.key"
             (click)="setFilter(f.key)">
-            {{ f.label }}
+            {{ 'DASHBOARD.FILTER_' + f.key.toUpperCase() | translate }}
             <span class="badge" *ngIf="f.key === 'pending' && pendingCount > 0">{{ pendingCount }}</span>
           </button>
         </div>
@@ -33,14 +34,14 @@ import { Router } from '@angular/router';
       <div *ngIf="errorMsg && !isLoading" class="bookings-error">
         <span class="error-icon">⚠</span>
         <p>{{ errorMsg }}</p>
-        <button class="btn-ghost" (click)="loadBookings()">Retry</button>
+        <button class="btn-ghost" (click)="loadBookings()">{{ 'DASHBOARD.RETRY' | translate }}</button>
       </div>
 
       <!-- Empty -->
       <div *ngIf="!isLoading && !errorMsg && bookings.length === 0" class="bookings-empty">
         <div class="empty-icon">📋</div>
-        <h3>No {{ activeFilter === 'all' ? '' : activeFilter }} requests yet</h3>
-        <p>When buyers request to book or purchase your properties, they'll appear here.</p>
+        <h3>{{ 'DASHBOARD.NO_BOOKINGS' | translate }}</h3>
+        <p>{{ 'DASHBOARD.NO_BOOKINGS_SUB' | translate }}</p>
       </div>
 
       <!-- Bookings List -->
@@ -50,10 +51,10 @@ import { Router } from '@angular/router';
           <!-- Booking Header -->
           <div class="booking-card-header">
             <div class="booking-type-badge" [class]="'type-' + booking.bookingType">
-              {{ booking.bookingType === 'rent' ? '🏠 Rental Request' : '💰 Purchase Offer' }}
+              {{ (booking.bookingType === 'rent' ? 'DASHBOARD.RENTAL_REQUEST' : 'DASHBOARD.PURCHASE_OFFER') | translate }}
             </div>
             <div class="booking-status-badge" [class]="'status-' + booking.status">
-              {{ booking.status | titlecase }}
+              {{ 'DASHBOARD.FILTER_' + booking.status.toUpperCase() | translate }}
             </div>
           </div>
 
@@ -63,9 +64,9 @@ import { Router } from '@angular/router';
               <img [src]="booking.property_id.images[0]" [alt]="booking.property_id.title" />
             </div>
             <div class="property-info">
-              <h3 class="property-title">{{ booking.property_id?.title || 'Property' }}</h3>
+              <h3 class="property-title">{{ (booking.property_id?.title || ('DASHBOARD.TABLE.PROPERTY' | translate)) | translateProp }}</h3>
               <p class="property-location">
-                📍 {{ booking.property_id?.location?.city || 'N/A' }}
+                📍 {{ (booking.property_id?.location?.city || 'N/A') | translateProp }}
               </p>
             </div>
           </div>
@@ -77,7 +78,7 @@ import { Router } from '@angular/router';
               <span *ngIf="!booking.user_id?.photo">{{ booking.user_id?.name?.charAt(0) | uppercase }}</span>
             </div>
             <div>
-              <p class="buyer-name">{{ booking.user_id?.name || 'Client' }}</p>
+              <p class="buyer-name">{{ booking.user_id?.name || ('DASHBOARD.ROLES.BUYER' | translate) }}</p>
               <p class="buyer-email">{{ booking.user_id?.email }}</p>
             </div>
           </div>
@@ -87,40 +88,40 @@ import { Router } from '@angular/router';
             <!-- Rent -->
             <ng-container *ngIf="booking.bookingType === 'rent'">
               <div class="detail-item">
-                <span class="detail-label">Check-in</span>
+                <span class="detail-label">{{ 'DASHBOARD.CHECK_IN' | translate }}</span>
                 <span class="detail-value">{{ booking.start_date | date:'dd MMM yyyy' }}</span>
               </div>
               <div class="detail-item">
-                <span class="detail-label">Check-out</span>
+                <span class="detail-label">{{ 'DASHBOARD.CHECK_OUT' | translate }}</span>
                 <span class="detail-value">{{ booking.end_date | date:'dd MMM yyyy' }}</span>
               </div>
             </ng-container>
             <!-- Sale -->
             <ng-container *ngIf="booking.bookingType === 'sale'">
               <div class="detail-item">
-                <span class="detail-label">Listed Price</span>
+                <span class="detail-label">{{ 'DASHBOARD.FORM.PRICE' | translate }}</span>
                 <span class="detail-value">{{ booking.amount | currency:'EGP':'symbol':'1.0-0' }}</span>
               </div>
               <div class="detail-item" *ngIf="booking.offerPrice">
-                <span class="detail-label">Offer Price</span>
+                <span class="detail-label">{{ 'DASHBOARD.OFFER_PRICE' | translate }}</span>
                 <span class="detail-value offer-price">{{ booking.offerPrice | currency:'EGP':'symbol':'1.0-0' }}</span>
               </div>
             </ng-container>
             <div class="detail-item">
-              <span class="detail-label">Total</span>
+              <span class="detail-label">{{ 'DASHBOARD.TABLE.AMOUNT' | translate }}</span>
               <span class="detail-value amount">{{ booking.amount | currency:'EGP':'symbol':'1.0-0' }}</span>
             </div>
             <div class="detail-item">
-              <span class="detail-label">Payment</span>
+              <span class="detail-label">{{ 'DASHBOARD.TABLE.PAYMENT' | translate }}</span>
               <span class="detail-value" [class]="'pay-' + booking.paymentStatus">
-                {{ booking.paymentStatus | titlecase }}
+                {{ 'DASHBOARD.PAYMENT_' + (booking.paymentStatus || 'not_initiated').toUpperCase() | translate }}
               </span>
             </div>
           </div>
 
           <!-- Notes -->
           <div class="booking-notes" *ngIf="booking.notes">
-            <span class="notes-label">Client Note:</span>
+            <span class="notes-label">{{ 'DASHBOARD.BUYER_NOTE' | translate }}</span>
             <p>"{{ booking.notes }}"</p>
           </div>
 
@@ -130,57 +131,57 @@ import { Router } from '@angular/router';
               [disabled]="loadingMap[booking._id]"
               (click)="approve(booking._id)">
               <span *ngIf="loadingMap[booking._id]" class="spinner-xs"></span>
-              ✓ Approve
+              {{ 'DASHBOARD.APPROVE_BTN' | translate }}
             </button>
             <button class="btn-reject"
               [disabled]="loadingMap[booking._id]"
               (click)="openRejectDialog(booking)">
-              ✕ Decline
+              {{ 'DASHBOARD.DECLINE_BTN' | translate }}
             </button>
           </div>
 
           <!-- Approved — waiting for payment -->
           <div class="booking-approved-notice" *ngIf="booking.status === 'approved' && booking.paymentStatus === 'not_initiated'">
             <span class="notice-icon">⏳</span>
-            Approved — awaiting client payment
-            <button class="btn-ghost btn-sm" style="margin-left:auto" (click)="openCancelDialog(booking)">Cancel Booking</button>
+            {{ 'DASHBOARD.APPROVED_AWAITING_PAYMENT' | translate }}
+            <button class="btn-ghost btn-sm" style="margin-left:auto" (click)="openCancelDialog(booking)">{{ 'DASHBOARD.CANCEL_BOOKING' | translate }}</button>
           </div>
 
           <!-- Paid -->
           <div class="booking-paid-notice" *ngIf="booking.paymentStatus === 'paid'">
             <span class="notice-icon">✅</span>
-            Payment confirmed — transaction complete
+            {{ 'DASHBOARD.PAYMENT_CONFIRMED' | translate }}
           </div>
 
           <!-- Request date -->
-          <p class="booking-date">Requested {{ booking.created_at | date:'dd MMM yyyy, HH:mm' }}</p>
+          <p class="booking-date">{{ 'DASHBOARD.REQUESTED_ON' | translate }} {{ booking.created_at | date:'dd MMM yyyy, HH:mm' }}</p>
         </div>
       </div>
 
       <!-- Pagination -->
       <div class="pagination" *ngIf="totalPages > 1">
-        <button [disabled]="currentPage <= 1" (click)="changePage(currentPage - 1)" class="page-btn">← Prev</button>
+        <button [disabled]="currentPage <= 1" (click)="changePage(currentPage - 1)" class="page-btn">← {{ 'DASHBOARD.PREV' | translate }}</button>
         <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-        <button [disabled]="currentPage >= totalPages" (click)="changePage(currentPage + 1)" class="page-btn">Next →</button>
+        <button [disabled]="currentPage >= totalPages" (click)="changePage(currentPage + 1)" class="page-btn">{{ 'DASHBOARD.NEXT' | translate }} →</button>
       </div>
     </div>
 
     <!-- Reject Dialog -->
     <div class="dialog-overlay" *ngIf="rejectDialogBooking" (click)="closeRejectDialog()">
       <div class="dialog-box" (click)="$event.stopPropagation()">
-        <h3>Decline Request</h3>
-        <p>Please provide a reason for declining this booking request.</p>
+        <h3>{{ 'DASHBOARD.DECLINE_REQUEST' | translate }}</h3>
+        <p>{{ 'DASHBOARD.DECLINE_REASON' | translate }}</p>
         <textarea
           class="reject-reason-input"
-          placeholder="e.g. Property already reserved for those dates..."
+          [placeholder]="'DASHBOARD.DECLINE_PLACEHOLDER' | translate"
           [(ngModel)]="rejectReason"
           rows="3">
         </textarea>
         <div class="dialog-actions">
-          <button class="btn-ghost" (click)="closeRejectDialog()">Cancel</button>
+          <button class="btn-ghost" (click)="closeRejectDialog()">{{ 'DASHBOARD.FORM.CANCEL' | translate }}</button>
           <button class="btn-danger" (click)="confirmReject()" [disabled]="isRejecting || !rejectReason.trim()">
             <span *ngIf="isRejecting" class="spinner-xs"></span>
-            Confirm Decline
+            {{ 'DASHBOARD.CONFIRM_DECLINE' | translate }}
           </button>
         </div>
       </div>
@@ -189,19 +190,19 @@ import { Router } from '@angular/router';
     <!-- Cancel Dialog -->
     <div class="dialog-overlay" *ngIf="cancelDialogBooking" (click)="closeCancelDialog()">
       <div class="dialog-box" (click)="$event.stopPropagation()">
-        <h3>Cancel Booking</h3>
-        <p>Are you sure you want to cancel this approved booking? Please provide a reason.</p>
+        <h3>{{ 'DASHBOARD.CANCEL_BOOKING' | translate }}</h3>
+        <p>{{ 'DASHBOARD.CANCEL_APPROVED_SUB' | translate }}</p>
         <textarea
           class="reject-reason-input"
-          placeholder="Reason for cancellation..."
+          [placeholder]="'DASHBOARD.CANCEL_MODAL.PLACEHOLDER' | translate"
           [(ngModel)]="cancelReason"
           rows="3">
         </textarea>
         <div class="dialog-actions">
-          <button class="btn-ghost" (click)="closeCancelDialog()">Close</button>
+          <button class="btn-ghost" (click)="closeCancelDialog()">{{ 'DASHBOARD.CANCEL_MODAL.CLOSE' | translate }}</button>
           <button class="btn-danger" (click)="confirmCancel()" [disabled]="isCancelling || !cancelReason.trim()">
             <span *ngIf="isCancelling" class="spinner-xs"></span>
-            Confirm Cancel
+            {{ 'DASHBOARD.CANCEL_MODAL.CONFIRM' | translate }}
           </button>
         </div>
       </div>
@@ -537,6 +538,7 @@ export class UserOwnerBookingsComponent implements OnInit {
   private svc  = inject(UserDashboardService);
   private notif = inject(NotificationService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   bookings: any[] = [];
   isLoading = true;
@@ -590,7 +592,7 @@ export class UserOwnerBookingsComponent implements OnInit {
         this.isLoading   = false;
       },
       error: (err: any) => {
-        this.errorMsg = err?.error?.message || 'Failed to load booking requests.';
+        this.errorMsg = err?.error?.message || this.translate.instant('DASHBOARD.ERR_LOAD_BOOKINGS');
         this.isLoading = false;
       }
     });
@@ -610,13 +612,12 @@ export class UserOwnerBookingsComponent implements OnInit {
     this.loadingMap[bookingId] = true;
     this.svc.approveBooking(bookingId).subscribe({
       next: () => {
-        this.notif.show('✅ Booking approved successfully!', 'success');
-        // Instant sync
+        this.notif.show(this.translate.instant('DASHBOARD.NOTIF_BOOKING_APPROVED'), 'success');
         this.bookings = this.bookings.map(b => b._id === bookingId ? { ...b, status: 'approved' } : b);
         this.loadingMap[bookingId] = false;
       },
       error: (err: any) => {
-        this.notif.show(err?.error?.message || 'Failed to approve booking.', 'error');
+        this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.NOTIF_BOOKING_APPROVE_FAILED'), 'error');
         this.loadingMap[bookingId] = false;
       }
     });
@@ -638,14 +639,13 @@ export class UserOwnerBookingsComponent implements OnInit {
     this.isRejecting = true;
     this.svc.rejectBooking(id, this.rejectReason).subscribe({
       next: () => {
-        this.notif.show('❌ Booking request declined.', 'info');
-        // Instant sync
+        this.notif.show(this.translate.instant('DASHBOARD.NOTIF_BOOKING_DECLINED'), 'info');
         this.bookings = this.bookings.map(b => b._id === id ? { ...b, status: 'rejected' } : b);
         this.closeRejectDialog();
         this.isRejecting = false;
       },
       error: (err: any) => {
-        this.notif.show(err?.error?.message || 'Failed to decline booking.', 'error');
+        this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.NOTIF_BOOKING_DECLINE_FAILED'), 'error');
         this.isRejecting = false;
       }
     });
@@ -668,13 +668,13 @@ export class UserOwnerBookingsComponent implements OnInit {
 
     this.svc.cancelBooking(id, this.cancelReason).subscribe({
       next: () => {
-        this.notif.show('Booking cancelled successfully.', 'success');
+        this.notif.show(this.translate.instant('DASHBOARD.NOTIF_BOOKING_CANCELLED'), 'success');
         this.bookings = this.bookings.map(b => b._id === id ? { ...b, status: 'cancelled' } : b);
         this.closeCancelDialog();
         this.isCancelling = false;
       },
       error: (err: any) => {
-        this.notif.show(err?.error?.message || 'Failed to cancel booking.', 'error');
+        this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.NOTIF_BOOKING_CANCEL_FAILED'), 'error');
         this.isCancelling = false;
       }
     });

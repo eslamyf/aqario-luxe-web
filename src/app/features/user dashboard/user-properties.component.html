@@ -2,12 +2,12 @@
   
   <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem">
     <div>
-      <div class="section-eyebrow">Inventory</div>
-      <h1>My Properties</h1>
-      <p>Manage your listings and track their visibility performance.</p>
+      <div class="section-eyebrow">{{ 'DASHBOARD.INVENTORY' | translate }}</div>
+      <h1>{{ 'DASHBOARD.MY_PROPERTIES' | translate }}</h1>
+      <p>{{ 'DASHBOARD.PROPERTIES_SUB' | translate }}</p>
     </div>
     <button class="action-btn primary" *ngIf="currentView === 'table'" (click)="currentView = 'form'">
-      <i class="ph ph-plus"></i> Add New Property
+      <i class="ph ph-plus"></i> {{ 'DASHBOARD.ADD_NEW_PROPERTY' | translate }}
     </button>
   </div>
 
@@ -17,80 +17,87 @@
       <div class="success-icon">
         <i class="ph ph-check-circle"></i>
       </div>
-      <h2>Listing Submitted!</h2>
-      <p>Your property is now under review. Want to maximize its visibility and sell faster?</p>
+      <h2>{{ 'DASHBOARD.SUBMITTED.TITLE' | translate }}</h2>
+      <p>{{ 'DASHBOARD.SUBMITTED.SUB' | translate }}</p>
     </div>
 
     <div class="promo-options-grid">
       <!-- Featured -->
       <div class="promo-card featured">
-        <div class="promo-label">MAX VISIBILITY</div>
+        <div class="promo-label">{{ 'DASHBOARD.PROMO.MAX_VISIBILITY' | translate }}</div>
         <div class="promo-icon"><i class="ph ph-star-fill"></i></div>
-        <h3>Featured Listing</h3>
-        <p>Top placement in search results + premium gold glow effect.</p>
-        <div class="promo-price">$49.99 <small>/ month</small></div>
-        <button class="promo-btn" (click)="onPromote('featured', 'paymob')">Promote Now</button>
+        <h3>{{ 'DASHBOARD.PROMO.FEATURED_TITLE' | translate }}</h3>
+        <p>{{ 'DASHBOARD.PROMO.FEATURED_DESC' | translate }}</p>
+        <div class="promo-price">$49.99 <small>{{ 'DASHBOARD.PROMO.MONTH' | translate }}</small></div>
+        <button class="promo-btn" (click)="onPromote('featured', 'paymob')">{{ 'DASHBOARD.PROMO.PROMOTE_NOW' | translate }}</button>
       </div>
 
       <!-- Boost -->
       <div class="promo-card boosted">
-        <div class="promo-label">SMART REACH</div>
+        <div class="promo-label">{{ 'DASHBOARD.PROMO.SMART_REACH' | translate }}</div>
         <div class="promo-icon"><i class="ph ph-lightning-fill"></i></div>
-        <h3>Boost Listing</h3>
-        <p>Higher ranking algorithm + unique lightning badge.</p>
-        <div class="promo-price">$24.99 <small>/ month</small></div>
-        <button class="promo-btn" (click)="onPromote('boosted', 'paymob')">Boost Now</button>
+        <h3>{{ 'DASHBOARD.PROMO.BOOST_TITLE' | translate }}</h3>
+        <p>{{ 'DASHBOARD.PROMO.BOOST_DESC' | translate }}</p>
+        <div class="promo-price">$24.99 <small>{{ 'DASHBOARD.PROMO.MONTH' | translate }}</small></div>
+        <button class="promo-btn" (click)="onPromote('boosted', 'paymob')">{{ 'DASHBOARD.PROMO.BOOST_NOW' | translate }}</button>
       </div>
 
       <!-- Badge -->
       <div class="promo-card badge">
-        <div class="promo-label">TRUST</div>
+        <div class="promo-label">{{ 'DASHBOARD.PROMO.TRUST' | translate }}</div>
         <div class="promo-icon"><i class="ph ph-seal-check-fill"></i></div>
-        <h3>Premium Badge</h3>
-        <p>Exclusive seal-check icon to build buyer trust and credibility.</p>
-        <div class="promo-price">$14.99 <small>/ month</small></div>
-        <button class="promo-btn" (click)="onPromote('premium-badge', 'paymob')">Get Badge</button>
+        <h3>{{ 'DASHBOARD.PROMO.BADGE_TITLE' | translate }}</h3>
+        <p>{{ 'DASHBOARD.PROMO.BADGE_DESC' | translate }}</p>
+        <div class="promo-price">$14.99 <small>{{ 'DASHBOARD.PROMO.MONTH' | translate }}</small></div>
+        <button class="promo-btn" (click)="onPromote('premium-badge', 'paymob')">{{ 'DASHBOARD.PROMO.GET_BADGE' | translate }}</button>
       </div>
     </div>
 
     <div class="success-actions">
-      <button class="action-btn outline" (click)="resetForm()">Skip for now, return to dashboard</button>
+      <button class="action-btn outline" (click)="resetForm()">{{ 'DASHBOARD.PROMO.SKIP' | translate }}</button>
     </div>
   </div>
 
   <!-- ── FORM VIEW ──────────────────────────────────────────────── -->
   <div class="panel-card" *ngIf="currentView === 'form'" [formGroup]="form">
     <div class="form-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem">
-      <h2>New Property Listing</h2>
-      <button class="action-btn outline" (click)="currentView = 'table'">Cancel</button>
+      <h2>{{ 'DASHBOARD.FORM.NEW_TITLE' | translate }}</h2>
+      <button class="action-btn outline" (click)="currentView = 'table'">{{ 'DASHBOARD.FORM.CANCEL' | translate }}</button>
     </div>
 
     <div class="form-grid">
-      <div class="form-group">
-        <label>Title <span class="req">*</span></label>
-        <input type="text" formControlName="title" placeholder="e.g. Luxury Penthouse in Dubai Marina" />
+      <div class="bilingual-pair">
+        <div class="form-group english-field">
+          <label>{{ 'DASHBOARD.FORM.TITLE_EN' | translate }} <span class="req">*</span></label>
+          <input type="text" [formControl]="$any(form.get('title.en'))" [placeholder]="'DASHBOARD.FORM.TITLE_PLACEHOLDER_EN' | translate" style="direction: ltr; text-align: left;" />
+        </div>
+        <div class="form-group arabic-field">
+          <label>{{ 'DASHBOARD.FORM.TITLE_AR' | translate }} <span class="req">*</span></label>
+          <input type="text" [formControl]="$any(form.get('title.ar'))" [placeholder]="'DASHBOARD.FORM.TITLE_PLACEHOLDER_AR' | translate" style="direction: rtl; text-align: right;" />
+        </div>
       </div>
+      
       <div class="form-group">
-        <label>Type <span class="req">*</span></label>
+        <label>{{ 'DASHBOARD.FORM.TYPE' | translate }} <span class="req">*</span></label>
         <select formControlName="type">
-          <option value="apartment">Apartment</option>
-          <option value="villa">Villa</option>
-          <option value="house">House</option>
-          <option value="townhouse">Townhouse</option>
-          <option value="studio">Studio</option>
-          <option value="office">Office</option>
-          <option value="shop">Shop</option>
+          <option value="apartment">{{ 'DASHBOARD.FORM.TYPE_APARTMENT' | translate }}</option>
+          <option value="villa">{{ 'DASHBOARD.FORM.TYPE_VILLA' | translate }}</option>
+          <option value="house">{{ 'DASHBOARD.FORM.TYPE_HOUSE' | translate }}</option>
+          <option value="townhouse">{{ 'DASHBOARD.FORM.TYPE_TOWNHOUSE' | translate }}</option>
+          <option value="studio">{{ 'DASHBOARD.FORM.TYPE_STUDIO' | translate }}</option>
+          <option value="office">{{ 'DASHBOARD.FORM.TYPE_OFFICE' | translate }}</option>
+          <option value="shop">{{ 'DASHBOARD.FORM.TYPE_SHOP' | translate }}</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Listing For <span class="req">*</span></label>
+        <label>{{ 'DASHBOARD.FORM.LISTING_FOR' | translate }} <span class="req">*</span></label>
         <select formControlName="listingType">
-          <option value="sale">For Sale</option>
-          <option value="rent">For Rent</option>
+          <option value="sale">{{ 'DASHBOARD.FORM.FOR_SALE' | translate }}</option>
+          <option value="rent">{{ 'DASHBOARD.FORM.FOR_RENT' | translate }}</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Currency</label>
+        <label>{{ 'DASHBOARD.FORM.CURRENCY' | translate }}</label>
         <select formControlName="currency">
           <option value="USD">USD</option>
           <option value="AED">AED</option>
@@ -99,30 +106,50 @@
         </select>
       </div>
       <div class="form-group">
-        <label>City <span class="req">*</span></label>
-        <input type="text" formControlName="city" placeholder="e.g. Dubai" />
-      </div>
-      <div class="form-group">
-        <label>District <span class="req">*</span></label>
-        <input type="text" formControlName="district" placeholder="e.g. Downtown" />
-      </div>
-      <div class="form-group">
-        <label>Price <span class="req">*</span></label>
+        <label>{{ 'DASHBOARD.FORM.PRICE' | translate }} <span class="req">*</span></label>
         <input type="number" formControlName="price" placeholder="500000" />
       </div>
       <div class="form-group">
-        <label>Area (m²)</label>
+        <label>{{ 'DASHBOARD.FORM.AREA' | translate }}</label>
         <input type="number" formControlName="area" placeholder="120" />
+      </div>
+
+      <div class="bilingual-pair">
+        <div class="form-group english-field">
+          <label>{{ 'DASHBOARD.FORM.CITY_EN' | translate }} <span class="req">*</span></label>
+          <input type="text" [formControl]="$any(form.get('city.en'))" [placeholder]="'DASHBOARD.FORM.CITY_PLACEHOLDER_EN' | translate" style="direction: ltr; text-align: left;" />
+        </div>
+        <div class="form-group arabic-field">
+          <label>{{ 'DASHBOARD.FORM.CITY_AR' | translate }} <span class="req">*</span></label>
+          <input type="text" [formControl]="$any(form.get('city.ar'))" [placeholder]="'DASHBOARD.FORM.CITY_PLACEHOLDER_AR' | translate" style="direction: rtl; text-align: right;" />
+        </div>
+      </div>
+
+      <div class="bilingual-pair">
+        <div class="form-group english-field">
+          <label>{{ 'DASHBOARD.FORM.DISTRICT_EN' | translate }} <span class="req">*</span></label>
+          <input type="text" [formControl]="$any(form.get('district.en'))" [placeholder]="'DASHBOARD.FORM.DISTRICT_PLACEHOLDER_EN' | translate" style="direction: ltr; text-align: left;" />
+        </div>
+        <div class="form-group arabic-field">
+          <label>{{ 'DASHBOARD.FORM.DISTRICT_AR' | translate }} <span class="req">*</span></label>
+          <input type="text" [formControl]="$any(form.get('district.ar'))" [placeholder]="'DASHBOARD.FORM.DISTRICT_PLACEHOLDER_AR' | translate" style="direction: rtl; text-align: right;" />
+        </div>
       </div>
     </div>
 
-    <div class="form-group" style="margin-top:1rem">
-      <label>Description <span class="req">*</span></label>
-      <textarea formControlName="description" placeholder="Describe the property..." rows="4"></textarea>
+    <div class="bilingual-pair" style="margin-top:1.5rem">
+      <div class="form-group english-field">
+        <label>{{ 'DASHBOARD.FORM.DESCRIPTION_EN' | translate }} <span class="req">*</span></label>
+        <textarea [formControl]="$any(form.get('description.en'))" [placeholder]="'DASHBOARD.FORM.DESCRIPTION_PLACEHOLDER_EN' | translate" rows="4" style="direction: ltr; text-align: left;"></textarea>
+      </div>
+      <div class="form-group arabic-field">
+        <label>{{ 'DASHBOARD.FORM.DESCRIPTION_AR' | translate }} <span class="req">*</span></label>
+        <textarea [formControl]="$any(form.get('description.ar'))" [placeholder]="'DASHBOARD.FORM.DESCRIPTION_PLACEHOLDER_AR' | translate" rows="4" style="direction: rtl; text-align: right;"></textarea>
+      </div>
     </div>
 
     <div class="form-group image-upload-section" style="margin-top: 1.5rem">
-      <label>Property Photos <span class="text-muted" style="font-size: 11px">(Max 10 images)</span></label>
+      <label>{{ 'DASHBOARD.FORM.PHOTOS' | translate }} <span class="text-muted" style="font-size: 11px">{{ 'DASHBOARD.FORM.MAX_PHOTOS' | translate }}</span></label>
       
     <div class="image-section-wrapper" style="max-width: 600px">
       <div class="image-uploader">
@@ -136,8 +163,8 @@
              (dragleave)="onDragLeave($event)">
           <div class="dropzone-content">
             <i class="ph ph-cloud-arrow-up"></i>
-            <p>Drag & drop your photos here</p>
-            <span class="sub-text">or click to browse your files (Max 10 images)</span>
+            <p>{{ 'DASHBOARD.FORM.DRAG_DROP' | translate }}</p>
+            <span class="sub-text">{{ 'DASHBOARD.FORM.BROWSE' | translate }}</span>
           </div>
         </div>
 
@@ -145,7 +172,7 @@
         <div class="image-preview-grid" *ngIf="imagePreviews.length > 0">
           <label for="prop-images" class="upload-drop-zone inline-zone" [class.active]="isDragging">
             <i class="ph ph-plus-circle"></i>
-            <span>Add More</span>
+            <span>{{ 'DASHBOARD.FORM.ADD_MORE' | translate }}</span>
           </label>
 
           <div class="preview-item" *ngFor="let preview of imagePreviews; let i = index">
@@ -153,7 +180,7 @@
             <button type="button" class="remove-img-btn" (click)="removeImage(i)" title="Remove image">
               <i class="ph ph-x"></i>
             </button>
-            <span class="img-badge" *ngIf="i === 0">Main Photo</span>
+            <span class="img-badge" *ngIf="i === 0">{{ 'DASHBOARD.FORM.MAIN_PHOTO' | translate }}</span>
           </div>
         </div>
 
@@ -164,25 +191,25 @@
 
     <div style="margin-top:2rem; display:flex; gap:1rem">
       <button class="action-btn primary" (click)="submitProperty()" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Submitting...' : 'Submit Listing' }}
+        {{ isSubmitting ? ('DASHBOARD.FORM.SUBMITTING' | translate) : ('DASHBOARD.FORM.SUBMIT' | translate) }}
       </button>
-      <button class="action-btn" (click)="resetForm()" [disabled]="isSubmitting">Cancel</button>
+      <button class="action-btn" (click)="resetForm()" [disabled]="isSubmitting">{{ 'DASHBOARD.FORM.CANCEL' | translate }}</button>
     </div>
   </div>
 
   <!-- ── TABLE VIEW ───────────────────────────────────────────── -->
   <div class="panel-card" *ngIf="currentView === 'table'">
-    <div *ngIf="isLoading" class="loading-state">Loading portfolio...</div>
+    <div *ngIf="isLoading" class="loading-state">{{ 'DASHBOARD.LOADING' | translate }}</div>
     
     <div class="table-wrap" *ngIf="!isLoading && properties.length > 0">
       <table>
         <thead>
           <tr>
-            <th>Property</th>
-            <th>Status</th>
-            <th>Promotion</th>
-            <th>Price</th>
-            <th>Actions</th>
+            <th>{{ 'DASHBOARD.TABLE.PROPERTY' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.STATUS' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.PROMOTION' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.PRICE' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.ACTIONS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -191,14 +218,14 @@
               <div class="property-cell">
                 <img [src]="p.images[0]" class="property-thumb" *ngIf="p.images?.length" />
                 <div class="property-info">
-                  <div class="property-title">{{ p.title }}</div>
-                  <div class="property-loc">{{ p.city }}</div>
+                  <div class="property-title">{{ p.title | translateProp }}</div>
+                  <div class="property-loc">{{ p.city | translateProp }}</div>
                 </div>
               </div>
             </td>
             <td>
               <span class="status-badge" [ngClass]="p.isApproved ? 'approved' : 'pending'">
-                {{ p.isApproved ? 'Approved' : 'Reviewing' }}
+                {{ (p.isApproved ? 'DASHBOARD.TABLE.APPROVED' : 'DASHBOARD.TABLE.REVIEWING') | translate }}
               </span>
             </td>
             <td>
@@ -212,8 +239,8 @@
             <td>{{ p.price | currency:p.currency }}</td>
             <td>
               <div class="action-group">
-                <button class="action-btn view" (click)="lastCreatedProperty = p; currentView = 'success'">Promote</button>
-                <button class="action-btn danger">Delete</button>
+                <button class="action-btn view" (click)="lastCreatedProperty = p; currentView = 'success'">{{ 'DASHBOARD.PROMO.PROMOTE_NOW' | translate }}</button>
+                <button class="action-btn danger">{{ 'DASHBOARD.REMOVE_BTN' | translate }}</button>
               </div>
             </td>
           </tr>
@@ -222,8 +249,8 @@
     </div>
 
     <div *ngIf="!isLoading && properties.length === 0" class="empty-state">
-      <strong>No properties yet.</strong>
-      <p>Start by listing your first property for free.</p>
+      <strong>{{ 'DASHBOARD.NO_PROPERTIES' | translate }}</strong>
+      <p>{{ 'DASHBOARD.NO_PROPERTIES_SUB' | translate }}</p>
     </div>
   </div>
 

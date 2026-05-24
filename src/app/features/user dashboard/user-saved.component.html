@@ -1,44 +1,44 @@
 <div>
   <div class="page-header">
-    <div class="section-eyebrow">Wishlist</div>
-    <h1>Saved Properties</h1>
-    <p>Properties you've bookmarked for later.</p>
+    <div class="section-eyebrow">{{ 'DASHBOARD.WISHLIST' | translate }}</div>
+    <h1>{{ 'DASHBOARD.SAVED_TITLE' | translate }}</h1>
+    <p>{{ 'DASHBOARD.SAVED_SUB' | translate }}</p>
   </div>
 
   <div class="panel-card">
-    <div *ngIf="isLoading" class="loading-state">Loading saved properties...</div>
+    <div *ngIf="isLoading" class="loading-state">{{ 'DASHBOARD.LOADING_SAVED' | translate }}</div>
     <div *ngIf="!isLoading && saved.length === 0" class="empty-state">
-      <strong>No saved properties</strong>
-      <p>Browse properties and save your favorites to compare later.</p>
+      <strong>{{ 'DASHBOARD.NO_SAVED' | translate }}</strong>
+      <p>{{ 'DASHBOARD.NO_SAVED_SUB' | translate }}</p>
     </div>
     <div class="table-wrap" *ngIf="!isLoading && saved.length > 0">
       <table>
         <thead>
           <tr>
-            <th>Property</th>
-            <th>City</th>
-            <th>Price</th>
-            <th>Actions</th>
+            <th>{{ 'DASHBOARD.TABLE.PROPERTY' | translate }}</th>
+            <th>{{ 'DASHBOARD.FORM.CITY' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.PRICE' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.ACTIONS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of saved">
-            <td>{{ propertyTitle(item) }}</td>
-            <td>{{ propertyCity(item) }}</td>
+            <td>{{ propertyTitle(item) | translateProp }}</td>
+            <td>{{ propertyCity(item) | translateProp }}</td>
             <td>{{ propertyPrice(item) | currency:'USD':'symbol':'1.0-0' }}</td>
             <td>
               <div class="action-group">
                 <a
                   class="action-btn view"
                   [routerLink]="['/properties', propertyId(item)]"
-                  title="View Property">
-                  View
+                  [title]="'DASHBOARD.VIEW_BTN' | translate">
+                  {{ 'DASHBOARD.VIEW_BTN' | translate }}
                 </a>
                 <button
                   class="action-btn danger"
                   [disabled]="activeId !== null"
                   (click)="remove(item)">
-                  Remove
+                  {{ 'DASHBOARD.REMOVE_BTN' | translate }}
                 </button>
               </div>
             </td>

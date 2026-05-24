@@ -1,48 +1,48 @@
 <div>
   <div class="page-header">
-    <div class="section-eyebrow">Reservations</div>
-    <h1>My Bookings</h1>
-    <p>Manage all your property reservations and their statuses.</p>
+    <div class="section-eyebrow">{{ 'DASHBOARD.RESERVATIONS' | translate }}</div>
+    <h1>{{ 'DASHBOARD.MY_BOOKINGS' | translate }}</h1>
+    <p>{{ 'DASHBOARD.BOOKINGS_SUB' | translate }}</p>
   </div>
 
   <div class="panel-card">
     <div class="table-toolbar">
       <label>
-        Filter:
+        {{ 'DASHBOARD.FILTER' | translate }}
         <select [(ngModel)]="filter">
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
-          <option value="cancelled">Cancelled</option>
+          <option value="all">{{ 'DASHBOARD.FILTER_ALL' | translate }}</option>
+          <option value="pending">{{ 'DASHBOARD.FILTER_PENDING' | translate }}</option>
+          <option value="approved">{{ 'DASHBOARD.FILTER_APPROVED' | translate }}</option>
+          <option value="rejected">{{ 'DASHBOARD.FILTER_REJECTED' | translate }}</option>
+          <option value="cancelled">{{ 'DASHBOARD.FILTER_CANCELLED' | translate }}</option>
         </select>
       </label>
     </div>
 
-    <div *ngIf="isLoading" class="loading-state">Loading bookings...</div>
+    <div *ngIf="isLoading" class="loading-state">{{ 'DASHBOARD.LOADING_BOOKINGS' | translate }}</div>
 
     <div *ngIf="!isLoading && hasError" class="empty-state">
-      <strong>Something went wrong</strong>
-      <p>Failed to load your bookings.</p>
-      <button class="action-btn primary" (click)="load()">Retry</button>
+      <strong>{{ 'DASHBOARD.STATS.UNAVAILABLE' | translate }}</strong>
+      <p>{{ 'DASHBOARD.ERR_LOAD_BOOKINGS' | translate }}</p>
+      <button class="action-btn primary" (click)="load()">{{ 'DASHBOARD.RETRY' | translate }}</button>
     </div>
 
     <div *ngIf="!isLoading && !hasError && filtered.length === 0" class="empty-state">
-      <strong>No bookings found</strong>
-      <p>Browse properties and make your first reservation.</p>
+      <strong>{{ 'DASHBOARD.NO_BOOKINGS' | translate }}</strong>
+      <p>{{ 'DASHBOARD.NO_BOOKINGS_SUB' | translate }}</p>
     </div>
 
     <div class="table-wrap" *ngIf="!isLoading && filtered.length > 0">
       <table>
         <thead>
           <tr>
-            <th>Property</th>
-            <th>Type</th>
-            <th>Dates</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Payment</th>
-            <th>Actions</th>
+            <th>{{ 'DASHBOARD.TABLE.PROPERTY' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.TYPE' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.DATES' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.AMOUNT' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.STATUS' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.PAYMENT' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.ACTIONS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -52,11 +52,11 @@
                 <img *ngIf="b.property_id?.images?.[0]"
                      [src]="b.property_id.images[0]"
                      alt="property" class="property-thumb">
-                <span>{{ propertyTitle(b) }}</span>
+                <span>{{ propertyTitle(b) | translateProp }}</span>
               </div>
             </td>
             <td>
-              <span class="booking-type-badge {{ b.bookingType }}">{{ b.bookingType === 'rent' ? 'Rent' : 'Sale' }}</span>
+              <span class="booking-type-badge {{ b.bookingType }}">{{ (b.bookingType === 'rent' ? 'DASHBOARD.TYPE.RENT' : 'DASHBOARD.TYPE.SALE') | translate }}</span>
             </td>
             <td>
               <div *ngIf="b.bookingType === 'rent'" class="dates-col">
@@ -73,10 +73,10 @@
                 <div *ngIf="b.offerPrice" class="offer-price">{{ b.offerPrice | currency:'EGP':'symbol':'1.0-0' }} (Offer)</div>
               </div>
             </td>
-            <td><span class="status-badge {{ b.status }}">{{ b.status | uppercase }}</span></td>
+            <td><span class="status-badge {{ b.status }}">{{ 'DASHBOARD.FILTER_' + b.status.toUpperCase() | translate }}</span></td>
             <td>
               <span class="payment-badge {{ b.paymentStatus || 'not_initiated' }}">
-                {{ (b.paymentStatus || 'not_initiated') | uppercase }}
+                {{ 'DASHBOARD.PAYMENT_' + (b.paymentStatus || 'not_initiated').toUpperCase() | translate }}
               </span>
             </td>
             <td>
@@ -85,7 +85,7 @@
                   class="action-btn success pay-btn"
                   *ngIf="b.status === 'approved' && (!b.paymentStatus || b.paymentStatus === 'not_initiated' || b.paymentStatus === 'pending')"
                   (click)="goToCheckout(b)">
-                  💳 Pay Now
+                  {{ 'DASHBOARD.PAY_NOW' | translate }}
                 </button>
                 <button
                   class="action-btn danger"
@@ -93,10 +93,10 @@
                   [disabled]="loadingMap[b._id]"
                   (click)="openCancelDialog(b)">
                   <span *ngIf="loadingMap[b._id]" class="spinner-xs"></span>
-                  {{ loadingMap[b._id] ? '...' : 'Cancel' }}
+                  {{ loadingMap[b._id] ? '...' : ('DASHBOARD.CANCEL_BTN' | translate) }}
                 </button>
                 <span class="muted-text small-text" *ngIf="b.status === 'approved' && b.paymentStatus === 'paid'">
-                  To cancel, <a routerLink="/support">contact support</a>
+                  {{ 'DASHBOARD.CANCEL_SUPPORT_PREFIX' | translate }} <a routerLink="/support">{{ 'DASHBOARD.CANCEL_SUPPORT_LINK' | translate }}</a>
                 </span>
               </div>
             </td>
@@ -109,19 +109,19 @@
   <!-- Cancel Dialog -->
   <div class="dialog-overlay" *ngIf="cancelDialogBooking" (click)="closeCancelDialog()">
     <div class="dialog-box" (click)="$event.stopPropagation()">
-      <h3>Cancel Booking</h3>
-      <p>Are you sure you want to cancel this booking? Please provide a reason.</p>
+      <h3>{{ 'DASHBOARD.CANCEL_MODAL.TITLE' | translate }}</h3>
+      <p>{{ 'DASHBOARD.CANCEL_DIALOG_SUB' | translate }}</p>
       <textarea
         class="reject-reason-input"
-        placeholder="Reason for cancellation..."
+        [placeholder]="'DASHBOARD.CANCEL_MODAL.PLACEHOLDER' | translate"
         [(ngModel)]="cancelReason"
         rows="3">
       </textarea>
       <div class="dialog-actions">
-        <button class="btn-ghost" (click)="closeCancelDialog()">Close</button>
+        <button class="btn-ghost" (click)="closeCancelDialog()">{{ 'DASHBOARD.CANCEL_MODAL.CLOSE' | translate }}</button>
         <button class="btn-danger" (click)="confirmCancel()" [disabled]="isCancelling || !cancelReason.trim()">
           <span *ngIf="isCancelling" class="spinner-xs"></span>
-          Confirm Cancel
+          {{ 'DASHBOARD.CANCEL_MODAL.CONFIRM' | translate }}
         </button>
       </div>
     </div>

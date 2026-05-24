@@ -14,22 +14,22 @@
         <!-- Buttons moved below the circle -->
         <div class="photo-actions">
           <ng-container *ngIf="!isUploadingPhoto; else uploadingSpinner">
-            <label for="photo-upload" class="action-btn upload" title="Change Avatar">
+            <label for="photo-upload" class="action-btn upload" [title]="'ACCOUNT.CHANGE_PHOTO' | translate">
               <i class="fa-solid fa-camera"></i>
-              <span>Change</span>
+              <span>{{ 'ACCOUNT.CHANGE_PHOTO' | translate }}</span>
             </label>
             <input type="file" id="photo-upload" hidden (change)="handleFileSelect($event)" accept="image/*">
             
-            <button type="button" class="action-btn remove" *ngIf="user.photo" (click)="removePhoto()" title="Remove Avatar">
+            <button type="button" class="action-btn remove" *ngIf="user.photo" (click)="removePhoto()" [title]="'ACCOUNT.REMOVE_PHOTO' | translate">
               <i class="fa-solid fa-trash-can"></i>
-              <span>Remove</span>
+              <span>{{ 'ACCOUNT.REMOVE_PHOTO' | translate }}</span>
             </button>
           </ng-container>
 
           <ng-template #uploadingSpinner>
             <div class="action-btn uploading">
               <i class="fa-solid fa-circle-notch fa-spin"></i>
-              <span>Uploading...</span>
+              <span>{{ 'ACCOUNT.UPLOADING' | translate }}</span>
             </div>
           </ng-template>
         </div>
@@ -39,18 +39,18 @@
         <div class="name-row">
           <h1>{{ user.name }}</h1>
           <span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">
-            {{ user.role | uppercase }}
+            {{ ('REAL_ESTATE.' + (user.role | uppercase)) | translate }}
           </span>
         </div>
         <p class="email">{{ user.email }}</p>
         <div class="status-indicators">
           <div class="indicator" [class.active]="user.isVerified">
             <i class="fa-solid" [class.fa-check-circle]="user.isVerified" [class.fa-circle-xmark]="!user.isVerified"></i>
-            <span>{{ user.isVerified ? 'VERIFIED IDENTITY' : 'UNVERIFIED ACCOUNT' }}</span>
+            <span>{{ (user.isVerified ? 'ACCOUNT.VERIFIED_IDENTITY' : 'ACCOUNT.UNVERIFIED_ACCOUNT') | translate }}</span>
           </div>
           <div class="indicator kyc" [ngClass]="user.kycStatus">
             <i class="fa-solid fa-id-card"></i>
-            <span>KYC: {{ user.kycStatus.replace('_', ' ') | titlecase }}</span>
+            <span>{{ 'ACCOUNT.KYC' | translate }}: {{ ('ACCOUNT.KYC_STATUS.' + (user.kycStatus | uppercase)) | translate }}</span>
           </div>
         </div>
       </div>
@@ -68,36 +68,36 @@
     <div class="kyc-error-fallback">
       <i class="fa-solid fa-triangle-exclamation"></i>
       <div class="error-text">
-        <strong>Sync Error:</strong>
-        <span>Verification status currently unavailable. Please try again later.</span>
+        <strong>{{ 'ACCOUNT.SYNC_ERROR' | translate }}</strong>
+        <span>{{ 'ACCOUNT.SYNC_ERROR_DESC' | translate }}</span>
       </div>
     </div>
   </ng-template>
 
   <!-- Account Settings Form -->
   <div class="content-header">
-    <h3>Profile Information</h3>
-    <p>Your details are protected and only visible to verified agents during transactions.</p>
+    <h3>{{ 'ACCOUNT.INFO_TITLE' | translate }}</h3>
+    <p>{{ 'ACCOUNT.INFO_SUBTITLE' | translate }}</p>
   </div>
   
   <form [formGroup]="profileForm" (ngSubmit)="submit()" class="luxury-form">
     <div class="form-grid">
       <div class="input-group">
-        <label>Full Name</label>
+        <label>{{ 'ACCOUNT.FULL_NAME' | translate }}</label>
         <input type="text" formControlName="name" placeholder="John Doe">
         <div class="error-hint" *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid">
-          <i class="fa-solid fa-circle-exclamation"></i> Full name is required
+          <i class="fa-solid fa-circle-exclamation"></i> {{ 'ACCOUNT.FULL_NAME_REQ' | translate }}
         </div>
       </div>
       
       <div class="input-group">
-        <label>Phone Number</label>
-        <input type="text" formControlName="phone" placeholder="+20 XXX XXX XXXX">
+        <label>{{ 'ACCOUNT.PHONE' | translate }}</label>
+        <input type="text" formControlName="phone" [placeholder]="'ACCOUNT.PHONE_PLACEHOLDER' | translate">
       </div>
       
       <div class="input-group full">
-        <label>Professional Bio</label>
-        <textarea formControlName="bio" rows="5" placeholder="Tell the community about your property interests or professional background..."></textarea>
+        <label>{{ 'ACCOUNT.BIO' | translate }}</label>
+        <textarea formControlName="bio" rows="5" [placeholder]="'ACCOUNT.BIO_PLACEHOLDER' | translate"></textarea>
       </div>
     </div>
     
@@ -105,7 +105,7 @@
       <button type="submit" class="btn-gold" [disabled]="profileForm.invalid || isUpdating">
         <i class="fa-solid fa-cloud-arrow-up" *ngIf="!isUpdating"></i>
         <i class="fa-solid fa-circle-notch fa-spin" *ngIf="isUpdating"></i>
-        <span>{{ isUpdating ? 'SYNCHRONIZING...' : 'UPDATE PROFILE' }}</span>
+        <span>{{ (isUpdating ? 'ACCOUNT.SYNCHRONIZING' : 'ACCOUNT.UPDATE_PROFILE') | translate }}</span>
       </button>
     </div>
   </form>
@@ -118,6 +118,6 @@
       <div class="ring"></div>
       <div class="logo-text">LUXE</div>
     </div>
-    <p>AUTHENTICATING IDENTITY...</p>
+    <p>{{ 'ACCOUNT.AUTHENTICATING' | translate }}</p>
   </div>
 </ng-template>

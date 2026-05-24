@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { UserDashboardService, OwnerAgentDashboard } from './user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
 
@@ -31,7 +32,8 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserDashboardService,
     private fb: FormBuilder,
-    private notif: NotificationService
+    private notif: NotificationService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -45,14 +47,26 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
 
   buildForm(): void {
     this.form = this.fb.group({
-      title:       ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
-      description: ['', [Validators.required, Validators.minLength(20)]],
+      title: this.fb.group({
+        en: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
+        ar: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]]
+      }),
+      description: this.fb.group({
+        en: ['', [Validators.required, Validators.minLength(20)]],
+        ar: ['', [Validators.required, Validators.minLength(20)]]
+      }),
       price:       [null, [Validators.required, Validators.min(1)]],
       area:        [null],
       bedrooms:    [null],
       bathrooms:   [null],
-      city:        ['', Validators.required],
-      district:    ['', Validators.required],
+      city: this.fb.group({
+        en: ['', Validators.required],
+        ar: ['', Validators.required]
+      }),
+      district: this.fb.group({
+        en: ['', Validators.required],
+        ar: ['', Validators.required]
+      }),
       address:     [''],
       type:        ['apartment', Validators.required],
       listingType: ['sale', Validators.required],
@@ -101,13 +115,13 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
     const totalAfter = this.selectedFiles.length + files.length;
 
     if (totalAfter > 10) {
-      this.notif.show('You can upload a maximum of 10 images.', 'error');
+      this.notif.show(this.translate.instant('DASHBOARD.FORM.NOTIF.MAX_IMAGES_ERROR'), 'error');
       return;
     }
 
     files.forEach(file => {
       if (!file.type.startsWith('image/')) {
-        this.notif.show(`"${file.name}" is not a valid image file.`, 'error');
+        this.notif.show(this.translate.instant('DASHBOARD.FORM.NOTIF.INVALID_IMAGE_ERROR', { fileName: file.name }), 'error');
         return;
       }
       this.selectedFiles.push(file);
@@ -143,7 +157,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
             window.location.href = res.data.paymentUrl;
           }
         },
-        error: (err: any) => this.notif.show('Promotion failed to initiate.', 'error')
+        error: (err: any) => this.notif.show(this.translate.instant('DASHBOARD.FORM.NOTIF.PROMOTION_FAILED'), 'error')
       });
   }
 
@@ -151,7 +165,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
     if (this.isSubmitting) return; // Guard: prevent programmatic double-submit bypassing button disabled state
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.notif.show('Please fill in all required fields.', 'error');
+      this.notif.show(this.translate.instant('DASHBOARD.FORM.NOTIF.REQUIRED_FIELDS_ERROR'), 'error');
       return;
     }
 
@@ -160,16 +174,20 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
     const v = this.form.value;
 
     // ── Required fields ──
-    fd.append('title', v.title);
-    fd.append('description', v.description);
+    fd.append('title[en]', v.title.en);
+    fd.append('title[ar]', v.title.ar);
+    fd.append('description[en]', v.description.en);
+    fd.append('description[ar]', v.description.ar);
     fd.append('price', String(v.price));
     fd.append('type', v.type);
     fd.append('listingType', v.listingType);
     fd.append('currency', v.currency || 'USD');
 
     // ── Location (nested object → bracket notation) ──
-    fd.append('location[city]', v.city);
-    fd.append('location[district]', v.district);
+    fd.append('location[city][en]', v.city.en);
+    fd.append('location[city][ar]', v.city.ar);
+    fd.append('location[district][en]', v.district.en);
+    fd.append('location[district][ar]', v.district.ar);
     if (v.address) fd.append('location[street]', v.address);
 
     // ── Optional numeric fields ──
@@ -184,7 +202,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: any) => {
-          this.notif.show('Property submitted for review! ✅', 'success');
+          this.notif.show(this.translate.instant('DASHBOARD.FORM.NOTIF.SUBMIT_SUCCESS'), 'success');
           this.lastCreatedProperty = res.data;
           this.isSubmitting = false;
           this.currentView = 'success';

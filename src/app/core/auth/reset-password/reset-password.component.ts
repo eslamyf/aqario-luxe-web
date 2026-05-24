@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../auth.service';
 import { strongPasswordValidator, passwordsMatchValidator } from '../auth-modal/auth-modal.component';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })
@@ -18,6 +19,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   private auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private translateService = inject(TranslateService);
 
   resetForm!: FormGroup;
   token: string | null = null;
@@ -29,7 +31,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.token = this.route.snapshot.paramMap.get('token');
     if (!this.token) {
-      this.errorMsg = 'Invalid reset link. Missing token.';
+      this.errorMsg = this.translateService.instant('AUTH.RESET_PAGE.INVALID_LINK');
     }
 
     this.resetForm = this.fb.group({
@@ -62,7 +64,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     this.auth.resetPassword(this.token, password).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.isLoading = false;
-        this.successMsg = 'Password reset successfully! Redirecting to home...';
+        this.successMsg = this.translateService.instant('AUTH.RESET_PAGE.SUCCESS');
         setTimeout(() => {
           this.router.navigate(['/']);
           this.auth.openModal('login');
@@ -70,7 +72,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMsg = err.error?.message || 'Failed to reset password. Link may be expired.';
+        this.errorMsg = err.error?.message || this.translateService.instant('AUTH.RESET_PAGE.FAILED');
       }
     });
   }

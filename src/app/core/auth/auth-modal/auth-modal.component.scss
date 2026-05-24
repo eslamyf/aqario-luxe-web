@@ -284,6 +284,7 @@ $red: var(--crimson);
   border-radius: 2px;
   transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
   display: inline-flex;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -431,10 +432,15 @@ $red: var(--crimson);
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
+
+  .auth-input {
+    padding-inline-end: 40px !important;
+  }
 
   .eye-icon {
     position: absolute;
-    right: 12px;
+    inset-inline-end: 12px;
     background: none;
     border: none;
     color: $mist;

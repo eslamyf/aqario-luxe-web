@@ -1,11 +1,11 @@
 <div>
   <div class="page-header">
-    <div class="section-eyebrow">Account</div>
-    <h1>My Profile</h1>
-    <p>Update your personal information and account security settings.</p>
+    <div class="section-eyebrow">{{ 'DASHBOARD.MY_ACCOUNT' | translate }}</div>
+    <h1>{{ 'DASHBOARD.PROFILE.TITLE' | translate }}</h1>
+    <p>{{ 'DASHBOARD.PROFILE.SUB' | translate }}</p>
   </div>
 
-  <div *ngIf="isLoading" class="loading-state">Loading profile...</div>
+  <div *ngIf="isLoading" class="loading-state">{{ 'DASHBOARD.PROFILE.LOADING' | translate }}</div>
 
   <ng-container *ngIf="!isLoading && user">
     <!-- ── Profile info card ────────────────────────────────── -->
@@ -16,39 +16,39 @@
           <img class="avatar-lg-img" *ngIf="user.photo" [src]="user.photo" [alt]="user.name" />
           <label for="profile-upload" class="avatar-overlay" data-cursor-hover>
             <i class="ph ph-camera"></i>
-            <span>Change</span>
+            <span>{{ 'ACCOUNT.CHANGE_PHOTO' | translate }}</span>
           </label>
           <input type="file" id="profile-upload" (change)="onPhotoChange($event)" accept="image/*" style="display:none" />
         </div>
         <div class="profile-header-info">
           <h2 class="profile-name">{{ user.name }}</h2>
           <span class="status-badge {{ user.kycStatus }}">
-            KYC: {{ user.kycStatus | uppercase }}
+            {{ 'ACCOUNT.KYC' | translate }}: {{ 'ACCOUNT.KYC_STATUS.' + (user.kycStatus || 'NOT_SUBMITTED').toUpperCase() | translate }}
           </span>
           <p class="member-since">
-            Member since {{ user.createdAt | date:'MMMM y' }}
+            {{ 'DASHBOARD.PROFILE.MEMBER_SINCE' | translate }} {{ user.createdAt | date:'MMMM y' }}
           </p>
         </div>
       </div>
       <div class="meta-table">
         <div class="meta-row">
-          <span class="meta-key">Email</span>
+          <span class="meta-key">{{ 'DASHBOARD.PROFILE.EMAIL' | translate }}</span>
           <span>{{ user.email }}</span>
         </div>
         <div class="meta-row">
-          <span class="meta-key">Role</span>
-          <span>{{ user.role | titlecase }}</span>
+          <span class="meta-key">{{ 'DASHBOARD.PROFILE.ROLE' | translate }}</span>
+          <span>{{ 'DASHBOARD.ROLES.' + user.role.toUpperCase() | translate }}</span>
         </div>
         <div class="meta-row">
-          <span class="meta-key">Verified</span>
+          <span class="meta-key">{{ 'DASHBOARD.PROFILE.VERIFIED' | translate }}</span>
           <span class="status-badge {{ user.isVerified ? 'approved' : 'pending' }}">
-            {{ user.isVerified ? 'Yes' : 'No' }}
+            {{ (user.isVerified ? 'DASHBOARD.PROFILE.YES' : 'DASHBOARD.PROFILE.NO') | translate }}
           </span>
         </div>
         <div class="meta-row">
-          <span class="meta-key">Status</span>
+          <span class="meta-key">{{ 'DASHBOARD.PROFILE.STATUS' | translate }}</span>
           <span class="status-badge {{ user.isBanned ? 'rejected' : 'approved' }}">
-            {{ user.isBanned ? 'Banned' : 'Active' }}
+            {{ (user.isBanned ? 'DASHBOARD.PROFILE.BANNED' : 'DASHBOARD.PROFILE.ACTIVE') | translate }}
           </span>
         </div>
       </div>
@@ -56,47 +56,47 @@
 
     <!-- ── Edit info form ─────────────────────────────────────── -->
     <div class="panel-card" [formGroup]="profileForm">
-      <h2>Edit Information</h2>
+      <h2>{{ 'DASHBOARD.PROFILE.EDIT_INFO' | translate }}</h2>
       <div class="form-grid">
         <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" formControlName="name" placeholder="Your full name" />
+          <label>{{ 'AUTH.FULL_NAME' | translate }}</label>
+          <input type="text" formControlName="name" [placeholder]="'AUTH.FULL_NAME_PLACEHOLDER' | translate" />
         </div>
         <div class="form-group">
-          <label>Phone</label>
-          <input type="tel" formControlName="phone" placeholder="+971 50 000 0000" />
+          <label>{{ 'DASHBOARD.PROFILE.PHONE' | translate }}</label>
+          <input type="tel" formControlName="phone" [placeholder]="'ACCOUNT.PHONE_PLACEHOLDER' | translate" />
         </div>
       </div>
       <div class="form-group" style="margin-top:0.5rem">
-        <label>Bio</label>
-        <textarea formControlName="bio" placeholder="A short bio..."></textarea>
+        <label>{{ 'DASHBOARD.PROFILE.BIO' | translate }}</label>
+        <textarea formControlName="bio" [placeholder]="'ACCOUNT.BIO_PLACEHOLDER' | translate"></textarea>
       </div>
       <div style="margin-top:1rem">
         <button class="action-btn primary" (click)="saveProfile()" [disabled]="isSavingProfile">
-          {{ isSavingProfile ? 'Saving...' : 'Save Changes' }}
+          {{ isSavingProfile ? ('DASHBOARD.PROFILE.SAVING' | translate) : ('DASHBOARD.PROFILE.SAVE_CHANGES' | translate) }}
         </button>
       </div>
     </div>
 
     <!-- ── Change password form ────────────────────────────────── -->
     <div class="panel-card" [formGroup]="passwordForm">
-      <h2>Change Password</h2>
+      <h2>{{ 'DASHBOARD.PROFILE.CHANGE_PASS' | translate }}</h2>
       <div class="form-grid">
         <div class="form-group">
-          <label>Current Password</label>
+          <label>{{ 'DASHBOARD.PROFILE.CURRENT_PASS' | translate }}</label>
           <input [type]="showCurrentPw ? 'text' : 'password'" formControlName="currentPassword" placeholder="••••••••" />
         </div>
         <div class="form-group">
-          <label>New Password</label>
-          <input [type]="showNewPw ? 'text' : 'password'" formControlName="newPassword" placeholder="Min. 8 characters" />
+          <label>{{ 'DASHBOARD.PROFILE.NEW_PASS' | translate }}</label>
+          <input [type]="showNewPw ? 'text' : 'password'" formControlName="newPassword" [placeholder]="'ACCOUNT.SECURITY.PLACEHOLDER_PASS' | translate" />
         </div>
       </div>
       <div class="password-action-row">
         <button class="action-btn primary" (click)="savePassword()" [disabled]="isSavingPassword">
-          {{ isSavingPassword ? 'Saving...' : 'Update Password' }}
+          {{ isSavingPassword ? ('DASHBOARD.PROFILE.SAVING' | translate) : ('DASHBOARD.PROFILE.UPDATE_PASS' | translate) }}
         </button>
         <span class="password-note">
-          You will be logged out after changing your password.
+          {{ 'DASHBOARD.PROFILE.PASS_NOTE' | translate }}
         </span>
       </div>
     </div>

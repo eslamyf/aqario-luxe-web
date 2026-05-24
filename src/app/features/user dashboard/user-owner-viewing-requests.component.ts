@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserDashboardService } from './user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-owner-viewing-requests',
@@ -10,14 +11,14 @@ import { NotificationService } from '../../shared/services/notification.service'
     <div class="ovr-wrapper">
       <div class="section-header">
         <div>
-          <h2 class="section-title">Incoming Viewing Requests</h2>
-          <p class="section-sub">Review and respond to property viewing requests from buyers.</p>
+          <h2 class="section-title">{{ 'DASHBOARD.INCOMING_VR' | translate }}</h2>
+          <p class="section-sub">{{ 'DASHBOARD.INCOMING_VR_SUB' | translate }}</p>
         </div>
         <div class="filter-tabs">
           <button *ngFor="let f of filters"
             class="filter-tab" [class.active]="activeFilter === f.key"
             (click)="setFilter(f.key)">
-            {{ f.label }}
+            {{ 'DASHBOARD.FILTER_' + f.key.toUpperCase() | translate }}
             <span class="badge" *ngIf="f.key === 'pending' && pendingCount > 0">{{ pendingCount }}</span>
           </button>
         </div>
@@ -31,14 +32,14 @@ import { NotificationService } from '../../shared/services/notification.service'
       <!-- Error -->
       <div *ngIf="errorMsg && !isLoading" class="ovr-error">
         <p>{{ errorMsg }}</p>
-        <button class="btn-ghost" (click)="load()">Retry</button>
+        <button class="btn-ghost" (click)="load()">{{ 'DASHBOARD.RETRY' | translate }}</button>
       </div>
 
       <!-- Empty -->
       <div *ngIf="!isLoading && !errorMsg && filteredRequests.length === 0" class="ovr-empty">
         <div class="empty-icon">&#128065;&#65039;</div>
-        <h3>No {{ activeFilter === 'all' ? '' : activeFilter }} requests</h3>
-        <p>When buyers request to view your properties, they will appear here.</p>
+        <h3>{{ 'DASHBOARD.NO_VR_INCOMING' | translate }}</h3>
+        <p>{{ 'DASHBOARD.NO_VR_INCOMING_SUB' | translate }}</p>
       </div>
 
       <!-- List -->
@@ -51,11 +52,11 @@ import { NotificationService } from '../../shared/services/notification.service'
             </div>
             <div class="prop-thumb placeholder" *ngIf="!r.property?.images?.length">&#127968;</div>
             <div class="prop-info">
-              <h3 class="prop-title">{{ r.property?.title || 'Property' }}</h3>
-              <p class="prop-location">&#128205; {{ r.property?.location?.city || 'N/A' }}</p>
+              <h3 class="prop-title">{{ (r.property?.title || ('DASHBOARD.TABLE.PROPERTY' | translate)) | translateProp }}</h3>
+              <p class="prop-location">&#128205; {{ (r.property?.location?.city || 'N/A') | translateProp }}</p>
             </div>
             <div class="status-badge" [class]="'status-' + r.status">
-              <span class="status-dot"></span>{{ r.status | titlecase }}
+              <span class="status-dot"></span>{{ 'DASHBOARD.FILTER_' + r.status.toUpperCase() | translate }}
             </div>
           </div>
 
@@ -66,7 +67,7 @@ import { NotificationService } from '../../shared/services/notification.service'
               <span *ngIf="!r.requester?.photo">{{ r.requester?.name?.charAt(0) | uppercase }}</span>
             </div>
             <div>
-              <p class="requester-name">{{ r.requester?.name || 'Buyer' }}</p>
+              <p class="requester-name">{{ r.requester?.name || ('DASHBOARD.ROLES.BUYER' | translate) }}</p>
               <p class="requester-email">{{ r.requester?.email }}</p>
             </div>
           </div>
@@ -74,22 +75,22 @@ import { NotificationService } from '../../shared/services/notification.service'
           <!-- Details -->
           <div class="ovr-details">
             <div class="detail-item" *ngIf="r.preferredDate">
-              <span class="detail-label">Preferred Date</span>
+              <span class="detail-label">{{ 'DASHBOARD.PREFERRED_DATE' | translate }}</span>
               <span class="detail-value">{{ r.preferredDate | date:'dd MMM yyyy' }}</span>
             </div>
             <div class="detail-item" *ngIf="r.preferredTime">
-              <span class="detail-label">Preferred Time</span>
+              <span class="detail-label">{{ 'DASHBOARD.PREFERRED_TIME' | translate }}</span>
               <span class="detail-value">{{ r.preferredTime }}</span>
             </div>
             <div class="detail-item">
-              <span class="detail-label">Requested On</span>
+              <span class="detail-label">{{ 'DASHBOARD.REQUESTED_ON' | translate }}</span>
               <span class="detail-value">{{ r.createdAt | date:'dd MMM yyyy' }}</span>
             </div>
           </div>
 
           <!-- Note -->
           <div class="ovr-message" *ngIf="r.message">
-            <span class="msg-label">Buyer Note:</span>
+            <span class="msg-label">{{ 'DASHBOARD.BUYER_NOTE' | translate }}</span>
             <p>"{{ r.message }}"</p>
           </div>
 
@@ -99,23 +100,23 @@ import { NotificationService } from '../../shared/services/notification.service'
               [disabled]="loadingMap[r._id]"
               (click)="approve(r._id)">
               <span *ngIf="loadingMap[r._id]" class="spinner-xs"></span>
-              Approve
+              {{ 'DASHBOARD.APPROVE_BTN' | translate }}
             </button>
             <button class="btn-reject"
               [disabled]="loadingMap[r._id]"
               (click)="openRejectDialog(r)">
-              Decline
+              {{ 'DASHBOARD.DECLINE_BTN' | translate }}
             </button>
           </div>
 
           <!-- Approved notice -->
           <div class="ovr-notice approved" *ngIf="r.status === 'approved'">
-            Approved — buyer has been notified.
+            {{ 'DASHBOARD.VR_APPROVED_NOTICE' | translate }}
           </div>
 
           <!-- Rejected notice -->
           <div class="ovr-notice rejected" *ngIf="r.status === 'rejected'">
-            Declined — buyer has been notified.
+            {{ 'DASHBOARD.VR_REJECTED_NOTICE' | translate }}
           </div>
 
         </div>
@@ -125,15 +126,15 @@ import { NotificationService } from '../../shared/services/notification.service'
     <!-- Reject Dialog -->
     <div class="dialog-overlay" *ngIf="rejectTarget" (click)="closeRejectDialog()">
       <div class="dialog-box" (click)="$event.stopPropagation()">
-        <h3>Decline Viewing Request</h3>
-        <p>Provide a reason for declining (optional — sent to the buyer).</p>
-        <textarea class="reject-input" rows="3" placeholder="e.g. Already booked for that date..."
+        <h3>{{ 'DASHBOARD.DECLINE_VR_TITLE' | translate }}</h3>
+        <p>{{ 'DASHBOARD.DECLINE_VR_SUB' | translate }}</p>
+        <textarea class="reject-input" rows="3" [placeholder]="'DASHBOARD.DECLINE_PLACEHOLDER' | translate"
           [(ngModel)]="rejectReason"></textarea>
         <div class="dialog-actions">
-          <button class="btn-ghost" (click)="closeRejectDialog()">Cancel</button>
+          <button class="btn-ghost" (click)="closeRejectDialog()">{{ 'DASHBOARD.FORM.CANCEL' | translate }}</button>
           <button class="btn-danger" (click)="confirmReject()" [disabled]="isRejecting">
             <span *ngIf="isRejecting" class="spinner-xs"></span>
-            Confirm Decline
+            {{ 'DASHBOARD.CONFIRM_DECLINE' | translate }}
           </button>
         </div>
       </div>
@@ -213,7 +214,6 @@ export class UserOwnerViewingRequestsComponent implements OnInit, OnDestroy {
   requests: any[] = [];
   isLoading = true;
   errorMsg = '';
-  // Per-item loading map — each card locks independently, no global block
   loadingMap: Record<string, boolean> = {};
   activeFilter = 'all';
   filters = [
@@ -229,7 +229,8 @@ export class UserOwnerViewingRequestsComponent implements OnInit, OnDestroy {
 
   constructor(
     private svc: UserDashboardService,
-    private notif: NotificationService
+    private notif: NotificationService,
+    private translate: TranslateService
   ) {}
 
   get filteredRequests(): any[] {
@@ -254,7 +255,7 @@ export class UserOwnerViewingRequestsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => { this.requests = data; this.isLoading = false; },
         error: (err) => {
-          this.errorMsg = err?.error?.message || 'Failed to load viewing requests.';
+          this.errorMsg = err?.error?.message || this.translate.instant('DASHBOARD.ERR_LOAD_VR');
           this.isLoading = false;
         }
       });
@@ -267,15 +268,14 @@ export class UserOwnerViewingRequestsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.notif.show('Viewing request approved!', 'success');
-          // ✅ Instant state sync — tab count updates automatically via filteredRequests getter
+          this.notif.show(this.translate.instant('DASHBOARD.NOTIF_VR_APPROVED'), 'success');
           this.requests = this.requests.map(r =>
             r._id === id ? { ...r, status: 'approved' } : r
           );
           this.loadingMap = { ...this.loadingMap, [id]: false };
         },
         error: (err) => {
-          this.notif.show(err?.error?.message || 'Failed to approve.', 'error');
+          this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.NOTIF_VR_APPROVE_FAILED'), 'error');
           this.loadingMap = { ...this.loadingMap, [id]: false };
         }
       });
@@ -292,8 +292,7 @@ export class UserOwnerViewingRequestsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.notif.show('Viewing request declined.', 'info');
-          // ✅ Instant state sync — no reload, no flicker
+          this.notif.show(this.translate.instant('DASHBOARD.NOTIF_VR_DECLINED'), 'info');
           this.requests = this.requests.map(r =>
             r._id === id ? { ...r, status: 'rejected' } : r
           );
@@ -301,7 +300,7 @@ export class UserOwnerViewingRequestsComponent implements OnInit, OnDestroy {
           this.isRejecting = false;
         },
         error: (err) => {
-          this.notif.show(err?.error?.message || 'Failed to decline.', 'error');
+          this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.NOTIF_VR_DECLINE_FAILED'), 'error');
           this.isRejecting = false;
         }
       });

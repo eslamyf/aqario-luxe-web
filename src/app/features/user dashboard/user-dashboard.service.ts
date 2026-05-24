@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { NotificationService } from '../../shared/services/notification.service';
 import { AuthService } from '../../core/auth/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 // ── Interfaces matched 1:1 with backend user.model.js ─────────────────────────
 
@@ -91,6 +92,7 @@ export class UserDashboardService {
   private router = inject(Router);
   private notif = inject(NotificationService);
   private authService = inject(AuthService);
+  private translate = inject(TranslateService);
   private readonly base = environment.apiUrl;
 
   private dashboardDataSubject = new BehaviorSubject<DashboardData | null>(null);
@@ -108,8 +110,36 @@ export class UserDashboardService {
     );
   }
 
-  private handleError(message: string) {
+  private handleError(key: string) {
     return (err: any) => {
+      const keyMap: Record<string, string> = {
+        'Failed to load profile data': 'DASHBOARD.ERR_LOAD_PROFILE',
+        'Failed to update profile': 'DASHBOARD.ERR_UPDATE_PROFILE',
+        'Failed to change password': 'DASHBOARD.ERR_CHANGE_PASSWORD',
+        'Failed to load bookings': 'DASHBOARD.ERR_LOAD_BOOKINGS',
+        'Failed to cancel booking': 'DASHBOARD.ERR_CANCEL_BOOKING',
+        'Failed to load owner booking requests': 'DASHBOARD.ERR_LOAD_OWNER_BOOKINGS',
+        'Failed to approve booking': 'DASHBOARD.ERR_APPROVE_BOOKING',
+        'Failed to reject booking': 'DASHBOARD.ERR_REJECT_BOOKING',
+        'Failed to load booking details': 'DASHBOARD.ERR_LOAD_BOOKING_DETAILS',
+        'Failed to load properties': 'DASHBOARD.ERR_LOAD_PROPERTIES',
+        'Failed to load saved properties': 'DASHBOARD.ERR_LOAD_SAVED_PROPERTIES',
+        'Failed to remove saved property': 'DASHBOARD.ERR_REMOVE_SAVED',
+        'Failed to load subscription plans': 'DASHBOARD.ERR_LOAD_PLANS',
+        'Failed to subscribe': 'DASHBOARD.ERR_SUBSCRIBE',
+        'Failed to cancel subscription': 'DASHBOARD.ERR_CANCEL_SUB',
+        'Failed to get payment status': 'DASHBOARD.ERR_PAYMENT_STATUS',
+        'Failed to load viewing requests': 'DASHBOARD.ERR_LOAD_VR',
+        'Failed to load owner viewing requests': 'DASHBOARD.ERR_LOAD_OWNER_VR',
+        'Failed to approve viewing request': 'DASHBOARD.ERR_APPROVE_VR',
+        'Failed to reject viewing request': 'DASHBOARD.ERR_REJECT_VR',
+        'Failed to cancel viewing request': 'DASHBOARD.ERR_CANCEL_VR',
+        'Failed to load payments': 'DASHBOARD.ERR_LOAD_PAYMENTS',
+        'Failed to load stats': 'DASHBOARD.ERR_LOAD_STATS'
+      };
+
+      const transKey = keyMap[key] || key;
+      const message = this.translate.instant(transKey);
       this.notif.show(message, 'error');
       return throwError(() => err);
     };
