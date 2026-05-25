@@ -29,7 +29,7 @@ import { filter } from 'rxjs/operators';
     }
     .admin-mode app-footer {
       display: block;
-      margin-left: 280px; /* Width of admin sidebar */
+      margin-inline-start: 280px; /* Width of admin sidebar */
     }
   `]
 })

@@ -1,10 +1,7 @@
 <!-- ─────────────────────────────────────────────────────────────────────────
   LUXE ESTATES — Property Card
-  Visual reference: Template/index.html lines 2000–2025 (renderProperties fn)
-  CSS classes: .property-card, .property-img, .property-overlay, .property-tag,
-               .property-favorite, .property-location, .property-name,
-               .property-price, .property-features, .property-actions,
-               .property-action-btn
+  Equal-heights refactored layout with permanent View Details button
+  Visual reference: Template/index.html
 ───────────────────────────────────────────────────────────────────────────── -->
 
 <div
@@ -13,60 +10,64 @@
   [routerLink]="['/properties', property._id]"
   data-cursor-hover>
 
-  <!-- ── Image / Placeholder ─────────────────────────────────────────────── -->
-  <img
-    *ngIf="property.images?.length && !imageError"
-    class="property-img"
-    [src]="property.images[0]"
-    [alt]="property.title"
-    loading="lazy"
-    (error)="onImageError()" />
+  <!-- Image & Badges Media Container -->
+  <div class="property-card-media">
+    <img
+      *ngIf="property.images?.length && !imageError"
+      class="property-img"
+      [src]="property.images[0]"
+      [alt]="property.title"
+      loading="lazy"
+      (error)="onImageError()" />
 
-  <!-- Placeholder when no image or image failed to load -->
-  <div *ngIf="!property.images?.length || imageError" class="property-img-placeholder"></div>
+    <!-- Placeholder when no image or image failed to load -->
+    <div *ngIf="!property.images?.length || imageError" class="property-img-placeholder"></div>
 
-  <!-- ── Badge — top left (Template line 445–457) ────────────────────────── -->
-  <!-- ── Promotion Badges ────────────────────────────────────────────── -->
-  <div class="promotion-badges">
-    <div class="promo-badge featured" *ngIf="property.promotion?.isFeatured">
-      <i class="ph ph-star-fill"></i> {{ 'PROPERTIES.PROMO.FEATURED' | translate }}
+    <!-- Promotion Badges -->
+    <div class="promotion-badges">
+      <div class="promo-badge featured" *ngIf="property.promotion?.isFeatured">
+        <i class="ph ph-star-fill"></i> {{ 'PROPERTIES.PROMO.FEATURED' | translate }}
+      </div>
+      <div class="promo-badge boosted" *ngIf="property.promotion?.isBoosted && !property.promotion?.isFeatured">
+        <i class="ph ph-lightning-fill"></i> {{ 'PROPERTIES.PROMO.BOOSTED' | translate }}
+      </div>
+      <div class="promo-badge premium" *ngIf="property.promotion?.hasPremiumBadge" title="Premium Listing">
+        <i class="ph ph-seal-check-fill"></i>
+      </div>
     </div>
-    <div class="promo-badge boosted" *ngIf="property.promotion?.isBoosted && !property.promotion?.isFeatured">
-      <i class="ph ph-lightning-fill"></i> {{ 'PROPERTIES.PROMO.BOOSTED' | translate }}
+
+    <!-- Property tag -->
+    <div class="property-tag" [class.rent]="property.status === 'for-rent'">
+      {{ (property.status === 'for-rent' ? 'REAL_ESTATE.FOR_RENT' : 'REAL_ESTATE.FOR_SALE') | translate }}
     </div>
-    <div class="promo-badge premium" *ngIf="property.promotion?.hasPremiumBadge" title="Premium Listing">
-      <i class="ph ph-seal-check-fill"></i>
-    </div>
+
+    <!-- Favorite button -->
+    <button
+      class="property-favorite"
+      [class.property-favorite--active]="isFavorited"
+      (click)="onFavoriteClick($event)"
+      [attr.aria-label]="(isFavorited ? 'PROPERTIES.NOTIF.REMOVED_FAVORITES' : 'PROPERTIES.NOTIF.ADDED_FAVORITES') | translate"
+      data-cursor-hover>
+      {{ isFavorited ? '♥' : '♡' }}
+    </button>
   </div>
 
-  <div class="property-tag" [class.rent]="property.status === 'for-rent'">
-    {{ (property.status === 'for-rent' ? 'REAL_ESTATE.FOR_RENT' : 'REAL_ESTATE.FOR_SALE') | translate }}
-  </div>
-
-  <!-- ── Favorite button — top right (Template line 458–470) ────────────── -->
-  <button
-    class="property-favorite"
-    [class.property-favorite--active]="isFavorited"
-    (click)="onFavoriteClick($event)"
-    [attr.aria-label]="(isFavorited ? 'PROPERTIES.NOTIF.REMOVED_FAVORITES' : 'PROPERTIES.NOTIF.ADDED_FAVORITES') | translate"
-    data-cursor-hover>
-    {{ isFavorited ? '♥' : '♡' }}
-  </button>
-
-  <!-- ── Overlay gradient + property info ─────────────────────────────────── -->
+  <!-- Content & Specs Container -->
   <div class="property-overlay">
-    <!-- City — Template line 471–478 -->
-    <div class="property-location">{{ property.city }}</div>
+    <!-- City -->
+    <div class="property-location">
+      <span style="margin-inline-end: 4px;">📍</span>{{ property.city }}
+    </div>
 
-    <!-- Title — Template line 479–486 -->
+    <!-- Title -->
     <div class="property-name">{{ property.title }}</div>
 
-    <!-- Price — Template line 487–494 -->
+    <!-- Price -->
     <div class="property-price">
       {{ formattedPrice }}
     </div>
 
-    <!-- Specs: beds | baths | area — Template line 495–505 -->
+    <!-- Specs: beds | baths | area -->
     <div class="property-features">
       <div *ngIf="property.bedrooms" class="property-feature">
         <span class="feature-icon">bed</span> {{ property.bedrooms }} {{ 'REAL_ESTATE.BED_SHORT' | translate }}
@@ -78,15 +79,17 @@
         <span class="feature-icon">m²</span> {{ property.area }}{{ 'REAL_ESTATE.AREA_UNIT' | translate }}
       </div>
     </div>
-  </div>
 
-  <!-- ── Hover action buttons — Template line 506–531 ───────────────────── -->
-  <div class="property-actions">
-    <button
-      class="property-action-btn"
-      data-cursor-hover>
-      {{ 'REAL_ESTATE.VIEW_DETAILS' | translate }}
-    </button>
+    <!-- Permanent Action Button (Aligned at bottom via flex margin-top: auto) -->
+    <div class="property-actions">
+      <button
+        class="property-action-btn"
+        [routerLink]="['/properties', property._id]"
+        (click)="$event.stopPropagation()"
+        data-cursor-hover>
+        {{ 'REAL_ESTATE.VIEW_DETAILS' | translate }}
+      </button>
+    </div>
   </div>
 
 </div>

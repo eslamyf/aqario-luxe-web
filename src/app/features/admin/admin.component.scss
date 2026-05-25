@@ -11,7 +11,7 @@
   min-width: 280px;
   flex-shrink: 0;
   background: var(--obsidian-2);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-inline-end: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   padding: 2rem 0;
@@ -315,6 +315,23 @@
       background: rgba(248, 113, 113, 0.1);
       border-color: #f87171;
       color: #f87171;
+    }
+  }
+}
+
+// ── RTL Layout Styling Overrides ──────────────────────────────────────────────
+[dir="rtl"] {
+  .admin-sidebar {
+    @media (max-width: 992px) {
+      left: auto;
+      right: -280px;
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -20px 0 40px rgba(0, 0, 0, 0.3);
+
+      &.open {
+        right: 0;
+        left: auto;
+      }
     }
   }
 }

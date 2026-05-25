@@ -17,26 +17,26 @@
     </div>
 
     <nav class="admin-nav">
-      <div class="nav-section">MAIN</div>
+      <div class="nav-section">{{ 'ADMIN.SIDEBAR.MAIN' | translate }}</div>
       <a routerLink="overview" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <i class="fa-solid fa-chart-line"></i> Dashboard
+        <i class="fa-solid fa-chart-line"></i> {{ 'ADMIN.SIDEBAR.DASHBOARD' | translate }}
       </a>
       <a routerLink="users" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <i class="fa-solid fa-users"></i> Users
+        <i class="fa-solid fa-users"></i> {{ 'ADMIN.SIDEBAR.USERS' | translate }}
       </a>
       <a routerLink="kyc" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <i class="fa-solid fa-id-card-clip"></i> KYC Center
+        <i class="fa-solid fa-id-card-clip"></i> {{ 'ADMIN.SIDEBAR.KYC_CENTER' | translate }}
       </a>
       <a routerLink="properties" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <i class="fa-solid fa-building"></i> Properties
+        <i class="fa-solid fa-building"></i> {{ 'ADMIN.SIDEBAR.PROPERTIES' | translate }}
       </a>
       <a routerLink="bookings" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <i class="fa-solid fa-calendar-check"></i> Bookings
+        <i class="fa-solid fa-calendar-check"></i> {{ 'ADMIN.SIDEBAR.BOOKINGS' | translate }}
       </a>
 
-      <div class="nav-section">GOVERNANCE</div>
+      <div class="nav-section">{{ 'ADMIN.SIDEBAR.GOVERNANCE' | translate }}</div>
       <a routerLink="audit" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <i class="fa-solid fa-scroll"></i> Audit Trail
+        <i class="fa-solid fa-scroll"></i> {{ 'ADMIN.SIDEBAR.AUDIT_TRAIL' | translate }}
       </a>
     </nav>
 
@@ -53,7 +53,7 @@
           <span class="role">{{ user.role === 'admin' ? 'System Administrator' : user.role }}</span>
         </div>
       </div>
-      <a routerLink="/" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Exit Admin</a>
+      <a routerLink="/" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> {{ 'ADMIN.SIDEBAR.EXIT_ADMIN' | translate }}</a>
     </div>
   </aside>
 

@@ -270,7 +270,7 @@
 .properties-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+  gap: 24px;
 }
 
 // ── Loading state ─────────────────────────────────────────────────────────────
@@ -435,7 +435,7 @@
 @media (max-width: 768px) {
   .properties-grid {
     grid-template-columns: 1fr;
-    gap: 2px;    // Fix 1 (audit) — explicit: preserves 2px panel-grid aesthetic on mobile
+    gap: 24px;
   }
 
   .prop-tab {

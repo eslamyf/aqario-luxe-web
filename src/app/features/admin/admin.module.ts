@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule, TitleCasePipe, DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { AdminComponent }            from './admin.component';
 import { AdminDashboardComponent }   from './admin-dashboard.component';
@@ -52,6 +53,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
+    TranslateModule,
     // Dashboard overview sub-components (standalone)
     AdminKycComponent,
     KpiCardComponent,

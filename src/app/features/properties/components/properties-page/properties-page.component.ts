@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -26,6 +26,7 @@ export class PropertiesPageComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private translateService    = inject(TranslateService);
   private destroyRef          = inject(DestroyRef);
+  private cdr                 = inject(ChangeDetectorRef);
 
   // ── Reactive State ────────────────────────────────────────────────────────
   properties$:   Observable<Property[]> = this.svc.properties$;
@@ -84,6 +85,14 @@ export class PropertiesPageComponent implements OnInit {
         }, { emitEvent: false });
         
         this.svc.setFilters(filters);
+      });
+
+    // Subscribe to language changes reactively to refresh listing translations instantly
+    this.translateService.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.svc.setFilters(this.svc.getCurrentFilters());
+        this.cdr.markForCheck();
       });
 
     // Subscribe to pagination metadata

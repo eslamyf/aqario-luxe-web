@@ -57,6 +57,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
       }),
       price:       [null, [Validators.required, Validators.min(1)]],
       area:        [null],
+      rooms:       [null],
       bedrooms:    [null],
       bathrooms:   [null],
       city: this.fb.group({
@@ -192,6 +193,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
 
     // ── Optional numeric fields ──
     if (v.area != null && v.area !== '')     fd.append('area', String(v.area));
+    if (v.rooms != null && v.rooms !== '')   fd.append('rooms', String(v.rooms));
     if (v.bedrooms != null && v.bedrooms !== '') fd.append('bedrooms', String(v.bedrooms));
     if (v.bathrooms != null && v.bathrooms !== '') fd.append('bathrooms', String(v.bathrooms));
 

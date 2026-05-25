@@ -3,55 +3,55 @@
     
     <!-- Top Bar -->
     <div class="top-bar">
-      <div class="breadcrumb">Admin Portal <span class="separator">/</span> <span class="current">OVERVIEW</span></div>
+      <div class="breadcrumb">{{ 'ADMIN.DASHBOARD.PORTAL' | translate }} <span class="separator">/</span> <span class="current">{{ 'ADMIN.DASHBOARD.OVERVIEW' | translate }}</span></div>
       <div class="actions">
         <button class="export-btn" (click)="exportBookings()" data-cursor-hover>
-          <i class="fa-solid fa-download"></i> EXPORT DATA
+          <i class="fa-solid fa-download"></i> {{ 'ADMIN.DASHBOARD.EXPORT_DATA' | translate }}
         </button>
         <button class="icon-btn"><i class="fa-regular fa-bell"></i><span class="dot-indicator"></span></button>
         <div class="market-status">
-          <span class="label">MARKET STATUS</span>
-          <span class="status"><span class="dot-green"></span> LIVE ANALYTICS</span>
+          <span class="label">{{ 'ADMIN.DASHBOARD.MARKET_STATUS' | translate }}</span>
+          <span class="status"><span class="dot-green"></span> {{ 'ADMIN.DASHBOARD.LIVE_ANALYTICS' | translate }}</span>
         </div>
       </div>
     </div>
 
     <!-- Header -->
     <header class="dashboard-hero">
-      <h1 class="section-title">Portfolio Performance</h1>
-      <p class="quote">"Wealth consists not in having great possessions, but in having few wants." — Epictetus</p>
+      <h1 class="section-title">{{ 'ADMIN.DASHBOARD.PERFORMANCE' | translate }}</h1>
+      <p class="quote">{{ 'ADMIN.DASHBOARD.QUOTE' | translate }}</p>
     </header>
 
     <div *ngIf="state.loading" class="loading-state">
-      Loading dashboard data...
+      {{ 'ADMIN.DASHBOARD.LOADING' | translate }}
     </div>
 
     <ng-container *ngIf="!state.loading">
       <!-- KPI Grid -->
       <div class="metrics-grid">
         <app-kpi-card
-          label="TOTAL USERS"
+          [label]="'DASHBOARD.TOTAL_USERS' | translate"
           [value]="state.stats?.users | number"
           [percentage]="12.4"
           [isPositive]="true"
           iconClass="fa-solid fa-users">
         </app-kpi-card>
         <app-kpi-card
-          label="PROPERTIES"
+          [label]="'ADMIN.SIDEBAR.PROPERTIES' | translate"
           [value]="state.stats?.properties | number"
           [percentage]="5.2"
           [isPositive]="true"
           iconClass="fa-regular fa-building">
         </app-kpi-card>
         <app-kpi-card
-          label="BOOKINGS"
+          [label]="'ADMIN.SIDEBAR.BOOKINGS' | translate"
           [value]="state.stats?.bookings | number"
           [percentage]="18.7"
           [isPositive]="true"
           iconClass="fa-regular fa-calendar-check">
         </app-kpi-card>
         <app-kpi-card
-          label="TOTAL REVENUE"
+          [label]="'ADMIN.DASHBOARD.TOTAL_REVENUE' | translate"
           [value]="state.stats?.revenue | currency:'USD':'symbol':'1.0-0'"
           [percentage]="24.1"
           [isPositive]="true"
@@ -63,13 +63,13 @@
       <div class="chart-section">
         <div class="chart-header">
           <div>
-            <h2>Revenue Analytics</h2>
-            <p>Global monthly earnings distribution (Current Fiscal Year)</p>
+            <h2>{{ 'ADMIN.DASHBOARD.REVENUE_ANALYTICS' | translate }}</h2>
+            <p>{{ 'ADMIN.DASHBOARD.REVENUE_SUB' | translate }}</p>
           </div>
           <div class="period-toggles">
-            <button class="toggle-btn" [class.active]="(period$ | async) === 'monthly'" (click)="setPeriod('monthly')">MONTH</button>
-            <button class="toggle-btn">QUARTER</button>
-            <button class="toggle-btn" [class.active]="(period$ | async) === 'yearly'" (click)="setPeriod('yearly')">YEAR</button>
+            <button class="toggle-btn" [class.active]="(period$ | async) === 'monthly'" (click)="setPeriod('monthly')">{{ 'ADMIN.DASHBOARD.MONTH' | translate }}</button>
+            <button class="toggle-btn">{{ 'ADMIN.DASHBOARD.QUARTER' | translate }}</button>
+            <button class="toggle-btn" [class.active]="(period$ | async) === 'yearly'" (click)="setPeriod('yearly')">{{ 'ADMIN.DASHBOARD.YEAR' | translate }}</button>
           </div>
         </div>
         <app-revenue-chart [data]="state.revenue"></app-revenue-chart>

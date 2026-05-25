@@ -83,6 +83,17 @@
             <span *ngIf="prop.bathrooms">🚿 {{ prop.bathrooms }} {{ 'REAL_ESTATE.BATH_SHORT' | translate }}</span>
             <span *ngIf="prop.area">📐 {{ prop.area }}{{ 'REAL_ESTATE.AREA_UNIT' | translate }}</span>
           </div>
+
+          <!-- View Details Action Button -->
+          <div class="prop-actions">
+            <button
+              class="prop-action-btn"
+              [routerLink]="['/properties', prop._id]"
+              (click)="$event.stopPropagation()"
+              data-cursor-hover>
+              {{ 'REAL_ESTATE.VIEW_DETAILS' | translate }}
+            </button>
+          </div>
         </div>
       </div>
     </div>

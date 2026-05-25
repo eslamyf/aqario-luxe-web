@@ -555,6 +555,8 @@
       "DISTRICT_PLACEHOLDER_AR": "مثال: وسط المدينة",
       "PRICE": "Price",
       "AREA": "Area (m²)",
+      "ROOMS": "Rooms",
+      "BATHROOMS": "Bathrooms",
       "DESCRIPTION": "Description",
       "DESCRIPTION_EN": "Description (English)",
       "DESCRIPTION_AR": "Description (Arabic)",
@@ -802,6 +804,39 @@
       "INVALID_LINK": "Invalid reset link. Missing token.",
       "SUCCESS": "Password reset successfully! Redirecting to home...",
       "FAILED": "Failed to reset password. Link may be expired."
+    }
+  },
+  "ADMIN": {
+    "SIDEBAR": {
+      "MAIN": "MAIN",
+      "DASHBOARD": "Dashboard",
+      "USERS": "Users",
+      "KYC_CENTER": "KYC Center",
+      "PROPERTIES": "Properties",
+      "BOOKINGS": "Bookings",
+      "GOVERNANCE": "GOVERNANCE",
+      "AUDIT_TRAIL": "Audit Trail",
+      "EXIT_ADMIN": "Exit Admin"
+    },
+    "DASHBOARD": {
+      "PORTAL": "Admin Portal",
+      "OVERVIEW": "OVERVIEW",
+      "EXPORT_DATA": "EXPORT DATA",
+      "MARKET_STATUS": "MARKET STATUS",
+      "LIVE_ANALYTICS": "LIVE ANALYTICS",
+      "PERFORMANCE": "Portfolio Performance",
+      "QUOTE": "\"Wealth consists not in having great possessions, but in having few wants.\" — Epictetus",
+      "LOADING": "Loading dashboard data...",
+      "REVENUE_ANALYTICS": "Revenue Analytics",
+      "REVENUE_SUB": "Global monthly earnings distribution (Current Fiscal Year)",
+      "MONTH": "MONTH",
+      "QUARTER": "QUARTER",
+      "YEAR": "YEAR",
+      "TOTAL_REVENUE": "Total Revenue",
+      "FORM": {
+        "ROOMS": "Rooms",
+        "BATHROOMS": "Bathrooms"
+      }
     }
   }
 }

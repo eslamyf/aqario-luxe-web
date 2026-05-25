@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
 import { PropertiesService } from '../../properties/services/properties.service';
 import { Property } from '../../properties/models/property.model';
 import { environment } from '../../../../environments/environment';
@@ -31,6 +32,7 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   private http               = inject(HttpClient);
   private ngZone             = inject(NgZone);
   private cdr                = inject(ChangeDetectorRef);
+  private translateService   = inject(TranslateService);
 
   // ── Lifecycle management ────────────────────────────────────────────────────
   private destroy$ = new Subject<void>();
@@ -79,6 +81,17 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   // ── Lifecycle ──────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.loadFeaturedProperties();
+
+    // Listen for language changes reactively to translate featured properties in place
+    this.translateService.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        this.featuredProperties = this.featuredProperties.map((p) => {
+          const translated = this.propertiesService.translateProperty(p, event.lang);
+          return this.enrichProperty(translated);
+        });
+        this.cdr.detectChanges();
+      });
   }
 
   ngAfterViewInit(): void {
@@ -95,9 +108,9 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = true;
     this.hasError  = false;
 
-    // Direct isolated call with limit=4, no side-effects on the shared service state
+    // Direct isolated call with limit=3, no side-effects on the shared service state
     this.propertiesService
-      .getProperties({ limit: 4, page: 1 })
+      .getProperties({ limit: 3, page: 1 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (props: Property[]) => {
