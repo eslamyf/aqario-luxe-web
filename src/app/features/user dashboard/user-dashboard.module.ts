@@ -47,7 +47,6 @@ const routes: Routes = [
     UserOwnerBookingsComponent,
     UserViewingRequestsComponent,
     UserOwnerViewingRequestsComponent,
-    TranslatePropPipe,
   ],
   imports: [
     CommonModule,
@@ -55,6 +54,10 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     TranslateModule,
+    TranslatePropPipe,
+  ],
+  exports: [
+    TranslatePropPipe,
   ],
 })
 export class UserDashboardModule {}

@@ -18,25 +18,25 @@ import { Property, PropertyFilters, PropertyType } from '../../models/property.m
   styleUrls: ['./properties-page.component.scss'],
 })
 export class PropertiesPageComponent implements OnInit {
-  private route   = inject(ActivatedRoute);
-  private router  = inject(Router);
-  private svc     = inject(PropertiesService);
-  private favoritesService    = inject(FavoritesService);
-  private authService         = inject(AuthService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private svc = inject(PropertiesService);
+  private favoritesService = inject(FavoritesService);
+  private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
-  private translateService    = inject(TranslateService);
-  private destroyRef          = inject(DestroyRef);
-  private cdr                 = inject(ChangeDetectorRef);
+  private translateService = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
 
   // ── Reactive State ────────────────────────────────────────────────────────
-  properties$:   Observable<Property[]> = this.svc.properties$;
-  isLoading$:    Observable<boolean>    = this.svc.loading$;
-  activeFilter$: Observable<string>     = this.svc.activeFilter$;
-  error$:        Observable<string | null> = this.svc.error$;
+  properties$: Observable<Property[]> = this.svc.properties$;
+  isLoading$: Observable<boolean> = this.svc.loading$;
+  activeFilter$: Observable<string> = this.svc.activeFilter$;
+  error$: Observable<string | null> = this.svc.error$;
 
   // Pagination state
-  currentPage  = 1;
-  totalPages   = 1;
+  currentPage = 1;
+  totalPages = 1;
   totalResults = 0;
 
   // UI state
@@ -45,8 +45,8 @@ export class PropertiesPageComponent implements OnInit {
   // ── Filter Form ───────────────────────────────────────────────────────────
   private fb = inject(FormBuilder);
   filterForm = this.fb.group({
-    search:   [''],
-    city:     [''],
+    search: [''],
+    city: [''],
     minPrice: [''],
     maxPrice: [''],
     bedrooms: ['']
@@ -54,14 +54,14 @@ export class PropertiesPageComponent implements OnInit {
 
   // ── Filter tabs — aligned with backend enum exactly ───────────────────────
   filterTabs = [
-    { labelKey: 'PROPERTIES.TABS.ALL',         key: 'all' },
-    { labelKey: 'REAL_ESTATE.FOR_SALE',        key: 'for-sale' },
-    { labelKey: 'REAL_ESTATE.FOR_RENT',        key: 'for-rent' },
+    { labelKey: 'PROPERTIES.TABS.ALL', key: 'all' },
+    { labelKey: 'REAL_ESTATE.FOR_SALE', key: 'for-sale' },
+    { labelKey: 'REAL_ESTATE.FOR_RENT', key: 'for-rent' },
     { labelKey: 'REAL_ESTATE.APARTMENTS_CHIP', key: 'apartment' },
-    { labelKey: 'REAL_ESTATE.VILLAS_CHIP',     key: 'villa' },
-    { labelKey: 'PROPERTIES.TABS.HOUSES',      key: 'house' },
-    { labelKey: 'PROPERTIES.TABS.STUDIOS',     key: 'studio' },
-    { labelKey: 'REAL_ESTATE.COMMERCIAL',      key: 'commercial' },
+    { labelKey: 'REAL_ESTATE.VILLAS_CHIP', key: 'villa' },
+    { labelKey: 'PROPERTIES.TABS.HOUSES', key: 'house' },
+    { labelKey: 'PROPERTIES.TABS.STUDIOS', key: 'studio' },
+    { labelKey: 'REAL_ESTATE.COMMERCIAL', key: 'commercial' },
   ];
 
   ngOnInit(): void {
@@ -77,13 +77,13 @@ export class PropertiesPageComponent implements OnInit {
         this.currentPage = filters.page ?? 1;
         // Patch form without triggering infinite loop
         this.filterForm.patchValue({
-          search:   filters.search || '',
-          city:     filters.city || '',
+          search: filters.search || '',
+          city: filters.city || '',
           minPrice: filters.minPrice ? filters.minPrice.toString() : '',
           maxPrice: filters.maxPrice ? filters.maxPrice.toString() : '',
           bedrooms: filters.bedrooms ? filters.bedrooms.toString() : '',
         }, { emitEvent: false });
-        
+
         this.svc.setFilters(filters);
       });
 
@@ -101,9 +101,9 @@ export class PropertiesPageComponent implements OnInit {
       .subscribe(meta => {
         if (meta) {
           setTimeout(() => {
-            this.totalPages   = meta.pages;
+            this.totalPages = meta.pages;
             this.totalResults = meta.total;
-            this.currentPage  = meta.page;
+            this.currentPage = meta.page;
           });
         }
       });
@@ -112,21 +112,21 @@ export class PropertiesPageComponent implements OnInit {
   private mapToFilters(params: Params): PropertyFilters {
     // Always request up to 1000 properties to display them all on one page
     const baseFilters: PropertyFilters = { limit: 1000 };
-    
+
     if (Object.keys(params).length === 0) return baseFilters;
 
     return {
       ...baseFilters,
-      search:   params['search']   || undefined,
-      city:     params['location'] || params['city'] || undefined,
-      type:     params['type']     as PropertyType | undefined,
-      status:   params['listingType'] === 'rent' ? 'for-rent' :
-                params['listingType'] === 'sale' ? 'for-sale' : undefined,
+      search: params['search'] || undefined,
+      city: params['location'] || params['city'] || undefined,
+      type: params['type'] as PropertyType | undefined,
+      status: params['listingType'] === 'rent' ? 'for-rent' :
+        params['listingType'] === 'sale' ? 'for-sale' : undefined,
       minPrice: params['minPrice'] ? Number(params['minPrice']) : undefined,
       maxPrice: params['maxPrice'] ? Number(params['maxPrice']) : undefined,
       bedrooms: params['bedrooms'] ? Number(params['bedrooms']) : undefined,
-      page:     params['page']     ? Number(params['page'])     : 1,
-      cursor:   params['cursor']   || undefined,
+      page: params['page'] ? Number(params['page']) : 1,
+      cursor: params['cursor'] || undefined,
     };
   }
 
@@ -141,7 +141,7 @@ export class PropertiesPageComponent implements OnInit {
 
   onFilterChange(filter: string): void {
     const queryParams: any = { ...this.route.snapshot.queryParams, page: 1 };
-    
+
     // Clear type and listingType to reset tab state properly
     delete queryParams.type;
     delete queryParams.listingType;
@@ -163,8 +163,8 @@ export class PropertiesPageComponent implements OnInit {
     const val = this.filterForm.value;
     const queryParams: any = { ...this.route.snapshot.queryParams, page: 1 };
 
-    if (val.search)   queryParams.search = val.search;     else delete queryParams.search;
-    if (val.city)     queryParams.city = val.city;         else delete queryParams.city;
+    if (val.search) queryParams.search = val.search; else delete queryParams.search;
+    if (val.city) queryParams.city = val.city; else delete queryParams.city;
     if (val.minPrice) queryParams.minPrice = val.minPrice; else delete queryParams.minPrice;
     if (val.maxPrice) queryParams.maxPrice = val.maxPrice; else delete queryParams.maxPrice;
     if (val.bedrooms) queryParams.bedrooms = val.bedrooms; else delete queryParams.bedrooms;

@@ -3,12 +3,12 @@
   <!-- ── Header ─────────────────────────────────── -->
   <div class="page-header">
     <div class="header-left">
-      <h1 class="page-title">User Directory</h1>
-      <p class="page-subtitle">Manage client access, agent roles, and system permissions.</p>
+      <h1 class="page-title">{{ 'ADMIN.USERS.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'ADMIN.USERS.SUBTITLE' | translate }}</p>
     </div>
     <div class="header-actions">
-      <button class="btn-secondary" title="Export users as CSV">
-        <i class="fa-solid fa-download"></i> Export CSV
+      <button class="btn-secondary" [title]="'ADMIN.USERS.EXPORT_CSV' | translate">
+        <i class="fa-solid fa-download"></i> {{ 'ADMIN.USERS.EXPORT_CSV' | translate }}
       </button>
     </div>
   </div>
@@ -20,7 +20,7 @@
       <input
         id="user-search"
         type="text"
-        placeholder="Search by name, email..."
+        [placeholder]="'ADMIN.USERS.SEARCH_PLACEHOLDER' | translate"
         [value]="searchValue"
         (input)="onSearch($any($event.target).value)"
         autocomplete="off"
@@ -31,15 +31,15 @@
     </div>
 
     <select id="role-filter" class="filter-select" [value]="roleValue" (change)="onRoleChange($any($event.target).value)">
-      <option *ngFor="let r of ROLES" [value]="r.value">{{ r.label }}</option>
+      <option *ngFor="let r of ROLES" [value]="r.value">{{ r.labelKey | translate }}</option>
     </select>
 
     <select id="status-filter" class="filter-select" [value]="statusValue" (change)="onStatusChange($any($event.target).value)">
-      <option *ngFor="let s of STATUSES" [value]="s.value">{{ s.label }}</option>
+      <option *ngFor="let s of STATUSES" [value]="s.value">{{ s.labelKey | translate }}</option>
     </select>
 
     <button class="btn-clear-filters" *ngIf="hasActiveFilters" (click)="clearFilters()">
-      <i class="fa-solid fa-filter-circle-xmark"></i> Clear
+      <i class="fa-solid fa-filter-circle-xmark"></i> {{ 'COMMON.CANCEL' | translate }}
     </button>
   </div>
 
@@ -55,9 +55,9 @@
     <div class="empty-icon">
       <i class="fa-solid fa-users-slash"></i>
     </div>
-    <p class="empty-title">No users found</p>
-    <p class="empty-sub" *ngIf="hasActiveFilters">Try adjusting your filters or search term.</p>
-    <button class="btn-secondary" *ngIf="hasActiveFilters" (click)="clearFilters()">Clear Filters</button>
+    <p class="empty-title">{{ 'ADMIN.USERS.EMPTY.TITLE' | translate }}</p>
+    <p class="empty-sub" *ngIf="hasActiveFilters">{{ 'ADMIN.USERS.EMPTY.SUBTITLE' | translate }}</p>
+    <button class="btn-secondary" *ngIf="hasActiveFilters" (click)="clearFilters()">{{ 'ADMIN.USERS.EMPTY.CLEAR' | translate }}</button>
   </div>
 
   <!-- ── Users Table ─────────────────────────────── -->
@@ -65,12 +65,12 @@
     <table class="users-table">
       <thead>
         <tr>
-          <th class="col-user">User</th>
-          <th class="col-role">Role &amp; Access</th>
-          <th class="col-kyc">KYC</th>
-          <th class="col-joined">Registration</th>
-          <th class="col-status">Status</th>
-          <th class="col-actions">Actions</th>
+          <th class="col-user">{{ 'ADMIN.USERS.TABLE.USER' | translate }}</th>
+          <th class="col-role">{{ 'ADMIN.USERS.TABLE.ROLE' | translate }}</th>
+          <th class="col-kyc">{{ 'ADMIN.USERS.TABLE.KYC' | translate }}</th>
+          <th class="col-joined">{{ 'ADMIN.USERS.TABLE.REGISTRATION' | translate }}</th>
+          <th class="col-status">{{ 'ADMIN.USERS.TABLE.STATUS' | translate }}</th>
+          <th class="col-actions">{{ 'ADMIN.USERS.TABLE.ACTIONS' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -100,14 +100,14 @@
             <!-- Permissions Expandable Section for Admins -->
             <div class="permissions-container" *ngIf="user.role === 'admin'">
               <details class="permissions-details">
-                <summary class="permissions-summary">Manage Permissions</summary>
+                <summary class="permissions-summary">{{ 'ADMIN.USERS.TABLE.MANAGE_PERMISSIONS' | translate }}</summary>
                 <div class="permissions-grid">
                   <label class="permission-toggle" *ngFor="let p of permissionsConfig">
                     <input 
                       type="checkbox" 
                       [checked]="user.permissions?.includes(p)"
                       (change)="onPermissionToggle(user, p, $event)">
-                    <span class="permission-label">{{ p.replace('_', ' ') }}</span>
+                    <span class="permission-label">{{ 'ADMIN.USERS.PERMISSIONS.' + p | translate }}</span>
                   </label>
                 </div>
               </details>
@@ -117,7 +117,7 @@
           <!-- KYC Status -->
           <td class="cell-kyc">
             <span class="kyc-badge" [ngClass]="user.kycStatus">
-              {{ kycLabel(user.kycStatus) }}
+              {{ 'ACCOUNT.KYC_STATUS.' + ((user.kycStatus || 'NOT_SUBMITTED') | uppercase) | translate }}
             </span>
           </td>
 
@@ -130,7 +130,7 @@
           <td class="cell-status">
             <div class="status-indicator" [class.active]="!user.isBanned" [class.banned]="user.isBanned">
               <span class="status-dot"></span>
-              {{ user.isBanned ? 'Banned' : 'Active' }}
+              {{ user.isBanned ? ('ADMIN.USERS.STATUS.BANNED' | translate) : ('ADMIN.USERS.STATUS.ACTIVE' | translate) }}
             </div>
           </td>
 
@@ -152,7 +152,7 @@
     <div class="table-footer">
       <!-- Pagination Context -->
       <div class="pagination-info" *ngIf="totalUsers > 0">
-        Showing {{ showingStart }}–{{ showingEnd }} of {{ totalUsers }} users
+        {{ 'ADMIN.USERS.FOOTER.SHOWING' | translate:{start: showingStart, end: showingEnd, total: totalUsers} }}
       </div>
 
       <!-- Pagination Buttons -->

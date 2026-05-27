@@ -4,21 +4,13 @@
   Visual reference: Template/index.html
 ───────────────────────────────────────────────────────────────────────────── -->
 
-<div
-  class="property-card"
-  [class.property-card--first]="isFirst"
-  [routerLink]="['/properties', property._id]"
+<div class="property-card" [class.property-card--first]="isFirst" [routerLink]="['/properties', property._id]"
   data-cursor-hover>
 
   <!-- Image & Badges Media Container -->
   <div class="property-card-media">
-    <img
-      *ngIf="property.images?.length && !imageError"
-      class="property-img"
-      [src]="property.images[0]"
-      [alt]="property.title"
-      loading="lazy"
-      (error)="onImageError()" />
+    <img *ngIf="property.images?.length && !imageError" class="property-img" [src]="property.images[0]"
+      [alt]="property.title" loading="lazy" (error)="onImageError()" />
 
     <!-- Placeholder when no image or image failed to load -->
     <div *ngIf="!property.images?.length || imageError" class="property-img-placeholder"></div>
@@ -42,10 +34,7 @@
     </div>
 
     <!-- Favorite button -->
-    <button
-      class="property-favorite"
-      [class.property-favorite--active]="isFavorited"
-      (click)="onFavoriteClick($event)"
+    <button class="property-favorite" [class.property-favorite--active]="isFavorited" (click)="onFavoriteClick($event)"
       [attr.aria-label]="(isFavorited ? 'PROPERTIES.NOTIF.REMOVED_FAVORITES' : 'PROPERTIES.NOTIF.ADDED_FAVORITES') | translate"
       data-cursor-hover>
       {{ isFavorited ? '♥' : '♡' }}
@@ -82,11 +71,8 @@
 
     <!-- Permanent Action Button (Aligned at bottom via flex margin-top: auto) -->
     <div class="property-actions">
-      <button
-        class="property-action-btn"
-        [routerLink]="['/properties', property._id]"
-        (click)="$event.stopPropagation()"
-        data-cursor-hover>
+      <button class="property-action-btn" [routerLink]="['/properties', property._id]"
+        (click)="$event.stopPropagation()" data-cursor-hover>
         {{ 'REAL_ESTATE.VIEW_DETAILS' | translate }}
       </button>
     </div>

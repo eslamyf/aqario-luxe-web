@@ -48,31 +48,44 @@
             <i class="fa-solid" [class.fa-check-circle]="user.isVerified" [class.fa-circle-xmark]="!user.isVerified"></i>
             <span>{{ (user.isVerified ? 'ACCOUNT.VERIFIED_IDENTITY' : 'ACCOUNT.UNVERIFIED_ACCOUNT') | translate }}</span>
           </div>
-          <div class="indicator kyc" [ngClass]="user.kycStatus">
+          <div class="indicator kyc" [ngClass]="user.kycStatus" *ngIf="user.role !== 'admin'">
             <i class="fa-solid fa-id-card"></i>
             <span>{{ 'ACCOUNT.KYC' | translate }}: {{ ('ACCOUNT.KYC_STATUS.' + (user.kycStatus | uppercase)) | translate }}</span>
           </div>
         </div>
       </div>
+
+      <div class="header-actions" *ngIf="user.role === 'admin' || user.role === 'owner'">
+        <a *ngIf="user.role === 'admin'" routerLink="/admin" class="btn-dashboard">
+          <i class="fa-solid fa-gauge-high"></i>
+          <span>{{ 'ACCOUNT.GO_TO_ADMIN_DASHBOARD' | translate }}</span>
+        </a>
+        <a *ngIf="user.role === 'owner'" routerLink="/dashboard" class="btn-dashboard">
+          <i class="fa-solid fa-gauge-high"></i>
+          <span>{{ 'ACCOUNT.GO_TO_OWNER_DASHBOARD' | translate }}</span>
+        </a>
+      </div>
     </div>
   </div>
 
   <!-- Real-State Driven KYC Banner -->
-  <app-kyc-status-banner 
-    *ngIf="user.kycStatus !== 'error_fallback'; else kycError"
-    [status]="user.kycStatus" 
-    (onAction)="navigateToKyc()">
-  </app-kyc-status-banner>
+  <ng-container *ngIf="user.role !== 'admin'">
+    <app-kyc-status-banner 
+      *ngIf="user.kycStatus !== 'error_fallback'; else kycError"
+      [status]="user.kycStatus" 
+      (onAction)="navigateToKyc()">
+    </app-kyc-status-banner>
 
-  <ng-template #kycError>
-    <div class="kyc-error-fallback">
-      <i class="fa-solid fa-triangle-exclamation"></i>
-      <div class="error-text">
-        <strong>{{ 'ACCOUNT.SYNC_ERROR' | translate }}</strong>
-        <span>{{ 'ACCOUNT.SYNC_ERROR_DESC' | translate }}</span>
+    <ng-template #kycError>
+      <div class="kyc-error-fallback">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div class="error-text">
+          <strong>{{ 'ACCOUNT.SYNC_ERROR' | translate }}</strong>
+          <span>{{ 'ACCOUNT.SYNC_ERROR_DESC' | translate }}</span>
+        </div>
       </div>
-    </div>
-  </ng-template>
+    </ng-template>
+  </ng-container>
 
   <!-- Account Settings Form -->
   <div class="content-header">

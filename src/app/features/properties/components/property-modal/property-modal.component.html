@@ -5,13 +5,8 @@
   Style B inputs: coding-rules.md §3.5
 ───────────────────────────────────────────────────────────────────────────── -->
 
-<div
-  class="prop-modal-overlay"
-  [class.active]="isActive"
-  (click)="onOverlayClick($event)"
-  role="dialog"
-  aria-modal="true"
-  [attr.aria-label]="property.title">
+<div class="prop-modal-overlay" [class.active]="isActive" (click)="onOverlayClick($event)" role="dialog"
+  aria-modal="true" [attr.aria-label]="property.title">
 
   <div class="prop-modal">
 
@@ -23,16 +18,16 @@
     <!-- ── Image gallery — 2fr | 1fr ────────────────────────────────────── -->
     <div class="prop-modal-images">
       <div class="prop-modal-img-main">
-        <img *ngIf="mainImage"  [src]="mainImage"  [alt]="property.title" loading="eager" />
+        <img *ngIf="mainImage" [src]="mainImage" [alt]="property.title" loading="eager" />
         <div *ngIf="!mainImage" class="prop-modal-img-placeholder"></div>
       </div>
       <div class="prop-modal-img-grid">
         <div class="prop-modal-img-small">
-          <img *ngIf="sideImage1"  [src]="sideImage1" [alt]="property.title" />
+          <img *ngIf="sideImage1" [src]="sideImage1" [alt]="property.title" />
           <div *ngIf="!sideImage1" class="prop-modal-img-placeholder"></div>
         </div>
         <div class="prop-modal-img-small">
-          <img *ngIf="sideImage2"  [src]="sideImage2" [alt]="property.title" />
+          <img *ngIf="sideImage2" [src]="sideImage2" [alt]="property.title" />
           <div *ngIf="!sideImage2" class="prop-modal-img-placeholder"></div>
         </div>
       </div>
@@ -46,7 +41,7 @@
 
         <div class="prop-modal-title">{{ property.title }}</div>
         <div class="prop-modal-location">{{ property.location }}</div>
-        <p   class="prop-modal-description">{{ property.description }}</p>
+        <p class="prop-modal-description">{{ property.description }}</p>
 
         <!-- Specs: beds | baths | area — repeat(3,1fr) gap: 1px -->
         <div class="prop-modal-specs">
@@ -77,15 +72,9 @@
             <!-- Preferred Date -->
             <div class="form-group">
               <label class="form-label" for="viewingDate">{{ 'PROPERTIES.DETAIL.PREFERRED_DATE' | translate }}</label>
-              <input
-                id="viewingDate"
-                type="date"
-                class="form-input"
-                formControlName="preferredDate"
-                [min]="minDate"
+              <input id="viewingDate" type="date" class="form-input" formControlName="preferredDate" [min]="minDate"
                 [class.form-input--error]="viewingForm.get('preferredDate')?.invalid && viewingForm.get('preferredDate')?.touched" />
-              <span
-                *ngIf="viewingForm.get('preferredDate')?.invalid && viewingForm.get('preferredDate')?.touched"
+              <span *ngIf="viewingForm.get('preferredDate')?.invalid && viewingForm.get('preferredDate')?.touched"
                 class="form-error">
                 {{ 'PROPERTIES.DETAIL.ERROR_DATE' | translate }}
               </span>
@@ -94,32 +83,21 @@
             <!-- Preferred Time -->
             <div class="form-group">
               <label class="form-label" for="viewingTime">{{ 'PROPERTIES.DETAIL.PREFERRED_TIME' | translate }}</label>
-              <input
-                id="viewingTime"
-                type="time"
-                class="form-input"
-                formControlName="preferredTime"
+              <input id="viewingTime" type="time" class="form-input" formControlName="preferredTime"
                 [class.form-input--error]="viewingForm.get('preferredTime')?.invalid && viewingForm.get('preferredTime')?.touched" />
-              <span
-                *ngIf="viewingForm.get('preferredTime')?.invalid && viewingForm.get('preferredTime')?.touched"
+              <span *ngIf="viewingForm.get('preferredTime')?.invalid && viewingForm.get('preferredTime')?.touched"
                 class="form-error">
                 {{ 'PROPERTIES.DETAIL.ERROR_TIME' | translate }}
               </span>
             </div>
 
             <div class="modal-form-actions">
-              <button
-                type="submit"
-                class="btn-primary"
-                [disabled]="viewingForm.invalid || isSubmitting"
+              <button type="submit" class="btn-primary" [disabled]="viewingForm.invalid || isSubmitting"
                 data-cursor-hover>
-                {{ isSubmitting ? ('PROPERTIES.DETAIL.SCHEDULING' | translate) : ('PROPERTIES.DETAIL.CONFIRM_VIEWING' | translate) }}
+                {{ isSubmitting ? ('PROPERTIES.DETAIL.SCHEDULING' | translate) : ('PROPERTIES.DETAIL.CONFIRM_VIEWING' |
+                translate) }}
               </button>
-              <button
-                type="button"
-                class="btn-ghost"
-                (click)="activeForm = 'none'"
-                data-cursor-hover>
+              <button type="button" class="btn-ghost" (click)="activeForm = 'none'" data-cursor-hover>
                 {{ 'COMMON.CANCEL' | translate }}
               </button>
             </div>
@@ -134,33 +112,22 @@
             <div class="form-group">
               <label class="form-label" for="inquiryMessage">{{ 'PROPERTIES.DETAIL.YOUR_MESSAGE' | translate }}</label>
               <!-- Style B input — coding-rules.md §3.5 -->
-              <textarea
-                id="inquiryMessage"
-                class="form-input form-textarea"
-                formControlName="message"
-                rows="4"
+              <textarea id="inquiryMessage" class="form-input form-textarea" formControlName="message" rows="4"
                 [placeholder]="'PROPERTIES.DETAIL.INQUIRY_PLACEHOLDER_MODAL' | translate"
                 [class.form-input--error]="inquiryForm.get('message')?.invalid && inquiryForm.get('message')?.touched">
               </textarea>
-              <span
-                *ngIf="inquiryForm.get('message')?.invalid && inquiryForm.get('message')?.touched"
+              <span *ngIf="inquiryForm.get('message')?.invalid && inquiryForm.get('message')?.touched"
                 class="form-error">
                 {{ 'PROPERTIES.DETAIL.ERROR_MESSAGE_LEN' | translate }}
               </span>
             </div>
             <div class="modal-form-actions">
-              <button
-                type="submit"
-                class="btn-primary"
-                [disabled]="inquiryForm.invalid || isSubmitting"
+              <button type="submit" class="btn-primary" [disabled]="inquiryForm.invalid || isSubmitting"
                 data-cursor-hover>
-                {{ isSubmitting ? ('PROPERTIES.DETAIL.SENDING' | translate) : ('PROPERTIES.DETAIL.SEND_MESSAGE' | translate) }}
+                {{ isSubmitting ? ('PROPERTIES.DETAIL.SENDING' | translate) : ('PROPERTIES.DETAIL.SEND_MESSAGE' |
+                translate) }}
               </button>
-              <button
-                type="button"
-                class="btn-ghost"
-                (click)="activeForm = 'none'"
-                data-cursor-hover>
+              <button type="button" class="btn-ghost" (click)="activeForm = 'none'" data-cursor-hover>
                 {{ 'COMMON.CANCEL' | translate }}
               </button>
             </div>
@@ -176,23 +143,18 @@
         <div class="prop-modal-price">{{ formattedPrice }}</div>
 
         <div class="prop-modal-badge" [class.rent]="property.status === 'for-rent'">
-          {{ property.status === 'for-rent' ? ('REAL_ESTATE.FOR_RENT' | translate) : ('REAL_ESTATE.FOR_SALE' | translate) }}
+          {{ property.status === 'for-rent' ? ('REAL_ESTATE.FOR_RENT' | translate) : ('REAL_ESTATE.FOR_SALE' |
+          translate) }}
         </div>
 
         <!-- Action buttons — Task 06: onclick triggers auth guard then shows form -->
         <div class="prop-modal-actions">
-          <button
-            class="btn-primary"
-            [class.btn-primary--active]="activeForm === 'viewing'"
-            (click)="onScheduleViewingClick()"
-            data-cursor-hover>
+          <button class="btn-primary" [class.btn-primary--active]="activeForm === 'viewing'"
+            (click)="onScheduleViewingClick()" data-cursor-hover>
             {{ 'PROPERTIES.DETAIL.SCHEDULE_TITLE' | translate }}
           </button>
-          <button
-            class="btn-secondary"
-            [class.btn-secondary--active]="activeForm === 'inquiry'"
-            (click)="onMakeInquiryClick()"
-            data-cursor-hover>
+          <button class="btn-secondary" [class.btn-secondary--active]="activeForm === 'inquiry'"
+            (click)="onMakeInquiryClick()" data-cursor-hover>
             {{ 'PROPERTIES.DETAIL.INQUIRY_TITLE' | translate }}
           </button>
         </div>

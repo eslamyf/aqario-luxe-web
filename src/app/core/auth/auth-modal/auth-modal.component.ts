@@ -195,6 +195,17 @@ export class AuthModalComponent implements OnInit, OnDestroy {
           const userName = res?.data?.user?.name || 'there';
           this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.GOOGLE_WELCOME', { name: userName }), 'success');
           this.close();
+
+          // Smart login redirection
+          const userObj = res?.data?.user || res?.user;
+          const role = userObj?.role?.toLowerCase() || 'buyer';
+          if (role === 'admin') {
+            this.router.navigate(['/admin/overview']);
+          } else if (role === 'owner') {
+            this.router.navigate(['/dashboard/overview']);
+          } else {
+            this.router.navigate(['/']);
+          }
         },
         error: (err: any) => {
           this.isGoogleLoading = false;
@@ -402,6 +413,16 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         const userName = userObj?.name || 'there';
         this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.WELCOME_BACK', { name: userName }), 'success');
         this.close(); // If success, close the modal
+
+        // Smart login redirection
+        const role = userObj?.role?.toLowerCase() || 'buyer';
+        if (role === 'admin') {
+          this.router.navigate(['/admin/overview']);
+        } else if (role === 'owner') {
+          this.router.navigate(['/dashboard/overview']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: (err: any) => {
         this.isLoading = false;

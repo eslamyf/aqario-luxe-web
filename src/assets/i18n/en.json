@@ -38,7 +38,25 @@
     "EDIT": "Edit",
     "SUBMIT": "Submit",
     "STATUS": "Status",
-    "ACTIONS": "Actions"
+    "ACTIONS": "Actions",
+    "PAGE_INFO": "Page {{current}} of {{total}}",
+    "PROCESSING": "Processing...",
+    "PREV": "Prev",
+    "NEXT": "Next",
+    "MONTHS": {
+      "JAN": "Jan",
+      "FEB": "Feb",
+      "MAR": "Mar",
+      "APR": "Apr",
+      "MAY": "May",
+      "JUN": "Jun",
+      "JUL": "Jul",
+      "AUG": "Aug",
+      "SEP": "Sep",
+      "OCT": "Oct",
+      "NOV": "Nov",
+      "DEC": "Dec"
+    }
   },
   "REAL_ESTATE": {
     "VILLA": "Villa",
@@ -70,7 +88,10 @@
     "AGENT": "Agent",
     "BUYER": "Buyer",
     "ADMIN": "Admin",
-    "COMMERCIAL": "Commercial"
+    "COMMERCIAL": "Commercial",
+    "OFFICE": "Office",
+    "STUDIO": "Studio",
+    "PROPERTY": "Property"
   },
   "HOME": {
     "HERO": {
@@ -405,7 +426,9 @@
       "RE_SUBMIT": "RE-SUBMIT DOCUMENTS",
       "START": "START VERIFICATION",
       "PENDING_REVIEW": "PENDING REVIEW"
-    }
+    },
+    "GO_TO_ADMIN_DASHBOARD": "Go to Admin Dashboard",
+    "GO_TO_OWNER_DASHBOARD": "Go to Owner Dashboard"
   },
   "DASHBOARD": {
     "IDENTITY_NOT_VERIFIED": "Identity not verified",
@@ -836,7 +859,327 @@
       "FORM": {
         "ROOMS": "Rooms",
         "BATHROOMS": "Bathrooms"
+      },
+      "TRANSACTIONS": {
+        "TITLE": "Recent Transactions",
+        "VIEW_ALL": "VIEW ALL",
+        "UNKNOWN_USER": "Unknown User",
+        "PROPERTY_PREFIX": "Property",
+        "COLS": {
+          "USER": "USER",
+          "PROPERTY": "PROPERTY",
+          "DATE": "DATE",
+          "STATUS": "STATUS",
+          "AMOUNT": "AMOUNT",
+          "ACTIONS": "ACTIONS"
+        },
+        "STATUS": {
+          "COMPLETED": "CONFIRMED",
+          "REFUNDED": "REFUNDED",
+          "PENDING": "PENDING",
+          "FAILED": "FAILED",
+          "EXPIRED": "EXPIRED"
+        },
+        "REFUND": "REFUND",
+        "PROCESSING": "Processing...",
+        "EMPTY": "No recent transactions found."
+      },
+      "ACTIVITY": {
+        "TITLE": "System Activity",
+        "EMPTY": "No recent activity.",
+        "OPEN_LOG": "OPEN ACTIVITY LOG"
       }
+    },
+    "PROPERTIES": {
+      "TITLE": "Property Management",
+      "SUBTITLE": "Manage, review, and moderate luxury listings across the global portfolio.",
+      "TABS": {
+        "PENDING": "Pending Review",
+        "APPROVED": "Approved",
+        "ALL": "All Listings"
+      },
+      "SEARCH_PLACEHOLDER": "Search by property title...",
+      "FILTERS": {
+        "ALL_TYPES": "All Types",
+        "ANY_PRICE": "Any Price",
+        "PRICE_LOW": "Under $500k (Entry)",
+        "PRICE_MEDIUM": "$500k - $5M (Premium)",
+        "PRICE_HIGH": "Above $5M (Ultra-Luxury)"
+      },
+      "FETCHING": "Fetching Portfolio...",
+      "EMPTY": "No properties found matching your criteria.",
+      "UNKNOWN_USER": "Unknown User",
+      "DRAWER": {
+        "DETAILS_TITLE": "Property Details",
+        "IMAGES_COUNT": "+{{count}} Images",
+        "STATUS_APPROVED": "Approved & Live",
+        "STATUS_PENDING": "Under Review",
+        "SQ_FT": "Sq Ft",
+        "TYPE": "Type",
+        "DESC_TITLE": "Description",
+        "AMENITIES_TITLE": "Amenities & Features",
+        "PROPERTY_OWNER": "Property Owner",
+        "REJECT": "Reject Listing",
+        "APPROVE": "Approve & Publish"
+      }
+    },
+    "USERS": {
+      "TITLE": "User Directory",
+      "SUBTITLE": "Manage client access, agent roles, and system permissions.",
+      "EXPORT_CSV": "Export CSV",
+      "SEARCH_PLACEHOLDER": "Search by name, email...",
+      "ROLES": {
+        "ALL": "All Roles",
+        "BUYER": "Buyer",
+        "OWNER": "Owner",
+        "AGENT": "Agent",
+        "ADMIN": "Admin"
+      },
+      "STATUSES": {
+        "ALL": "All Statuses",
+        "ACTIVE": "Active",
+        "BANNED": "Banned"
+      },
+      "EMPTY": {
+        "TITLE": "No users found",
+        "SUBTITLE": "Try adjusting your filters or search term.",
+        "CLEAR": "Clear Filters"
+      },
+      "TABLE": {
+        "USER": "User",
+        "ROLE": "Role & Access",
+        "KYC": "KYC",
+        "REGISTRATION": "Registration",
+        "STATUS": "Status",
+        "ACTIONS": "Actions",
+        "MANAGE_PERMISSIONS": "Manage Permissions"
+      },
+      "STATUS": {
+        "ACTIVE": "Active",
+        "BANNED": "Banned"
+      },
+      "PERMISSIONS": {
+        "MANAGE_USERS": "Manage Users",
+        "MANAGE_PROPERTIES": "Manage Properties",
+        "MANAGE_BOOKINGS": "Manage Bookings",
+        "VIEW_AUDIT": "View Audit Logs",
+        "MANAGE_KYC": "Manage KYC"
+      },
+      "FOOTER": {
+        "SHOWING": "Showing {{start}}–{{end}} of {{total}} users"
+      },
+      "ACTIONS": {
+        "CHANGE_ROLE": "Change Role",
+        "UNBAN": "Unban User",
+        "BAN": "Ban User",
+        "SUBSCRIPTION": "Subscription",
+        "HARD_CANCEL": "Hard Cancel Sub"
+      },
+      "CONFIRMATION": {
+        "ROLE": {
+          "TITLE": "Change User Role",
+          "MESSAGE": "Are you sure you want to change \"{{name}}\" role to {{role}}?",
+          "CONFIRM": "Set as {{role}}"
+        },
+        "BAN": {
+          "TITLE": "Ban User",
+          "MESSAGE": "This will prevent \"{{name}}\" from accessing the platform.",
+          "CONFIRM": "Ban User"
+        },
+        "UNBAN": {
+          "TITLE": "Unban User",
+          "MESSAGE": "This will restore \"{{name}}\" access to the platform.",
+          "CONFIRM": "Unban User"
+        },
+        "CANCEL": {
+          "TITLE": "Revoke Subscription",
+          "MESSAGE": "This will immediately terminate {{name}}'s subscription. They will lose access to pro features instantly.",
+          "CONFIRM": "Confirm Revocation",
+          "REASON_PLACEHOLDER": "Reason for revocation...",
+          "ARCHIVE_LISTINGS": "Also archive all active listings"
+        }
+      }
+    },
+    "KYC": {
+      "TITLE": "Identity Verification",
+      "SEARCH_PLACEHOLDER": "Search identities...",
+      "TABS": {
+        "PENDING": "Pending ({{count}})",
+        "APPROVED": "Approved ({{count}})",
+        "REJECTED": "Rejected ({{count}})"
+      },
+      "EMPTY": "No identities found",
+      "TAGS": {
+        "HNW": "HIGH NET WORTH",
+        "TIER1": "TIER 1 ASSESSMENT",
+        "VERSION": "VERSION {{version}}"
+      },
+      "RISK": {
+        "TITLE": "RISK PROFILE",
+        "LOW": "LOW RISK ASSESSMENT"
+      },
+      "SECTIONS": {
+        "DOC_SCANS": "DOCUMENT SCANS",
+        "EXTRACTED_INFO": "EXTRACTED INFORMATION",
+        "OWNERSHIP_DOCS": "OWNERSHIP VERIFICATION DOCUMENTS"
+      },
+      "SCANS": {
+        "FRONT": "FRONT SIDE",
+        "BACK": "REVERSE SIDE"
+      },
+      "FIELDS": {
+        "LEGAL_NAME": "FULL LEGAL NAME",
+        "NATIONALITY": "NATIONALITY",
+        "GLOBAL_CITIZEN": "GLOBAL CITIZEN"
+      },
+      "DOCS": {
+        "DEFAULT_NAME": "Verification Document",
+        "DEFAULT_TYPE": "Document"
+      },
+      "REJECTION_REASON": "REJECTION REASON",
+      "REF_ID": "REFERENCE ID",
+      "ACTIONS": {
+        "REJECT": "REJECT APPLICATION",
+        "APPROVE": "APPROVE & VERIFY",
+        "SET_PENDING": "SET TO PENDING",
+        "REJECT_AFTER_APPROVE": "REJECT AFTER APPROVAL",
+        "REEVALUATE": "RE-EVALUATE",
+        "APPROVE_REGARDLESS": "APPROVE REGARDLESS"
+      },
+      "NO_SELECTION": {
+        "TITLE": "Select an identity to verify",
+        "SUBTITLE": "Choose a user from the list to begin the assessment process."
+      },
+      "REJECT_MODAL": {
+        "TITLE": "Rejection Protocol",
+        "INSTRUCTION": "Please specify the reason for declining this verification request. This will be visible to the user.",
+        "PLACEHOLDER": "Enter reason for rejection...",
+        "CONFIRM": "CONFIRM REJECTION"
+      }
+    },
+    "BOOKINGS": {
+      "TITLE": "Bookings Operating System",
+      "SUBTITLE": "Mission-critical reservation management & financial oversight.",
+      "INSIGHTS": {
+        "AT_RISK": "Bookings at Risk (Failed Payment)",
+        "HIGH_VALUE": "High-Value Approvals Pending",
+        "TASKS_REMAINING": "Total Tasks Remaining"
+      },
+      "SELECTED": "{{count}} SELECTED",
+      "APPROVE_ALL": "APPROVE ALL",
+      "REJECT_ALL": "REJECT ALL",
+      "EXPORT_CSV": "EXPORT CSV",
+      "SEARCH_PLACEHOLDER": "Filter by client, property, or ID...",
+      "FILTERS": {
+        "ALL": "All"
+      },
+      "SORT": {
+        "NEWEST": "Newest First",
+        "HIGHEST_VALUE": "Highest Value"
+      },
+      "TABLE": {
+        "ID": "Booking ID",
+        "CLIENT": "Client",
+        "PROPERTY": "Property",
+        "LOCATION": "Location",
+        "DATE_RANGE": "Date Range",
+        "TOTAL_AMOUNT": "Total Amount",
+        "STATUS": "Status"
+      },
+      "STATUS": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected",
+        "CANCELLED": "Cancelled"
+      },
+      "PAYMENT": {
+        "PENDING": "Pending",
+        "COMPLETED": "Completed",
+        "FAILED": "Failed",
+        "REFUNDED": "Refunded"
+      },
+      "FOOTER": {
+        "SHOWING": "Showing <strong>{{count}}</strong> of <strong>{{total}}</strong> results"
+      },
+      "EMPTY": "No reservations matching your filters.",
+      "LOADING": "Loading Operations Engine...",
+      "PANEL": {
+        "SHORTCUT_APPROVE": "PRESS A TO APPROVE",
+        "SHORTCUT_REJECT": "PRESS R TO REJECT",
+        "BOOKING_PREFIX": "BOOKING",
+        "TITLE": "Reservation Control",
+        "PRIMARY_GUEST": "Primary Guest",
+        "PROPERTY_OVERVIEW": "Property Overview",
+        "AUDIT_HISTORY": "Audit History & Timeline",
+        "INITIAL_SUBMISSION": "Initial Submission",
+        "BY": "by",
+        "ACTIONS": {
+          "APPROVE": "APPROVE RESERVATION",
+          "REJECT": "REJECT WITH REASON"
+        }
+      }
+    },
+    "AUDIT": {
+      "TITLE": "Audit Trail",
+      "SUBTITLE": "{{count}} administrative actions recorded",
+      "FILTERS": {
+        "ACTION": "Action Type",
+        "RESOURCE": "Resource Type",
+        "FROM_DATE": "From Date",
+        "TO_DATE": "To Date",
+        "RESET": "Reset",
+        "ALL_ACTIONS": "All Actions",
+        "ALL_RESOURCES": "All Resources"
+      },
+      "RESOURCES": {
+        "PROPERTY": "Property",
+        "BOOKING": "Booking",
+        "USER": "User",
+        "REVIEW": "Review",
+        "AUCTION": "Auction"
+      },
+      "LOADING": "Loading audit records…",
+      "EMPTY": "No audit records found",
+      "TABLE": {
+        "ACTOR": "Actor",
+        "ACTION": "Action",
+        "RESOURCE": "Resource",
+        "DATE_TIME": "Date & Time",
+        "DETAILS": "Details"
+      },
+      "UNKNOWN_ACTOR": "Unknown",
+      "TOOLTIP": {
+        "COLLAPSE": "Collapse",
+        "VIEW_CHANGES": "View Changes"
+      },
+      "DETAILS": {
+        "BEFORE": "Before",
+        "AFTER": "After",
+        "IP": "IP:",
+        "REASON": "Reason:"
+      },
+      "FOOTER": {
+        "PAGE_INFO": "Page {{current}} of {{total}}"
+      }
+    }
+  },
+  "AUDIT": {
+    "ACTIONS": {
+      "APPROVE_PROPERTY": "Approve Property",
+      "REJECT_PROPERTY": "Reject Property",
+      "APPROVE_BOOKING": "Approve Booking",
+      "REJECT_BOOKING": "Reject Booking",
+      "BULK_UPDATE_BOOKINGS": "Bulk Update Bookings",
+      "BAN_USER": "Ban User",
+      "UNBAN_USER": "Unban User",
+      "CHANGE_ROLE": "Change Role",
+      "UPDATE_PERMISSIONS": "Update Permissions",
+      "APPROVE_KYC": "Approve KYC",
+      "REJECT_KYC": "Reject KYC",
+      "REVERT_KYC": "Revert KYC",
+      "RESET_KYC": "Reset KYC",
+      "DELETE_REVIEW": "Delete Review",
+      "APPROVE_AUCTION": "Approve Auction"
     }
   }
 }

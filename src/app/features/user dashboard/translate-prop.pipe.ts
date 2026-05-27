@@ -4,7 +4,8 @@ import { AR_TRANSLATIONS } from '../properties/services/properties.service';
 
 @Pipe({
   name: 'translateProp',
-  pure: false
+  pure: false,
+  standalone: true
 })
 export class TranslatePropPipe implements PipeTransform {
   private translate = inject(TranslateService);

@@ -132,6 +132,10 @@ export class AdminAuditComponent implements OnInit, OnDestroy {
     return this.ACTION_COLORS[action] || 'slate';
   }
 
+  getActionLabel(action: string): string {
+    return `AUDIT.ACTIONS.${action}`;
+  }
+
   formatChanges(changes: any): string {
     return JSON.stringify(changes, null, 2);
   }

@@ -38,7 +38,25 @@
     "EDIT": "تعديل",
     "SUBMIT": "إرسال",
     "STATUS": "الحالة",
-    "ACTIONS": "الإجراءات"
+    "ACTIONS": "الإجراءات",
+    "PAGE_INFO": "الصفحة {{current}} من أصل {{total}}",
+    "PROCESSING": "جاري المعالجة...",
+    "PREV": "السابق",
+    "NEXT": "التالي",
+    "MONTHS": {
+      "JAN": "يناير",
+      "FEB": "فبراير",
+      "MAR": "مارس",
+      "APR": "أبريل",
+      "MAY": "مايو",
+      "JUN": "يونيو",
+      "JUL": "يوليو",
+      "AUG": "أغسطس",
+      "SEP": "سبتمبر",
+      "OCT": "أكتوبر",
+      "NOV": "نوفمبر",
+      "DEC": "ديسمبر"
+    }
   },
   "REAL_ESTATE": {
     "VILLA": "فيلا",
@@ -70,7 +88,10 @@
     "AGENT": "الوكيل",
     "BUYER": "المشتري",
     "ADMIN": "مسؤول",
-    "COMMERCIAL": "عقارات تجارية"
+    "COMMERCIAL": "عقارات تجارية",
+    "OFFICE": "مكتب",
+    "STUDIO": "استوديو",
+    "PROPERTY": "عقار"
   },
   "HOME": {
     "HERO": {
@@ -405,7 +426,9 @@
       "RE_SUBMIT": "إعادة تقديم المستندات",
       "START": "بدء التحقق",
       "PENDING_REVIEW": "قيد المراجعة"
-    }
+    },
+    "GO_TO_ADMIN_DASHBOARD": "الذهاب إلى لوحة تحكم الأدمن",
+    "GO_TO_OWNER_DASHBOARD": "الذهاب إلى لوحة تحكم المالك"
   },
   "DASHBOARD": {
     "IDENTITY_NOT_VERIFIED": "الهوية غير مؤكدة",
@@ -832,7 +855,327 @@
       "MONTH": "شهر",
       "QUARTER": "ربع سنة",
       "YEAR": "سنة",
-      "TOTAL_REVENUE": "إجمالي الإيرادات"
+      "TOTAL_REVENUE": "إجمالي الإيرادات",
+      "TRANSACTIONS": {
+        "TITLE": "العمليات الأخيرة",
+        "VIEW_ALL": "عرض الكل",
+        "UNKNOWN_USER": "مستخدم غير معروف",
+        "PROPERTY_PREFIX": "عقار",
+        "COLS": {
+          "USER": "المستخدم",
+          "PROPERTY": "العقار",
+          "DATE": "التاريخ",
+          "STATUS": "الحالة",
+          "AMOUNT": "المبلغ",
+          "ACTIONS": "الإجراءات"
+        },
+        "STATUS": {
+          "COMPLETED": "مؤكد",
+          "REFUNDED": "مسترجع",
+          "PENDING": "قيد الانتظار",
+          "FAILED": "فاشل",
+          "EXPIRED": "منتهي"
+        },
+        "REFUND": "استرجاع",
+        "PROCESSING": "جاري المعالجة...",
+        "EMPTY": "لم يتم العثور على عمليات حديثة."
+      },
+      "ACTIVITY": {
+        "TITLE": "نشاط النظام",
+        "EMPTY": "لا يوجد نشاط حديث.",
+        "OPEN_LOG": "فتح سجل النشاط"
+      }
+    },
+    "PROPERTIES": {
+      "TITLE": "إدارة العقارات",
+      "SUBTITLE": "إدارة ومراجعة والإشراف على العقارات الفاخرة في المحفظة العالمية.",
+      "TABS": {
+        "PENDING": "قيد المراجعة",
+        "APPROVED": "مقبول",
+        "ALL": "جميع العقارات"
+      },
+      "SEARCH_PLACEHOLDER": "البحث عن طريق عنوان العقار...",
+      "FILTERS": {
+        "ALL_TYPES": "جميع الأنواع",
+        "ANY_PRICE": "أي سعر",
+        "PRICE_LOW": "أقل من 500 ألف دولار (اقتصادي)",
+        "PRICE_MEDIUM": "500 ألف - 5 مليون دولار (مميز)",
+        "PRICE_HIGH": "أكثر من 5 مليون دولار (فاخر للغاية)"
+      },
+      "FETCHING": "جاري جلب المحفظة العقارية...",
+      "EMPTY": "لم يتم العثور على عقارات تطابق معايير البحث الخاصة بك.",
+      "UNKNOWN_USER": "مستخدم غير معروف",
+      "DRAWER": {
+        "DETAILS_TITLE": "تفاصيل العقار",
+        "IMAGES_COUNT": "+{{count}} صور",
+        "STATUS_APPROVED": "مقبول ونشط",
+        "STATUS_PENDING": "تحت المراجعة",
+        "SQ_FT": "قدم مربع",
+        "TYPE": "النوع",
+        "DESC_TITLE": "الوصف",
+        "AMENITIES_TITLE": "المرافق والميزات",
+        "PROPERTY_OWNER": "مالك العقار",
+        "REJECT": "رفض العقار",
+        "APPROVE": "قبول ونشر"
+      }
+    },
+    "USERS": {
+      "TITLE": "دليل المستخدمين",
+      "SUBTITLE": "إدارة وصول العملاء، وأدوار الوكلاء، وصلاحيات النظام.",
+      "EXPORT_CSV": "تصدير CSV",
+      "SEARCH_PLACEHOLDER": "البحث بالاسم أو البريد الإلكتروني...",
+      "ROLES": {
+        "ALL": "جميع الأدوار",
+        "BUYER": "مشتري",
+        "OWNER": "مالك",
+        "AGENT": "وكيل",
+        "ADMIN": "مدير"
+      },
+      "STATUSES": {
+        "ALL": "جميع الحالات",
+        "ACTIVE": "نشط",
+        "BANNED": "محظور"
+      },
+      "EMPTY": {
+        "TITLE": "لم يتم العثور على مستخدمين",
+        "SUBTITLE": "حاول ضبط الفلاتر أو مصطلحات البحث.",
+        "CLEAR": "إعادة تعيين الفلاتر"
+      },
+      "TABLE": {
+        "USER": "المستخدم",
+        "ROLE": "الدور والوصول",
+        "KYC": "توثيق الهوية (KYC)",
+        "REGISTRATION": "التسجيل",
+        "STATUS": "الحالة",
+        "ACTIONS": "الإجراءات",
+        "MANAGE_PERMISSIONS": "إدارة الصلاحيات"
+      },
+      "STATUS": {
+        "ACTIVE": "نشط",
+        "BANNED": "محظور"
+      },
+      "PERMISSIONS": {
+        "MANAGE_USERS": "إدارة المستخدمين",
+        "MANAGE_PROPERTIES": "إدارة العقارات",
+        "MANAGE_BOOKINGS": "إدارة الحجوزات",
+        "VIEW_AUDIT": "عرض سجلات التدقيق",
+        "MANAGE_KYC": "إدارة توثيق الهوية"
+      },
+      "FOOTER": {
+        "SHOWING": "عرض {{start}}–{{end}} من أصل {{total}} مستخدم"
+      },
+      "ACTIONS": {
+        "CHANGE_ROLE": "تغيير الدور",
+        "UNBAN": "إلغاء حظر المستخدم",
+        "BAN": "حظر المستخدم",
+        "SUBSCRIPTION": "الاشتراك",
+        "HARD_CANCEL": "إلغاء الاشتراك الفوري"
+      },
+      "CONFIRMATION": {
+        "ROLE": {
+          "TITLE": "تغيير دور المستخدم",
+          "MESSAGE": "هل أنت متأكد أنك تريد تغيير دور \"{{name}}\" إلى {{role}}؟",
+          "CONFIRM": "تعيين كـ {{role}}"
+        },
+        "BAN": {
+          "TITLE": "حظر المستخدم",
+          "MESSAGE": "سيمنع هذا الإجراء \"{{name}}\" من الوصول إلى المنصة.",
+          "CONFIRM": "حظر المستخدم"
+        },
+        "UNBAN": {
+          "TITLE": "إلغاء حظر المستخدم",
+          "MESSAGE": "سيعيد هذا الإجراء لـ \"{{name}}\" إمكانية الوصول إلى المنصة.",
+          "CONFIRM": "إلغاء الحظر"
+        },
+        "CANCEL": {
+          "TITLE": "إلغاء الاشتراك الفوري",
+          "MESSAGE": "سيؤدي هذا إلى إنهاء اشتراك {{name}} على الفور وسيفقد إمكانية الوصول إلى الميزات الاحترافية فوراً.",
+          "CONFIRM": "تأكيد الإلغاء",
+          "REASON_PLACEHOLDER": "سبب إلغاء الاشتراك...",
+          "ARCHIVE_LISTINGS": "أرشفة جميع العقارات النشطة أيضاً"
+        }
+      }
+    },
+    "KYC": {
+      "TITLE": "توثيق الهوية",
+      "SEARCH_PLACEHOLDER": "البحث في الهويات...",
+      "TABS": {
+        "PENDING": "قيد المراجعة ({{count}})",
+        "APPROVED": "مقبول ({{count}})",
+        "REJECTED": "مرفوض ({{count}})"
+      },
+      "EMPTY": "لم يتم العثور على طلبات توثيق",
+      "TAGS": {
+        "HNW": "أصول مالية عالية",
+        "TIER1": "تقييم المستوى الأول",
+        "VERSION": "النسخة {{version}}"
+      },
+      "RISK": {
+        "TITLE": "ملف المخاطر",
+        "LOW": "تقييم مخاطر منخفضة"
+      },
+      "SECTIONS": {
+        "DOC_SCANS": "نسخ المستندات الضوئية",
+        "EXTRACTED_INFO": "المعلومات المستخرجة",
+        "OWNERSHIP_DOCS": "مستندات إثبات الملكية"
+      },
+      "SCANS": {
+        "FRONT": "الوجه الأمامي",
+        "BACK": "الوجه الخلفي"
+      },
+      "FIELDS": {
+        "LEGAL_NAME": "الاسم القانوني الكامل",
+        "NATIONALITY": "الجنسية",
+        "GLOBAL_CITIZEN": "مواطن عالمي"
+      },
+      "DOCS": {
+        "DEFAULT_NAME": "مستند التوثيق",
+        "DEFAULT_TYPE": "مستند"
+      },
+      "REJECTION_REASON": "سبب الرفض",
+      "REF_ID": "الرقم المرجعي",
+      "ACTIONS": {
+        "REJECT": "رفض الطلب",
+        "APPROVE": "موافقة وتوثيق",
+        "SET_PENDING": "تعيين كقيد الانتظار",
+        "REJECT_AFTER_APPROVE": "رفض بعد القبول",
+        "REEVALUATE": "إعادة تقييم",
+        "APPROVE_REGARDLESS": "موافقة على أي حال"
+      },
+      "NO_SELECTION": {
+        "TITLE": "اختر هوية للتحقق منها",
+        "SUBTITLE": "اختر مستخدماً من القائمة لبدء عملية التقييم والتوثيق."
+      },
+      "REJECT_MODAL": {
+        "TITLE": "بروتوكول الرفض",
+        "INSTRUCTION": "يرجى تحديد سبب رفض طلب التوثيق هذا. سيكون هذا السبب مرئياً للمستخدم.",
+        "PLACEHOLDER": "أدخل سبب الرفض هنا...",
+        "CONFIRM": "تأكيد الرفض"
+      }
+    },
+    "BOOKINGS": {
+      "TITLE": "نظام تشغيل الحجوزات",
+      "SUBTITLE": "إدارة الحجوزات والرقابة المالية الحيوية للمنصة.",
+      "INSIGHTS": {
+        "AT_RISK": "حجوزات معرضة للخطر (فشل الدفع)",
+        "HIGH_VALUE": "موافقات مبالغ عالية معلقة",
+        "TASKS_REMAINING": "إجمالي المهام المتبقية"
+      },
+      "SELECTED": "تم تحديد {{count}}",
+      "APPROVE_ALL": "قبول الكل",
+      "REJECT_ALL": "رفض الكل",
+      "EXPORT_CSV": "تصدير CSV",
+      "SEARCH_PLACEHOLDER": "تصفية حسب العميل أو العقار أو المعرف...",
+      "FILTERS": {
+        "ALL": "الكل"
+      },
+      "SORT": {
+        "NEWEST": "الأحدث أولاً",
+        "HIGHEST_VALUE": "الأعلى قيمة"
+      },
+      "TABLE": {
+        "ID": "معرف الحجز",
+        "CLIENT": "العميل",
+        "PROPERTY": "العقار",
+        "LOCATION": "الموقع",
+        "DATE_RANGE": "فترة الحجز",
+        "TOTAL_AMOUNT": "المبلغ الإجمالي",
+        "STATUS": "الحالة"
+      },
+      "STATUS": {
+        "PENDING": "معلق",
+        "APPROVED": "مقبول",
+        "REJECTED": "مرفوض",
+        "CANCELLED": "ملغي"
+      },
+      "PAYMENT": {
+        "PENDING": "معلق",
+        "COMPLETED": "مكتمل",
+        "FAILED": "فاشل",
+        "REFUNDED": "مسترجع"
+      },
+      "FOOTER": {
+        "SHOWING": "عرض <strong>{{count}}</strong> من أصل <strong>{{total}}</strong> نتائج"
+      },
+      "EMPTY": "لا توجد حجوزات تطابق الفلاتر المحددة.",
+      "LOADING": "جاري تحميل محرك العمليات...",
+      "PANEL": {
+        "SHORTCUT_APPROVE": "اضغط A للقبول",
+        "SHORTCUT_REJECT": "اضغط R للرفض",
+        "BOOKING_PREFIX": "حجز رقم",
+        "TITLE": "التحكم في الحجز",
+        "PRIMARY_GUEST": "العميل الرئيسي",
+        "PROPERTY_OVERVIEW": "نظرة عامة على العقار",
+        "AUDIT_HISTORY": "سجل التدقيق والجدول الزمني",
+        "INITIAL_SUBMISSION": "التقديم الأولي",
+        "BY": "بواسطة",
+        "ACTIONS": {
+          "APPROVE": "الموافقة على الحجز",
+          "REJECT": "الرفض مع ذكر السبب"
+        }
+      }
+    },
+    "AUDIT": {
+      "TITLE": "سجل التدقيق",
+      "SUBTITLE": "تم تسجيل {{count}} إجراء إداري",
+      "FILTERS": {
+        "ACTION": "نوع الإجراء",
+        "RESOURCE": "نوع المورد",
+        "FROM_DATE": "من تاريخ",
+        "TO_DATE": "إلى تاريخ",
+        "RESET": "إعادة تعيين",
+        "ALL_ACTIONS": "جميع الإجراءات",
+        "ALL_RESOURCES": "جميع الموارد"
+      },
+      "RESOURCES": {
+        "PROPERTY": "عقار",
+        "BOOKING": "حجز",
+        "USER": "مستخدم",
+        "REVIEW": "تقييم",
+        "AUCTION": "مزاد"
+      },
+      "LOADING": "جاري تحميل سجلات التدقيق...",
+      "EMPTY": "لم يتم العثور على سجلات تدقيق",
+      "TABLE": {
+        "ACTOR": "المنفذ",
+        "ACTION": "الإجراء",
+        "RESOURCE": "المورد",
+        "DATE_TIME": "التاريخ والوقت",
+        "DETAILS": "التفاصيل"
+      },
+      "UNKNOWN_ACTOR": "غير معروف",
+      "TOOLTIP": {
+        "COLLAPSE": "طي التفاصيل",
+        "VIEW_CHANGES": "عرض التغييرات"
+      },
+      "DETAILS": {
+        "BEFORE": "قبل",
+        "AFTER": "بعد",
+        "IP": "عنوان IP:",
+        "REASON": "السبب:"
+      },
+      "FOOTER": {
+        "PAGE_INFO": "الصفحة {{current}} من أصل {{total}}"
+      }
+    }
+  },
+  "AUDIT": {
+    "ACTIONS": {
+      "APPROVE_PROPERTY": "قبول العقار",
+      "REJECT_PROPERTY": "رفض العقار",
+      "APPROVE_BOOKING": "الموافقة على الحجز",
+      "REJECT_BOOKING": "رفض الحجز",
+      "BULK_UPDATE_BOOKINGS": "تحديث جماعي للحجوزات",
+      "BAN_USER": "حظر مستخدم",
+      "UNBAN_USER": "إلغاء حظر مستخدم",
+      "CHANGE_ROLE": "تغيير الدور",
+      "UPDATE_PERMISSIONS": "تحديث الصلاحيات",
+      "APPROVE_KYC": "قبول توثيق الهوية",
+      "REJECT_KYC": "رفض توثيق الهوية",
+      "REVERT_KYC": "استرجاع توثيق الهوية",
+      "RESET_KYC": "إعادة تعيين توثيق الهوية",
+      "DELETE_REVIEW": "حذف التقييم",
+      "APPROVE_AUCTION": "الموافقة على المزاد"
     }
   }
 }

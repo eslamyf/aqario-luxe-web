@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { AdminUser } from '../../admin.service';
 
 export type UserRole = 'buyer' | 'owner' | 'agent' | 'admin';
@@ -22,7 +23,7 @@ interface ConfirmationConfig {
 @Component({
   selector: 'app-user-actions',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   template: `
     <!-- Trigger button -->
     <div class="actions-wrapper">
@@ -37,7 +38,7 @@ interface ConfirmationConfig {
         </div>
 
         <div class="dropdown-section">
-          <p class="section-label">Change Role</p>
+          <p class="section-label">{{ 'ADMIN.USERS.ACTIONS.CHANGE_ROLE' | translate }}</p>
           <button
             *ngFor="let role of availableRoles"
             class="dropdown-item role-item"
@@ -45,7 +46,7 @@ interface ConfirmationConfig {
             [disabled]="user.role === role.value || loading"
             (click)="requestRoleChange(role.value)">
             <i class="fa-solid" [ngClass]="role.icon"></i>
-            {{ role.label }}
+            {{ role.labelKey | translate }}
             <i class="fa-solid fa-check current-check" *ngIf="user.role === role.value"></i>
           </button>
         </div>
@@ -60,20 +61,20 @@ interface ConfirmationConfig {
             [disabled]="loading"
             (click)="requestBanToggle()">
             <i class="fa-solid" [ngClass]="user.isBanned ? 'fa-user-check' : 'fa-user-slash'"></i>
-            {{ user.isBanned ? 'Unban User' : 'Ban User' }}
+            {{ user.isBanned ? ('ADMIN.USERS.ACTIONS.UNBAN' | translate) : ('ADMIN.USERS.ACTIONS.BAN' | translate) }}
           </button>
         </div>
 
         <div class="dropdown-divider" *ngIf="user.subscriptionStatus === 'active'"></div>
 
         <div class="dropdown-section" *ngIf="user.subscriptionStatus === 'active'">
-          <p class="section-label">Subscription</p>
+          <p class="section-label">{{ 'ADMIN.USERS.ACTIONS.SUBSCRIPTION' | translate }}</p>
           <button
             class="dropdown-item hard-cancel-action"
             [disabled]="loading"
             (click)="requestHardCancel()">
             <i class="fa-solid fa-radiation"></i>
-            Hard Cancel Sub
+            {{ 'ADMIN.USERS.ACTIONS.HARD_CANCEL' | translate }}
           </button>
         </div>
       </div>
@@ -85,27 +86,27 @@ interface ConfirmationConfig {
         <div class="modal-icon" [class.danger]="confirmation.danger">
           <i class="fa-solid" [ngClass]="confirmation.type === 'ban' ? 'fa-user-slash' : 'fa-shield-halved'"></i>
         </div>
-        <h3 class="modal-title">{{ confirmation.title }}</h3>
-        <p class="modal-message">{{ confirmation.message }}</p>
+        <h3 class="modal-title">{{ confirmation.title | translate }}</h3>
+        <p class="modal-message">{{ confirmation.message | translate:{name: user.name, role: ('REAL_ESTATE.' + (confirmation.newRole | uppercase) | translate)} }}</p>
 
         <!-- Hard Cancel Specific Fields -->
         <div class="modal-fields" *ngIf="confirmation.type === 'hard-cancel'">
           <textarea
             class="reason-input"
-            placeholder="Reason for revocation..."
+            [placeholder]="'ADMIN.USERS.CONFIRMATION.CANCEL.REASON_PLACEHOLDER' | translate"
             [(ngModel)]="confirmation.reason"
             rows="3">
           </textarea>
           
           <label class="checkbox-field">
             <input type="checkbox" [(ngModel)]="confirmation.forceDeactivateListings">
-            <span>Also archive all active listings</span>
+            <span>{{ 'ADMIN.USERS.CONFIRMATION.CANCEL.ARCHIVE_LISTINGS' | translate }}</span>
           </label>
         </div>
 
         <div class="modal-actions">
           <button class="btn-cancel" (click)="cancelConfirmation()" [disabled]="loading">
-            Cancel
+            {{ 'COMMON.CANCEL' | translate }}
           </button>
           <button
             class="btn-confirm"
@@ -113,7 +114,7 @@ interface ConfirmationConfig {
             (click)="executeAction()"
             [disabled]="loading">
             <i class="fa-solid fa-spinner fa-spin" *ngIf="loading"></i>
-            {{ loading ? 'Processing...' : confirmation.confirmLabel }}
+            {{ loading ? ('COMMON.PROCESSING' | translate) : (confirmation.confirmLabel | translate:{role: ('REAL_ESTATE.' + (confirmation.newRole | uppercase) | translate)}) }}
           </button>
         </div>
       </div>
@@ -388,9 +389,9 @@ export class UserActionsComponent {
   confirmation: ConfirmationConfig | null = null;
 
   readonly availableRoles = [
-    { value: 'buyer' as UserRole, label: 'Buyer', icon: 'fa-user'      },
-    { value: 'owner' as UserRole, label: 'Owner', icon: 'fa-building'  },
-    { value: 'agent' as UserRole, label: 'Agent', icon: 'fa-handshake' },
+    { value: 'buyer' as UserRole, labelKey: 'REAL_ESTATE.BUYER', icon: 'fa-user'      },
+    { value: 'owner' as UserRole, labelKey: 'REAL_ESTATE.OWNER', icon: 'fa-building'  },
+    { value: 'agent' as UserRole, labelKey: 'REAL_ESTATE.AGENT', icon: 'fa-handshake' },
   ];
 
   @HostListener('document:click', ['$event'])
@@ -417,9 +418,9 @@ export class UserActionsComponent {
     this.isOpen = false;
     this.confirmation = {
       type:         'role',
-      title:        'Change User Role',
-      message:      `Are you sure you want to change "${this.user.name}" role to ${role.toUpperCase()}?`,
-      confirmLabel: `Set as ${role}`,
+      title:        'ADMIN.USERS.CONFIRMATION.ROLE.TITLE',
+      message:      'ADMIN.USERS.CONFIRMATION.ROLE.MESSAGE',
+      confirmLabel: 'ADMIN.USERS.CONFIRMATION.ROLE.CONFIRM',
       danger:       role === 'admin',
       newRole:      role,
     };
@@ -430,11 +431,11 @@ export class UserActionsComponent {
     const isBanning = !this.user.isBanned;
     this.confirmation = {
       type:         'ban',
-      title:        isBanning ? 'Ban User' : 'Unban User',
+      title:        isBanning ? 'ADMIN.USERS.CONFIRMATION.BAN.TITLE' : 'ADMIN.USERS.CONFIRMATION.UNBAN.TITLE',
       message:      isBanning
-        ? `This will prevent "${this.user.name}" from accessing the platform.`
-        : `This will restore "${this.user.name}" access to the platform.`,
-      confirmLabel: isBanning ? 'Ban User' : 'Unban User',
+        ? 'ADMIN.USERS.CONFIRMATION.BAN.MESSAGE'
+        : 'ADMIN.USERS.CONFIRMATION.UNBAN.MESSAGE',
+      confirmLabel: isBanning ? 'ADMIN.USERS.CONFIRMATION.BAN.CONFIRM' : 'ADMIN.USERS.CONFIRMATION.UNBAN.CONFIRM',
       danger:       isBanning,
     };
   }
@@ -443,9 +444,9 @@ export class UserActionsComponent {
     this.isOpen = false;
     this.confirmation = {
       type:         'hard-cancel',
-      title:        'Revoke Subscription',
-      message:      `This will immediately terminate ${this.user.name}'s subscription. They will lose access to pro features instantly.`,
-      confirmLabel: 'Confirm Revocation',
+      title:        'ADMIN.USERS.CONFIRMATION.CANCEL.TITLE',
+      message:      'ADMIN.USERS.CONFIRMATION.CANCEL.MESSAGE',
+      confirmLabel: 'ADMIN.USERS.CONFIRMATION.CANCEL.CONFIRM',
       danger:       true,
       reason:       '',
       forceDeactivateListings: false,

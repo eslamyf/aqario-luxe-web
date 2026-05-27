@@ -9,8 +9,8 @@
         </svg>
       </div>
       <div>
-        <h1>Audit Trail</h1>
-        <p>{{ total | number }} administrative actions recorded</p>
+        <h1>{{ 'ADMIN.AUDIT.TITLE' | translate }}</h1>
+        <p>{{ 'ADMIN.AUDIT.SUBTITLE' | translate:{count: total} }}</p>
       </div>
     </div>
   </div>
@@ -19,32 +19,32 @@
   <div class="audit-filters">
     <div class="filter-row">
       <div class="filter-group">
-        <label>Action Type</label>
+        <label>{{ 'ADMIN.AUDIT.FILTERS.ACTION' | translate }}</label>
         <select [(ngModel)]="actionFilter" (change)="applyFilters()">
-          <option value="">All Actions</option>
-          <option *ngFor="let a of ACTION_TYPES" [value]="a">{{ a | titlecase }}</option>
+          <option value="">{{ 'ADMIN.AUDIT.FILTERS.ALL_ACTIONS' | translate }}</option>
+          <option *ngFor="let a of ACTION_TYPES" [value]="a">{{ getActionLabel(a) | translate }}</option>
         </select>
       </div>
       <div class="filter-group">
-        <label>Resource Type</label>
+        <label>{{ 'ADMIN.AUDIT.FILTERS.RESOURCE' | translate }}</label>
         <select [(ngModel)]="targetTypeFilter" (change)="applyFilters()">
-          <option value="">All Resources</option>
-          <option *ngFor="let t of TARGET_TYPES" [value]="t">{{ t }}</option>
+          <option value="">{{ 'ADMIN.AUDIT.FILTERS.ALL_RESOURCES' | translate }}</option>
+          <option *ngFor="let t of TARGET_TYPES" [value]="t">{{ 'ADMIN.AUDIT.RESOURCES.' + (t | uppercase) | translate }}</option>
         </select>
       </div>
       <div class="filter-group">
-        <label>From Date</label>
+        <label>{{ 'ADMIN.AUDIT.FILTERS.FROM_DATE' | translate }}</label>
         <input type="date" [(ngModel)]="dateFrom" (change)="applyFilters()" />
       </div>
       <div class="filter-group">
-        <label>To Date</label>
+        <label>{{ 'ADMIN.AUDIT.FILTERS.TO_DATE' | translate }}</label>
         <input type="date" [(ngModel)]="dateTo" (change)="applyFilters()" />
       </div>
       <button class="btn-reset" (click)="resetFilters()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
         </svg>
-        Reset
+        {{ 'ADMIN.AUDIT.FILTERS.RESET' | translate }}
       </button>
     </div>
   </div>
@@ -52,7 +52,7 @@
   <!-- ── Loading ────────────────────────────────────────────── -->
   <div class="loading-state" *ngIf="loading">
     <div class="spinner"></div>
-    <p>Loading audit records…</p>
+    <p>{{ 'ADMIN.AUDIT.LOADING' | translate }}</p>
   </div>
 
   <!-- ── Error ──────────────────────────────────────────────── -->
@@ -68,7 +68,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
       <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
     </svg>
-    <p>No audit records found</p>
+    <p>{{ 'ADMIN.AUDIT.EMPTY' | translate }}</p>
   </div>
 
   <!-- ── Log Table ──────────────────────────────────────────── -->
@@ -76,11 +76,11 @@
     <table class="audit-table">
       <thead>
         <tr>
-          <th>Actor</th>
-          <th>Action</th>
-          <th>Resource</th>
-          <th>Date & Time</th>
-          <th>Details</th>
+          <th>{{ 'ADMIN.AUDIT.TABLE.ACTOR' | translate }}</th>
+          <th>{{ 'ADMIN.AUDIT.TABLE.ACTION' | translate }}</th>
+          <th>{{ 'ADMIN.AUDIT.TABLE.RESOURCE' | translate }}</th>
+          <th>{{ 'ADMIN.AUDIT.TABLE.DATE_TIME' | translate }}</th>
+          <th>{{ 'ADMIN.AUDIT.TABLE.DETAILS' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -94,18 +94,18 @@
                   <span *ngIf="!log.actor.photo">{{ log.actor.name.charAt(0) | uppercase }}</span>
                 </div>
                 <div>
-                  <span class="actor-name">{{ log.actor.name || 'Unknown' }}</span>
+                  <span class="actor-name">{{ log.actor.name || ('ADMIN.AUDIT.UNKNOWN_ACTOR' | translate) }}</span>
                   <span class="actor-email">{{ log.actor.email }}</span>
                 </div>
               </div>
             </td>
             <td class="action-cell">
               <span class="action-badge" [attr.data-color]="getActionColor(log.action)">
-                {{ log.action }}
+                {{ getActionLabel(log.action) | translate }}
               </span>
             </td>
             <td class="resource-cell">
-              <span class="resource-type">{{ log.targetType }}</span>
+              <span class="resource-type">{{ 'ADMIN.AUDIT.RESOURCES.' + (log.targetType | uppercase) | translate }}</span>
               <span class="resource-id">{{ log.targetId | slice:0:8 }}…</span>
             </td>
             <td class="date-cell">
@@ -115,7 +115,7 @@
             <td class="actions-cell">
               <button class="btn-expand" (click)="toggleExpand(log._id)"
                       [class.active]="expandedLogId === log._id"
-                      [title]="expandedLogId === log._id ? 'Collapse' : 'View Changes'">
+                      [title]="expandedLogId === log._id ? ('ADMIN.AUDIT.TOOLTIP.COLLAPSE' | translate) : ('ADMIN.AUDIT.TOOLTIP.VIEW_CHANGES' | translate)">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     [attr.d]="expandedLogId === log._id
@@ -132,20 +132,20 @@
               <div class="detail-panel">
                 <div class="detail-grid">
                   <div class="detail-block" *ngIf="log.changes?.before !== undefined">
-                    <h4>Before</h4>
+                    <h4>{{ 'ADMIN.AUDIT.DETAILS.BEFORE' | translate }}</h4>
                     <pre class="code-block before">{{ formatChanges(log.changes.before) }}</pre>
                   </div>
                   <div class="detail-block" *ngIf="log.changes?.after !== undefined">
-                    <h4>After</h4>
+                    <h4>{{ 'ADMIN.AUDIT.DETAILS.AFTER' | translate }}</h4>
                     <pre class="code-block after">{{ formatChanges(log.changes.after) }}</pre>
                   </div>
                 </div>
                 <div class="meta-row" *ngIf="log.metadata?.ip || log.metadata?.reason">
                   <span *ngIf="log.metadata?.ip">
-                    <strong>IP:</strong> {{ log.metadata.ip }}
+                    <strong>{{ 'ADMIN.AUDIT.DETAILS.IP' | translate }}</strong> {{ log.metadata.ip }}
                   </span>
                   <span *ngIf="log.metadata?.reason">
-                    <strong>Reason:</strong> {{ log.metadata.reason }}
+                    <strong>{{ 'ADMIN.AUDIT.DETAILS.REASON' | translate }}</strong> {{ log.metadata.reason }}
                   </span>
                 </div>
               </div>
@@ -158,8 +158,8 @@
 
   <!-- ── Pagination ─────────────────────────────────────────── -->
   <div class="pagination" *ngIf="pages > 1">
-    <button class="page-btn" (click)="goToPage(page - 1)" [disabled]="page <= 1">‹ Prev</button>
-    <span class="page-info">Page {{ page }} of {{ pages }}</span>
-    <button class="page-btn" (click)="goToPage(page + 1)" [disabled]="page >= pages">Next ›</button>
+    <button class="page-btn" (click)="goToPage(page - 1)" [disabled]="page <= 1">{{ 'COMMON.PREV' | translate }}</button>
+    <span class="page-info">{{ 'ADMIN.AUDIT.FOOTER.PAGE_INFO' | translate:{current: page, total: pages} }}</span>
+    <button class="page-btn" (click)="goToPage(page + 1)" [disabled]="page >= pages">{{ 'COMMON.NEXT' | translate }}</button>
   </div>
 </div>

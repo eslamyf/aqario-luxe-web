@@ -1,27 +1,28 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-activity-feed',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, TranslateModule],
   template: `
     <div class="activity-panel">
       <div class="panel-header">
-        <h3>System Activity</h3>
+        <h3>{{ 'ADMIN.DASHBOARD.ACTIVITY.TITLE' | translate }}</h3>
       </div>
       <div class="feed-list">
         <div class="feed-item" *ngFor="let activity of activities">
           <div class="dot" [ngClass]="'dot-' + activity.colorCode"></div>
           <div class="content">
-            <h4 class="type">{{ formatType(activity.type) }}</h4>
+            <h4 class="type">{{ 'AUDIT.ACTIONS.' + activity.type | translate }}</h4>
             <p class="message">{{ activity.message }}</p>
             <span class="time">{{ activity.createdAt | date:'short' }}</span>
           </div>
         </div>
-        <div *ngIf="!activities?.length" class="empty-state">No recent activity.</div>
+        <div *ngIf="!activities?.length" class="empty-state">{{ 'ADMIN.DASHBOARD.ACTIVITY.EMPTY' | translate }}</div>
       </div>
-      <button class="btn-outline">OPEN ACTIVITY LOG</button>
+      <button class="btn-outline">{{ 'ADMIN.DASHBOARD.ACTIVITY.OPEN_LOG' | translate }}</button>
     </div>
   `,
   styles: [`

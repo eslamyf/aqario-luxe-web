@@ -1,27 +1,30 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePropPipe } from '../../../user dashboard/translate-prop.pipe';
 import { AdminService } from '../../admin.service';
 
 @Component({
   selector: 'app-transactions-table',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, DatePipe],
+  imports: [CommonModule, CurrencyPipe, DatePipe, RouterModule, TranslateModule, TranslatePropPipe],
   template: `
     <div class="transactions-panel">
       <div class="panel-header">
-        <h3>Recent Transactions</h3>
-        <a routerLink="/admin/bookings" class="view-all">VIEW ALL</a>
+        <h3>{{ 'ADMIN.DASHBOARD.TRANSACTIONS.TITLE' | translate }}</h3>
+        <a routerLink="/admin/bookings" class="view-all">{{ 'ADMIN.DASHBOARD.TRANSACTIONS.VIEW_ALL' | translate }}</a>
       </div>
       <div class="table-responsive">
         <table>
           <thead>
             <tr>
-              <th>USER</th>
-              <th>PROPERTY</th>
-              <th>DATE</th>
-              <th>STATUS</th>
-              <th>AMOUNT</th>
-              <th>ACTIONS</th>
+              <th>{{ 'ADMIN.DASHBOARD.TRANSACTIONS.COLS.USER' | translate }}</th>
+              <th>{{ 'ADMIN.DASHBOARD.TRANSACTIONS.COLS.PROPERTY' | translate }}</th>
+              <th>{{ 'ADMIN.DASHBOARD.TRANSACTIONS.COLS.DATE' | translate }}</th>
+              <th>{{ 'ADMIN.DASHBOARD.TRANSACTIONS.COLS.STATUS' | translate }}</th>
+              <th>{{ 'ADMIN.DASHBOARD.TRANSACTIONS.COLS.AMOUNT' | translate }}</th>
+              <th>{{ 'ADMIN.DASHBOARD.TRANSACTIONS.COLS.ACTIONS' | translate }}</th>
             </tr>
           </thead>
           <tbody>
@@ -29,14 +32,14 @@ import { AdminService } from '../../admin.service';
               <td>
                 <div class="user-cell">
                   <div class="avatar">{{ getInitials(txn.user_id?.name) }}</div>
-                  <span>{{ txn.user_id?.name || 'Unknown User' }}</span>
+                  <span>{{ txn.user_id?.name || ('ADMIN.DASHBOARD.TRANSACTIONS.UNKNOWN_USER' | translate) }}</span>
                 </div>
               </td>
-              <td class="property-name">{{ txn.booking_id?.property_id?.title || 'Property #' + txn.booking_id?.property_id?.toString().slice(-4) }}</td>
+              <td class="property-name">{{ (txn.booking_id?.property_id?.title | translateProp) || (('ADMIN.DASHBOARD.TRANSACTIONS.PROPERTY_PREFIX' | translate) + ' #' + txn.booking_id?.property_id?.toString().slice(-4)) }}</td>
               <td>{{ txn.createdAt | date:'mediumDate' }}</td>
               <td>
                 <span class="status-badge" [class.confirmed]="txn.status === 'completed'" [class.pending]="txn.status !== 'completed'" [class.refunded]="txn.status === 'refunded'">
-                  {{ getStatusLabel(txn.status) }}
+                  {{ 'ADMIN.DASHBOARD.TRANSACTIONS.STATUS.' + (txn.status | uppercase) | translate }}
                 </span>
               </td>
               <td class="amount">{{ txn.totalAmount | currency:'USD':'symbol':'1.0-0' }}</td>
@@ -46,13 +49,13 @@ import { AdminService } from '../../admin.service';
                   class="refund-btn"
                   (click)="initiateRefund(txn)"
                   data-cursor-hover>
-                  REFUND
+                  {{ 'ADMIN.DASHBOARD.TRANSACTIONS.REFUND' | translate }}
                 </button>
-                <span *ngIf="isProcessingRefund(txn._id)" class="processing">Processing...</span>
+                <span *ngIf="isProcessingRefund(txn._id)" class="processing">{{ 'ADMIN.DASHBOARD.TRANSACTIONS.PROCESSING' | translate }}</span>
               </td>
             </tr>
             <tr *ngIf="!transactions?.length">
-              <td colspan="6" class="empty-state">No recent transactions found.</td>
+              <td colspan="6" class="empty-state">{{ 'ADMIN.DASHBOARD.TRANSACTIONS.EMPTY' | translate }}</td>
             </tr>
           </tbody>
         </table>

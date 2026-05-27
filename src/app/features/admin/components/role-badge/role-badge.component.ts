@@ -1,16 +1,17 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 export type UserRole = 'buyer' | 'owner' | 'agent' | 'admin';
 
 @Component({
   selector: 'app-role-badge',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <span class="role-badge" [ngClass]="role">
       <i class="fa-solid" [ngClass]="icon"></i>
-      {{ label }}
+      {{ 'REAL_ESTATE.' + (role | uppercase) | translate }}
     </span>
   `,
   styles: [`

@@ -3,46 +3,43 @@
   <div class="admin-header-actions">
     <div class="header-main">
       <h1 style="font-family: var(--font-display); font-size: 2.5rem; color: var(--white); margin-bottom: 0.5rem;">
-        Property Management</h1>
-      <p style="color: rgba(255,255,255,0.5); font-family: var(--font-body);">Manage, review, and moderate luxury
-        listings across the global portfolio.</p>
+        {{ 'ADMIN.PROPERTIES.TITLE' | translate }}</h1>
+      <p style="color: rgba(255,255,255,0.5); font-family: var(--font-body);">{{ 'ADMIN.PROPERTIES.SUBTITLE' | translate }}</p>
     </div>
 
     <!-- Tabs -->
     <nav class="admin-tabs">
-      <button class="tab-btn" [class.active]="filters.approvalStatus === 'false'" (click)="setTab('pending')">Pending
-        Review</button>
+      <button class="tab-btn" [class.active]="filters.approvalStatus === 'false'" (click)="setTab('pending')">{{ 'ADMIN.PROPERTIES.TABS.PENDING' | translate }}</button>
       <button class="tab-btn" [class.active]="filters.approvalStatus === 'true'"
-        (click)="setTab('approved')">Approved</button>
-      <button class="tab-btn" [class.active]="filters.approvalStatus === 'all'" (click)="setTab('all')">All
-        Listings</button>
+        (click)="setTab('approved')">{{ 'ADMIN.PROPERTIES.TABS.APPROVED' | translate }}</button>
+      <button class="tab-btn" [class.active]="filters.approvalStatus === 'all'" (click)="setTab('all')">{{ 'ADMIN.PROPERTIES.TABS.ALL' | translate }}</button>
     </nav>
 
     <!-- Filter Bar -->
     <div class="filter-bar">
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Search by property title..." (input)="onSearch($event)"
+        <input type="text" [placeholder]="'ADMIN.PROPERTIES.SEARCH_PLACEHOLDER' | translate" (input)="onSearch($event)"
           [value]="filters.search">
       </div>
 
       <div class="filters-group">
         <!-- Type Filter -->
         <select [(ngModel)]="filters.type" (change)="onFilterChange()">
-          <option value="all">All Types</option>
-          <option value="villa">Villa</option>
-          <option value="apartment">Apartment</option>
-          <option value="office">Office</option>
-          <option value="studio">Studio</option>
-          <option value="commercial">Commercial</option>
+          <option value="all">{{ 'ADMIN.PROPERTIES.FILTERS.ALL_TYPES' | translate }}</option>
+          <option value="villa">{{ 'REAL_ESTATE.VILLA' | translate }}</option>
+          <option value="apartment">{{ 'REAL_ESTATE.APARTMENT' | translate }}</option>
+          <option value="office">{{ 'REAL_ESTATE.OFFICE' | translate }}</option>
+          <option value="studio">{{ 'REAL_ESTATE.STUDIO' | translate }}</option>
+          <option value="commercial">{{ 'REAL_ESTATE.COMMERCIAL' | translate }}</option>
         </select>
 
         <!-- Price Range Filter -->
         <select [(ngModel)]="filters.priceRange" (change)="onFilterChange()">
-          <option value="all">Any Price</option>
-          <option value="low">Under $500k (Entry)</option>
-          <option value="medium">$500k - $5M (Premium)</option>
-          <option value="high">Above $5M (Ultra-Luxury)</option>
+          <option value="all">{{ 'ADMIN.PROPERTIES.FILTERS.ANY_PRICE' | translate }}</option>
+          <option value="low">{{ 'ADMIN.PROPERTIES.FILTERS.PRICE_LOW' | translate }}</option>
+          <option value="medium">{{ 'ADMIN.PROPERTIES.FILTERS.PRICE_MEDIUM' | translate }}</option>
+          <option value="high">{{ 'ADMIN.PROPERTIES.FILTERS.PRICE_HIGH' | translate }}</option>
         </select>
       </div>
     </div>
@@ -51,13 +48,13 @@
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-state">
     <i class="fa-solid fa-circle-notch fa-spin"></i>
-    <span>Fetching Portfolio...</span>
+    <span>{{ 'ADMIN.PROPERTIES.FETCHING' | translate }}</span>
   </div>
 
   <!-- Empty State -->
   <div *ngIf="!isLoading && properties.length === 0" class="loading-state">
     <i class="fa-solid fa-folder-open" style="opacity: 0.3;"></i>
-    <span>No properties found matching your criteria.</span>
+    <span>{{ 'ADMIN.PROPERTIES.EMPTY' | translate }}</span>
   </div>
 
   <!-- Properties Grid -->
@@ -65,21 +62,21 @@
     <article *ngFor="let property of properties" class="property-card" (click)="selectProperty(property)">
 
       <div class="card-image">
-        <img [src]="property.images?.[0] || 'assets/property-placeholder.jpg'" [alt]="property.title">
+        <img [src]="property.images?.[0] || 'assets/property-placeholder.jpg'" [alt]="property.title | translateProp">
         <div class="badge-status" [class.pending]="property.approvalStatus !== 'approved'" [class.approved]="property.approvalStatus === 'approved'">
-          {{ property.approvalStatus === 'approved' ? 'Approved' : 'Pending' }}
+          {{ property.approvalStatus === 'approved' ? ('COMMON.APPROVED' | translate) : ('COMMON.PENDING' | translate) }}
         </div>
       </div>
 
       <div class="card-content">
         <div class="title-row">
-          <h3>{{ (property.title.length > 20) ? (property.title | slice:0:17) + '...' : property.title }}</h3>
+          <h3>{{ (property.title | translateProp).length > 20 ? (property.title | translateProp | slice:0:17) + '...' : (property.title | translateProp) }}</h3>
           <span class="price">{{ property.price | currency:property.currency:'symbol':'1.0-0' }}</span>
         </div>
 
         <div class="location">
           <i class="fa-solid fa-location-dot"></i>
-          <span>{{ property.location?.city }}, {{ property.location?.district }}</span>
+          <span>{{ property.location?.city | translateProp }}, {{ property.location?.district | translateProp }}</span>
         </div>
 
         <div class="owner-info">
@@ -87,7 +84,7 @@
             {{ property.owner?.name?.charAt(0) || 'U' }}
           </div>
           <div class="owner-details">
-            <span class="name">{{ property.owner?.name || 'Unknown User' }}</span>
+            <span class="name">{{ property.owner?.name || ('ADMIN.PROPERTIES.UNKNOWN_USER' | translate) }}</span>
             <span class="time">{{ property.createdAt | date:'mediumDate' }}</span>
           </div>
         </div>
@@ -101,7 +98,7 @@
       <i class="fa-solid fa-chevron-left"></i>
     </button>
 
-    <span class="page-info">Page {{ page }} of {{ pages }}</span>
+    <span class="page-info">{{ 'COMMON.PAGE_INFO' | translate:{current: page, total: pages} }}</span>
 
     <button class="page-btn" [disabled]="page === pages" (click)="setPage(page + 1)">
       <i class="fa-solid fa-chevron-right"></i>
@@ -112,7 +109,7 @@
   <div class="details-drawer-overlay" *ngIf="selectedProperty" (click)="selectedProperty = null">
     <div class="details-drawer" (click)="$event.stopPropagation()">
       <header class="drawer-header">
-        <h2>Property Details</h2>
+        <h2>{{ 'ADMIN.PROPERTIES.DRAWER.DETAILS_TITLE' | translate }}</h2>
         <button class="close-btn" (click)="selectedProperty = null">&times;</button>
       </header>
 
@@ -122,26 +119,24 @@
           <img [src]="selectedProperty.images?.[0]" alt="Main image">
           <div class="more-images">
             <i class="fa-solid fa-images"></i>
-            <span>+{{ selectedProperty.images?.length || 0 }} Images</span>
+            <span>{{ 'ADMIN.PROPERTIES.DRAWER.IMAGES_COUNT' | translate:{count: selectedProperty.images?.length || 0} }}</span>
           </div>
         </div>
 
         <!-- Main Info -->
         <div class="main-info">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-            <span class="price">{{ selectedProperty.price | currency:selectedProperty.currency:'symbol':'1.0-0'
-              }}</span>
+            <span class="price">{{ selectedProperty.price | currency:selectedProperty.currency:'symbol':'1.0-0' }}</span>
             <span class="badge-status" [class.pending]="selectedProperty.approvalStatus !== 'approved'"
               [class.approved]="selectedProperty.approvalStatus === 'approved'"
               style="position: static; font-size: 11px; padding: 4px 10px;">
-              {{ selectedProperty.approvalStatus === 'approved' ? 'Approved & Live' : 'Under Review' }}
+              {{ selectedProperty.approvalStatus === 'approved' ? ('ADMIN.PROPERTIES.DRAWER.STATUS_APPROVED' | translate) : ('ADMIN.PROPERTIES.DRAWER.STATUS_PENDING' | translate) }}
             </span>
           </div>
-          <h3>{{ selectedProperty.title }}</h3>
+          <h3>{{ selectedProperty.title | translateProp }}</h3>
           <div class="loc">
             <i class="fa-solid fa-location-dot"></i>
-            <span>{{ selectedProperty.location?.street }}, {{ selectedProperty.location?.district }}, {{
-              selectedProperty.location?.city }}</span>
+            <span>{{ selectedProperty.location?.street | translateProp }}, {{ selectedProperty.location?.district | translateProp }}, {{ selectedProperty.location?.city | translateProp }}</span>
           </div>
         </div>
 
@@ -149,35 +144,35 @@
         <div class="stats-grid">
           <div class="stat-item">
             <span class="val">{{ selectedProperty.bedrooms }}</span>
-            <span class="label">Beds</span>
+            <span class="label">{{ 'REAL_ESTATE.BED_SHORT' | translate }}</span>
           </div>
           <div class="stat-item">
             <span class="val">{{ selectedProperty.bathrooms }}</span>
-            <span class="label">Baths</span>
+            <span class="label">{{ 'REAL_ESTATE.BATH_SHORT' | translate }}</span>
           </div>
           <div class="stat-item">
             <span class="val">{{ selectedProperty.area }}</span>
-            <span class="label">Sq Ft</span>
+            <span class="label">{{ 'ADMIN.PROPERTIES.DRAWER.SQ_FT' | translate }}</span>
           </div>
           <div class="stat-item">
-            <span class="val" style="text-transform: capitalize;">{{ selectedProperty.type }}</span>
-            <span class="label">Type</span>
+            <span class="val" style="text-transform: capitalize;">{{ 'REAL_ESTATE.' + (selectedProperty.type | uppercase) | translate }}</span>
+            <span class="label">{{ 'ADMIN.PROPERTIES.DRAWER.TYPE' | translate }}</span>
           </div>
         </div>
 
         <!-- Description -->
         <div class="description-box">
-          <h4>Description</h4>
-          <p>{{ selectedProperty.description }}</p>
+          <h4>{{ 'ADMIN.PROPERTIES.DRAWER.DESC_TITLE' | translate }}</h4>
+          <p>{{ selectedProperty.description | translateProp }}</p>
         </div>
 
         <!-- Features -->
         <div class="features-list" *ngIf="selectedProperty.features?.length">
-          <h4>Amenities & Features</h4>
+          <h4>{{ 'ADMIN.PROPERTIES.DRAWER.AMENITIES_TITLE' | translate }}</h4>
           <div class="features-grid">
             <div class="feature-tag" *ngFor="let feat of selectedProperty.features">
               <i class="fa-solid fa-check"></i>
-              {{ feat }}
+              {{ feat | translateProp }}
             </div>
           </div>
         </div>
@@ -186,7 +181,7 @@
         <div class="owner-card">
           <div class="avatar-lg">{{ selectedProperty.owner?.name?.charAt(0) }}</div>
           <div class="info">
-            <span class="label">Property Owner</span>
+            <span class="label">{{ 'ADMIN.PROPERTIES.DRAWER.PROPERTY_OWNER' | translate }}</span>
             <span class="name">{{ selectedProperty.owner?.name }}</span>
             <span class="email">{{ selectedProperty.owner?.email }}</span>
           </div>
@@ -196,11 +191,11 @@
       <footer class="drawer-footer">
         <button class="reject-btn" [disabled]="activePropertyId === selectedProperty._id"
           (click)="updateApproval(selectedProperty, 'reject')">
-          Reject Listing
+          {{ 'ADMIN.PROPERTIES.DRAWER.REJECT' | translate }}
         </button>
         <button class="approve-btn" [disabled]="activePropertyId === selectedProperty._id"
           (click)="updateApproval(selectedProperty, 'approve')">
-          Approve & Publish
+          {{ 'ADMIN.PROPERTIES.DRAWER.APPROVE' | translate }}
         </button>
       </footer>
     </div>

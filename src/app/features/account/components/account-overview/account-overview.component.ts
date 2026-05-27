@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { RouterModule } from '@angular/router';
 import { AccountService, UserProfile } from '../../services/account.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { KycStatusBannerComponent } from '../kyc-status-banner/kyc-status-banner.component';
@@ -10,7 +11,7 @@ import { KycStatusBannerComponent } from '../kyc-status-banner/kyc-status-banner
 @Component({
   selector: 'app-account-overview',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, KycStatusBannerComponent, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, KycStatusBannerComponent, TranslateModule, RouterModule],
   templateUrl: './account-overview.component.html',
   styleUrls: ['./account-overview.component.scss']
 })

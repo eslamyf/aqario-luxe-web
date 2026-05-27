@@ -13,7 +13,8 @@
   <div class="properties-header">
     <div>
       <div class="section-eyebrow">{{ 'PROPERTIES.EYEBROW' | translate }}</div>
-      <h2 class="section-title">{{ 'PROPERTIES.TITLE' | translate }} <em>{{ 'PROPERTIES.EMPHASIS' | translate }}</em></h2>
+      <h2 class="section-title">{{ 'PROPERTIES.TITLE' | translate }} <em>{{ 'PROPERTIES.EMPHASIS' | translate }}</em>
+      </h2>
     </div>
     <div>
       <p class="section-sub">
@@ -24,12 +25,8 @@
 
   <!-- ── Filter tabs ─────────────────────────────────────────────────────── -->
   <div class="properties-tabs">
-    <button
-      *ngFor="let tab of filterTabs"
-      class="prop-tab"
-      [class.active]="(activeFilter$ | async) === tab.key"
-      (click)="onFilterChange(tab.key)"
-      data-cursor-hover>
+    <button *ngFor="let tab of filterTabs" class="prop-tab" [class.active]="(activeFilter$ | async) === tab.key"
+      (click)="onFilterChange(tab.key)" data-cursor-hover>
       {{ tab.labelKey | translate }}
     </button>
   </div>
@@ -42,16 +39,17 @@
           <span class="input-icon">🔍</span>
           <input type="text" formControlName="search" [placeholder]="'PROPERTIES.SEARCH_PLACEHOLDER' | translate" />
         </div>
-        
+
         <div class="input-group">
           <span class="input-icon">📍</span>
           <input type="text" formControlName="city" [placeholder]="'PROPERTIES.CITY_PLACEHOLDER' | translate" />
         </div>
 
-        <button type="button" class="btn-toggle-filters" (click)="toggleFilterPanel()" [class.active]="isFilterExpanded">
+        <button type="button" class="btn-toggle-filters" (click)="toggleFilterPanel()"
+          [class.active]="isFilterExpanded">
           <span class="filter-icon">⚙️</span> {{ 'PROPERTIES.FILTERS_BTN' | translate }}
         </button>
-        
+
         <button type="submit" class="btn-gold" data-cursor-hover>{{ 'PROPERTIES.SEARCH_BTN' | translate }}</button>
       </div>
 
@@ -78,7 +76,8 @@
             </select>
           </div>
           <div class="filter-actions">
-            <button type="button" class="btn-secondary" (click)="clearFilters()">{{ 'PROPERTIES.CLEAR_ALL' | translate }}</button>
+            <button type="button" class="btn-secondary" (click)="clearFilters()">{{ 'PROPERTIES.CLEAR_ALL' | translate
+              }}</button>
           </div>
         </div>
       </div>
@@ -86,7 +85,8 @@
   </div>
 
   <!-- ── Loading state ───────────────────────────────────────────────────── -->
-  <div *ngIf="isLoading$ | async" class="properties-loading properties-skeleton-grid" aria-busy="true" aria-label="Loading properties">
+  <div *ngIf="isLoading$ | async" class="properties-loading properties-skeleton-grid" aria-busy="true"
+    aria-label="Loading properties">
     <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6]">
       <div class="skeleton-image shimmer"></div>
       <div class="skeleton-copy">
@@ -112,11 +112,8 @@
   <!-- ── Properties grid ─────────────────────────────────────────────────── -->
   <ng-container *ngIf="(isLoading$ | async) === false && (error$ | async) === null">
     <div *ngIf="(properties$ | async)?.length" class="properties-grid">
-      <app-property-card
-        *ngFor="let prop of properties$ | async; let i = index; trackBy: trackById"
-        [property]="prop"
-        [isFirst]="i === 0"
-        (favoriteToggled)="onFavoriteToggled($event)">
+      <app-property-card *ngFor="let prop of properties$ | async; let i = index; trackBy: trackById" [property]="prop"
+        [isFirst]="i === 0" (favoriteToggled)="onFavoriteToggled($event)">
       </app-property-card>
     </div>
 
@@ -130,10 +127,7 @@
 
     <!-- ── Pagination ─────────────────────────────────────────────────────── -->
     <div *ngIf="totalPages > 1" class="properties-pagination">
-      <button
-        class="pagination-btn"
-        [disabled]="currentPage <= 1"
-        (click)="onPageChange(currentPage - 1)"
+      <button class="pagination-btn" [disabled]="currentPage <= 1" (click)="onPageChange(currentPage - 1)"
         data-cursor-hover>
         {{ 'PROPERTIES.PREV' | translate }}
       </button>
@@ -143,10 +137,7 @@
         <span class="pagination-total">{{ 'PROPERTIES.TOTAL_INFO' | translate:{ total: totalResults } }}</span>
       </span>
 
-      <button
-        class="pagination-btn"
-        [disabled]="currentPage >= totalPages"
-        (click)="onPageChange(currentPage + 1)"
+      <button class="pagination-btn" [disabled]="currentPage >= totalPages" (click)="onPageChange(currentPage + 1)"
         data-cursor-hover>
         {{ 'PROPERTIES.NEXT' | translate }}
       </button>

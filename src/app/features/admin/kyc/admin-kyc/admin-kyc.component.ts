@@ -1,6 +1,7 @@
 import { Component, OnInit, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, combineLatest, switchMap, catchError, of, tap, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -11,7 +12,7 @@ import { NotificationService } from '../../../../shared/services/notification.se
 @Component({
   selector: 'app-admin-kyc',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './admin-kyc.component.html',
   styleUrl: './admin-kyc.component.scss'
 })

@@ -1,10 +1,11 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-revenue-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <div class="chart-container">
       <svg viewBox="0 0 1000 300" preserveAspectRatio="none">
@@ -20,7 +21,7 @@ import { CommonModule } from '@angular/common';
         <polyline [attr.points]="linePoints" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
       <div class="x-axis">
-        <span *ngFor="let label of labels">{{ label }}</span>
+        <span *ngFor="let label of labels">{{ label | translate }}</span>
       </div>
     </div>
   `,
@@ -90,7 +91,11 @@ export class RevenueChartComponent implements OnChanges {
       this.fillPoints = `${firstX},${height} ${this.linePoints} ${lastX},${height}`;
     }
 
-    const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    this.labels = points.map(p => p.month ? monthNames[p.month - 1] : '');
+    const monthKeys = [
+      'COMMON.MONTHS.JAN', 'COMMON.MONTHS.FEB', 'COMMON.MONTHS.MAR', 'COMMON.MONTHS.APR',
+      'COMMON.MONTHS.MAY', 'COMMON.MONTHS.JUN', 'COMMON.MONTHS.JUL', 'COMMON.MONTHS.AUG',
+      'COMMON.MONTHS.SEP', 'COMMON.MONTHS.OCT', 'COMMON.MONTHS.NOV', 'COMMON.MONTHS.DEC'
+    ];
+    this.labels = points.map(p => p.month ? monthKeys[p.month - 1] : '');
   }
 }

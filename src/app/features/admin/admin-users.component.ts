@@ -45,17 +45,17 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
 
   // ── Static options ────────────────────────────────────────
   readonly ROLES = [
-    { value: '',       label: 'All Roles'  },
-    { value: 'buyer',  label: 'Buyer'      },
-    { value: 'owner',  label: 'Owner'      },
-    { value: 'agent',  label: 'Agent'      },
-    { value: 'admin',  label: 'Admin'      },
+    { value: '',       labelKey: 'ADMIN.USERS.ROLES.ALL'    },
+    { value: 'buyer',  labelKey: 'ADMIN.USERS.ROLES.BUYER'  },
+    { value: 'owner',  labelKey: 'ADMIN.USERS.ROLES.OWNER'  },
+    { value: 'agent',  labelKey: 'ADMIN.USERS.ROLES.AGENT'  },
+    { value: 'admin',  labelKey: 'ADMIN.USERS.ROLES.ADMIN'  },
   ];
 
   readonly STATUSES = [
-    { value: '',       label: 'All Statuses' },
-    { value: 'active', label: 'Active'        },
-    { value: 'banned', label: 'Banned'        },
+    { value: '',       labelKey: 'ADMIN.USERS.STATUSES.ALL' },
+    { value: 'active', labelKey: 'ADMIN.USERS.STATUSES.ACTIVE' },
+    { value: 'banned', labelKey: 'ADMIN.USERS.STATUSES.BANNED' },
   ];
 
   ngOnInit(): void {

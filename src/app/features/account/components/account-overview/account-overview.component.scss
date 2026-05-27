@@ -24,6 +24,51 @@ $mist:       var(--text-muted);
     display: flex;
     align-items: center;
     gap: 3rem;
+
+    .header-actions {
+      margin-inline-start: auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .btn-dashboard {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: linear-gradient(135deg, #C9A96E, #8A6E3D);
+      color: var(--obsidian);
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(201, 169, 110, 0.15);
+
+      i {
+        font-size: 1rem;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(201, 169, 110, 0.3);
+        background: linear-gradient(135deg, #dfbc7e, #a3834b);
+        color: var(--obsidian-3);
+        
+        i {
+          transform: rotate(15deg) scale(1.1);
+        }
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
   }
 }
 

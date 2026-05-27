@@ -22,6 +22,8 @@ import { ActivityFeedComponent }     from './components/activity-feed/activity-f
 import { RoleBadgeComponent }        from './components/role-badge/role-badge.component';
 import { UserActionsComponent }      from './components/user-actions/user-actions.component';
 
+import { TranslatePropPipe } from '../user dashboard/translate-prop.pipe';
+
 const routes: Routes = [
   {
     path: '',
@@ -54,6 +56,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     TranslateModule,
+    TranslatePropPipe,
     // Dashboard overview sub-components (standalone)
     AdminKycComponent,
     KpiCardComponent,
