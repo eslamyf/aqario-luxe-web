@@ -37,6 +37,10 @@ export interface KYCSubmission {
   frontImage: string;
   backImage?: string;
   ownershipDocuments?: string[];
+  /** Phase 2 — Personal Info & Liveness */
+  nationality?: string;
+  phoneNumber?: string;
+  livePhoto?: string;
 }
 
 export interface FullKYCResponse {
@@ -57,6 +61,9 @@ export interface FullKYCResponse {
       submittedAt?: string;
       approvedAt?: string;
       rejectionReason?: string;
+      nationality?: string;
+      phoneNumber?: string;
+      livePhoto?: string;
     };
   };
 }

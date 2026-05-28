@@ -1,189 +1,365 @@
 <div class="kyc-container">
   <div class="kyc-card">
-    <!-- Back Button -->
+
+    <!-- ── Back Button ──────────────────────────────────────────────────── -->
     <div class="back-action">
       <a routerLink="/account" class="btn-back">
-        <i class="fa-solid fa-arrow-left"></i> Return to Profile
+        <i class="fa-solid fa-arrow-left"></i>
+        {{ 'USER_KYC.RETURN_TO_PROFILE' | translate }}
       </a>
     </div>
 
-
-    <!-- Initial Loading State (SSoT) -->
+    <!-- ── Initial Loading ───────────────────────────────────────────────── -->
     <div class="kyc-initial-loading" *ngIf="isInitialLoading">
       <div class="loader-wrap">
         <div class="spinner-gold"></div>
-        <p>Synchronizing identity data...</p>
+        <p>{{ 'USER_KYC.SYNCING' | translate }}</p>
       </div>
     </div>
 
-    <!-- Header Section -->
+    <!-- ── Header ────────────────────────────────────────────────────────── -->
     <div class="kyc-header">
-      <div class="header-content">
-        <span class="eyebrow"><i class="fa-solid fa-shield-halved"></i> Security & Trust</span>
-        <h1>Identity Verification</h1>
-        <p class="description">
-          To protect our community and comply with international regulations, we require a one-time identity verification.
-        </p>
-      </div>
+      <span class="eyebrow">
+        <i class="fa-solid fa-shield-halved"></i>
+        {{ 'USER_KYC.SECURITY_TRUST' | translate }}
+      </span>
+      <h1>{{ 'USER_KYC.TITLE' | translate }}</h1>
+      <p class="description">{{ 'USER_KYC.DESCRIPTION' | translate }}</p>
     </div>
 
-    <!-- Status Banner (Dynamic) -->
+    <!-- ── Status Banner ─────────────────────────────────────────────────── -->
     <div class="status-banner" [ngClass]="status.status" *ngIf="status">
       <div class="status-content">
         <div class="status-icon-wrapper">
-          <!-- User Profile Photo -->
           <ng-container *ngIf="userPhoto; else statusIconFallback">
-            <img [src]="userPhoto"
-                 class="status-user-photo"
-                 alt="Profile"
-                 (error)="$any($event.target).src = 'https://ui-avatars.com/api/?name=' + userName + '&background=C9A96E&color=000&size=256'">
+            <img [src]="userPhoto" class="status-user-photo" alt="Profile"
+              (error)="$any($event.target).src = 'https://ui-avatars.com/api/?name=' + userName + '&background=C9A96E&color=000&size=256'">
           </ng-container>
           <ng-template #statusIconFallback>
             <i class="fa-solid" [ngClass]="{
-              'fa-circle-check approved-icon': status.status === 'approved',
-              'fa-clock pending-icon': status.status === 'pending',
+              'fa-circle-check approved-icon':      status.status === 'approved',
+              'fa-clock pending-icon':               status.status === 'pending',
               'fa-circle-exclamation rejected-icon': status.status === 'rejected',
-              'fa-id-card-clip default-icon': status.status === 'not_submitted'
+              'fa-id-card-clip default-icon':        status.status === 'not_submitted'
             }"></i>
           </ng-template>
         </div>
         <div class="status-text">
-          <h3>{{ getStatusTitle() }}</h3>
-          <p>{{ getStatusDescription() }}</p>
+          <h3>{{ 'USER_KYC.STATUS.' + ((status.status || 'not_submitted') | uppercase) + '_TITLE' | translate }}</h3>
+          <p>{{ 'USER_KYC.STATUS.' + ((status.status || 'not_submitted') | uppercase) + '_DESC' | translate }}</p>
         </div>
       </div>
       <div class="status-badge" [ngClass]="status.status">
-        {{ status.status | titlecase }}
+        {{ 'ACCOUNT.KYC_STATUS.' + ((status.status || 'not_submitted') | uppercase) | translate }}
       </div>
     </div>
 
-    <!-- Rejection Reason Alert -->
+    <!-- ── Rejection Reason ───────────────────────────────────────────────── -->
     <div class="rejection-reason-box" *ngIf="status?.status === 'rejected'">
       <div class="reason-header">
         <i class="fa-solid fa-triangle-exclamation"></i>
-        <span>Reason for rejection:</span>
+        <span>{{ 'USER_KYC.REJECTION_REASON' | translate }}</span>
       </div>
       <p class="reason-content">{{ status?.reason }}</p>
     </div>
 
-    <!-- KYC Form Workflow (Editable in not_submitted, rejected, and pending states) -->
+    <!-- ══════════════════════════════════════════════════════════════════════
+         KYC WORKFLOW FORM
+         ══════════════════════════════════════════════════════════════════ -->
     <div class="kyc-workflow" *ngIf="status?.status !== 'approved'">
       <form [formGroup]="kycForm" (ngSubmit)="onSubmit()">
-        
-        <!-- Step 1: Document Type -->
+
+        <!-- ── STEP 01 — Document Type ─────────────────────────────────── -->
         <div class="workflow-step">
           <div class="step-label">
             <span class="step-num">01</span>
-            <span class="step-title">Select Document Type</span>
+            <span class="step-title">{{ 'USER_KYC.STEP_1_TITLE' | translate }}</span>
           </div>
-          
           <div class="doc-type-grid">
             <label class="doc-type-card" [class.active]="kycForm.get('documentType')?.value === 'national_id'">
               <input type="radio" formControlName="documentType" value="national_id">
               <div class="card-inner">
                 <i class="fa-solid fa-id-card"></i>
-                <span class="label">National ID</span>
+                <span class="label">{{ 'USER_KYC.NATIONAL_ID' | translate }}</span>
               </div>
             </label>
-            
             <label class="doc-type-card" [class.active]="kycForm.get('documentType')?.value === 'passport'">
               <input type="radio" formControlName="documentType" value="passport">
               <div class="card-inner">
                 <i class="fa-solid fa-passport"></i>
-                <span class="label">Passport</span>
+                <span class="label">{{ 'USER_KYC.PASSPORT' | translate }}</span>
               </div>
             </label>
           </div>
         </div>
 
-        <!-- Step 2: Image Uploads -->
+        <!-- ── STEP 02 — Personal Information ─────────────────────────── -->
         <div class="workflow-step">
           <div class="step-label">
             <span class="step-num">02</span>
-            <span class="step-title">Upload Documents</span>
+            <span class="step-title">{{ 'USER_KYC.STEP_2_PERSONAL_TITLE' | translate }}</span>
           </div>
+          <div class="personal-info-grid">
 
-          <div class="upload-grid">
-            <!-- Front Image -->
-            <div class="upload-field">
-              <label class="field-hint">{{ kycForm.get('documentType')?.value === 'passport' ? 'Main Data Page' : 'Front Side' }}</label>
-              <div class="drop-zone" (click)="frontInput.click()" [class.has-preview]="frontPreview">
-                <input type="file" #frontInput hidden (change)="onFileSelected($event, 'front')" accept="image/*">
-                
-                <ng-container *ngIf="frontPreview; else frontPlaceholder">
-                  <img [src]="frontPreview" class="preview-img" alt="Front Preview">
-                  <div class="change-overlay">
-                    <i class="fa-solid fa-camera-rotate"></i> Change Image
+            <!-- Nationality -->
+            <div class="form-field">
+              <label class="field-label" for="kyc-nationality">
+                {{ 'USER_KYC.NATIONALITY' | translate }}
+                <span class="required-mark">*</span>
+              </label>
+              <div class="input-wrapper nationality-wrapper" [class.input-error]="f['nationality'].invalid && f['nationality'].touched"
+                [class.dropdown-open]="showDropdown">
+                <i class="fa-solid fa-earth-africa field-icon"></i>
+                <input id="kyc-nationality" type="text" class="kyc-input" formControlName="nationality"
+                  [placeholder]="'USER_KYC.NATIONALITY_PLACEHOLDER' | translate" autocomplete="off"
+                  (focus)="onNationalityFocus()" (input)="filterCountries($event)">
+                <i class="fa-solid fa-chevron-down dropdown-arrow" (click)="toggleDropdown($event)"></i>
+
+                <!-- Custom Dropdown Overlay -->
+                <div class="custom-dropdown-overlay" *ngIf="showDropdown">
+                  <div class="dropdown-options-list">
+                    <div class="dropdown-option-item" *ngFor="let country of filteredCountries"
+                      (click)="selectCountry(country); $event.stopPropagation();">
+                      <span class="country-flag">{{ getFlagEmoji(country.code) }}</span>
+                      <span class="country-text">{{ isArabic ? country.ar : country.en }}</span>
+                    </div>
+                    <div class="dropdown-no-results" *ngIf="filteredCountries.length === 0">
+                      {{ isArabic ? 'لا توجد نتائج' : 'No results found' }}
+                    </div>
                   </div>
-                </ng-container>
-                
-                <ng-template #frontPlaceholder>
-                  <div class="upload-placeholder">
-                    <div class="icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                    <span class="main-text">Upload Front Image</span>
-                    <span class="sub-text">JPG, PNG or WEBP (Max 5MB)</span>
-                  </div>
-                </ng-template>
+                </div>
               </div>
-
-              <!-- Remove Front Image -->
-              <button
-                *ngIf="frontPreview"
-                type="button"
-                class="remove-doc-btn"
-                (click)="removeImage('front')"
-                title="Remove image">
-                <i class="fa-solid fa-trash-can"></i> Remove
-              </button>
+              <span class="field-error" *ngIf="f['nationality'].invalid && f['nationality'].touched">
+                {{ 'USER_KYC.NATIONALITY_REQUIRED' | translate }}
+              </span>
             </div>
 
-            <!-- Back Image (Conditional) -->
-            <div class="upload-field" *ngIf="kycForm.get('documentType')?.value !== 'passport'">
-              <label class="field-hint">Back Side</label>
-              <div class="drop-zone" (click)="backInput.click()" [class.has-preview]="backPreview">
-                <input type="file" #backInput hidden (change)="onFileSelected($event, 'back')" accept="image/*">
+            <!-- Phone Number -->
+            <div class="form-field">
+              <label class="field-label" for="kyc-phone">
+                {{ 'USER_KYC.PHONE_NUMBER' | translate }}
+                <span class="required-mark">*</span>
+              </label>
+              <div class="input-wrapper phone-dial-wrapper" [class.input-error]="f['phoneNumber'].invalid && f['phoneNumber'].touched"
+                [class.dropdown-open]="showDialDropdown">
                 
-                <ng-container *ngIf="backPreview; else backPlaceholder">
-                  <img [src]="backPreview" class="preview-img" alt="Back Preview">
-                  <div class="change-overlay">
-                    <i class="fa-solid fa-camera-rotate"></i> Change Image
-                  </div>
-                </ng-container>
-                
-                <ng-template #backPlaceholder>
-                  <div class="upload-placeholder">
-                    <div class="icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                    <span class="main-text">Upload Back Image</span>
-                    <span class="sub-text">Required for this document</span>
-                  </div>
-                </ng-template>
-              </div>
+                <!-- Custom Dial Code Selector -->
+                <div class="dial-code-selector" (click)="toggleDialDropdown($event)">
+                  <span class="dial-flag">{{ getFlagEmoji(currentDialCountryCode) }}</span>
+                  <span class="dial-value" dir="ltr">{{ selectedDialCode }}</span>
+                  <i class="fa-solid fa-chevron-down dial-arrow"></i>
+                </div>
 
-              <!-- Remove Back Image -->
-              <button
-                *ngIf="backPreview"
-                type="button"
-                class="remove-doc-btn"
-                (click)="removeImage('back')"
-                title="Remove image">
-                <i class="fa-solid fa-trash-can"></i> Remove
-              </button>
+                <input id="kyc-phone" type="tel" class="kyc-input phone-number-input" formControlName="phoneNumber"
+                  [placeholder]="'USER_KYC.PHONE_PLACEHOLDER' | translate" autocomplete="tel" maxlength="15">
+
+                <!-- Dial Code Dropdown Overlay -->
+                <div class="custom-dropdown-overlay dial-dropdown-overlay" *ngIf="showDialDropdown">
+                  <div class="dial-dropdown-search">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" class="dial-search-input" [placeholder]="isArabic ? 'بحث عن بلد...' : 'Search country...'"
+                      (click)="$event.stopPropagation()" (input)="filterDialCountries($event)">
+                  </div>
+                  <div class="dropdown-options-list">
+                    <div class="dropdown-option-item" *ngFor="let country of filteredDialCountries"
+                      (click)="selectDialCode(country); $event.stopPropagation();">
+                      <span class="country-flag">{{ getFlagEmoji(country.code) }}</span>
+                      <span class="country-text">{{ isArabic ? country.ar : country.en }}</span>
+                      <span class="dial-code-badge" dir="ltr">{{ country.dialCode }}</span>
+                    </div>
+                    <div class="dropdown-no-results" *ngIf="filteredDialCountries.length === 0">
+                      {{ isArabic ? 'لا توجد نتائج' : 'No results found' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <span class="field-error" *ngIf="f['phoneNumber'].errors?.['required'] && f['phoneNumber'].touched">
+                {{ 'USER_KYC.PHONE_REQUIRED' | translate }}
+              </span>
+              <span class="field-error" *ngIf="f['phoneNumber'].errors?.['invalidCombinedPhone'] && f['phoneNumber'].touched">
+                {{ 'USER_KYC.PHONE_INVALID' | translate }}
+              </span>
             </div>
+
           </div>
         </div>
 
-        <!-- Step 3: Property Ownership Documents -->
+        <!-- ── STEP 03 — Document Images ──────────────────────────────── -->
         <div class="workflow-step">
           <div class="step-label">
             <span class="step-num">03</span>
-            <span class="step-title">Property Ownership Documents</span>
+            <span class="step-title">{{ 'USER_KYC.STEP_3_DOCS_TITLE' | translate }}</span>
           </div>
-          <p class="step-desc">Upload ownership documents (PDF, DOC, or images) from the Real Estate Registry to prove property ownership.</p>
+          <div class="upload-grid">
+
+            <!-- Front Image -->
+            <div class="upload-field">
+              <label class="field-hint">
+                {{ (kycForm.get('documentType')?.value === 'passport'
+                ? 'USER_KYC.MAIN_DATA_PAGE' : 'USER_KYC.FRONT_SIDE') | translate }}
+              </label>
+              <div class="drop-zone" (click)="frontInput.click()" [class.has-preview]="frontPreview">
+                <input type="file" #frontInput hidden (change)="onFileSelected($event, 'front')" accept="image/*">
+                <ng-container *ngIf="frontPreview; else frontPlaceholder">
+                  <img [src]="frontPreview" class="preview-img" alt="Front Preview">
+                  <div class="change-overlay">
+                    <i class="fa-solid fa-camera-rotate"></i>
+                    {{ 'USER_KYC.CHANGE_IMAGE' | translate }}
+                  </div>
+                </ng-container>
+                <ng-template #frontPlaceholder>
+                  <div class="upload-placeholder">
+                    <div class="icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                    <span class="main-text">{{ 'USER_KYC.UPLOAD_FRONT' | translate }}</span>
+                    <span class="sub-text">{{ 'USER_KYC.FORMAT_LIMIT' | translate }}</span>
+                  </div>
+                </ng-template>
+              </div>
+              <button *ngIf="frontPreview" type="button" class="remove-doc-btn" (click)="removeImage('front')"
+                [title]="'USER_KYC.REMOVE' | translate">
+                <i class="fa-solid fa-trash-can"></i> {{ 'USER_KYC.REMOVE' | translate }}
+              </button>
+            </div>
+
+            <!-- Back Image (National ID only) -->
+            <div class="upload-field" *ngIf="kycForm.get('documentType')?.value !== 'passport'">
+              <label class="field-hint">{{ 'USER_KYC.BACK_SIDE' | translate }}</label>
+              <div class="drop-zone" (click)="backInput.click()" [class.has-preview]="backPreview">
+                <input type="file" #backInput hidden (change)="onFileSelected($event, 'back')" accept="image/*">
+                <ng-container *ngIf="backPreview; else backPlaceholder">
+                  <img [src]="backPreview" class="preview-img" alt="Back Preview">
+                  <div class="change-overlay">
+                    <i class="fa-solid fa-camera-rotate"></i>
+                    {{ 'USER_KYC.CHANGE_IMAGE' | translate }}
+                  </div>
+                </ng-container>
+                <ng-template #backPlaceholder>
+                  <div class="upload-placeholder">
+                    <div class="icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                    <span class="main-text">{{ 'USER_KYC.UPLOAD_BACK' | translate }}</span>
+                    <span class="sub-text">{{ 'USER_KYC.REQUIRED_FOR_DOC' | translate }}</span>
+                  </div>
+                </ng-template>
+              </div>
+              <button *ngIf="backPreview" type="button" class="remove-doc-btn" (click)="removeImage('back')"
+                [title]="'USER_KYC.REMOVE' | translate">
+                <i class="fa-solid fa-trash-can"></i> {{ 'USER_KYC.REMOVE' | translate }}
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── STEP 04 — Live Selfie / Liveness Check ─────────────────── -->
+        <div class="workflow-step">
+          <div class="step-label">
+            <span class="step-num">04</span>
+            <span class="step-title">{{ 'USER_KYC.STEP_4_LIVENESS_TITLE' | translate }}</span>
+          </div>
+          <p class="step-desc">{{ 'USER_KYC.STEP_4_LIVENESS_DESC' | translate }}</p>
+
+          <div class="liveness-container">
+
+            <!-- State A: IDLE — not started yet -->
+            <div class="liveness-idle" *ngIf="isCameraIdle">
+              <div class="face-silhouette" aria-hidden="true">
+                <i class="fa-regular fa-circle-user"></i>
+              </div>
+              <p class="liveness-hint">{{ 'USER_KYC.LIVENESS_HINT' | translate }}</p>
+              <button type="button" id="btn-start-camera" class="btn-camera-action btn-start-camera"
+                (click)="startCamera()">
+                <i class="fa-solid fa-camera"></i>
+                {{ 'USER_KYC.START_CAMERA' | translate }}
+              </button>
+            </div>
+
+            <!-- State B: LOADING — getUserMedia in progress -->
+            <div class="liveness-loading" *ngIf="isCameraLoading">
+              <div class="camera-loading-box">
+                <div class="spinner-gold"></div>
+                <p>{{ 'USER_KYC.CAMERA_LOADING' | translate }}</p>
+              </div>
+            </div>
+
+            <!-- State C: ERROR — permission denied or device unavailable -->
+            <div class="liveness-error" *ngIf="hasCameraError">
+              <div class="camera-error-box">
+                <i class="fa-solid fa-video-slash error-icon"></i>
+                <p class="error-msg">{{ cameraErrorMsg }}</p>
+                <button type="button" class="btn-camera-action btn-retry-camera" (click)="retryCamera()">
+                  <i class="fa-solid fa-rotate-right"></i>
+                  {{ 'USER_KYC.CAMERA_RETRY' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <!-- State D: ACTIVE — live video feed -->
+            <div class="liveness-active" [style.display]="isCameraActive ? 'flex' : 'none'">
+              <div class="camera-viewport">
+                <video #videoEl autoplay muted playsinline class="camera-video"></video>
+                <!-- Premium Face Guide Overlay -->
+                <div class="face-guide-overlay">
+                  <div class="face-guide-oval"></div>
+                  <div class="face-guide-scanner"></div>
+                </div>
+              </div>
+              <p class="camera-tip">
+                <i class="fa-solid fa-circle-info"></i>
+                {{ 'USER_KYC.CAMERA_TIP' | translate }}
+              </p>
+              <button type="button" id="btn-capture" class="btn-camera-action btn-capture" (click)="capturePhoto()">
+                <i class="fa-solid fa-circle-dot"></i>
+                {{ 'USER_KYC.CAPTURE_PHOTO' | translate }}
+              </button>
+              <!-- Hidden canvas for frame extraction -->
+              <canvas #canvasEl style="display:none;"></canvas>
+            </div>
+
+            <!-- State E: CAPTURED — preview + upload state -->
+            <div class="liveness-captured" *ngIf="isCaptured">
+              <div class="selfie-viewport">
+                <img [src]="livePhotoPreview" class="selfie-img" [alt]="'USER_KYC.SELFIE_ALT' | translate">
+              </div>
+
+              <!-- Upload in progress -->
+              <div class="selfie-upload-status uploading" *ngIf="isUploadingSelfie">
+                <div class="spinner-small-gold"></div>
+                <span>{{ 'USER_KYC.UPLOADING_SELFIE' | translate }}</span>
+              </div>
+
+              <div class="captured-actions">
+                <button type="button" id="btn-retake" class="btn-camera-action btn-retake" (click)="retakePhoto()"
+                  [disabled]="isUploadingSelfie">
+                  <i class="fa-solid fa-rotate-left"></i>
+                  {{ 'USER_KYC.RETAKE_PHOTO' | translate }}
+                </button>
+                <button type="button" id="btn-delete-selfie" class="btn-camera-action btn-delete-selfie" (click)="deleteSelfie()"
+                  [disabled]="isUploadingSelfie">
+                  <i class="fa-solid fa-trash-can"></i>
+                  {{ 'COMMON.DELETE' | translate }}
+                </button>
+              </div>
+            </div>
+
+          </div><!-- /liveness-container -->
+        </div>
+
+        <!-- ── STEP 05 — Property Ownership Documents ──────────────────── -->
+        <div class="workflow-step">
+          <div class="step-label">
+            <span class="step-num">05</span>
+            <span class="step-title">{{ 'USER_KYC.STEP_5_OWNERSHIP_TITLE' | translate }}</span>
+          </div>
+          <p class="step-desc">{{ 'USER_KYC.STEP_5_OWNERSHIP_DESC' | translate }}</p>
+          <p class="allowed-formats-hint">
+            <i class="fa-solid fa-circle-info"></i>
+            {{ 'USER_KYC.ALLOWED_FORMATS' | translate }}
+          </p>
 
           <div class="ownership-upload-container">
             <div class="ownership-grid">
 
-              <!-- Uploaded Files List -->
+              <!-- Uploaded Files -->
               <div class="ownership-file-card" *ngFor="let doc of ownershipDocs; let i = index">
                 <div class="file-icon-wrap" [style.color]="getFileIconColor(doc.fileType)">
                   <i class="fa-solid" [ngClass]="getFileIcon(doc.fileType)"></i>
@@ -192,58 +368,49 @@
                   <span class="file-name" [title]="doc.fileName">{{ doc.fileName }}</span>
                   <span class="file-type-badge">{{ doc.fileType?.toUpperCase() }}</span>
                 </div>
-                <button type="button"
-                        class="file-delete-btn"
-                        (click)="deleteOwnershipFile(i)"
-                        [disabled]="isDeletingOwnership[i]"
-                        title="Delete document">
-                  <i class="fa-solid" [ngClass]="isDeletingOwnership[i] ? 'fa-circle-notch fa-spin' : 'fa-trash-can'"></i>
+                <button type="button" class="file-delete-btn" (click)="deleteOwnershipFile(i)"
+                  [disabled]="isDeletingOwnership[i]" [title]="'USER_KYC.REMOVE' | translate">
+                  <i class="fa-solid"
+                    [ngClass]="isDeletingOwnership[i] ? 'fa-circle-notch fa-spin' : 'fa-trash-can'"></i>
                 </button>
               </div>
 
-              <!-- Upload New File -->
+              <!-- Add New File -->
               <div class="add-ownership-card" (click)="ownershipInput.click()" [class.uploading]="isUploadingOwnership">
-                <input type="file"
-                       #ownershipInput
-                       hidden
-                       (change)="onOwnershipFileSelected($event)"
-                       multiple
-                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp">
+                <input type="file" #ownershipInput hidden (change)="onOwnershipFileSelected($event)" multiple
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp">
                 <ng-container *ngIf="!isUploadingOwnership; else uploadingDoc">
                   <i class="fa-solid fa-plus"></i>
-                  <span>Add Document</span>
-                  <small>PDF, DOC, or Image</small>
+                  <span>{{ 'USER_KYC.ADD_DOCUMENT' | translate }}</span>
+                  <small>{{ 'USER_KYC.PDF_DOC_IMAGE' | translate }}</small>
                 </ng-container>
                 <ng-template #uploadingDoc>
                   <i class="fa-solid fa-circle-notch fa-spin"></i>
-                  <span>Uploading...</span>
+                  <span>{{ 'USER_KYC.UPLOADING' | translate }}</span>
                 </ng-template>
               </div>
 
             </div>
 
-            <!-- Upload Queue Status Tracker -->
+            <!-- Upload Queue -->
             <div class="upload-queue" *ngIf="fileUploadQueue.length > 0">
-              <div class="queue-item" *ngFor="let entry of fileUploadQueue; let qi = index"
-                   [ngClass]="entry.status">
+              <div class="queue-item" *ngFor="let entry of fileUploadQueue; let qi = index" [ngClass]="entry.status">
                 <div class="queue-file-name">
-                  <i class="fa-solid"
-                     [ngClass]="{
-                       'fa-circle-notch fa-spin': entry.status === 'uploading',
-                       'fa-circle-check': entry.status === 'success',
-                       'fa-circle-exclamation': entry.status === 'error'
-                     }"></i>
+                  <i class="fa-solid" [ngClass]="{
+                    'fa-circle-notch fa-spin': entry.status === 'uploading',
+                    'fa-circle-check':         entry.status === 'success',
+                    'fa-circle-exclamation':   entry.status === 'error'
+                  }"></i>
                   <span>{{ entry.name }}</span>
                 </div>
                 <div class="queue-actions">
                   <span class="queue-status-text">
-                    {{ entry.status === 'uploading' ? 'Uploading...' : entry.status === 'success' ? 'Saved to DB' : entry.error }}
+                    {{ entry.status === 'uploading' ? ('USER_KYC.UPLOADING' | translate)
+                    : entry.status === 'success' ? ('USER_KYC.SAVED_TO_DB' | translate)
+                    : entry.error }}
                   </span>
-                  <button *ngIf="entry.status === 'error'"
-                          type="button"
-                          class="retry-btn"
-                          (click)="retryUpload(qi)">
-                    <i class="fa-solid fa-rotate-right"></i> Retry
+                  <button *ngIf="entry.status === 'error'" type="button" class="retry-btn" (click)="retryUpload(qi)">
+                    <i class="fa-solid fa-rotate-right"></i> {{ 'USER_KYC.RETRY' | translate }}
                   </button>
                 </div>
               </div>
@@ -252,57 +419,64 @@
           </div>
         </div>
 
-        <!-- Submit Section -->
+        <!-- ── Submit ──────────────────────────────────────────────────── -->
         <div class="submit-section">
           <div class="security-info">
             <i class="fa-solid fa-lock"></i>
-            <span>Your documents are encrypted and stored securely.</span>
+            <span>{{ 'USER_KYC.SECURE_NOTE' | translate }}</span>
           </div>
-          
-          <button type="submit" class="btn-primary-gold" [disabled]="kycForm.invalid || isUploading || isLoading">
+
+          <button type="submit" class="btn-primary-gold"
+            [disabled]="kycForm.invalid || isUploading || isLoading || isUploadingSelfie">
             <span class="btn-content" *ngIf="!isLoading && !isUploading">
-              {{ status?.status === 'pending' ? 'Save Changes' : 'Submit for Verification' }} <i class="fa-solid fa-arrow-right-long"></i>
+              {{ (status?.status === 'pending'
+              ? 'USER_KYC.SAVE_CHANGES'
+              : 'USER_KYC.SUBMIT_VERIFICATION') | translate }}
+              <i class="fa-solid fa-arrow-right-long"></i>
             </span>
-            
             <div class="btn-loading" *ngIf="isLoading || isUploading">
               <span class="spinner-small"></span>
-              <span>{{ isUploading ? 'Uploading Images...' : (status?.status === 'pending' ? 'Saving Changes...' : 'Finalizing Submission...') }}</span>
+              <span>{{ (isUploading
+                ? 'USER_KYC.UPLOADING_IMAGES'
+                : status?.status === 'pending'
+                ? 'USER_KYC.SAVING_CHANGES'
+                : 'USER_KYC.FINALIZING') | translate }}</span>
             </div>
           </button>
         </div>
-      </form>
-    </div>
 
-    <!-- Approved State Message -->
+      </form>
+    </div><!-- /kyc-workflow -->
+
+    <!-- ── Approved State ─────────────────────────────────────────────────── -->
     <div class="approved-success" *ngIf="status?.status === 'approved'">
       <div class="success-icon"><i class="fa-solid fa-certificate"></i></div>
-      <h2>Account Fully Verified</h2>
-      <p>Congratulations! Your identity has been confirmed. You now have full access to all premium features of Luxe Estates.</p>
-      
+      <h2>{{ 'USER_KYC.VERIFIED_TITLE' | translate }}</h2>
+      <p>{{ 'USER_KYC.VERIFIED_DESC' | translate }}</p>
       <div class="success-actions">
         <button class="btn-gold" routerLink="/properties">
-          Explore Properties <i class="fa-solid fa-house-chimney"></i>
+          {{ 'USER_KYC.EXPLORE_PROPERTIES' | translate }}
+          <i class="fa-solid fa-house-chimney"></i>
         </button>
         <button class="btn-ghost" routerLink="/user/dashboard">
-          Go to Dashboard
+          {{ 'USER_KYC.GO_TO_DASHBOARD' | translate }}
         </button>
       </div>
     </div>
 
-  </div>
+  </div><!-- /kyc-card -->
 
-  <!-- Safety Warning Modal -->
+  <!-- ── Safety Warning Modal ───────────────────────────────────────────── -->
   <div class="kyc-modal-overlay" *ngIf="showRevertWarning">
     <div class="kyc-modal">
-      <div class="modal-icon warning">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-      </div>
-      <h3>Cancel Verification Request?</h3>
-      <p>You have removed all documents. Proceeding will completely cancel your current KYC verification request and reset your status.</p>
+      <div class="modal-icon warning"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h3>{{ 'USER_KYC.MODAL_CANCEL_TITLE' | translate }}</h3>
+      <p>{{ 'USER_KYC.MODAL_CANCEL_DESC' | translate }}</p>
       <div class="modal-actions">
-        <button class="btn-secondary" (click)="cancelRevert()">Go Back</button>
-        <button class="btn-danger" (click)="confirmRevert()">Yes, Cancel Request</button>
+        <button class="btn-secondary" (click)="cancelRevert()">{{ 'USER_KYC.GO_BACK' | translate }}</button>
+        <button class="btn-danger" (click)="confirmRevert()">{{ 'USER_KYC.YES_CANCEL' | translate }}</button>
       </div>
     </div>
   </div>
+
 </div>

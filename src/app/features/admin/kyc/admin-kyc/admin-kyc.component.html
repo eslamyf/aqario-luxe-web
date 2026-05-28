@@ -83,6 +83,9 @@
                 <span class="tag">{{ 'ADMIN.KYC.TAGS.HNW' | translate }}</span>
                 <span class="tag">{{ 'ADMIN.KYC.TAGS.TIER1' | translate }}</span>
                 <span class="tag gold" *ngIf="selectedUser.kycVersion">{{ 'ADMIN.KYC.TAGS.VERSION' | translate:{version: selectedUser.kycVersion} }}</span>
+                <button type="button" class="btn-dossier" (click)="downloadUserData()" title="Download Dossier (JSON)">
+                  <i class="fa-solid fa-file-invoice"></i> Download Dossier
+                </button>
               </div>
             </div>
             
@@ -98,24 +101,58 @@
           <!-- Document Scans Section -->
           <div class="section-container">
             <h4 class="section-title">{{ 'ADMIN.KYC.SECTIONS.DOC_SCANS' | translate }}</h4>
-            <div class="scans-grid" *ngFor="let doc of selectedUser.kycDocuments">
-              <div class="scan-item">
-                <span class="scan-label">{{ 'ADMIN.KYC.SCANS.FRONT' | translate }}</span>
-                <div class="image-box" (click)="openImage(doc.frontImage)">
-                  <img [src]="getOptimizedImageUrl(doc.frontImage)" 
-                       (error)="$any($event.target).src = 'assets/images/id-placeholder.png'"
-                       alt="Front Scan" />
-                  <div class="overlay"><i class="fa-solid fa-expand"></i></div>
+            <div class="scans-grid">
+              <ng-container *ngFor="let doc of selectedUser.kycDocuments">
+                <div class="scan-item">
+                  <span class="scan-label">{{ 'ADMIN.KYC.SCANS.FRONT' | translate }}</span>
+                  <div class="image-box">
+                    <img [src]="getOptimizedImageUrl(doc.frontImage)" 
+                         (error)="$any($event.target).src = 'assets/images/id-placeholder.png'"
+                         alt="Front Scan" />
+                    <div class="overlay-actions">
+                      <button type="button" class="action-btn" (click)="previewImage(doc.frontImage)" title="Expand Preview">
+                        <i class="fa-solid fa-expand"></i>
+                      </button>
+                      <button type="button" class="action-btn" (click)="downloadImage(doc.frontImage, 'front-scan-' + selectedUser.name.toLowerCase().replace(' ', '-') + '.jpg')" title="Download Image">
+                        <i class="fa-solid fa-download"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              
-              <div class="scan-item" *ngIf="doc.backImage">
-                <span class="scan-label">{{ 'ADMIN.KYC.SCANS.BACK' | translate }}</span>
-                <div class="image-box" (click)="openImage(doc.backImage)">
-                  <img [src]="getOptimizedImageUrl(doc.backImage)" 
+                
+                <div class="scan-item" *ngIf="doc.backImage">
+                  <span class="scan-label">{{ 'ADMIN.KYC.SCANS.BACK' | translate }}</span>
+                  <div class="image-box">
+                    <img [src]="getOptimizedImageUrl(doc.backImage)" 
+                         (error)="$any($event.target).src = 'assets/images/id-placeholder.png'"
+                         alt="Back Scan" />
+                    <div class="overlay-actions">
+                      <button type="button" class="action-btn" (click)="previewImage(doc.backImage)" title="Expand Preview">
+                        <i class="fa-solid fa-expand"></i>
+                      </button>
+                      <button type="button" class="action-btn" (click)="downloadImage(doc.backImage, 'back-scan-' + selectedUser.name.toLowerCase().replace(' ', '-') + '.jpg')" title="Download Image">
+                        <i class="fa-solid fa-download"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Live Selfie Comparison -->
+              <div class="scan-item" *ngIf="selectedUser.kycLivePhoto">
+                <span class="scan-label">{{ 'ADMIN.KYC.SCANS.LIVE_SELFIE' | translate }}</span>
+                <div class="image-box liveness-comparison">
+                  <img [src]="getOptimizedImageUrl(selectedUser.kycLivePhoto)" 
                        (error)="$any($event.target).src = 'assets/images/id-placeholder.png'"
-                       alt="Back Scan" />
-                  <div class="overlay"><i class="fa-solid fa-expand"></i></div>
+                       alt="Live Selfie" />
+                  <div class="overlay-actions">
+                    <button type="button" class="action-btn" (click)="previewImage(selectedUser.kycLivePhoto)" title="Expand Preview">
+                      <i class="fa-solid fa-expand"></i>
+                    </button>
+                    <button type="button" class="action-btn" (click)="downloadImage(selectedUser.kycLivePhoto, 'live-selfie-' + selectedUser.name.toLowerCase().replace(' ', '-') + '.jpg')" title="Download Image">
+                      <i class="fa-solid fa-download"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -133,7 +170,14 @@
                 <span class="field-label">{{ 'ADMIN.KYC.FIELDS.NATIONALITY' | translate }}</span>
                 <div class="field-value-with-icon">
                   <i class="fa-solid fa-globe icon"></i>
-                  <span>{{ 'ADMIN.KYC.FIELDS.GLOBAL_CITIZEN' | translate }}</span>
+                  <span>{{ selectedUser.kycNationality || ('ADMIN.KYC.FIELDS.GLOBAL_CITIZEN' | translate) }}</span>
+                </div>
+              </div>
+              <div class="info-card" *ngIf="selectedUser.kycPhoneNumber">
+                <span class="field-label">{{ 'ADMIN.KYC.FIELDS.PHONE_NUMBER' | translate }}</span>
+                <div class="field-value-with-icon">
+                  <i class="fa-solid fa-phone icon"></i>
+                  <span>{{ selectedUser.kycPhoneNumber }}</span>
                 </div>
               </div>
             </div>
@@ -143,7 +187,7 @@
           <div class="section-container" *ngIf="selectedUser.ownershipDocuments?.length">
             <h4 class="section-title">{{ 'ADMIN.KYC.SECTIONS.OWNERSHIP_DOCS' | translate }}</h4>
             <div class="ownership-grid">
-              <div class="own-doc-card" *ngFor="let own of selectedUser.ownershipDocuments" (click)="openFile(own.fileUrl || own.imageUrl)">
+              <div class="own-doc-card" *ngFor="let own of selectedUser.ownershipDocuments" (click)="downloadOwnership(own)">
                 
                 <div class="doc-preview-wrap">
                   <!-- Image Preview -->
@@ -158,7 +202,7 @@
                   </ng-container>
 
                   <div class="doc-overlay">
-                    <i class="fa-solid fa-up-right-from-square"></i>
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
                   </div>
                 </div>
 
@@ -250,6 +294,14 @@
         <button class="btn-text" (click)="cancelReject()">{{ 'COMMON.CANCEL' | translate }}</button>
         <button class="btn-confirm-red" (click)="submitReject()">{{ 'ADMIN.KYC.REJECT_MODAL.CONFIRM' | translate }}</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Image Preview Modal -->
+  <div class="lightbox-overlay" *ngIf="previewImageUrl" (click)="closePreviewImage()">
+    <div class="lightbox-content" (click)="$event.stopPropagation()">
+      <img [src]="previewImageUrl" alt="Fullscreen Image Preview" class="lightbox-img" />
+      <button type="button" class="lightbox-close" (click)="closePreviewImage()">&times;</button>
     </div>
   </div>
 

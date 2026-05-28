@@ -51,7 +51,7 @@ import { TranslateModule } from '@ngx-translate/core';
   `]
 })
 export class RevenueChartComponent implements OnChanges {
-  @Input() data: { _id: { year: number, month?: number }, totalRevenue: number }[] = [];
+  @Input() data: { _id: { year: number, month?: number, quarter?: number }, totalRevenue: number }[] = [];
   
   linePoints: string = '';
   fillPoints: string = '';
@@ -79,7 +79,7 @@ export class RevenueChartComponent implements OnChanges {
       const x = index * stepX;
       // y is inverted because SVG origin is top-left
       const y = height - ((point.totalRevenue / maxRevenue) * (height * 0.8)); // 0.8 to leave some top padding
-      return { x, y, revenue: point.totalRevenue, month: point._id.month };
+      return { x, y, revenue: point.totalRevenue, id: point._id };
     });
 
     this.linePoints = points.map(p => `${p.x},${p.y}`).join(' ');
@@ -96,6 +96,14 @@ export class RevenueChartComponent implements OnChanges {
       'COMMON.MONTHS.MAY', 'COMMON.MONTHS.JUN', 'COMMON.MONTHS.JUL', 'COMMON.MONTHS.AUG',
       'COMMON.MONTHS.SEP', 'COMMON.MONTHS.OCT', 'COMMON.MONTHS.NOV', 'COMMON.MONTHS.DEC'
     ];
-    this.labels = points.map(p => p.month ? monthKeys[p.month - 1] : '');
+    this.labels = points.map(p => {
+      if (p.id.month) {
+        return monthKeys[p.id.month - 1];
+      } else if (p.id.quarter) {
+        return `Q${p.id.quarter} ${p.id.year}`;
+      } else {
+        return `${p.id.year}`;
+      }
+    });
   }
 }

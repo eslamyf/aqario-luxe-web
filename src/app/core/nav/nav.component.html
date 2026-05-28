@@ -248,11 +248,11 @@
 
       <!-- Guest on mobile -->
       <ng-container *ngIf="!(auth.currentUser$ | async)">
-        <button class="btn-signin" (click)="openLogin(); closeMobileMenu()">Sign In</button>
+        <button class="btn-signin" (click)="openLogin(); closeMobileMenu()">{{ 'NAV.SIGN_IN' | translate }}</button>
       </ng-container>
 
       <button *ngIf="!(dashboardUi.isDashboardRoute | async)" class="btn-list" (click)="onListPropertyClick(); closeMobileMenu()">
-        List Property
+        {{ 'NAV.LIST_PROPERTY' | translate }}
       </button>
     </div>
   </div>

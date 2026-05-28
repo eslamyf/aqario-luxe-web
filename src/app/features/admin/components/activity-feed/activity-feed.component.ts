@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-activity-feed',
   standalone: true,
-  imports: [CommonModule, DatePipe, TranslateModule],
+  imports: [CommonModule, DatePipe, RouterModule, TranslateModule],
   template: `
     <div class="activity-panel">
       <div class="panel-header">
@@ -16,13 +17,13 @@ import { TranslateModule } from '@ngx-translate/core';
           <div class="dot" [ngClass]="'dot-' + activity.colorCode"></div>
           <div class="content">
             <h4 class="type">{{ 'AUDIT.ACTIONS.' + activity.type | translate }}</h4>
-            <p class="message">{{ activity.message }}</p>
+            <p class="message">{{ translate.currentLang === 'ar' ? (activity.messageAr || activity.message) : activity.message }}</p>
             <span class="time">{{ activity.createdAt | date:'short' }}</span>
           </div>
         </div>
         <div *ngIf="!activities?.length" class="empty-state">{{ 'ADMIN.DASHBOARD.ACTIVITY.EMPTY' | translate }}</div>
       </div>
-      <button class="btn-outline">{{ 'ADMIN.DASHBOARD.ACTIVITY.OPEN_LOG' | translate }}</button>
+      <button class="btn-outline" routerLink="/admin/audit">{{ 'ADMIN.DASHBOARD.ACTIVITY.OPEN_LOG' | translate }}</button>
     </div>
   `,
   styles: [`
@@ -114,6 +115,8 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class ActivityFeedComponent {
   @Input() activities: any[] = [];
+
+  constructor(public translate: TranslateService) {}
 
   formatType(type: string): string {
     return type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');

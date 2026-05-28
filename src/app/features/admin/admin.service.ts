@@ -113,6 +113,9 @@ export interface KycSubmission {
   kycRejectionReason?: string;
   kycAttempts: number;
   kycVersion?: number;
+  kycNationality?: string;
+  kycPhoneNumber?: string;
+  kycLivePhoto?: string;
 }
 
 export interface PaginatedKyc {
@@ -206,7 +209,7 @@ export class AdminService {
     );
   }
 
-  getRevenueAnalytics(period: 'monthly' | 'yearly' = 'monthly'): Observable<RevenueReportItem[]> {
+  getRevenueAnalytics(period: 'monthly' | 'quarterly' | 'yearly' = 'monthly'): Observable<RevenueReportItem[]> {
     return this.http.get<ApiResponse<{ report: RevenueReportItem[] }>>(`${this.base}/dashboard/admin/reports/revenue?period=${period}`).pipe(
       map((res) => res.data?.report || []),
       catchError(this.handleError('Failed to load revenue analytics'))
@@ -324,6 +327,14 @@ export class AdminService {
     );
   }
 
+  downloadOwnershipFile(userId: string, docId: string): Observable<Blob> {
+    return this.http.get(`${this.base}/kyc/ownership/download/${userId}/${docId}`, {
+      responseType: 'blob'
+    }).pipe(
+      catchError(this.handleError('Failed to download ownership document'))
+    );
+  }
+
   // ── Properties Management ──────────────────────────────────
 
   getProperties(filters: any = {}): Observable<any> {
@@ -396,8 +407,50 @@ export class AdminService {
       if (filters[k] && filters[k] !== 'all') params.append(k, filters[k]);
     });
     
-    // Direct window open or hidden link for download
-    window.open(`${this.base}/bookings/admin/export?${params.toString()}`, '_blank');
+    this.http.get(`${this.base}/bookings/admin/export?${params.toString()}`, {
+      responseType: 'blob'
+    }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bookings-export-${new Date().toISOString().slice(0, 10)}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Export failed', err);
+        this.notificationService.show('Failed to export bookings data.', 'error');
+      }
+    });
+  }
+
+  exportUsers(filters: any = {}): void {
+    const params = new URLSearchParams();
+    Object.keys(filters).forEach(k => {
+      if (filters[k] && filters[k] !== 'all') params.append(k, filters[k]);
+    });
+    
+    this.http.get(`${this.base}/dashboard/admin/users/export?${params.toString()}`, {
+      responseType: 'blob'
+    }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `users-export-${new Date().toISOString().slice(0, 10)}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Export failed', err);
+        this.notificationService.show('Failed to export users data.', 'error');
+      }
+    });
   }
 
   // ── Payment Management ───────────────────────────────────────

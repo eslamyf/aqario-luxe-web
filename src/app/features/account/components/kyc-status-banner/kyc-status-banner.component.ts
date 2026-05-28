@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-kyc-status-banner',
@@ -14,8 +14,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
             <i class="fa-solid" [ngClass]="statusIcon"></i>
           </div>
           <div class="text-block">
-            <h4>{{ statusTitle }}</h4>
-            <p>{{ statusDescription }}</p>
+            <h4>{{ titleKey | translate }}</h4>
+            <p>{{ descKey | translate }}</p>
           </div>
         </div>
         
@@ -153,8 +153,6 @@ export class KycStatusBannerComponent {
   @Input() status: string = 'not_submitted';
   @Output() onAction = new EventEmitter<void>();
 
-  private translateService = inject(TranslateService);
-
   get statusIcon(): string {
     switch (this.status) {
       case 'pending': return 'fa-hourglass-half';
@@ -163,19 +161,21 @@ export class KycStatusBannerComponent {
     }
   }
 
-  get statusTitle(): string {
+  /** Returns the i18n key for the banner title — the template resolves it via | translate */
+  get titleKey(): string {
     switch (this.status) {
-      case 'pending': return this.translateService.instant('ACCOUNT.KYC_BANNER.VERIFICATION_PENDING');
-      case 'rejected': return this.translateService.instant('ACCOUNT.KYC_BANNER.IDENTITY_REJECTED');
-      default: return this.translateService.instant('ACCOUNT.KYC_BANNER.IDENTITY_VERIFICATION');
+      case 'pending': return 'ACCOUNT.KYC_BANNER.VERIFICATION_PENDING';
+      case 'rejected': return 'ACCOUNT.KYC_BANNER.IDENTITY_REJECTED';
+      default:         return 'ACCOUNT.KYC_BANNER.IDENTITY_VERIFICATION';
     }
   }
 
-  get statusDescription(): string {
+  /** Returns the i18n key for the banner description — the template resolves it via | translate */
+  get descKey(): string {
     switch (this.status) {
-      case 'pending': return this.translateService.instant('ACCOUNT.KYC_BANNER.DESC_PENDING');
-      case 'rejected': return this.translateService.instant('ACCOUNT.KYC_BANNER.DESC_REJECTED');
-      default: return this.translateService.instant('ACCOUNT.KYC_BANNER.DESC_DEFAULT');
+      case 'pending': return 'ACCOUNT.KYC_BANNER.DESC_PENDING';
+      case 'rejected': return 'ACCOUNT.KYC_BANNER.DESC_REJECTED';
+      default:         return 'ACCOUNT.KYC_BANNER.DESC_DEFAULT';
     }
   }
 }

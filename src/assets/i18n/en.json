@@ -187,12 +187,30 @@
       "SUCCESS_MSG": "You're subscribed to Aqario Luxe Market Intelligence! ✓"
     },
     "PARTNERS": {
-      "PLD": { "ABBR": "PLD", "NAME": "PROLOGIS" },
-      "AMT": { "ABBR": "AMT", "NAME": "AMERICAN TOWER" },
-      "EQIX": { "ABBR": "EQIX", "NAME": "EQUINIX" },
-      "DLR": { "ABBR": "DLR", "NAME": "DIGITAL REALTY" },
-      "SPG": { "ABBR": "SPG", "NAME": "SIMON PROPERTY" },
-      "WELL": { "ABBR": "WELL", "NAME": "WELLTOWER" }
+      "PLD": {
+        "ABBR": "PLD",
+        "NAME": "PROLOGIS"
+      },
+      "AMT": {
+        "ABBR": "AMT",
+        "NAME": "AMERICAN TOWER"
+      },
+      "EQIX": {
+        "ABBR": "EQIX",
+        "NAME": "EQUINIX"
+      },
+      "DLR": {
+        "ABBR": "DLR",
+        "NAME": "DIGITAL REALTY"
+      },
+      "SPG": {
+        "ABBR": "SPG",
+        "NAME": "SIMON PROPERTY"
+      },
+      "WELL": {
+        "ABBR": "WELL",
+        "NAME": "WELLTOWER"
+      }
     }
   },
   "SEARCH": {
@@ -830,6 +848,7 @@
     }
   },
   "ADMIN": {
+    "ROLE_ADMIN": "System Administrator",
     "SIDEBAR": {
       "MAIN": "MAIN",
       "DASHBOARD": "Dashboard",
@@ -875,6 +894,7 @@
         },
         "STATUS": {
           "COMPLETED": "CONFIRMED",
+          "PAID": "PAID",
           "REFUNDED": "REFUNDED",
           "PENDING": "PENDING",
           "FAILED": "FAILED",
@@ -926,7 +946,7 @@
     "USERS": {
       "TITLE": "User Directory",
       "SUBTITLE": "Manage client access, agent roles, and system permissions.",
-      "EXPORT_CSV": "Export CSV",
+      "EXPORT_EXCEL": "Export Excel",
       "SEARCH_PLACEHOLDER": "Search by name, email...",
       "ROLES": {
         "ALL": "All Roles",
@@ -1025,12 +1045,14 @@
       },
       "SCANS": {
         "FRONT": "FRONT SIDE",
-        "BACK": "REVERSE SIDE"
+        "BACK": "REVERSE SIDE",
+        "LIVE_SELFIE": "LIVE SELFIE COMPARISON"
       },
       "FIELDS": {
         "LEGAL_NAME": "FULL LEGAL NAME",
         "NATIONALITY": "NATIONALITY",
-        "GLOBAL_CITIZEN": "GLOBAL CITIZEN"
+        "GLOBAL_CITIZEN": "GLOBAL CITIZEN",
+        "PHONE_NUMBER": "PHONE NUMBER"
       },
       "DOCS": {
         "DEFAULT_NAME": "Verification Document",
@@ -1068,7 +1090,7 @@
       "SELECTED": "{{count}} SELECTED",
       "APPROVE_ALL": "APPROVE ALL",
       "REJECT_ALL": "REJECT ALL",
-      "EXPORT_CSV": "EXPORT CSV",
+      "EXPORT_EXCEL": "EXPORT EXCEL",
       "SEARCH_PLACEHOLDER": "Filter by client, property, or ID...",
       "FILTERS": {
         "ALL": "All"
@@ -1179,7 +1201,99 @@
       "REVERT_KYC": "Revert KYC",
       "RESET_KYC": "Reset KYC",
       "DELETE_REVIEW": "Delete Review",
-      "APPROVE_AUCTION": "Approve Auction"
+      "APPROVE_AUCTION": "Approve Auction",
+      "USER_REGISTERED": "User Registration",
+      "NEW_LISTING": "New Property Listing",
+      "NEW_BOOKING": "New Booking"
+    }
+  },
+  "USER_KYC": {
+    "RETURN_TO_PROFILE": "Return to Profile",
+    "SYNCING": "Synchronizing identity data...",
+    "SECURITY_TRUST": "Security & Trust",
+    "TITLE": "Identity Verification",
+    "DESCRIPTION": "To protect our community and comply with international regulations, we require a one-time identity verification.",
+    "REJECTION_REASON": "Reason for rejection:",
+    "STEP_1_TITLE": "Select Document Type",
+    "NATIONAL_ID": "National ID",
+    "PASSPORT": "Passport",
+    "STEP_2_PERSONAL_TITLE": "Personal Information",
+    "NATIONALITY": "Nationality",
+    "NATIONALITY_PLACEHOLDER": "e.g. Egyptian",
+    "NATIONALITY_REQUIRED": "Nationality is required",
+    "PHONE_NUMBER": "Phone Number",
+    "PHONE_PLACEHOLDER": "+20 XXX XXX XXXX",
+    "PHONE_REQUIRED": "Phone number is required",
+    "PHONE_INVALID": "Please enter a valid phone number",
+    "STEP_3_DOCS_TITLE": "Upload Documents",
+    "FRONT_SIDE": "Front Side",
+    "BACK_SIDE": "Back Side",
+    "MAIN_DATA_PAGE": "Main Data Page",
+    "CHANGE_IMAGE": "Change Image",
+    "UPLOAD_FRONT": "Upload Front Image",
+    "UPLOAD_BACK": "Upload Back Image",
+    "FORMAT_LIMIT": "JPG, PNG or WEBP (Max 5MB)",
+    "REQUIRED_FOR_DOC": "Required for this document",
+    "REMOVE": "Remove",
+    "STEP_3_TITLE": "Property Ownership Documents",
+    "STEP_3_DESC": "Upload ownership documents (PDF, DOC, or images) from the Real Estate Registry to prove property ownership.",
+    "STEP_4_LIVENESS_TITLE": "Live Selfie — Liveness Check",
+    "STEP_4_LIVENESS_DESC": "Take a live selfie to confirm your physical presence. This cannot be uploaded from your gallery.",
+    "LIVENESS_HINT": "Align your face within the golden guide container and ensure optimal lighting to capture a clear, high-quality photo.",
+    "START_CAMERA": "Start Camera",
+    "CAMERA_TIP": "Align your face within the oval guide, then press Capture Photo.",
+    "CAPTURE_PHOTO": "Capture Photo",
+    "UPLOADING_SELFIE": "Uploading selfie...",
+    "SELFIE_SAVED": "Saved",
+    "RETAKE_PHOTO": "Retake",
+    "DELETE_PHOTO": "Delete Photo",
+    "CAMERA_LOADING": "Initializing camera...",
+    "CAMERA_RETRY": "Retry Camera",
+    "SELFIE_ALT": "Captured Selfie Preview",
+    "CAMERA_PERMISSION_DENIED": "Camera access is required to verify your identity. Please allow permissions in your browser settings.",
+    "CAMERA_UNAVAILABLE": "Camera device is unavailable or in use by another application.",
+    "NOTIF_SELFIE_SAVED": "Selfie captured and verified successfully.",
+    "ERR_SELFIE_FAILED": "Failed to upload selfie. Please try again.",
+    "NOTIF_SUBMITTED": "KYC verification request submitted successfully.",
+    "ERR_SUBMIT_FAILED": "Failed to submit verification request. Please try again.",
+    "ERR_FILE_TOO_LARGE": "File size exceeds the 5MB limit.",
+    "ERR_NOT_IMAGE": "Selected file must be an image.",
+    "ERR_REMOVE_FAILED": "Failed to remove the document. Please try again.",
+    "NOTIF_DOC_SAVED": "Document uploaded successfully.",
+    "ERR_UPLOAD_FAILED": "Failed to upload the document. Please try again.",
+    "NOTIF_DOC_REMOVED": "Document removed successfully.",
+    "STEP_5_OWNERSHIP_TITLE": "Property Ownership Documents",
+    "STEP_5_OWNERSHIP_DESC": "Upload supporting documents from the Real Estate Registry to prove property ownership.",
+    "ALLOWED_FORMATS": "Allowed formats: PDF, DOC, or Image",
+    "ADD_DOCUMENT": "Add Document",
+    "PDF_DOC_IMAGE": "PDF, DOC, or Image",
+    "UPLOADING": "Uploading...",
+    "SAVED_TO_DB": "Saved to DB",
+    "RETRY": "Retry",
+    "SECURE_NOTE": "Your documents are encrypted and stored securely.",
+    "SAVE_CHANGES": "Save Changes",
+    "SUBMIT_VERIFICATION": "Submit for Verification",
+    "UPLOADING_IMAGES": "Uploading Images...",
+    "SAVING_CHANGES": "Saving Changes...",
+    "FINALIZING": "Finalizing Submission...",
+    "VERIFIED_TITLE": "Account Fully Verified",
+    "VERIFIED_DESC": "Congratulations! Your identity has been confirmed. You now have full access to all premium features of Luxe Estates.",
+    "EXPLORE_PROPERTIES": "Explore Properties",
+    "GO_TO_DASHBOARD": "Go to Dashboard",
+    "MODAL_CANCEL_TITLE": "Cancel Verification Request?",
+    "MODAL_CANCEL_DESC": "You have removed all documents. Proceeding will completely cancel your current KYC verification request and reset your status.",
+    "MODAL_CANCEL_REVERT": "Are you sure you want to cancel the review request?",
+    "GO_BACK": "Go Back",
+    "YES_CANCEL": "Yes, Cancel Request",
+    "STATUS": {
+      "APPROVED_TITLE": "Identity Verified",
+      "APPROVED_DESC": "Your identity has been successfully confirmed. You have unlocked full access to all premium features.",
+      "PENDING_TITLE": "Verification in Progress",
+      "PENDING_DESC": "Our compliance team is currently reviewing your documents. This usually takes 24–48 hours.",
+      "REJECTED_TITLE": "Action Required: Verification Rejected",
+      "REJECTED_DESC": "Unfortunately, your submission did not meet our requirements. Please review the reason below and re-submit.",
+      "NOT_SUBMITTED_TITLE": "Verify Your Identity",
+      "NOT_SUBMITTED_DESC": "To ensure a secure marketplace, we require all members to verify their identity before transacting."
     }
   }
 }

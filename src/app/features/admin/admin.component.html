@@ -50,7 +50,7 @@
         </ng-template>
         <div class="info">
           <span class="name">{{ user.name }}</span>
-          <span class="role">{{ user.role === 'admin' ? 'System Administrator' : user.role }}</span>
+          <span class="role">{{ user.role === 'admin' ? ('ADMIN.ROLE_ADMIN' | translate) : user.role }}</span>
         </div>
       </div>
       <a routerLink="/" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> {{ 'ADMIN.SIDEBAR.EXIT_ADMIN' | translate }}</a>

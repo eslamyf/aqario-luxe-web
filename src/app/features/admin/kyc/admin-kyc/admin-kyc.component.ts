@@ -53,6 +53,7 @@ export class AdminKycComponent implements OnInit, OnDestroy {
   isSubmitting = false;
   showRejectModal = false;
   rejectionReason = '';
+  previewImageUrl: string | null = null;
 
   ngOnInit(): void {
     // Setup Search Debounce
@@ -142,8 +143,20 @@ export class AdminKycComponent implements OnInit, OnDestroy {
     }
   }
 
-  openFile(url?: string): void {
-    if (url) window.open(url, '_blank');
+  downloadOwnership(own: any): void {
+    if (!this.selectedUser || !own || !own._id) return;
+    this.adminService.downloadOwnershipFile(this.selectedUser._id, own._id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = own.fileName || 'ownership-document';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
+    });
   }
 
   approveKyc(): void {
@@ -206,6 +219,64 @@ export class AdminKycComponent implements OnInit, OnDestroy {
   }
 
   openImage(url: string): void {
-    if (url) window.open(url, '_blank');
+    if (url) {
+      this.previewImage(url);
+    }
+  }
+
+  previewImage(url: string): void {
+    this.previewImageUrl = url;
+  }
+
+  closePreviewImage(): void {
+    this.previewImageUrl = null;
+  }
+
+  downloadImage(url: string, filename: string): void {
+    if (!url) return;
+    this.notificationService.show('Downloading image...', 'info');
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename || 'downloaded-image';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch(err => {
+        console.error('Failed to download image:', err);
+        window.open(url, '_blank');
+      });
+  }
+
+  downloadUserData(): void {
+    if (!this.selectedUser) return;
+    const userData = {
+      id: this.selectedUser._id,
+      name: this.selectedUser.name,
+      email: this.selectedUser.email,
+      kycStatus: this.selectedUser.kycStatus,
+      kycNationality: this.selectedUser.kycNationality,
+      kycPhoneNumber: this.selectedUser.kycPhoneNumber,
+      kycVersion: this.selectedUser.kycVersion,
+      kycAttempts: this.selectedUser.kycAttempts,
+      kycSubmittedAt: this.selectedUser.kycSubmittedAt,
+      kycApprovedAt: this.selectedUser.kycApprovedAt,
+      kycRejectionReason: this.selectedUser.kycRejectionReason,
+      documents: this.selectedUser.kycDocuments || [],
+      ownershipDocuments: this.selectedUser.ownershipDocuments || []
+    };
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(userData, null, 2));
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = `kyc-dossier-${this.selectedUser.name.toLowerCase().replace(/\s+/g, '-')}-${this.selectedUser._id.slice(-8)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    this.notificationService.show('Dossier downloaded successfully', 'success');
   }
 }

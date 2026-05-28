@@ -19,7 +19,6 @@
     <!-- Header -->
     <header class="dashboard-hero">
       <h1 class="section-title">{{ 'ADMIN.DASHBOARD.PERFORMANCE' | translate }}</h1>
-      <p class="quote">{{ 'ADMIN.DASHBOARD.QUOTE' | translate }}</p>
     </header>
 
     <div *ngIf="state.loading" class="loading-state">
@@ -68,7 +67,7 @@
           </div>
           <div class="period-toggles">
             <button class="toggle-btn" [class.active]="(period$ | async) === 'monthly'" (click)="setPeriod('monthly')">{{ 'ADMIN.DASHBOARD.MONTH' | translate }}</button>
-            <button class="toggle-btn">{{ 'ADMIN.DASHBOARD.QUARTER' | translate }}</button>
+            <button class="toggle-btn" [class.active]="(period$ | async) === 'quarterly'" (click)="setPeriod('quarterly')">{{ 'ADMIN.DASHBOARD.QUARTER' | translate }}</button>
             <button class="toggle-btn" [class.active]="(period$ | async) === 'yearly'" (click)="setPeriod('yearly')">{{ 'ADMIN.DASHBOARD.YEAR' | translate }}</button>
           </div>
         </div>

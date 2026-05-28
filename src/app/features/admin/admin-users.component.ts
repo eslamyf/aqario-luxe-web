@@ -145,6 +145,15 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
     this.router.navigate([], { relativeTo: this.route, queryParams: {} });
   }
 
+  exportUsers(): void {
+    const filters = {
+      search: this.searchSubject.getValue() || undefined,
+      role:   this.roleSubject.getValue()   || undefined,
+      status: this.statusSubject.getValue() || undefined,
+    };
+    this.adminService.exportUsers(filters);
+  }
+
   private syncUrl(): void {
     this.router.navigate([], {
       relativeTo: this.route,

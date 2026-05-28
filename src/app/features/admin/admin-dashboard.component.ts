@@ -20,7 +20,7 @@ interface DashboardState {
 export class AdminDashboardComponent implements OnInit {
   private adminService = inject(AdminService);
 
-  private periodSubject = new BehaviorSubject<'monthly' | 'yearly'>('monthly');
+  private periodSubject = new BehaviorSubject<'monthly' | 'quarterly' | 'yearly'>('monthly');
   period$ = this.periodSubject.asObservable();
 
   state$: Observable<DashboardState>;
@@ -45,7 +45,7 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  setPeriod(period: 'monthly' | 'yearly') {
+  setPeriod(period: 'monthly' | 'quarterly' | 'yearly') {
     this.periodSubject.next(period);
   }
 
