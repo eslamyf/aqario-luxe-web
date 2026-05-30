@@ -198,13 +198,19 @@
                 {{ (kycForm.get('documentType')?.value === 'passport'
                 ? 'USER_KYC.MAIN_DATA_PAGE' : 'USER_KYC.FRONT_SIDE') | translate }}
               </label>
-              <div class="drop-zone" (click)="frontInput.click()" [class.has-preview]="frontPreview">
+              <div class="drop-zone" (click)="!frontPreview ? frontInput.click() : $event.stopPropagation()" [class.has-preview]="frontPreview">
                 <input type="file" #frontInput hidden (change)="onFileSelected($event, 'front')" accept="image/*">
                 <ng-container *ngIf="frontPreview; else frontPlaceholder">
                   <img [src]="frontPreview" class="preview-img" alt="Front Preview">
                   <div class="change-overlay">
-                    <i class="fa-solid fa-camera-rotate"></i>
-                    {{ 'USER_KYC.CHANGE_IMAGE' | translate }}
+                    <button type="button" class="overlay-btn preview-btn" (click)="openPreview(selectedFrontFile || frontPreview, 'front'); $event.stopPropagation();" [title]="'USER_KYC.PREVIEW' | translate">
+                      <i class="fa-solid fa-eye"></i>
+                      <span>{{ 'USER_KYC.PREVIEW' | translate }}</span>
+                    </button>
+                    <button type="button" class="overlay-btn remove-btn" (click)="removeImage('front'); $event.stopPropagation();" [title]="'USER_KYC.REMOVE' | translate">
+                      <i class="fa-solid fa-trash-can"></i>
+                      <span>{{ 'USER_KYC.REMOVE' | translate }}</span>
+                    </button>
                   </div>
                 </ng-container>
                 <ng-template #frontPlaceholder>
@@ -215,22 +221,24 @@
                   </div>
                 </ng-template>
               </div>
-              <button *ngIf="frontPreview" type="button" class="remove-doc-btn" (click)="removeImage('front')"
-                [title]="'USER_KYC.REMOVE' | translate">
-                <i class="fa-solid fa-trash-can"></i> {{ 'USER_KYC.REMOVE' | translate }}
-              </button>
             </div>
 
             <!-- Back Image (National ID only) -->
             <div class="upload-field" *ngIf="kycForm.get('documentType')?.value !== 'passport'">
               <label class="field-hint">{{ 'USER_KYC.BACK_SIDE' | translate }}</label>
-              <div class="drop-zone" (click)="backInput.click()" [class.has-preview]="backPreview">
+              <div class="drop-zone" (click)="!backPreview ? backInput.click() : $event.stopPropagation()" [class.has-preview]="backPreview">
                 <input type="file" #backInput hidden (change)="onFileSelected($event, 'back')" accept="image/*">
                 <ng-container *ngIf="backPreview; else backPlaceholder">
                   <img [src]="backPreview" class="preview-img" alt="Back Preview">
                   <div class="change-overlay">
-                    <i class="fa-solid fa-camera-rotate"></i>
-                    {{ 'USER_KYC.CHANGE_IMAGE' | translate }}
+                    <button type="button" class="overlay-btn preview-btn" (click)="openPreview(selectedBackFile || backPreview, 'back'); $event.stopPropagation();" [title]="'USER_KYC.PREVIEW' | translate">
+                      <i class="fa-solid fa-eye"></i>
+                      <span>{{ 'USER_KYC.PREVIEW' | translate }}</span>
+                    </button>
+                    <button type="button" class="overlay-btn remove-btn" (click)="removeImage('back'); $event.stopPropagation();" [title]="'USER_KYC.REMOVE' | translate">
+                      <i class="fa-solid fa-trash-can"></i>
+                      <span>{{ 'USER_KYC.REMOVE' | translate }}</span>
+                    </button>
                   </div>
                 </ng-container>
                 <ng-template #backPlaceholder>
@@ -241,10 +249,6 @@
                   </div>
                 </ng-template>
               </div>
-              <button *ngIf="backPreview" type="button" class="remove-doc-btn" (click)="removeImage('back')"
-                [title]="'USER_KYC.REMOVE' | translate">
-                <i class="fa-solid fa-trash-can"></i> {{ 'USER_KYC.REMOVE' | translate }}
-              </button>
             </div>
 
           </div>
@@ -368,11 +372,17 @@
                   <span class="file-name" [title]="doc.fileName">{{ doc.fileName }}</span>
                   <span class="file-type-badge">{{ doc.fileType?.toUpperCase() }}</span>
                 </div>
-                <button type="button" class="file-delete-btn" (click)="deleteOwnershipFile(i)"
-                  [disabled]="isDeletingOwnership[i]" [title]="'USER_KYC.REMOVE' | translate">
-                  <i class="fa-solid"
-                    [ngClass]="isDeletingOwnership[i] ? 'fa-circle-notch fa-spin' : 'fa-trash-can'"></i>
-                </button>
+                <div class="file-actions">
+                  <button type="button" class="file-action-btn preview-btn" (click)="openPreview(doc.fileUrl || doc.imageUrl || '', doc.fileName || '')"
+                    [title]="'USER_KYC.PREVIEW_DOCUMENT' | translate">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                  <button type="button" class="file-action-btn delete-btn" (click)="deleteOwnershipFile(i)"
+                    [disabled]="isDeletingOwnership[i]" [title]="'USER_KYC.REMOVE_FILE' | translate">
+                    <i class="fa-solid"
+                      [ngClass]="isDeletingOwnership[i] ? 'fa-circle-notch fa-spin' : 'fa-trash-can'"></i>
+                  </button>
+                </div>
               </div>
 
               <!-- Add New File -->
@@ -476,6 +486,46 @@
         <button class="btn-secondary" (click)="cancelRevert()">{{ 'USER_KYC.GO_BACK' | translate }}</button>
         <button class="btn-danger" (click)="confirmRevert()">{{ 'USER_KYC.YES_CANCEL' | translate }}</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ── In-Browser Document Preview Modal ──────────────────────────────── -->
+  <div class="kyc-preview-modal-overlay" *ngIf="showPreviewModal" (click)="closePreview()">
+    <div class="kyc-preview-modal" (click)="$event.stopPropagation()">
+      
+      <!-- Sticky Header -->
+      <div class="modal-header">
+        <h3 class="modal-title" [title]="previewTitle">{{ previewTitle }}</h3>
+        <button type="button" class="btn-close-modal" (click)="closePreview()" [title]="'USER_KYC.CLOSE' | translate">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Content Area -->
+      <div class="modal-content-area">
+        
+        <!-- Render Image -->
+        <div class="render-viewport image-viewport" *ngIf="previewFileType === 'image'">
+          <img [src]="previewUrl" alt="Document Preview" class="preview-render-img">
+        </div>
+
+        <!-- Render PDF -->
+        <div class="render-viewport pdf-viewport" *ngIf="previewFileType === 'pdf'">
+          <object [data]="previewUrl" type="application/pdf" class="preview-render-pdf">
+            <iframe [src]="previewUrl" frameborder="0" class="preview-render-pdf-fallback"></iframe>
+          </object>
+        </div>
+
+        <!-- Render Unsupported format -->
+        <div class="render-viewport unsupported-viewport" *ngIf="previewFileType === 'unsupported'">
+          <div class="unsupported-msg-box">
+            <i class="fa-solid fa-file-circle-exclamation warning-icon"></i>
+            <p class="unsupported-desc">{{ 'USER_KYC.UNSUPPORTED_PREVIEW_DESC' | translate }}</p>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 

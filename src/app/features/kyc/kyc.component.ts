@@ -2,6 +2,7 @@ import {
   Component, inject, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener
 } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { isValidPhoneNumber, CountryCode } from 'libphonenumber-js';
 import {
   ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl
@@ -39,8 +40,16 @@ export class KycComponent implements OnInit, OnDestroy, AfterViewInit {
   private translate = inject(TranslateService);
   private cdr = inject(ChangeDetectorRef);
   private elementRef = inject(ElementRef);
+  private sanitizer = inject(DomSanitizer);
 
   isViewInitialized = false;
+
+  // ── Document Preview Modal State ──────────────────────────────────────────
+  showPreviewModal = false;
+  previewTitle = '';
+  previewUrl: SafeResourceUrl | null = null;
+  previewFileType: 'image' | 'pdf' | 'unsupported' = 'image';
+  objectUrlToRevoke: string | null = null;
 
   // Searchable Dropdown state
   showDropdown = false;
@@ -309,6 +318,77 @@ export class KycComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.pollSubscription?.unsubscribe();
     this.stopCamera();
+    this.closePreview();
+  }
+
+  // ── Document Preview Handlers ─────────────────────────────────────────────
+  openPreview(fileOrUrl: File | string, title: string): void {
+    if (this.objectUrlToRevoke) {
+      URL.revokeObjectURL(this.objectUrlToRevoke);
+      this.objectUrlToRevoke = null;
+    }
+
+    let urlString = '';
+    let fileType: 'image' | 'pdf' | 'unsupported' = 'unsupported';
+
+    if (fileOrUrl instanceof File) {
+      const type = fileOrUrl.type.toLowerCase();
+      if (type.startsWith('image/')) {
+        fileType = 'image';
+      } else if (type === 'application/pdf') {
+        fileType = 'pdf';
+      } else {
+        fileType = 'unsupported';
+      }
+      urlString = URL.createObjectURL(fileOrUrl);
+      this.objectUrlToRevoke = urlString;
+    } else if (typeof fileOrUrl === 'string') {
+      const lowerUrl = fileOrUrl.toLowerCase();
+      const cleanUrl = lowerUrl.split('?')[0].split('#')[0];
+      if (cleanUrl.endsWith('.pdf')) {
+        fileType = 'pdf';
+      } else if (
+        cleanUrl.endsWith('.jpg') ||
+        cleanUrl.endsWith('.jpeg') ||
+        cleanUrl.endsWith('.png') ||
+        cleanUrl.endsWith('.webp') ||
+        lowerUrl.startsWith('data:image/')
+      ) {
+        fileType = 'image';
+      } else if (lowerUrl.startsWith('data:application/pdf')) {
+        fileType = 'pdf';
+      } else {
+        fileType = 'image'; // default fallback for urls
+      }
+      urlString = fileOrUrl;
+    }
+
+    let displayTitle = title;
+    if (title === 'front') {
+      const docType = this.kycForm.get('documentType')?.value;
+      const sideText = this.translate.instant(docType === 'passport' ? 'USER_KYC.MAIN_DATA_PAGE' : 'USER_KYC.FRONT_SIDE');
+      displayTitle = `${this.translate.instant('USER_KYC.PREVIEW_DOCUMENT')}: ${sideText}`;
+    } else if (title === 'back') {
+      const sideText = this.translate.instant('USER_KYC.BACK_SIDE');
+      displayTitle = `${this.translate.instant('USER_KYC.PREVIEW_DOCUMENT')}: ${sideText}`;
+    }
+
+    this.previewTitle = displayTitle;
+    this.previewFileType = fileType;
+    this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(urlString);
+    this.showPreviewModal = true;
+    this.cdr.detectChanges();
+  }
+
+  closePreview(): void {
+    this.showPreviewModal = false;
+    this.previewUrl = null;
+    this.previewTitle = '';
+    if (this.objectUrlToRevoke) {
+      URL.revokeObjectURL(this.objectUrlToRevoke);
+      this.objectUrlToRevoke = null;
+    }
+    this.cdr.detectChanges();
   }
 
   // ── Searchable Dropdown Helpers ───────────────────────────────────────────

@@ -1294,6 +1294,11 @@
       "REJECTED_DESC": "Unfortunately, your submission did not meet our requirements. Please review the reason below and re-submit.",
       "NOT_SUBMITTED_TITLE": "Verify Your Identity",
       "NOT_SUBMITTED_DESC": "To ensure a secure marketplace, we require all members to verify their identity before transacting."
-    }
+    },
+    "PREVIEW_DOCUMENT": "Preview Document",
+    "CLOSE": "Close",
+    "REMOVE_FILE": "Remove File",
+    "UNSUPPORTED_PREVIEW_DESC": "Direct preview is not supported for this file format. Please download the file or verify locally.",
+    "PREVIEW": "Preview"
   }
 }
