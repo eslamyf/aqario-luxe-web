@@ -90,18 +90,18 @@ export class NavComponent {
   }
 
   // Intelligent function to control "List Property" button based on roles
-  onListPropertyClick(): void {
+  navigateToAddProperty(): void {
     const currentUser = this.auth.currentUser;
 
     if (!currentUser) {
       // If no user is logged in, open the login modal
       this.auth.openModal();
-    } else if (currentUser.role === 'buyer') {
-      // If regular buyer, redirect to "Become Agent" page
-      this.router.navigate(['/become-agent']);
-    } else if (currentUser.role === 'owner' || currentUser.role === 'agent') {
-      // If owner/agent, redirect to "Add Property" page
-      this.router.navigate(['/add-property']);
+    } else if (currentUser.role === 'owner' || currentUser.role === 'agent' || currentUser.role === 'admin') {
+      // Condition A: If owner/agent/admin, redirect to "Add Property" page in the dashboard
+      this.router.navigate(['/dashboard/properties'], { queryParams: { view: 'form' } });
+    } else {
+      // Condition B: Standard user / not owner -> redirect immediately to KYC page
+      this.router.navigate(['/kyc']);
     }
   }
 

@@ -137,7 +137,8 @@ export class PropertiesService {
     if (filters?.type)     params = params.set('type',     filters.type);
     if (filters?.maxPrice) params = params.set('maxPrice', String(filters.maxPrice));
     if (filters?.minPrice) params = params.set('minPrice', String(filters.minPrice));
-    if (filters?.bedrooms) params = params.set('bedrooms', String(filters.bedrooms));
+    if (filters?.bedrooms)  params = params.set('bedrooms',  String(filters.bedrooms));
+    if (filters?.bathrooms) params = params.set('bathrooms', String(filters.bathrooms));
     if (filters?.page)     params = params.set('page',     String(filters.page));
     if (filters?.limit)    params = params.set('limit',    String(filters.limit));
     if (filters?.cursor)   params = params.set('cursor',   filters.cursor);

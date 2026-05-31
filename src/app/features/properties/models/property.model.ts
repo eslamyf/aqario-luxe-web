@@ -88,6 +88,7 @@ export interface PropertyFilters {
   maxPrice?: number;
   minPrice?: number;
   bedrooms?: number;
+  bathrooms?: number;
   page?: number;
   limit?: number;
   /** Map to cursor pagination */

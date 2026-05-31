@@ -10,9 +10,25 @@
   <div class="hero-orb hero-orb-1"></div>
   <div class="hero-orb hero-orb-2"></div>
 
+  <!-- ── FULL-SCREEN BACKGROUND: Luxury Architectural Image ── -->
+  <div class="hero-visual" [@heroImage]="animState" aria-hidden="true">
+    <div class="hero-visual-frame">
+      <!-- Primary: high-quality luxury villa photograph -->
+      <img
+        class="hero-visual-img"
+        src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85"
+        [alt]="'HOME.HERO.IMAGE_ALT' | translate"
+        loading="eager"
+        decoding="async"
+        (error)="onImageError($event)"
+      />
+      <!-- Gradient fade mask — blends image into the hero background -->
+      <div class="hero-visual-mask"></div>
+    </div>
+  </div>
+
   <!-- ═══════════════════════════════════════════════════════════
-       HERO BODY — Two-column grid: Left = Content, Right = Image
-       On mobile this collapses to single column (image below)
+       HERO BODY — Content container (floats on top of background)
   ════════════════════════════════════════════════════════════ -->
   <div class="hero-body">
 
@@ -25,16 +41,13 @@
       </div>
 
       <!-- Headline -->
-      <h1 class="hero-headline">
-        <!-- Line 1: "Find Your" — weight 300, delay 0.4s -->
-        <span class="headline-light" [@headline1]="animState">{{ 'HOME.HERO.HEADLINE_LIGHT' | translate }}</span>
-        <!-- Line 2: "Perfect Home" — italic gold, delay 0.6s -->
-        <em   class="headline-gold"  [@headline2]="animState">{{ 'HOME.HERO.HEADLINE_GOLD' | translate }}</em>
+      <h1 class="hero-headline" [@headline1]="animState">
+        {{ 'HOME.HERO.HERO_HEADLINE' | translate }}
       </h1>
 
       <!-- Sub-text -->
       <p class="hero-sub" [@subText]="animState">
-        {{ 'HOME.HERO.SUB' | translate }}
+        {{ 'HOME.HERO.HERO_SUBTEXT' | translate }}
       </p>
 
       <!-- CTA Buttons -->
@@ -49,36 +62,13 @@
         <button
           id="btn-list-property"
           class="btn-secondary"
-          data-cursor-hover>
+          data-cursor-hover
+          (click)="navigateToAddProperty()">
           {{ 'HOME.HERO.LIST' | translate }}
         </button>
       </div>
 
     </div><!-- /hero-content -->
-
-    <!-- ── RIGHT: Luxury Architectural Image ─────────────────── -->
-    <!-- Fade-in with subtle upward motion via Angular animation  -->
-    <div class="hero-visual" [@heroImage]="animState" aria-hidden="true">
-      <div class="hero-visual-frame">
-        <!-- Primary: high-quality luxury villa photograph -->
-        <img
-          class="hero-visual-img"
-          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85"
-          [alt]="'HOME.HERO.IMAGE_ALT' | translate"
-          loading="eager"
-          decoding="async"
-          (error)="onImageError($event)"
-        />
-        <!-- Gradient fade mask — blends image into the hero background -->
-        <div class="hero-visual-mask"></div>
-        <!-- Floating property badge — design accent -->
-        <div class="hero-visual-badge">
-          <span class="badge-label">{{ 'HOME.HERO.FEATURED' | translate }}</span>
-          <span class="badge-price">{{ 'HOME.HERO.FEATURED_PRICE' | translate }}</span>
-          <span class="badge-location">{{ 'HOME.HERO.FEATURED_LOCATION' | translate }}</span>
-        </div>
-      </div>
-    </div><!-- /hero-visual -->
 
   </div><!-- /hero-body -->
 

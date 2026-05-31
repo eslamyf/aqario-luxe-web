@@ -23,6 +23,8 @@
   // ── Semantic Text Tokens ──────────────────────────────────
   --text-main:         #F9FAFB;   // Crisp off-white
   --text-muted:        #9CA3AF;   // Muted slate gray
+  --text-primary:      var(--text-main);
+  --text-secondary:    var(--text-muted);
   --placeholder-color: #6B7280;   // Search/input placeholder
 
   // ── Semantic Border / Overlay ────────────────────────────
@@ -130,6 +132,8 @@
   // ── Semantic Text Tokens ──────────────────────────────────
   --text-main:         #111827;   // Deep Charcoal — high contrast readability
   --text-muted:        #6B7280;   // Medium Gray — standard SaaS secondary text
+  --text-primary:      #111827;
+  --text-secondary:    #4B5563;
   --placeholder-color: #9CA3AF;   // Light Gray placeholder
 
   // ── Semantic Border / Overlay ────────────────────────────

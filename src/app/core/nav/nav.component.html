@@ -21,9 +21,10 @@
          DESKTOP NAV LINKS
          ══════════════════════════════════════════════════ -->
     <ul class="nav-links" role="list">
+      <li><a routerLink="/"           routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" id="nav-link-home">{{ 'NAV.HOME' | translate }}</a></li>
       <li><a routerLink="/properties" routerLinkActive="active" id="nav-link-properties">{{ 'NAV.PROPERTIES' | translate }}</a></li>
-      <li><a routerLink="/" fragment="explore"                  id="nav-link-explore">{{ 'NAV.EXPLORE' | translate }}</a></li>
       <li><a routerLink="/agents"     routerLinkActive="active" id="nav-link-agents">{{ 'NAV.AGENTS' | translate }}</a></li>
+      <li><a routerLink="/dashboard/saved" routerLinkActive="active" id="nav-link-favourites">{{ 'NAV.FAVOURITES' | translate }}</a></li>
     </ul>
 
     <!-- ══════════════════════════════════════════════════
@@ -135,7 +136,7 @@
       </ng-container>
 
       <!-- List Property CTA — always visible on desktop -->
-      <button id="btn-list-property" class="btn-list" (click)="onListPropertyClick()" data-cursor-hover>
+      <button id="btn-list-property" class="btn-list" (click)="navigateToAddProperty()" data-cursor-hover>
         {{ 'NAV.LIST_PROPERTY' | translate }}
       </button>
 
@@ -209,9 +210,10 @@
     <!-- GLOBAL LINKS TEMPLATE -->
     <ng-template #globalMobileNav>
       <ul class="mobile-nav-links" role="list">
+        <li><a routerLink="/"           routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">{{ 'NAV.HOME' | translate }}</a></li>
         <li><a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.PROPERTIES' | translate }}</a></li>
-        <li><a routerLink="/" fragment="explore"                  (click)="closeMobileMenu()">{{ 'NAV.EXPLORE' | translate }}</a></li>
         <li><a routerLink="/agents"     routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.AGENTS' | translate }}</a></li>
+        <li><a routerLink="/dashboard/saved" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.FAVOURITES' | translate }}</a></li>
       </ul>
     </ng-template>
 
@@ -251,7 +253,7 @@
         <button class="btn-signin" (click)="openLogin(); closeMobileMenu()">{{ 'NAV.SIGN_IN' | translate }}</button>
       </ng-container>
 
-      <button *ngIf="!(dashboardUi.isDashboardRoute | async)" class="btn-list" (click)="onListPropertyClick(); closeMobileMenu()">
+      <button *ngIf="!(dashboardUi.isDashboardRoute | async)" class="btn-list" (click)="navigateToAddProperty(); closeMobileMenu()">
         {{ 'NAV.LIST_PROPERTY' | translate }}
       </button>
     </div>

@@ -41,6 +41,7 @@ export class PropertiesPageComponent implements OnInit {
 
   // UI state
   isFilterExpanded = false;
+  currentTab = 'all';
 
   // ── Filter Form ───────────────────────────────────────────────────────────
   private fb = inject(FormBuilder);
@@ -49,19 +50,20 @@ export class PropertiesPageComponent implements OnInit {
     city: [''],
     minPrice: [''],
     maxPrice: [''],
-    bedrooms: ['']
+    bedrooms: [''],
+    bathrooms: ['']
   });
 
   // ── Filter tabs — aligned with backend enum exactly ───────────────────────
   filterTabs = [
-    { labelKey: 'PROPERTIES.TABS.ALL', key: 'all' },
-    { labelKey: 'REAL_ESTATE.FOR_SALE', key: 'for-sale' },
-    { labelKey: 'REAL_ESTATE.FOR_RENT', key: 'for-rent' },
-    { labelKey: 'REAL_ESTATE.APARTMENTS_CHIP', key: 'apartment' },
-    { labelKey: 'REAL_ESTATE.VILLAS_CHIP', key: 'villa' },
-    { labelKey: 'PROPERTIES.TABS.HOUSES', key: 'house' },
-    { labelKey: 'PROPERTIES.TABS.STUDIOS', key: 'studio' },
-    { labelKey: 'REAL_ESTATE.COMMERCIAL', key: 'commercial' },
+    { labelKey: 'PROPERTIES.TABS.ALL', id: 'all' },
+    { labelKey: 'REAL_ESTATE.FOR_SALE', id: 'for-sale' },
+    { labelKey: 'REAL_ESTATE.FOR_RENT', id: 'for-rent' },
+    { labelKey: 'REAL_ESTATE.APARTMENTS_CHIP', id: 'apartment' },
+    { labelKey: 'REAL_ESTATE.VILLAS_CHIP', id: 'villa' },
+    { labelKey: 'PROPERTIES.TABS.HOUSES', id: 'house' },
+    { labelKey: 'PROPERTIES.TABS.STUDIOS', id: 'studio' },
+    { labelKey: 'REAL_ESTATE.COMMERCIAL', id: 'commercial' },
   ];
 
   ngOnInit(): void {
@@ -75,6 +77,8 @@ export class PropertiesPageComponent implements OnInit {
       )
       .subscribe((filters) => {
         this.currentPage = filters.page ?? 1;
+        this.currentTab = filters.status || filters.type || 'all';
+
         // Patch form without triggering infinite loop
         this.filterForm.patchValue({
           search: filters.search || '',
@@ -82,9 +86,11 @@ export class PropertiesPageComponent implements OnInit {
           minPrice: filters.minPrice ? filters.minPrice.toString() : '',
           maxPrice: filters.maxPrice ? filters.maxPrice.toString() : '',
           bedrooms: filters.bedrooms ? filters.bedrooms.toString() : '',
+          bathrooms: filters.bathrooms ? filters.bathrooms.toString() : '',
         }, { emitEvent: false });
 
         this.svc.setFilters(filters);
+        this.cdr.markForCheck();
       });
 
     // Subscribe to language changes reactively to refresh listing translations instantly
@@ -125,6 +131,7 @@ export class PropertiesPageComponent implements OnInit {
       minPrice: params['minPrice'] ? Number(params['minPrice']) : undefined,
       maxPrice: params['maxPrice'] ? Number(params['maxPrice']) : undefined,
       bedrooms: params['bedrooms'] ? Number(params['bedrooms']) : undefined,
+      bathrooms: params['bathrooms'] ? Number(params['bathrooms']) : undefined,
       page: params['page'] ? Number(params['page']) : 1,
       cursor: params['cursor'] || undefined,
     };
@@ -168,6 +175,7 @@ export class PropertiesPageComponent implements OnInit {
     if (val.minPrice) queryParams.minPrice = val.minPrice; else delete queryParams.minPrice;
     if (val.maxPrice) queryParams.maxPrice = val.maxPrice; else delete queryParams.maxPrice;
     if (val.bedrooms) queryParams.bedrooms = val.bedrooms; else delete queryParams.bedrooms;
+    if (val.bathrooms) queryParams.bathrooms = val.bathrooms; else delete queryParams.bathrooms;
 
     this.router.navigate([], { queryParams });
   }

@@ -1,5 +1,6 @@
 {
   "NAV": {
+    "HOME": "Home",
     "PROPERTIES": "Properties",
     "EXPLORE": "Explore",
     "AGENTS": "Agents",
@@ -22,7 +23,8 @@
     "REQUESTS": "Requests",
     "SAVED": "Saved",
     "PAYMENTS": "Payments",
-    "ADMIN_CENTER": "Admin Center"
+    "ADMIN_CENTER": "Admin Center",
+    "FAVOURITES": "Favourites"
   },
   "COMMON": {
     "SEARCH": "Search",
@@ -98,6 +100,8 @@
       "EYEBROW": "PREMIER GLOBAL REAL ESTATE",
       "HEADLINE_LIGHT": "Find Your",
       "HEADLINE_GOLD": "Perfect Home",
+      "HERO_HEADLINE": "Find Your Perfect Home",
+      "HERO_SUBTEXT": "Discover premium properties carefully selected to provide you with an exceptional residential and investment experience in one place.",
       "SUB": "From penthouse suites in Manhattan to waterfront villas in Dubai — discover extraordinary properties curated for the discerning.",
       "EXPLORE": "EXPLORE PROPERTIES",
       "LIST": "LIST YOUR PROPERTY",
@@ -266,6 +270,24 @@
     "CITY_PLACEHOLDER": "City or location",
     "FILTERS_BTN": "Filters",
     "SEARCH_BTN": "Search",
+    "BEDS_BATHS": "Rooms & Baths",
+    "BEDS_BATHS_1": "1+ Beds & Baths",
+    "BEDS_BATHS_2": "2+ Beds & Baths",
+    "BEDS_BATHS_3": "3+ Beds & Baths",
+    "BEDS_BATHS_4": "4+ Beds & Baths",
+    "BEDS_BATHS_5": "5+ Beds & Baths",
+    "BEDROOMS_LABEL": "Bedrooms",
+    "BATHROOMS_LABEL": "Bathrooms",
+    "BEDROOMS_1": "1+ Bedroom",
+    "BEDROOMS_2": "2+ Bedrooms",
+    "BEDROOMS_3": "3+ Bedrooms",
+    "BEDROOMS_4": "4+ Bedrooms",
+    "BEDROOMS_5": "5+ Bedrooms",
+    "BATHROOMS_1": "1+ Bathroom",
+    "BATHROOMS_2": "2+ Bathrooms",
+    "BATHROOMS_3": "3+ Bathrooms",
+    "BATHROOMS_4": "4+ Bathrooms",
+    "BATHROOMS_5": "5+ Bathrooms",
     "MIN_PRICE": "Min Price ($)",
     "MAX_PRICE": "Max Price ($)",
     "BEDROOMS": "Bedrooms",
@@ -1300,5 +1322,8 @@
     "REMOVE_FILE": "Remove File",
     "UNSUPPORTED_PREVIEW_DESC": "Direct preview is not supported for this file format. Please download the file or verify locally.",
     "PREVIEW": "Preview"
-  }
+  },
+  "NAV_HOME": "Home",
+  "HERO_HEADLINE": "Find Your Perfect Home",
+  "HERO_SUBTEXT": "Discover premium properties carefully selected to provide you with an exceptional residential and investment experience in one place."
 }

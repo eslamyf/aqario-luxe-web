@@ -10,12 +10,13 @@
   padding: 120px 60px;        // Template line 377: section { padding: 120px 60px }
 }
 
-// ── Section header — Template lines 409–412 ──────────────────────────────────
+// ── Section header ───────────────────────────────────────────────────────────
 .properties-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
   margin-bottom: 60px;
+  text-align: start;
 }
 
 // ── Eyebrow — Template lines 378–390 ─────────────────────────────────────────
@@ -56,21 +57,33 @@
   }
 }
 
-// ── Section sub-text — Template lines 400–405 ────────────────────────────────
+// ── Section sub-text ─────────────────────────────────────────────────────────
 .section-sub {
   font-size: 15px;
   color: var(--mist);
   line-height: 1.7;
   max-width: 500px;
-  text-align: end;            // RTL-safe: matches template "text-align:right"
+  margin-top: 16px;
+  text-align: start;
+
+  :host-context([dir="rtl"]) & {
+    text-align: right;
+  }
 }
 
 // ── Filter tabs — Template lines 1276–1295 ───────────────────────────────────
 .properties-tabs {
   display: flex;
+  justify-content: flex-start;
   gap: 0;
   margin-bottom: 40px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+}
+
+:host-context([dir="rtl"]) {
+  .properties-tabs {
+    justify-content: flex-start;
+  }
 }
 
 // Individual tab — Template lines 1281–1294
@@ -80,7 +93,7 @@
   font-size: 10px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--mist);
+  color: var(--text-secondary, var(--mist));
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   background: none;
@@ -95,7 +108,7 @@
   }
 
   &:hover {
-    color: var(--white);
+    color: var(--text-primary, var(--white));
   }
 }
 
@@ -105,6 +118,11 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 20px;
   margin-bottom: 40px;
+
+  :host-context([data-theme="light"]) & {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
   
   .search-inputs {
     display: flex;
@@ -123,14 +141,20 @@
       padding: 0 16px;
       transition: border-color 0.3s ease;
 
+      :host-context([data-theme="light"]) & {
+        background: rgba(0, 0, 0, 0.04);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
       &:focus-within {
         border-color: var(--gold);
       }
 
       .input-icon {
-        font-size: 14px;
         color: var(--gold);
-        margin-right: 12px;
+        margin-inline-end: 12px;
+        display: flex;
+        align-items: center;
       }
 
       input {
@@ -144,7 +168,7 @@
         outline: none;
 
         &::placeholder {
-          color: rgba(255, 255, 255, 0.3);
+          color: var(--placeholder-color);
         }
       }
     }
@@ -163,6 +187,10 @@
       gap: 8px;
       transition: all 0.3s ease;
       cursor: pointer;
+
+      :host-context([data-theme="light"]) & {
+        border-color: rgba(0, 0, 0, 0.15);
+      }
 
       &:hover, &.active {
         border-color: var(--gold);
@@ -201,6 +229,10 @@
       margin-top: 20px;
       padding-top: 20px;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+      :host-context([data-theme="light"]) & {
+        border-top-color: rgba(0, 0, 0, 0.08);
+      }
     }
 
     .filter-row {
@@ -234,12 +266,17 @@
           outline: none;
           transition: border-color 0.3s ease;
 
+          :host-context([data-theme="light"]) & {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.1);
+          }
+
           &:focus {
             border-color: var(--gold);
           }
 
           &::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+            color: var(--placeholder-color);
           }
         }
         
@@ -388,6 +425,10 @@
   // cursor: none — global styles.scss handles this
   transition: border-color 0.3s var(--transition), color 0.3s var(--transition);
 
+  :host-context([data-theme="light"]) & {
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+
   &:hover {
     border-color: var(--gold);
     color: var(--gold);
@@ -426,10 +467,6 @@
     align-items: flex-start;
     gap: 20px;
   }
-
-  .section-sub {
-    text-align: start;
-  }
 }
 
 @media (max-width: 768px) {
@@ -443,3 +480,15 @@
     font-size: 9px;
   }
 }
+
+// ── Premium SVG Icons ────────────────────────────────────────────────────────
+.icon-svg {
+  display: inline-block;
+  vertical-align: middle;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  flex-shrink: 0;
+  transition: stroke 0.3s ease, fill 0.3s ease;
+}
+

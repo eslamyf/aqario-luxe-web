@@ -269,3 +269,15 @@
     box-shadow: 0 8px 16px var(--brand-gold-soft);
   }
 }
+
+// ── Premium SVG Icons ────────────────────────────────────────────────────────
+.icon-svg {
+  display: inline-block;
+  vertical-align: middle;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  flex-shrink: 0;
+  transition: stroke 0.3s ease, fill 0.3s ease;
+}
+

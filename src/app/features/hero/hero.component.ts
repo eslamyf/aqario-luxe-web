@@ -18,6 +18,7 @@ import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SearchPayload } from './search-bar/search-bar.component';
+import { AuthService } from '../../core/auth/auth.service';
 
 // ─── Shared easing curve (mirrors var(--transition) from _variables.scss) ───
 const EASE = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
@@ -53,6 +54,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private ngZone = inject(NgZone);
+  private auth = inject(AuthService);
 
   animState: 'hidden' | 'visible' = 'hidden';
 
@@ -114,6 +116,18 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       el.scrollIntoView({ behavior: 'smooth' });
     } else {
       this.router.navigate(['/properties']);
+    }
+  }
+
+  navigateToAddProperty(): void {
+    const currentUser = this.auth.currentUser;
+
+    if (!currentUser) {
+      this.auth.openModal();
+    } else if (currentUser.role === 'owner' || currentUser.role === 'agent' || currentUser.role === 'admin') {
+      this.router.navigate(['/dashboard/properties'], { queryParams: { view: 'form' } });
+    } else {
+      this.router.navigate(['/kyc']);
     }
   }
 

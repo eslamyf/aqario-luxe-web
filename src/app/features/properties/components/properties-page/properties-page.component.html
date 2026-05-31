@@ -11,22 +11,18 @@
 
   <!-- ── Section header ──────────────────────────────────────────────────── -->
   <div class="properties-header">
-    <div>
-      <div class="section-eyebrow">{{ 'PROPERTIES.EYEBROW' | translate }}</div>
-      <h2 class="section-title">{{ 'PROPERTIES.TITLE' | translate }} <em>{{ 'PROPERTIES.EMPHASIS' | translate }}</em>
-      </h2>
-    </div>
-    <div>
-      <p class="section-sub">
-        {{ 'PROPERTIES.SUB' | translate }}
-      </p>
-    </div>
+    <div class="section-eyebrow">{{ 'PROPERTIES.EYEBROW' | translate }}</div>
+    <h2 class="section-title">{{ 'PROPERTIES.TITLE' | translate }} <em>{{ 'PROPERTIES.EMPHASIS' | translate }}</em>
+    </h2>
+    <p class="section-sub">
+      {{ 'PROPERTIES.SUB' | translate }}
+    </p>
   </div>
 
   <!-- ── Filter tabs ─────────────────────────────────────────────────────── -->
   <div class="properties-tabs">
-    <button *ngFor="let tab of filterTabs" class="prop-tab" [class.active]="(activeFilter$ | async) === tab.key"
-      (click)="onFilterChange(tab.key)" data-cursor-hover>
+    <button *ngFor="let tab of filterTabs" class="prop-tab" [class.active]="currentTab === tab.id"
+      (click)="onFilterChange(tab.id)" data-cursor-hover>
       {{ tab.labelKey | translate }}
     </button>
   </div>
@@ -36,18 +32,40 @@
     <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="search-form">
       <div class="search-inputs">
         <div class="input-group">
-          <span class="input-icon">🔍</span>
+          <span class="input-icon">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="16" height="16">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
           <input type="text" formControlName="search" [placeholder]="'PROPERTIES.SEARCH_PLACEHOLDER' | translate" />
         </div>
 
         <div class="input-group">
-          <span class="input-icon">📍</span>
+          <span class="input-icon">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="16" height="16">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </span>
           <input type="text" formControlName="city" [placeholder]="'PROPERTIES.CITY_PLACEHOLDER' | translate" />
         </div>
 
         <button type="button" class="btn-toggle-filters" (click)="toggleFilterPanel()"
           [class.active]="isFilterExpanded">
-          <span class="filter-icon">⚙️</span> {{ 'PROPERTIES.FILTERS_BTN' | translate }}
+          <span class="filter-icon">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+              <line x1="1" y1="14" x2="7" y2="14"></line>
+              <line x1="9" y1="8" x2="15" y2="8"></line>
+              <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+          </span> {{ 'PROPERTIES.FILTERS_BTN' | translate }}
         </button>
 
         <button type="submit" class="btn-gold" data-cursor-hover>{{ 'PROPERTIES.SEARCH_BTN' | translate }}</button>
@@ -65,14 +83,25 @@
             <input type="number" formControlName="maxPrice" [placeholder]="'PROPERTIES.ANY' | translate" />
           </div>
           <div class="filter-group">
-            <label>{{ 'PROPERTIES.BEDROOMS' | translate }}</label>
+            <label>{{ 'PROPERTIES.BEDROOMS_LABEL' | translate }}</label>
             <select formControlName="bedrooms">
               <option value="">{{ 'PROPERTIES.ANY' | translate }}</option>
-              <option value="1">1+</option>
-              <option value="2">2+</option>
-              <option value="3">3+</option>
-              <option value="4">4+</option>
-              <option value="5">5+</option>
+              <option value="1">{{ 'PROPERTIES.BEDROOMS_1' | translate }}</option>
+              <option value="2">{{ 'PROPERTIES.BEDROOMS_2' | translate }}</option>
+              <option value="3">{{ 'PROPERTIES.BEDROOMS_3' | translate }}</option>
+              <option value="4">{{ 'PROPERTIES.BEDROOMS_4' | translate }}</option>
+              <option value="5">{{ 'PROPERTIES.BEDROOMS_5' | translate }}</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>{{ 'PROPERTIES.BATHROOMS_LABEL' | translate }}</label>
+            <select formControlName="bathrooms">
+              <option value="">{{ 'PROPERTIES.ANY' | translate }}</option>
+              <option value="1">{{ 'PROPERTIES.BATHROOMS_1' | translate }}</option>
+              <option value="2">{{ 'PROPERTIES.BATHROOMS_2' | translate }}</option>
+              <option value="3">{{ 'PROPERTIES.BATHROOMS_3' | translate }}</option>
+              <option value="4">{{ 'PROPERTIES.BATHROOMS_4' | translate }}</option>
+              <option value="5">{{ 'PROPERTIES.BATHROOMS_5' | translate }}</option>
             </select>
           </div>
           <div class="filter-actions">
@@ -101,7 +130,13 @@
   <!-- ── Error state ─────────────────────────────────────────────────────── -->
   <div *ngIf="(error$ | async) as err" class="properties-error">
     <div class="error-card">
-      <span class="error-icon">⚠</span>
+      <span class="error-icon">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="24" height="24">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </span>
       <p class="error-message">{{ err }}</p>
       <button class="btn-secondary" (click)="retryLoad()" data-cursor-hover>
         {{ 'PROPERTIES.TRY_AGAIN' | translate }}
@@ -145,7 +180,7 @@
   </ng-container>
 
   <!-- ── View All button ─────────────────────────────────────────────────── -->
-  <div class="properties-footer">
+  <div class="properties-footer" *ngIf="(properties$ | async)?.length">
     <button class="btn-secondary" (click)="onViewAll()" data-cursor-hover>
       {{ 'PROPERTIES.VIEW_ALL_BTN' | translate }}
     </button>

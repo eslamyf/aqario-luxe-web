@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { UserDashboardService, OwnerAgentDashboard } from './user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
@@ -28,6 +28,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   constructor(
     private userService: UserDashboardService,
@@ -39,6 +40,13 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildForm();
     this.load();
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        if (params['view'] === 'form' || params['action'] === 'add') {
+          this.currentView = 'form';
+        }
+      });
   }
 
   ngOnDestroy(): void { this.destroy$.next(); this.destroy$.complete(); }
