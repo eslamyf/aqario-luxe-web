@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserDashboardService } from '../user dashboard/user-dashboard.service';
+import { PaymentService } from './payment.service';
 
 @Component({
   selector: 'app-payment-success',
@@ -135,6 +136,7 @@ export class PaymentSuccessComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dashboardService = inject(UserDashboardService);
+  private paymentService = inject(PaymentService);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -163,9 +165,9 @@ export class PaymentSuccessComponent implements OnInit, OnDestroy {
     }
 
     this.timer = setTimeout(() => {
-      this.dashboardService.getBookingDetails(this.bookingId!).subscribe({
-        next: (b) => {
-          if (b.status === 'completed' || b.paymentStatus === 'paid') {
+      this.paymentService.verifyPaymentStatus(this.bookingId!).subscribe({
+        next: (res) => {
+          if (res.data?.paid || res.data?.paymentStatus === 'paid') {
             this.status = 'success';
           } else {
             this.pollBookingStatus(attempt + 1);

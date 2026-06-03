@@ -15,8 +15,9 @@ export interface ViewingStatus {
    * completed → viewing physically completed
    * rejected  → owner rejected
    * cancelled → user cancelled
+   * APPROVED_FOR_BOOKING → approved for booking
    */
-  viewingStatus: 'pending' | 'approved' | 'completed' | 'rejected' | 'cancelled' | null;
+  viewingStatus: 'pending' | 'approved' | 'completed' | 'rejected' | 'cancelled' | 'APPROVED_FOR_BOOKING' | null;
   viewingId: string | null;
 }
 

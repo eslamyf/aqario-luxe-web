@@ -4,32 +4,33 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from './payment.service';
 import { BookingsService } from '../bookings/bookings.service';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   template: `
     <div class="checkout-container">
       <div class="loader-box" *ngIf="isLoading && !hasError && !booking">
         <div class="spinner"></div>
-        <h2>Loading Checkout...</h2>
-        <p>Retrieving your booking details</p>
+        <h2>{{ 'CHECKOUT.LOADING' | translate }}</h2>
+        <p>{{ 'CHECKOUT.RETRIEVING' | translate }}</p>
       </div>
 
       <div class="error-box" *ngIf="hasError">
-        <div class="icon-circle error">❌</div>
-        <h2>Checkout Failed</h2>
+        <div class="icon-circle error">&times;</div>
+        <h2>{{ 'CHECKOUT.FAILED' | translate }}</h2>
         <p>{{ errorMessage }}</p>
-        <button class="action-btn" (click)="loadBooking()">Retry</button>
+        <button class="action-btn" (click)="loadBooking()">{{ 'CHECKOUT.RETRY' | translate }}</button>
       </div>
 
       <div class="checkout-content" *ngIf="booking && !hasError">
         
         <div class="invoice-section">
           <div class="invoice-header">
-            <h2>Order Summary</h2>
-            <p class="ref-number">Ref: {{ booking._id }}</p>
+            <h2>{{ 'CHECKOUT.ORDER_SUMMARY' | translate }}</h2>
+            <p class="ref-number">{{ 'CHECKOUT.REF' | translate }}: {{ booking._id }}</p>
           </div>
 
           <div class="property-summary">
@@ -39,52 +40,49 @@ import { FormsModule } from '@angular/forms';
 
           <div class="invoice-details">
             <div class="invoice-row">
-              <span>Property Total</span>
+              <span>{{ 'CHECKOUT.PROPERTY_TOTAL' | translate }}</span>
               <span>{{ booking.amount | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
             </div>
             <div class="invoice-row service-fee">
-              <span>Service & Platform Fee (3%)</span>
+              <span>{{ 'CHECKOUT.SERVICE_FEE' | translate }}</span>
               <span>{{ serviceFee | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
             </div>
             <div class="invoice-row total-row">
-              <span>Final Total</span>
+              <span>{{ 'CHECKOUT.FINAL_TOTAL' | translate }}</span>
               <span class="final-price">{{ finalPrice | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
             </div>
           </div>
         </div>
 
         <div class="payment-section">
-          <h2>Select Payment Method</h2>
+          <h2>{{ 'CHECKOUT.SELECT_PAYMENT_METHOD' | translate }}</h2>
           
           <div class="payment-methods">
-            <label class="method-card" [class.selected]="selectedMethod === 'paymob'">
+            <label class="method-card" [class.selected]="selectedMethod === 'paymob'" (click)="selectedMethod = 'paymob'">
               <input type="radio" name="paymentMethod" value="paymob" [(ngModel)]="selectedMethod">
-              <span class="method-icon">💳</span>
               <div class="method-info">
-                <span class="method-name">Credit / Debit Card</span>
-                <span class="method-desc">Secure payment via Paymob</span>
+                <span class="method-name">{{ 'CHECKOUT.CREDIT_DEBIT' | translate }}</span>
+                <span class="method-desc">{{ 'CHECKOUT.SECURE_PAYMOB' | translate }}</span>
               </div>
             </label>
 
-
-            <label class="method-card" [class.selected]="selectedMethod === 'paypal'">
+            <label class="method-card" [class.selected]="selectedMethod === 'paypal'" (click)="selectedMethod = 'paypal'">
               <input type="radio" name="paymentMethod" value="paypal" [(ngModel)]="selectedMethod">
-              <span class="method-icon">🅿️</span>
               <div class="method-info">
-                <span class="method-name">PayPal</span>
-                <span class="method-desc">Pay with your PayPal account</span>
+                <span class="method-name">{{ 'CHECKOUT.PAYPAL' | translate }}</span>
+                <span class="method-desc">{{ 'CHECKOUT.SECURE_PAYPAL' | translate }}</span>
               </div>
             </label>
           </div>
 
           <div class="security-badge">
-            <span>🔒 256-bit Secure Encryption</span>
+            <span>{{ 'CHECKOUT.SECURE_ENCRYPTION' | translate }}</span>
           </div>
 
           <button class="action-btn full-width" 
                   [disabled]="isProcessing" 
                   (click)="processPayment()">
-            <span *ngIf="!isProcessing">Pay {{ finalPrice | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
+            <span *ngIf="!isProcessing">{{ 'CHECKOUT.PAY' | translate }} {{ finalPrice | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
             <div *ngIf="isProcessing" class="spinner-small"></div>
           </button>
         </div>
@@ -340,9 +338,9 @@ export class CheckoutComponent implements OnInit {
           return;
         }
 
-        // Calculate fees: 3% service & platform fee
+        // Calculate fees: 5% service & platform fee
         const propertyTotal = this.booking.amount || 0;
-        this.serviceFee = propertyTotal * 0.03;
+        this.serviceFee = propertyTotal * 0.05;
         this.finalPrice = propertyTotal + this.serviceFee;
       },
       error: (err) => {

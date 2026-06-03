@@ -17,6 +17,25 @@
   align-items: flex-start;
   margin-bottom: 60px;
   text-align: start;
+  width: 100%;
+
+  :host-context([dir="rtl"]) & {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+.header-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: start;
+  width: 100%;
+
+  :host-context([dir="rtl"]) & {
+    align-items: flex-end;
+    text-align: right;
+  }
 }
 
 // ── Eyebrow — Template lines 378–390 ─────────────────────────────────────────
@@ -38,6 +57,10 @@
     width: 30px;
     height: 1px;
     background: var(--gold);
+  }
+
+  :host-context([dir="rtl"]) & {
+    flex-direction: row-reverse;
   }
 }
 
@@ -143,7 +166,7 @@
 
       :host-context([data-theme="light"]) & {
         background: rgba(0, 0, 0, 0.04);
-        border-color: rgba(0, 0, 0, 0.1);
+        border-color: var(--border-color);
       }
 
       &:focus-within {
@@ -268,7 +291,7 @@
 
           :host-context([data-theme="light"]) & {
             background: rgba(0, 0, 0, 0.04);
-            border-color: rgba(0, 0, 0, 0.1);
+            border-color: var(--border-color);
           }
 
           &:focus {
@@ -284,8 +307,8 @@
           appearance: none;
           cursor: pointer;
           option {
-            background: var(--obsidian);
-            color: var(--white);
+            background: var(--bg-surface);
+            color: var(--text-main);
           }
         }
       }

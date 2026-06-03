@@ -35,14 +35,14 @@
       <!-- Agent Info -->
       <div class="agent-info">
         <h3 class="agent-name">{{ agent.name }}</h3>
-        <p class="agent-specialty">{{ agent.specialty }}</p>
+        <p class="agent-specialty">{{ agent.title }}</p>
 
         <!-- Countries tags -->
         <div class="agent-countries">
           <span
             class="country-tag"
-            *ngFor="let country of agent.countries"
-          >{{ country }}</span>
+            *ngFor="let region of agent.regions"
+          >{{ region }}</span>
         </div>
       </div>
 
@@ -54,7 +54,7 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <div class="stat-val">{{ agent.value }}</div>
+          <div class="stat-val">{{ agent.volume }}</div>
           <div class="stat-key">Volume</div>
         </div>
         <div class="stat-divider"></div>

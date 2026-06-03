@@ -113,7 +113,7 @@
           </div>
           <div class="agent-info">
             <p class="agent-name">{{ property.owner.name }}</p>
-            <p class="agent-status">✨ {{ 'PROPERTIES.DETAIL.FAST_RESPONSE' | translate }}</p>
+            <p class="agent-status">{{ 'PROPERTIES.DETAIL.FAST_RESPONSE' | translate }}</p>
           </div>
           <div class="agent-actions">
             <!-- WhatsApp -->
@@ -193,10 +193,11 @@
               <!-- STATE C — Eligible: viewing approved or completed -->
               <ng-container *ngIf="getBookingState(viewingStatus) === 'eligible'">
                 <div class="eligible-badge">
-                  <span class="eligible-icon">✅</span>
-                  <span>{{ 'PROPERTIES.DETAIL.ELIGIBLE_NOTICE' | translate:{ status: (viewingStatus.viewingStatus ===
-                    'completed' ? ('PROPERTIES.DETAIL.COMPLETED' | translate) : ('PROPERTIES.DETAIL.APPROVED' |
-                    translate)) } }}</span>
+                  <span>{{ 'PROPERTIES.DETAIL.ELIGIBLE_NOTICE' | translate:{ status: (
+                    viewingStatus.viewingStatus === 'APPROVED_FOR_BOOKING' ? ('PROPERTIES.DETAIL.APPROVED_FOR_BOOKING' | translate) :
+                    viewingStatus.viewingStatus === 'completed' ? ('PROPERTIES.DETAIL.COMPLETED' | translate) :
+                    ('PROPERTIES.DETAIL.APPROVED' | translate)
+                  ) } }}</span>
                 </div>
 
                 <form [formGroup]="bookingForm" (ngSubmit)="onBookProperty(property, viewingStatus)">
@@ -232,7 +233,7 @@
 
                   <button type="submit" class="btn-book btn-book--eligible full-width" id="book-btn-eligible"
                     [disabled]="(property.status !== 'for-sale' && bookingForm.invalid) || isSubmittingBooking">
-                    <span *ngIf="!isSubmittingBooking">✨ {{ 'PROPERTIES.DETAIL.RESERVE_NOW' | translate }}</span>
+                    <span *ngIf="!isSubmittingBooking">{{ 'PROPERTIES.DETAIL.RESERVE_NOW' | translate }}</span>
                     <div *ngIf="isSubmittingBooking" class="spinner dark"></div>
                   </button>
                 </form>
@@ -251,10 +252,13 @@
 
           <!-- If viewing is pending or approved/completed, show status badge -->
           <ng-container *ngIf="(viewingStatus$ | async) as vs">
-            <div *ngIf="vs.viewingStatus === 'approved' || vs.viewingStatus === 'completed'"
+            <div *ngIf="vs.viewingStatus === 'approved' || vs.viewingStatus === 'completed' || vs.viewingStatus === 'APPROVED_FOR_BOOKING'"
               class="viewing-done-notice">
-              <span>✅ {{ vs.viewingStatus === 'completed' ? ('PROPERTIES.DETAIL.VIEWING_COMPLETED_NOTICE' | translate) :
-                ('PROPERTIES.DETAIL.VIEWING_APPROVED_NOTICE' | translate) }}</span>
+              <span>{{ 
+                vs.viewingStatus === 'APPROVED_FOR_BOOKING' ? ('PROPERTIES.DETAIL.APPROVED_FOR_BOOKING' | translate) :
+                vs.viewingStatus === 'completed' ? ('PROPERTIES.DETAIL.VIEWING_COMPLETED_NOTICE' | translate) :
+                ('PROPERTIES.DETAIL.VIEWING_APPROVED_NOTICE' | translate) 
+              }}</span>
             </div>
             <div *ngIf="vs.viewingStatus === 'pending'" class="viewing-pending-notice">
               <span>⏳ {{ 'PROPERTIES.DETAIL.VIEWING_SUBMITTED' | translate }}</span>

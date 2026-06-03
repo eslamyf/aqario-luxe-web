@@ -131,13 +131,13 @@
 
   // ── Semantic Text Tokens ──────────────────────────────────
   --text-main:         #111827;   // Deep Charcoal — high contrast readability
-  --text-muted:        #6B7280;   // Medium Gray — standard SaaS secondary text
+  --text-muted:        #4B5563;   // High contrast charcoal gray
   --text-primary:      #111827;
   --text-secondary:    #4B5563;
-  --placeholder-color: #9CA3AF;   // Light Gray placeholder
+  --placeholder-color: #4B5563;   // High contrast placeholder
 
   // ── Semantic Border / Overlay ────────────────────────────
-  --border-color:      #E5E7EB;   // Clean, crisp borders
+  --border-color:      #111827;   // High contrast borders
   --overlay-color:     rgba(255, 255, 255, 0.95);
   --surface-glass:     rgba(255, 255, 255, 0.85);
 

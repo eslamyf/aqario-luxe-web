@@ -109,9 +109,24 @@ import { TranslateService } from '@ngx-translate/core';
             </button>
           </div>
 
+          <!-- Actions (approved only) -->
+          <div class="ovr-actions" *ngIf="r.status === 'approved'">
+            <button class="btn-approve"
+              [disabled]="loadingMap[r._id]"
+              (click)="approveForBooking(r._id)">
+              <span *ngIf="loadingMap[r._id]" class="spinner-xs"></span>
+              {{ 'DASHBOARD.APPROVE_FOR_BOOKING_BTN' | translate }}
+            </button>
+          </div>
+
           <!-- Approved notice -->
           <div class="ovr-notice approved" *ngIf="r.status === 'approved'">
             {{ 'DASHBOARD.VR_APPROVED_NOTICE' | translate }}
+          </div>
+
+          <!-- Approved for booking notice -->
+          <div class="ovr-notice approved" *ngIf="r.status === 'APPROVED_FOR_BOOKING'">
+            {{ 'DASHBOARD.VR_APPROVED_FOR_BOOKING_NOTICE' | translate }}
           </div>
 
           <!-- Rejected notice -->
@@ -171,7 +186,7 @@ import { TranslateService } from '@ngx-translate/core';
     .status-badge { flex-shrink: 0; padding: 0.25rem 0.8rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.03em; display: inline-flex; align-items: center; gap: 6px; }
     .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
     .status-pending   { background: rgba(251,191,36,0.12);  color: #d97706; border: 1px solid rgba(251,191,36,0.3); }
-    .status-approved  { background: rgba(74,222,128,0.12);  color: #16a34a; border: 1px solid rgba(74,222,128,0.3); }
+    .status-approved, .status-APPROVED_FOR_BOOKING  { background: rgba(74,222,128,0.12);  color: #16a34a; border: 1px solid rgba(74,222,128,0.3); }
     .status-rejected  { background: rgba(239,68,68,0.12);   color: #dc2626; border: 1px solid rgba(239,68,68,0.3); }
     .status-cancelled { background: rgba(156,163,175,0.12); color: #6b7280; border: 1px solid rgba(156,163,175,0.3); }
     .requester-info { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem; }
@@ -220,6 +235,7 @@ export class UserOwnerViewingRequestsComponent implements OnInit, OnDestroy {
     { label: 'All', key: 'all' },
     { label: 'Pending', key: 'pending' },
     { label: 'Approved', key: 'approved' },
+    { label: 'Approved for Booking', key: 'APPROVED_FOR_BOOKING' },
     { label: 'Declined', key: 'rejected' },
   ];
   rejectTarget: any = null;
@@ -271,6 +287,26 @@ export class UserOwnerViewingRequestsComponent implements OnInit, OnDestroy {
           this.notif.show(this.translate.instant('DASHBOARD.NOTIF_VR_APPROVED'), 'success');
           this.requests = this.requests.map(r =>
             r._id === id ? { ...r, status: 'approved' } : r
+          );
+          this.loadingMap = { ...this.loadingMap, [id]: false };
+        },
+        error: (err) => {
+          this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.NOTIF_VR_APPROVE_FAILED'), 'error');
+          this.loadingMap = { ...this.loadingMap, [id]: false };
+        }
+      });
+  }
+
+  approveForBooking(id: string): void {
+    if (this.loadingMap[id]) return;
+    this.loadingMap = { ...this.loadingMap, [id]: true };
+    this.svc.approveViewingRequestForBooking(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.notif.show(this.translate.instant('DASHBOARD.NOTIF_VR_APPROVED_FOR_BOOKING'), 'success');
+          this.requests = this.requests.map(r =>
+            r._id === id ? { ...r, status: 'APPROVED_FOR_BOOKING' } : r
           );
           this.loadingMap = { ...this.loadingMap, [id]: false };
         },

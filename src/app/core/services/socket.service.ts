@@ -55,6 +55,18 @@ export class SocketService {
     this.socketPromise = null;
   }
 
+  updateTokenAndReconnect(newToken: string): void {
+    if (newToken) {
+      localStorage.setItem('aqario_token', newToken);
+    }
+    if (this.socket) {
+      this.socket.auth = { token: newToken };
+      this.socket.disconnect();
+      this.socket.connect();
+    } else {
+      this.connect(newToken);
+    }
+  }
 
   onNotification(): Observable<any> {
     return new Observable(subscriber => {

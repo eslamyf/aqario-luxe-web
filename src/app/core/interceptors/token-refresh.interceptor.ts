@@ -13,11 +13,13 @@ import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../environments/environment';
+import { SocketService } from '../services/socket.service';
 
 @Injectable()
 export class TokenRefreshInterceptor implements HttpInterceptor {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private socketService = inject(SocketService);
   
   // Use HttpBackend to bypass interceptors for the refresh request
   private httpBackend = inject(HttpBackend);
@@ -72,6 +74,9 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
               localStorage.setItem('aqario_user', JSON.stringify(currentUser));
               this.authService.setCurrentUser(currentUser);
             }
+
+            // Sync token update with Socket.io connection
+            this.socketService.updateTokenAndReconnect(token);
 
             this.refreshTokenSubject.next(token);
             return next.handle(this.addToken(request, token));

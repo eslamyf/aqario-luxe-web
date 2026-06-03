@@ -132,6 +132,7 @@ export class UserDashboardService {
         'Failed to load viewing requests': 'DASHBOARD.ERR_LOAD_VR',
         'Failed to load owner viewing requests': 'DASHBOARD.ERR_LOAD_OWNER_VR',
         'Failed to approve viewing request': 'DASHBOARD.ERR_APPROVE_VR',
+        'Failed to approve viewing request for booking': 'DASHBOARD.ERR_APPROVE_VR_BOOKING',
         'Failed to reject viewing request': 'DASHBOARD.ERR_REJECT_VR',
         'Failed to cancel viewing request': 'DASHBOARD.ERR_CANCEL_VR',
         'Failed to load payments': 'DASHBOARD.ERR_LOAD_PAYMENTS',
@@ -342,6 +343,13 @@ export class UserDashboardService {
     return this.http.patch<any>(`${this.base}/viewing-requests/${id}/status`, { status: 'approved' }).pipe(
       map((res) => res.data),
       catchError(this.handleError('Failed to approve viewing request'))
+    );
+  }
+
+  approveViewingRequestForBooking(id: string): Observable<any> {
+    return this.http.patch<any>(`${this.base}/viewing-requests/${id}/status`, { status: 'APPROVED_FOR_BOOKING' }).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to approve viewing request for booking'))
     );
   }
 

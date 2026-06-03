@@ -334,6 +334,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.isSubmittingBooking = false;
         this.loadingService.hide();
+        if (err.handled || err.error?.handled) return;
         const msg = err.error?.code === 'VIEWING_REQUIRED'
           ? err.error.message
           : (err.error?.message || this.translateService.instant('PROPERTIES.DETAIL.NOTIF.FAILED_BOOKING'));

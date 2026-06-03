@@ -15,10 +15,9 @@ import {
   ViewChildren,
   QueryList,
 } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
 import { NotificationService }      from '../../shared/services/notification.service';
-import { MockDataService, Agent }   from '../../shared/services/mock-data.service';
+import { MockDataService }          from '../../shared/services/mock-data.service';
+import { AgentService, Agent }      from './agent.service';
 import { environment }              from '../../../environments/environment';
 
 @Component({
@@ -39,7 +38,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private notificationService: NotificationService,
     private mockDataService:     MockDataService,
-    private http:                HttpClient,
+    private agentService:        AgentService,
   ) {}
 
   ngOnInit(): void {
@@ -66,14 +65,12 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // ── Load Agents ───────────────────────────────────────────────────────────
   loadAgents(): void {
-    this.http.get<Agent[]>(`${environment.apiUrl}/users?role=agent`).subscribe({
+    this.agentService.getAgents().subscribe({
       next: (data) => {
         this.agents = data;
-        // Scroll reveal will automatically trigger via ViewChildren.changes
       },
-      error: () => {
-        this.agents = this.mockDataService.getAgents();
-        // Scroll reveal will automatically trigger via ViewChildren.changes
+      error: (err) => {
+        console.error('Failed to load agents from API:', err);
       },
     });
   }
