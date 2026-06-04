@@ -4,8 +4,18 @@
 // Prod: update apiUrl before deploying to production
 // ─────────────────────────────────────────────────────────────
 
+const getApiUrl = (): string => {
+  const host = window.location.hostname;
+  if (host.includes('loca.lt') || (host !== 'localhost' && host !== '127.0.0.1' && host !== 'PROD_DOMAIN')) {
+    return 'https://aqario-luxe-eslam.loca.lt/api/v1';
+  }
+  return 'https://PROD_DOMAIN/api/v1';
+};
+
 export const environment = {
   production: true,
-  apiUrl: 'https://PROD_DOMAIN/api/v1',
+  get apiUrl(): string {
+    return getApiUrl();
+  },
   googleClientId: '668341342866-ufmo1js3tbrv5nkeakgtn81kjsp9r3if.apps.googleusercontent.com'
 };

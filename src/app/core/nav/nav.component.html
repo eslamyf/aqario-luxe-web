@@ -8,23 +8,26 @@
     <a class="nav-logo" routerLink="/" id="nav-logo" data-cursor-hover>
       <!-- Minimal architectural diamond mark -->
       <svg class="logo-icon" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M10 1 L19 7 L19 17 L10 23 L1 17 L1 7 Z" stroke="currentColor" stroke-width="0.8" fill="none" opacity="0.6"/>
-        <path d="M10 5 L15.5 8.5 L15.5 15.5 L10 19 L4.5 15.5 L4.5 8.5 Z" stroke="currentColor" stroke-width="0.5" fill="none" opacity="0.4"/>
-        <circle cx="10" cy="12" r="1.2" fill="currentColor" opacity="0.9"/>
+        <path d="M10 1 L19 7 L19 17 L10 23 L1 17 L1 7 Z" stroke="currentColor" stroke-width="0.8" fill="none"
+          opacity="0.6" />
+        <path d="M10 5 L15.5 8.5 L15.5 15.5 L10 19 L4.5 15.5 L4.5 8.5 Z" stroke="currentColor" stroke-width="0.5"
+          fill="none" opacity="0.4" />
+        <circle cx="10" cy="12" r="1.2" fill="currentColor" opacity="0.9" />
       </svg>
-      <span class="logo-mark">AQARIO</span>
-      <span class="logo-dot" aria-hidden="true">·</span>
-      <span class="logo-word">LUXE</span>
+      <span class="logo-mark">{{ 'BRAND_NAME' | translate }}</span>
     </a>
 
     <!-- ══════════════════════════════════════════════════
          DESKTOP NAV LINKS
          ══════════════════════════════════════════════════ -->
     <ul class="nav-links" role="list">
-      <li><a routerLink="/"           routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" id="nav-link-home">{{ 'NAV.HOME' | translate }}</a></li>
-      <li><a routerLink="/properties" routerLinkActive="active" id="nav-link-properties">{{ 'NAV.PROPERTIES' | translate }}</a></li>
-      <li><a routerLink="/agents"     routerLinkActive="active" id="nav-link-agents">{{ 'NAV.AGENTS' | translate }}</a></li>
-      <li><a routerLink="/dashboard/saved" routerLinkActive="active" id="nav-link-favourites">{{ 'NAV.FAVOURITES' | translate }}</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" id="nav-link-home">{{
+          'NAV.HOME' | translate }}</a></li>
+      <li><a routerLink="/properties" routerLinkActive="active" id="nav-link-properties">{{ 'NAV.PROPERTIES' | translate
+          }}</a></li>
+      <li><a routerLink="/agents" routerLinkActive="active" id="nav-link-agents">{{ 'NAV.AGENTS' | translate }}</a></li>
+      <li><a routerLink="/dashboard/saved" routerLinkActive="active" id="nav-link-favourites">{{ 'NAV.FAVOURITES' |
+          translate }}</a></li>
     </ul>
 
     <!-- ══════════════════════════════════════════════════
@@ -34,56 +37,51 @@
     <div class="nav-actions">
 
       <!-- Language Toggle -->
-      <button
-        id="btn-lang-toggle"
-        type="button"
-        class="btn-lang-toggle"
-        (click)="toggleLanguage()"
+      <button id="btn-lang-toggle" type="button" class="btn-lang-toggle" (click)="toggleLanguage()"
         [attr.aria-label]="(lang$ | async) === 'en' ? 'تغيير اللغة إلى العربية' : 'Switch to English'"
-        [attr.title]="(lang$ | async) === 'en' ? 'تغيير اللغة إلى العربية' : 'Switch to English'"
-        data-cursor-hover>
+        [attr.title]="(lang$ | async) === 'en' ? 'تغيير اللغة إلى العربية' : 'Switch to English'" data-cursor-hover>
         <span class="lang-text" aria-hidden="true">
           {{ (lang$ | async) === 'en' ? 'العربية' : 'EN' }}
         </span>
       </button>
 
       <!-- Theme Toggle — leftmost of action group -->
-      <button
-        id="btn-theme-toggle"
-        type="button"
-        class="btn-theme-toggle"
-        (click)="toggleTheme()"
+      <button id="btn-theme-toggle" type="button" class="btn-theme-toggle" (click)="toggleTheme()"
         [attr.aria-label]="(theme$ | async) === 'light' ? 'Switch to dark mode' : 'Switch to light mode'"
-        [attr.title]="(theme$ | async) === 'light' ? 'Switch to dark mode' : 'Switch to light mode'"
-        data-cursor-hover>
+        [attr.title]="(theme$ | async) === 'light' ? 'Switch to dark mode' : 'Switch to light mode'" data-cursor-hover>
         <span class="theme-icon" aria-hidden="true">
-          <svg *ngIf="(theme$ | async) === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          <svg *ngIf="(theme$ | async) === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" width="16" height="16">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
-          <svg *ngIf="(theme$ | async) === 'light'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          <svg *ngIf="(theme$ | async) === 'light'" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" width="16" height="16">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
           </svg>
         </span>
       </button>
 
       <!-- Guest: Sign In button -->
       <ng-template #guestTemplate>
-        <button id="btn-sign-in" class="btn-signin" (click)="openLogin()" data-cursor-hover>{{ 'NAV.SIGN_IN' | translate }}</button>
+        <button id="btn-sign-in" class="btn-signin" (click)="openLogin()" data-cursor-hover>{{ 'NAV.SIGN_IN' | translate
+          }}</button>
       </ng-template>
 
       <!-- Logged-in: user profile + dropdown -->
       <ng-container *ngIf="auth.currentUser$ | async as user; else guestTemplate">
         <!-- Notification Bell -->
-        <div class="nav-bell-wrapper notifications-dropdown-container" (click)="toggleNotifications($event)" data-cursor-hover>
-          <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20">
+        <div class="nav-bell-wrapper notifications-dropdown-container" (click)="toggleNotifications($event)"
+          data-cursor-hover>
+          <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20"
+            height="20">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
           </svg>
@@ -95,13 +93,15 @@
           <div class="notifications-dropdown" *ngIf="showNotifications" role="menu" (click)="$event.stopPropagation()">
             <div class="notifications-header">
               <h4>{{ 'NAV.NOTIFICATIONS' | translate }}</h4>
-              <button class="btn-mark-read" (click)="markAllAsRead()" *ngIf="(notificationsApi.unreadCount$ | async)! > 0">{{ 'NAV.MARK_ALL_READ' | translate }}</button>
+              <button class="btn-mark-read" (click)="markAllAsRead()"
+                *ngIf="(notificationsApi.unreadCount$ | async)! > 0">{{ 'NAV.MARK_ALL_READ' | translate }}</button>
             </div>
             <div class="notifications-list" *ngIf="(notificationsApi.notifications$ | async) as notifications">
               <div *ngIf="notifications.length === 0" class="no-notifications">
                 <p>{{ 'NAV.NO_NOTIFICATIONS' | translate }}</p>
               </div>
-              <div *ngFor="let n of notifications" class="notification-item" [class.unread]="!n.isRead" (click)="markAsRead(n._id)">
+              <div *ngFor="let n of notifications" class="notification-item" [class.unread]="!n.isRead"
+                (click)="markAsRead(n._id)">
                 <div class="notification-content">
                   <p class="notification-title">{{ n.title }}</p>
                   <p class="notification-message">{{ n.message }}</p>
@@ -126,11 +126,15 @@
           </div>
 
           <div class="user-dropdown" *ngIf="showDropdown" role="menu">
-            <a class="dropdown-item" routerLink="/account" (click)="showDropdown = false" role="menuitem">{{ 'NAV.MY_ACCOUNT' | translate }}</a>
-            <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview" (click)="showDropdown = false" role="menuitem">{{ 'NAV.MY_DASHBOARD' | translate }}</a>
-            <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false" role="menuitem">{{ 'NAV.ADMIN_PANEL' | translate }}</a>
+            <a class="dropdown-item" routerLink="/account" (click)="showDropdown = false" role="menuitem">{{
+              'NAV.MY_ACCOUNT' | translate }}</a>
+            <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview"
+              (click)="showDropdown = false" role="menuitem">{{ 'NAV.MY_DASHBOARD' | translate }}</a>
+            <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false"
+              role="menuitem">{{ 'NAV.ADMIN_PANEL' | translate }}</a>
             <div class="dropdown-divider" role="separator"></div>
-            <button class="dropdown-item logout-btn" (click)="onLogout()" role="menuitem">{{ 'NAV.SIGN_OUT' | translate }}</button>
+            <button class="dropdown-item logout-btn" (click)="onLogout()" role="menuitem">{{ 'NAV.SIGN_OUT' | translate
+              }}</button>
           </div>
         </div>
       </ng-container>
@@ -141,13 +145,8 @@
       </button>
 
       <!-- Hamburger — mobile only (CSS handles display) -->
-      <button
-        id="btn-hamburger"
-        class="hamburger"
-        [class.open]="isMobileMenuOpen"
-        (click)="toggleMobileMenu()"
-        aria-label="Toggle navigation menu"
-        [attr.aria-expanded]="isMobileMenuOpen">
+      <button id="btn-hamburger" class="hamburger" [class.open]="isMobileMenuOpen" (click)="toggleMobileMenu()"
+        aria-label="Toggle navigation menu" [attr.aria-expanded]="isMobileMenuOpen">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -160,7 +159,7 @@
        MOBILE MENU OVERLAY
        ══════════════════════════════════════════════════ -->
   <div class="mobile-menu" [class.open]="isMobileMenuOpen" role="dialog" aria-label="Navigation menu">
-    
+
     <!-- 1. USER CONTEXT HEADER (Always at top if logged in) -->
     <ng-container *ngIf="auth.currentUser$ | async as user">
       <div class="mobile-menu-user-header">
@@ -188,20 +187,27 @@
       <div class="mobile-dashboard-links" *ngIf="auth.currentUser$ | async as user">
         <span class="nav-section-label">{{ 'NAV.ACCOUNT_MGMT' | translate }}</span>
         <ul class="mobile-nav-links" role="list">
-          <li><a routerLink="/dashboard/overview" (click)="closeMobileMenu()"><i class="ph ph-squares-four"></i> {{ 'NAV.OVERVIEW' | translate }}</a></li>
-          <li><a routerLink="/dashboard/bookings" (click)="closeMobileMenu()"><i class="ph ph-calendar-check"></i> {{ 'NAV.MY_BOOKINGS' | translate }}</a></li>
-          
+          <li><a routerLink="/dashboard/overview" (click)="closeMobileMenu()"><i class="ph ph-squares-four"></i> {{
+              'NAV.OVERVIEW' | translate }}</a></li>
+          <li><a routerLink="/dashboard/bookings" (click)="closeMobileMenu()"><i class="ph ph-calendar-check"></i> {{
+              'NAV.MY_BOOKINGS' | translate }}</a></li>
+
           <!-- Owner/Agent Links -->
           <ng-container *ngIf="user.role === 'owner' || user.role === 'agent'">
-            <li><a routerLink="/dashboard/properties" (click)="closeMobileMenu()"><i class="ph ph-buildings"></i> {{ 'NAV.MY_PROPERTIES' | translate }}</a></li>
-            <li><a routerLink="/dashboard/owner-bookings" (click)="closeMobileMenu()"><i class="ph ph-bell-ringing"></i> {{ 'NAV.REQUESTS' | translate }}</a></li>
+            <li><a routerLink="/dashboard/properties" (click)="closeMobileMenu()"><i class="ph ph-buildings"></i> {{
+                'NAV.MY_PROPERTIES' | translate }}</a></li>
+            <li><a routerLink="/dashboard/owner-bookings" (click)="closeMobileMenu()"><i class="ph ph-bell-ringing"></i>
+                {{ 'NAV.REQUESTS' | translate }}</a></li>
           </ng-container>
- 
-          <li><a routerLink="/dashboard/saved" (click)="closeMobileMenu()"><i class="ph ph-heart"></i> {{ 'NAV.SAVED' | translate }}</a></li>
-          <li><a routerLink="/dashboard/payments" (click)="closeMobileMenu()"><i class="ph ph-credit-card"></i> {{ 'NAV.PAYMENTS' | translate }}</a></li>
-          
+
+          <li><a routerLink="/dashboard/saved" (click)="closeMobileMenu()"><i class="ph ph-heart"></i> {{ 'NAV.SAVED' |
+              translate }}</a></li>
+          <li><a routerLink="/dashboard/payments" (click)="closeMobileMenu()"><i class="ph ph-credit-card"></i> {{
+              'NAV.PAYMENTS' | translate }}</a></li>
+
           <li *ngIf="user.role === 'admin'">
-            <a routerLink="/admin" class="admin-highlight" (click)="closeMobileMenu()"><i class="ph ph-shield-check"></i> {{ 'NAV.ADMIN_CENTER' | translate }}</a>
+            <a routerLink="/admin" class="admin-highlight" (click)="closeMobileMenu()"><i
+                class="ph ph-shield-check"></i> {{ 'NAV.ADMIN_CENTER' | translate }}</a>
           </li>
         </ul>
       </div>
@@ -210,33 +216,32 @@
     <!-- GLOBAL LINKS TEMPLATE -->
     <ng-template #globalMobileNav>
       <ul class="mobile-nav-links" role="list">
-        <li><a routerLink="/"           routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">{{ 'NAV.HOME' | translate }}</a></li>
-        <li><a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.PROPERTIES' | translate }}</a></li>
-        <li><a routerLink="/agents"     routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.AGENTS' | translate }}</a></li>
-        <li><a routerLink="/dashboard/saved" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.FAVOURITES' | translate }}</a></li>
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+            (click)="closeMobileMenu()">{{ 'NAV.HOME' | translate }}</a></li>
+        <li><a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.PROPERTIES' |
+            translate }}</a></li>
+        <li><a routerLink="/agents" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.AGENTS' | translate
+            }}</a></li>
+        <li><a routerLink="/dashboard/saved" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'NAV.FAVOURITES' |
+            translate }}</a></li>
       </ul>
     </ng-template>
 
     <div class="mobile-nav-actions">
       <!-- Global links shortcut even if in dashboard -->
-      <a *ngIf="(dashboardUi.isDashboardRoute | async)" routerLink="/" class="back-to-site-link" (click)="closeMobileMenu()">
+      <a *ngIf="(dashboardUi.isDashboardRoute | async)" routerLink="/" class="back-to-site-link"
+        (click)="closeMobileMenu()">
         <i class="ph ph-arrow-left"></i> {{ 'NAV.BACK_TO_SITE' | translate }}
       </a>
 
       <!-- Mobile theme toggle -->
-      <button
-        type="button"
-        class="btn-theme-toggle btn-theme-toggle--mobile"
-        (click)="toggleTheme()"
+      <button type="button" class="btn-theme-toggle btn-theme-toggle--mobile" (click)="toggleTheme()"
         [attr.aria-label]="(theme$ | async) === 'light' ? 'Switch to dark mode' : 'Switch to light mode'">
         {{ (theme$ | async) === 'light' ? ('NAV.LIGHT_MODE' | translate) : ('NAV.DARK_MODE' | translate) }}
       </button>
 
       <!-- Mobile language toggle -->
-      <button
-        type="button"
-        class="btn-lang-toggle btn-lang-toggle--mobile"
-        (click)="toggleLanguage()"
+      <button type="button" class="btn-lang-toggle btn-lang-toggle--mobile" (click)="toggleLanguage()"
         [attr.aria-label]="(lang$ | async) === 'en' ? 'تغيير اللغة إلى العربية' : 'Switch to English'">
         {{ (lang$ | async) === 'en' ? '🌐 العربية' : '🌐 English' }}
       </button>
@@ -253,7 +258,8 @@
         <button class="btn-signin" (click)="openLogin(); closeMobileMenu()">{{ 'NAV.SIGN_IN' | translate }}</button>
       </ng-container>
 
-      <button *ngIf="!(dashboardUi.isDashboardRoute | async)" class="btn-list" (click)="navigateToAddProperty(); closeMobileMenu()">
+      <button *ngIf="!(dashboardUi.isDashboardRoute | async)" class="btn-list"
+        (click)="navigateToAddProperty(); closeMobileMenu()">
         {{ 'NAV.LIST_PROPERTY' | translate }}
       </button>
     </div>

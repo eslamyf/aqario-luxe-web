@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
@@ -42,6 +42,21 @@ export class DynamicLocaleId extends String {
   }
 }
 
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+  handleError(error: any): void {
+    const message = error?.message || String(error || '');
+    if (
+      message.includes('Could not establish connection') ||
+      message.includes('Receiving end does not exist')
+    ) {
+      // Safely ignore browser extension noise
+      return;
+    }
+    console.error(error);
+  }
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,6 +92,10 @@ export class DynamicLocaleId extends String {
   ],
 
   providers: [
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenRefreshInterceptor,

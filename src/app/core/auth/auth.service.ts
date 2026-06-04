@@ -190,18 +190,22 @@ export class AuthService {
   }
 
   logout(): void {
-    // Call the backend to clear the httpOnly cookie and invalidate tokens
+    // 1. Synchronously wipe local session state immediately
+    if (typeof window !== 'undefined') {
+      localStorage.clear();
+      sessionStorage.clear();
+    }
+    this.socketService.disconnect();
+    this._currentUser$.next(null);
+    this._isAuthenticated$.next(false);
+
+    // 2. Asynchronously notify the backend to clean up cookies/sessions (fire-and-forget)
     this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
       next: () => {
-        this.socketService.disconnect();
-        this.clearStorage();
-        this._currentUser$.next(null);
+        console.log('[Auth] Backend logout successful');
       },
-      error: () => {
-        // Even if the backend fails, clear the local state to ensure security
-        this.socketService.disconnect();
-        this.clearStorage();
-        this._currentUser$.next(null);
+      error: (err) => {
+        console.warn('[Auth] Backend logout failed (safely ignored):', err?.message || err);
       }
     });
   }

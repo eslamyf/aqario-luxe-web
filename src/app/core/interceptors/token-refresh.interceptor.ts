@@ -35,12 +35,16 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error) => {
+        // Explicitly bypass and throw 401 errors from authentication-handling endpoints
         if (
-          error instanceof HttpErrorResponse &&
-          error.status === 401 &&
-          !request.url.includes('auth/refresh-token') &&
-          !request.url.includes('auth/login')
+          request.url.includes('/auth/refresh-token') ||
+          request.url.includes('/auth/logout') ||
+          request.url.includes('/auth/login')
         ) {
+          return throwError(() => error);
+        }
+
+        if (error instanceof HttpErrorResponse && error.status === 401) {
           return this.handle401Error(request, next);
         }
         return throwError(() => error);

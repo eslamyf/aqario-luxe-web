@@ -9,11 +9,12 @@
         <img [src]="user.photo" alt="Brand Logo" class="brand-logo-avatar" />
       </ng-container>
       <ng-template #brandLogoFallback>
-        <div class="brand-logo-fallback" style="display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: #111;">
+        <div class="brand-logo-fallback"
+          style="display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: #111;">
           {{ user.name.substring(0, 1) | uppercase }}
         </div>
       </ng-template>
-      <span class="brand-text">AQARIO LUXE</span>
+      <span class="brand-text">{{ 'BRAND_NAME' | translate }}</span>
     </div>
 
     <nav class="admin-nav">
@@ -53,7 +54,8 @@
           <span class="role">{{ user.role === 'admin' ? ('ADMIN.ROLE_ADMIN' | translate) : user.role }}</span>
         </div>
       </div>
-      <a routerLink="/" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> {{ 'ADMIN.SIDEBAR.EXIT_ADMIN' | translate }}</a>
+      <a routerLink="/" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> {{
+        'ADMIN.SIDEBAR.EXIT_ADMIN' | translate }}</a>
     </div>
   </aside>
 

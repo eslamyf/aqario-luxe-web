@@ -72,6 +72,14 @@ $red: var(--crimson);
   text-align: center;
   margin-bottom: 28px;
 
+  .auth-logo-img {
+    display: block;
+    margin: 0 auto 12px;
+    width: 3rem;
+    height: 3rem;
+    object-fit: contain;
+  }
+
   &-name {
     font-family: 'Cormorant Garamond', 'Georgia', serif;
     font-size: 22px;

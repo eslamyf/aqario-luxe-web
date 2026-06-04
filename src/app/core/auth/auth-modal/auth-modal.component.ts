@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
@@ -63,6 +63,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   private modalEscape = inject(ModalEscapeService); // ESC global bus
   private notificationSvc = inject(NotificationService); // §5.5
   private translateService = inject(TranslateService);
+  private zone = inject(NgZone);
 
   // ─── State Variables ───
   isOpen = false;           // Controls modal visibility
@@ -178,44 +179,46 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   }
 
   private handleGoogleCredentialResponse(response: any): void {
-    if (this.isGoogleLoading) return; // Prevent multiple calls
-    if (!response?.credential) {
-      this.isGoogleLoading = false;
-      this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.GOOGLE_INVALID_CRED'), 'error');
-      return;
-    }
+    this.zone.run(() => {
+      if (this.isGoogleLoading) return; // Prevent multiple calls
+      if (!response?.credential) {
+        this.isGoogleLoading = false;
+        this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.GOOGLE_INVALID_CRED'), 'error');
+        return;
+      }
 
-    this.isGoogleLoading = true;
+      this.isGoogleLoading = true;
 
-    this.auth.loginWithGoogle(response.credential)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res: any) => {
-          this.isGoogleLoading = false;
-          const userName = res?.data?.user?.name || 'there';
-          this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.GOOGLE_WELCOME', { name: userName }), 'success');
-          this.close();
+      this.auth.loginWithGoogle(response.credential)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: any) => {
+            this.isGoogleLoading = false;
+            const userName = res?.data?.user?.name || 'there';
+            this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.GOOGLE_WELCOME', { name: userName }), 'success');
+            this.close();
 
-          // Smart login redirection
-          const userObj = res?.data?.user || res?.user;
-          const role = userObj?.role?.toLowerCase() || 'buyer';
-          if (role === 'admin') {
-            this.router.navigate(['/admin/overview']);
-          } else if (role === 'owner') {
-            this.router.navigate(['/dashboard/overview']);
-          } else {
-            this.router.navigate(['/']);
+            // Smart login redirection
+            const userObj = res?.data?.user || res?.user;
+            const role = userObj?.role?.toLowerCase() || 'buyer';
+            if (role === 'admin') {
+              this.router.navigate(['/admin/overview']);
+            } else if (role === 'owner') {
+              this.router.navigate(['/dashboard/overview']);
+            } else {
+              this.router.navigate(['/']);
+            }
+          },
+          error: (err: any) => {
+            this.isGoogleLoading = false;
+            console.error('[Frontend-Google-Error]:', err);
+            console.error('[Frontend-Google-Error-Body]:', err.error);
+            const msg = err.error?.message || this.translateService.instant('AUTH.NOTIF.GOOGLE_FAILED');
+            this.notificationSvc.show(msg, 'error');
+            this.errorMsg = msg;
           }
-        },
-        error: (err: any) => {
-          this.isGoogleLoading = false;
-          console.error('[Frontend-Google-Error]:', err);
-          console.error('[Frontend-Google-Error-Body]:', err.error);
-          const msg = err.error?.message || this.translateService.instant('AUTH.NOTIF.GOOGLE_FAILED');
-          this.notificationSvc.show(msg, 'error');
-          this.errorMsg = msg;
-        }
-      });
+        });
+    });
   }
 
   ngOnInit(): void {
@@ -411,22 +414,26 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         // Fix: Properly extract the user's name from the normalized backend response (Task 4)
         const userObj = res?.data?.user || res?.user;
         const userName = userObj?.name || 'there';
-        this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.WELCOME_BACK', { name: userName }), 'success');
-        this.close(); // If success, close the modal
+        this.zone.run(() => {
+          this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.WELCOME_BACK', { name: userName }), 'success');
+          this.close(); // If success, close the modal
 
-        // Smart login redirection
-        const role = userObj?.role?.toLowerCase() || 'buyer';
-        if (role === 'admin') {
-          this.router.navigate(['/admin/overview']);
-        } else if (role === 'owner') {
-          this.router.navigate(['/dashboard/overview']);
-        } else {
-          this.router.navigate(['/']);
-        }
+          // Smart login redirection
+          const role = userObj?.role?.toLowerCase() || 'buyer';
+          if (role === 'admin') {
+            this.router.navigate(['/admin/overview']);
+          } else if (role === 'owner') {
+            this.router.navigate(['/dashboard/overview']);
+          } else {
+            this.router.navigate(['/']);
+          }
+        });
       },
       error: (err: any) => {
         this.isLoading = false;
-        this.errorMsg = err.error?.message || this.translateService.instant('AUTH.NOTIF.INVALID_CREDENTIALS');
+        this.zone.run(() => {
+          this.errorMsg = err.error?.message || this.translateService.instant('AUTH.NOTIF.INVALID_CREDENTIALS');
+        });
       }
     });
   }

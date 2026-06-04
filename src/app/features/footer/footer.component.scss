@@ -14,7 +14,7 @@
 // Reference: background var(--obsidian), padding 80px 60px 40px,
 //            border-top 1px solid rgba(gold, 0.1)
 .site-footer {
-  background: var(--bg-base);             // SEMANTIC — obsidian in dark, pearl in light
+  background: var(--bg-base); // SEMANTIC — obsidian in dark, pearl in light
   padding: 80px 60px 40px;
   border-top: 1px solid var(--border-color); // SEMANTIC gold-tinted border
 
@@ -93,12 +93,12 @@
 .footer-social-link {
   width: 40px;
   height: 40px;
-  border: 1px solid var(--slate);      // ✅ var(--slate) — no hardcoded hex
+  border: 1px solid var(--slate); // ✅ var(--slate) — no hardcoded hex
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  font-family: var(--font-mono);        // ✅ §3.2 — mono for all labels
+  font-family: var(--font-mono); // ✅ §3.2 — mono for all labels
   font-size: 11px;
   font-weight: 700;
   color: var(--mist);
@@ -115,7 +115,7 @@
 // Column header: font-mono, 10px, letter-spacing 3px, gold, uppercase
 // Reference: .footer-col-title (lines 965–972)
 .footer-col-title {
-  font-family: var(--font-mono);        // ✅ §3.2 — mono for labels
+  font-family: var(--font-mono); // ✅ §3.2 — mono for labels
   font-size: 10px;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -138,14 +138,14 @@
 // Reference: .footer-links a (lines 974–980)
 .footer-link {
   font-family: var(--font-body);
-  font-size: 13px;                       // task spec: 13px (template uses 14px, task spec 13px)
+  font-size: 13px; // task spec: 13px (template uses 14px, task spec 13px)
   color: var(--mist);
   text-decoration: none;
   transition: color 0.3s var(--transition);
-  display: inline-block;                 // ensures transition works smoothly
+  display: inline-block; // ensures transition works smoothly
 
   &:hover {
-    color: var(--gold);                  // ✅ var(--gold) — no hardcoded hex
+    color: var(--gold); // ✅ var(--gold) — no hardcoded hex
   }
 }
 
@@ -171,7 +171,7 @@
 // Copyright text: font-mono, 11px → task spec 10px
 // Reference: .footer-copy (lines 986–991)
 .footer-copy {
-  font-family: var(--font-mono);        // ✅ §3.2 — mono for copyright
+  font-family: var(--font-mono); // ✅ §3.2 — mono for copyright
   font-size: 10px;
   letter-spacing: 2px;
   color: var(--mist);
@@ -180,7 +180,7 @@
 
 // Right-side tagline (reference line 1807): gold, mono, 10px
 .footer-powered {
-  font-family: var(--font-mono);        // ✅ mono for labels
+  font-family: var(--font-mono); // ✅ mono for labels
   font-size: 10px;
   letter-spacing: 2px;
   color: var(--gold);

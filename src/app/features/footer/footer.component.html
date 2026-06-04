@@ -15,8 +15,8 @@
     <!-- Column 1: Brand ──────────────────────────────────── -->
     <div class="footer-brand reveal">
       <!-- Logo: font-display, 28px, letter-spacing 4px (reference line 950) -->
-      <div class="footer-logo" aria-label="Aqario Luxe">
-        AQARIO<span class="footer-logo-dot">·</span>LUXE
+      <div class="footer-logo" [attr.aria-label]="'BRAND_NAME' | translate">
+        {{ 'BRAND_NAME' | translate }}
       </div>
 
       <!-- Description (reference line 958) -->
@@ -26,25 +26,15 @@
 
       <!-- Social icons row (reference lines 1765–1770) -->
       <div class="footer-social" role="list" aria-label="Social media links">
-        <a
-          *ngFor="let social of socialLinks"
-          [href]="social.href"
-          class="footer-social-link"
-          role="listitem"
-          [attr.aria-label]="social.ariaLabel"
-          [attr.data-cursor-hover]="true"
-        >
+        <a *ngFor="let social of socialLinks" [href]="social.href" class="footer-social-link" role="listitem"
+          [attr.aria-label]="social.ariaLabel" [attr.data-cursor-hover]="true">
           {{ social.label }}
         </a>
       </div>
     </div><!-- /footer-brand -->
 
     <!-- Columns 2-4: Navigation links (data-driven) ────── -->
-    <div
-      *ngFor="let col of columns; let i = index"
-      class="footer-nav-col reveal"
-      [class]="'reveal-delay-' + (i + 1)"
-    >
+    <div *ngFor="let col of columns; let i = index" class="footer-nav-col reveal" [class]="'reveal-delay-' + (i + 1)">
       <!-- Column header: font-mono, 10px, letter-spacing 3px, gold, uppercase -->
       <div class="footer-col-title">{{ col.titleKey | translate }}</div>
 

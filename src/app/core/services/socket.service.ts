@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, fromEvent, EMPTY } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Observable, BehaviorSubject, fromEvent, EMPTY } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -11,7 +11,11 @@ import { environment } from '../../../environments/environment';
 export class SocketService {
   private socket: any = null;
   private socketPromise: Promise<any> | null = null;
-  private readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
+  private socketSubject = new BehaviorSubject<any>(null);
+  socket$ = this.socketSubject.asObservable();
+  private get baseUrl(): string {
+    return environment.apiUrl.replace('/api/v1', '');
+  }
 
   connect(token: string): void {
     if (token) {
@@ -24,10 +28,15 @@ export class SocketService {
   private getSocket(): Promise<any> {
     if (this.socket) return Promise.resolve(this.socket);
     
+    const token = localStorage.getItem('aqario_token');
+    if (!token) {
+      return Promise.resolve(null);
+    }
+    
     if (!this.socketPromise) {
       this.socketPromise = import('socket.io-client').then(({ io }) => {
         this.socket = io(this.baseUrl, {
-          auth: { token: localStorage.getItem('aqario_token') },
+          auth: { token },
           withCredentials: true,
           transports:      ['websocket', 'polling'],
         });
@@ -40,6 +49,7 @@ export class SocketService {
           console.warn('[Socket] connection error:', error?.message ?? error);
         });
 
+        this.socketSubject.next(this.socket);
         return this.socket;
       }).catch((err) => {
         console.warn('[Socket] socket.io-client not available', err);
@@ -56,6 +66,7 @@ export class SocketService {
       this.socket = null;
     }
     this.socketPromise = null;
+    this.socketSubject.next(null);
   }
 
   updateTokenAndReconnect(newToken: string): void {
@@ -84,19 +95,17 @@ export class SocketService {
   }
 
   onNotification(): Observable<any> {
-    return new Observable(subscriber => {
-      let socketRef: any = null;
-      const handler = (data: any) => subscriber.next(data);
-
-      this.getSocket().then(socket => {
-        if (!socket) return;
-        socketRef = socket;
-        socket.on('notification', handler);
-      });
-
-      return () => {
-        if (socketRef) socketRef.off('notification', handler);
-      };
-    });
+    return this.socket$.pipe(
+      filter(socket => !!socket),
+      switchMap(socket => {
+        return new Observable(subscriber => {
+          const handler = (data: any) => subscriber.next(data);
+          socket.on('notification', handler);
+          return () => {
+            socket.off('notification', handler);
+          };
+        });
+      })
+    );
   }
 }
