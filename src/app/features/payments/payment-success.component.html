@@ -1,0 +1,58 @@
+<div class="success-container">
+  <div class="status-box">
+    <!-- CAPTURING STATE (PayPal Capture in progress) -->
+    <ng-container *ngIf="status === 'capturing'">
+      <div class="spinner"></div>
+      <h2>{{ 'CHECKOUT.CONFIRMING' | translate }}</h2>
+      <p>{{ 'CHECKOUT.WAITING_GATEWAY' | translate }}</p>
+    </ng-container>
+
+    <!-- PENDING STATE (General webhook polling) -->
+    <ng-container *ngIf="status === 'pending'">
+      <div class="spinner"></div>
+      <h2>{{ 'CHECKOUT.CONFIRMING' | translate }}</h2>
+      <p>{{ 'CHECKOUT.WAITING_GATEWAY' | translate }}</p>
+    </ng-container>
+
+    <!-- SUCCESS STATE -->
+    <ng-container *ngIf="status === 'success'">
+      <div class="icon-circle success">
+        <i class="fas fa-check"></i>
+      </div>
+      <h2>{{ 'CHECKOUT.SUCCESSFUL' | translate }}</h2>
+      <p>{{ 'CHECKOUT.CONFIRMED_DESC' | translate }}</p>
+      <button class="action-btn primary" (click)="goToDashboard()">
+        {{ 'CHECKOUT.GO_TO_DASHBOARD' | translate }}
+      </button>
+    </ng-container>
+
+    <!-- FAILED STATE -->
+    <ng-container *ngIf="status === 'failed'">
+      <div class="icon-circle error">
+        <i class="fas fa-times"></i>
+      </div>
+      <h2>{{ 'CHECKOUT.VERIFICATION_FAILED' | translate }}</h2>
+      <p>{{ 'CHECKOUT.FAILED_DESC' | translate }}</p>
+      <button class="action-btn primary" (click)="goToDashboard()">
+        {{ 'CHECKOUT.GO_TO_DASHBOARD' | translate }}
+      </button>
+    </ng-container>
+
+    <!-- DELAYED STATE -->
+    <ng-container *ngIf="status === 'delayed'">
+      <div class="icon-circle delayed">
+        <i class="fas fa-clock"></i>
+      </div>
+      <h2>{{ 'CHECKOUT.DELAYED' | translate }}</h2>
+      <p>{{ 'CHECKOUT.DELAYED_DESC' | translate }}</p>
+      <div class="action-group" style="display:flex; gap:1rem; justify-content:center; margin-top:2rem;">
+        <button class="action-btn primary" (click)="checkAgain()">
+          {{ 'CHECKOUT.CHECK_AGAIN' | translate }}
+        </button>
+        <button class="action-btn secondary" (click)="goToDashboard()">
+          {{ 'CHECKOUT.GO_TO_MY_BOOKINGS' | translate }}
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>

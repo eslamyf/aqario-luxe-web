@@ -79,12 +79,12 @@ export class DynamicLocaleId extends String {
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      useClass: TokenRefreshInterceptor,
       multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenRefreshInterceptor,
+      useClass: AuthInterceptor,
       multi: true,
     },
     {

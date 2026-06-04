@@ -14,17 +14,20 @@ export class SocketService {
   private readonly baseUrl = environment.apiUrl.replace('/api/v1', '');
 
   connect(token: string): void {
+    if (token) {
+      localStorage.setItem('aqario_token', token);
+    }
     if (this.socket?.connected || this.socketPromise) return;
-    this.getSocket(token);
+    this.getSocket();
   }
 
-  private getSocket(token?: string): Promise<any> {
+  private getSocket(): Promise<any> {
     if (this.socket) return Promise.resolve(this.socket);
     
     if (!this.socketPromise) {
       this.socketPromise = import('socket.io-client').then(({ io }) => {
         this.socket = io(this.baseUrl, {
-          auth: (cb) => cb({ token: localStorage.getItem('aqario_token') }),
+          auth: { token: localStorage.getItem('aqario_token') },
           withCredentials: true,
           transports:      ['websocket', 'polling'],
         });
@@ -59,10 +62,22 @@ export class SocketService {
     if (newToken) {
       localStorage.setItem('aqario_token', newToken);
     }
+
+    const triggerReconnect = (socketInstance: any) => {
+      if (socketInstance) {
+        socketInstance.auth = { token: newToken };
+        socketInstance.disconnect();
+        socketInstance.connect();
+        console.log('[Socket] Reconnected with fresh token');
+      }
+    };
+
     if (this.socket) {
-      this.socket.auth = { token: newToken };
-      this.socket.disconnect();
-      this.socket.connect();
+      triggerReconnect(this.socket);
+    } else if (this.socketPromise) {
+      this.socketPromise.then((socketInstance) => {
+        triggerReconnect(socketInstance);
+      });
     } else {
       this.connect(newToken);
     }

@@ -3,52 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserDashboardService } from '../user dashboard/user-dashboard.service';
 import { PaymentService } from './payment.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-payment-success',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="success-container">
-      <div class="status-box">
-        <ng-container *ngIf="status === 'pending'">
-          <div class="spinner"></div>
-          <h2>Confirming Payment...</h2>
-          <p>We are waiting for the payment gateway to confirm your transaction. Please hold on, this usually takes a few seconds.</p>
-        </ng-container>
-
-        <ng-container *ngIf="status === 'success'">
-          <div class="icon-circle success">
-            <i class="fas fa-check"></i>
-          </div>
-          <h2>Payment Successful!</h2>
-          <p>Your booking has been fully confirmed and paid.</p>
-          <button class="action-btn primary" (click)="goToDashboard()">Go to Dashboard</button>
-        </ng-container>
-
-        <ng-container *ngIf="status === 'failed'">
-          <div class="icon-circle error">
-            <i class="fas fa-times"></i>
-          </div>
-          <h2>Verification Failed</h2>
-          <p>We couldn't verify your payment. If you were charged, please contact support.</p>
-          <button class="action-btn primary" (click)="goToDashboard()">Go to Dashboard</button>
-        </ng-container>
-
-        <ng-container *ngIf="status === 'delayed'">
-          <div class="icon-circle delayed">
-            <i class="fas fa-clock"></i>
-          </div>
-          <h2>Payment is taking longer than usual</h2>
-          <p>We're still waiting for the payment provider's confirmation. This usually completes within a few minutes.</p>
-          <div class="action-group" style="display:flex; gap:1rem; justify-content:center; margin-top:2rem;">
-            <button class="action-btn primary" (click)="checkAgain()">Check Status Again</button>
-            <button class="action-btn secondary" (click)="goToDashboard()">Go to My Bookings</button>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-  `,
+  imports: [CommonModule, TranslateModule],
+  templateUrl: './payment-success.component.html',
   styles: [`
     .success-container {
       display: flex;
@@ -128,10 +90,14 @@ import { PaymentService } from './payment.service';
   `]
 })
 export class PaymentSuccessComponent implements OnInit, OnDestroy {
-  status: 'pending' | 'success' | 'failed' | 'delayed' = 'pending';
+  status: 'pending' | 'success' | 'failed' | 'delayed' | 'capturing' = 'pending';
+  paymentStatus: 'pending' | 'success' | 'failed' | 'delayed' | 'capturing' = 'pending';
+  isLoading = true;
   bookingId: string | null = null;
+  
   private timer: any;
   private delays = [3000, 5000, 8000, 13000, 21000]; // Exponential backoff
+  private pollSubscription: Subscription | null = null;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -141,6 +107,8 @@ export class PaymentSuccessComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.bookingId = params['bookingId'];
+      const token = params['token'];
+      const payerId = params['PayerID'];
 
       if (!this.bookingId) {
         this.bookingId = localStorage.getItem('lastCheckoutBookingId');
@@ -149,9 +117,40 @@ export class PaymentSuccessComponent implements OnInit, OnDestroy {
       if (this.bookingId) {
         // Clean up fallback to prevent stale data in future visits
         localStorage.removeItem('lastCheckoutBookingId');
-        this.pollBookingStatus(0);
+
+        if (token && payerId) {
+          // PayPal Checkout Approval Return sequence detected
+          this.status = 'capturing';
+          this.paymentStatus = 'pending';
+          this.isLoading = true;
+
+          this.pollSubscription = this.paymentService.capturePaypalOrder(this.bookingId, token, payerId).subscribe({
+            next: (res) => {
+              if (res.status === 'success' || res.data?.success) {
+                this.status = 'success';
+                this.paymentStatus = 'success';
+                this.isLoading = false;
+              } else {
+                // Fallback to regular status polling
+                this.status = 'pending';
+                this.pollBookingStatus(0);
+              }
+            },
+            error: (err) => {
+              console.error('[PaymentSuccess] PayPal capture error:', err);
+              // Fallback to status polling just in case backend processed it concurrently
+              this.status = 'pending';
+              this.pollBookingStatus(0);
+            }
+          });
+        } else {
+          // Regular flow (e.g. Paymob webhook polling)
+          this.pollBookingStatus(0);
+        }
       } else {
         this.status = 'failed';
+        this.paymentStatus = 'failed';
+        this.isLoading = false;
       }
     });
   }
@@ -161,14 +160,33 @@ export class PaymentSuccessComponent implements OnInit, OnDestroy {
 
     if (attempt >= this.delays.length) {
       this.status = 'delayed';
+      this.paymentStatus = 'delayed';
+      this.isLoading = false;
       return;
     }
 
+    // Clear any previous active subscription before rescheduling
+    if (this.pollSubscription) {
+      this.pollSubscription.unsubscribe();
+    }
+
     this.timer = setTimeout(() => {
-      this.paymentService.verifyPaymentStatus(this.bookingId!).subscribe({
+      this.pollSubscription = this.paymentService.verifyPaymentStatus(this.bookingId!).subscribe({
         next: (res) => {
           if (res.data?.paid || res.data?.paymentStatus === 'paid') {
             this.status = 'success';
+            this.paymentStatus = 'success';
+            this.isLoading = false;
+            if (this.pollSubscription) {
+              this.pollSubscription.unsubscribe();
+            }
+          } else if (res.data?.paymentStatus === 'failed' || res.data?.paymentStatus === 'expired') {
+            this.status = 'failed';
+            this.paymentStatus = 'failed';
+            this.isLoading = false;
+            if (this.pollSubscription) {
+              this.pollSubscription.unsubscribe();
+            }
           } else {
             this.pollBookingStatus(attempt + 1);
           }
@@ -184,10 +202,15 @@ export class PaymentSuccessComponent implements OnInit, OnDestroy {
     if (this.timer) {
       clearTimeout(this.timer);
     }
+    if (this.pollSubscription) {
+      this.pollSubscription.unsubscribe();
+    }
   }
 
   checkAgain(): void {
     this.status = 'pending';
+    this.paymentStatus = 'pending';
+    this.isLoading = true;
     this.pollBookingStatus(0);
   }
 

@@ -1350,7 +1350,18 @@
     "STRIPE": "Stripe",
     "SECURE_STRIPE": "Secure checkout via Stripe",
     "SECURE_ENCRYPTION": "256-bit Secure Encryption",
-    "PAY": "Pay"
+    "PAY": "Pay",
+    "CONFIRMING": "Confirming Payment...",
+    "WAITING_GATEWAY": "We are waiting for the payment gateway to confirm your transaction. Please hold on, this usually takes a few seconds.",
+    "SUCCESSFUL": "Payment Successful!",
+    "CONFIRMED_DESC": "Your booking has been fully confirmed and paid.",
+    "VERIFICATION_FAILED": "Verification Failed",
+    "FAILED_DESC": "We couldn't verify your payment. If you were charged, please contact support.",
+    "DELAYED": "Payment is taking longer than usual",
+    "DELAYED_DESC": "We're still waiting for the payment provider's confirmation. This usually completes within a few minutes.",
+    "CHECK_AGAIN": "Check Status Again",
+    "GO_TO_DASHBOARD": "Go to Dashboard",
+    "GO_TO_MY_BOOKINGS": "Go to My Bookings"
   },
   "ERRORS": {
     "DATE_ALREADY_BOOKED": "The property is booked during this time range"

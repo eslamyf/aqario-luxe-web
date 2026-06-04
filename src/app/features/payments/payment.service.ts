@@ -78,4 +78,15 @@ export class PaymentService {
   verifyPaymentStatus(bookingId: string): Observable<VerifyPaymentStatusResponse> {
     return this.http.get<VerifyPaymentStatusResponse>(`${this.apiUrl}/verify/${bookingId}`);
   }
+
+  /**
+   * Capture an approved PayPal checkout order
+   */
+  capturePaypalOrder(bookingId: string, token: string, payerId: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/paypal/capture`, {
+      bookingId,
+      token,
+      payerId
+    });
+  }
 }
