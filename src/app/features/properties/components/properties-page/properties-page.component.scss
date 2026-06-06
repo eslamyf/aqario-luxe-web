@@ -18,11 +18,6 @@
   margin-bottom: 60px;
   text-align: start;
   width: 100%;
-
-  :host-context([dir="rtl"]) & {
-    align-items: flex-end;
-    text-align: right;
-  }
 }
 
 .header-text-container {
@@ -31,11 +26,6 @@
   align-items: flex-start;
   text-align: start;
   width: 100%;
-
-  :host-context([dir="rtl"]) & {
-    align-items: flex-end;
-    text-align: right;
-  }
 }
 
 // ── Eyebrow — Template lines 378–390 ─────────────────────────────────────────
@@ -57,10 +47,6 @@
     width: 30px;
     height: 1px;
     background: var(--gold);
-  }
-
-  :host-context([dir="rtl"]) & {
-    flex-direction: row-reverse;
   }
 }
 
@@ -88,10 +74,6 @@
   max-width: 500px;
   margin-top: 16px;
   text-align: start;
-
-  :host-context([dir="rtl"]) & {
-    text-align: right;
-  }
 }
 
 // ── Filter tabs — Template lines 1276–1295 ───────────────────────────────────
@@ -101,12 +83,6 @@
   gap: 0;
   margin-bottom: 40px;
   border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
-}
-
-:host-context([dir="rtl"]) {
-  .properties-tabs {
-    justify-content: flex-start;
-  }
 }
 
 // Individual tab — Template lines 1281–1294

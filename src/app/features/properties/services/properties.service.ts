@@ -163,7 +163,7 @@ export class PropertiesService {
           return properties.map((p) => this.mapProperty(p));
         }),
         catchError((err: any) => {
-          const message = err.error?.message ?? 'Failed to load properties. Please try again.';
+          const message = err.error?.message ?? this.translateService.instant('PROPERTIES.LOAD_FAILED');
           this._error$.next(message);
           this.notificationService.show(message, 'error');
           return of([] as Property[]); // Graceful degradation — return empty array, don't crash

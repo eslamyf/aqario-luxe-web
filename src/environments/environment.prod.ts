@@ -6,10 +6,10 @@
 
 const getApiUrl = (): string => {
   const host = window.location.hostname;
-  if (host.includes('loca.lt') || (host !== 'localhost' && host !== '127.0.0.1' && host !== 'PROD_DOMAIN')) {
+  if (host.includes('loca.lt') || (host !== 'localhost' && host !== '127.0.0.1' && host !== 'www.aqarioluxe.com')) {
     return 'https://aqario-luxe-eslam.loca.lt/api/v1';
   }
-  return 'https://PROD_DOMAIN/api/v1';
+  return 'https://www.aqarioluxe.com/api/v1';
 };
 
 export const environment = {

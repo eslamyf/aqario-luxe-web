@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { BecomeAgentComponent } from './become-agent.component';
 
 describe('BecomeAgentComponent', () => {
@@ -8,7 +8,10 @@ describe('BecomeAgentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BecomeAgentComponent]
+      imports: [
+        BecomeAgentComponent,
+        RouterTestingModule
+      ]
     })
     .compileComponents();
     

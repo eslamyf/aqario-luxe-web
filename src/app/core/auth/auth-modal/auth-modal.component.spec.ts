@@ -2,6 +2,9 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthModalComponent } from './auth-modal.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('AuthModalComponent', () => {
   let component: AuthModalComponent;
@@ -9,7 +12,12 @@ describe('AuthModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AuthModalComponent]
+      imports: [
+        AuthModalComponent,
+        HttpClientTestingModule,
+        RouterTestingModule,
+        TranslateModule.forRoot()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AuthModalComponent);

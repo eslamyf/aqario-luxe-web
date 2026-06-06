@@ -101,10 +101,10 @@
                 <p>{{ 'NAV.NO_NOTIFICATIONS' | translate }}</p>
               </div>
               <div *ngFor="let n of notifications" class="notification-item" [class.unread]="!n.isRead"
-                (click)="markAsRead(n._id)">
+                (click)="onNotificationClick(n)">
                 <div class="notification-content">
-                  <p class="notification-title">{{ n.title }}</p>
-                  <p class="notification-message">{{ n.message }}</p>
+                  <p class="notification-title">{{ n.title | translatePayload }}</p>
+                  <p class="notification-message">{{ n.message | translatePayload }}</p>
                   <span class="notification-time">{{ n.createdAt | date:'short' }}</span>
                 </div>
                 <div class="unread-dot" *ngIf="!n.isRead"></div>

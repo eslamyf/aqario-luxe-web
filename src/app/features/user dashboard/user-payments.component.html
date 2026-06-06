@@ -1,15 +1,23 @@
 <div>
-  <div class="page-header">
-    <div class="section-eyebrow">{{ 'DASHBOARD.FINANCIALS' | translate }}</div>
-    <h1>{{ 'DASHBOARD.PAYMENT_HISTORY' | translate }}</h1>
-    <p>{{ 'DASHBOARD.PAYMENT_SUB' | translate }}</p>
+  <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <div class="section-eyebrow">{{ 'DASHBOARD.FINANCIALS' | translate }}</div>
+      <h1>{{ 'DASHBOARD.PAYMENT_HISTORY' | translate }}</h1>
+      <p>{{ 'DASHBOARD.PAYMENT_SUB' | translate }}</p>
+    </div>
+    <div *ngIf="isOwnerOrAgent">
+      <button class="action-btn primary gold-btn" (click)="openPayoutModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 0.6rem 1.25rem; font-weight: 600; border-radius: 8px;">
+        <i class="ph ph-hand-coins" style="font-size: 1.15rem;"></i>
+        {{ 'DASHBOARD.REQUEST_PAYOUT_BTN' | translate }}
+      </button>
+    </div>
   </div>
 
   <div class="stats-grid" style="grid-template-columns: repeat(3,1fr);margin-bottom:1.5rem">
     <article class="stat-card">
-      <span class="stat-label">{{ 'DASHBOARD.STATS.TOTAL_PAID' | translate }}</span>
-      <span class="stat-value">{{ totalPaid | currency:'EGP':'symbol':'1.0-0' }}</span>
-      <span class="stat-note">{{ 'DASHBOARD.STATS.TOTAL_SPENT_SUB' | translate }}</span>
+      <span class="stat-label">{{ (isOwnerOrAgent ? 'DASHBOARD.STATS.TOTAL_EARNED' : 'DASHBOARD.STATS.TOTAL_PAID') | translate }}</span>
+      <span class="stat-value">{{ (isOwnerOrAgent ? (currentUser?.cumulativeBalance || totalPaid) : totalPaid) | currency:(payments[0]?.currency || 'EGP'):'symbol':'1.0-0' }}</span>
+      <span class="stat-note">{{ (isOwnerOrAgent ? 'DASHBOARD.STATS.TOTAL_EARNED_SUB' : 'DASHBOARD.STATS.TOTAL_SPENT_SUB') | translate }}</span>
     </article>
     <article class="stat-card">
       <span class="stat-label">{{ 'DASHBOARD.STATS.COMPLETED' | translate }}</span>
@@ -42,7 +50,14 @@
             <th>{{ 'DASHBOARD.TABLE.PROPERTY' | translate }}</th>
             <th>{{ 'DASHBOARD.TABLE.BOOKING' | translate }}</th>
             <th>{{ 'DASHBOARD.TABLE.METHOD' | translate }}</th>
-            <th>{{ 'DASHBOARD.TABLE.AMOUNT' | translate }}</th>
+            <ng-container *ngIf="isOwnerOrAgent; else buyerHeaders">
+              <th>{{ 'DASHBOARD.TABLE.BUYER_PAID' | translate }}</th>
+              <th>{{ 'DASHBOARD.TABLE.COMMISSION' | translate }}</th>
+              <th>{{ 'DASHBOARD.TABLE.NET_INCOME' | translate }}</th>
+            </ng-container>
+            <ng-template #buyerHeaders>
+              <th>{{ 'DASHBOARD.TABLE.AMOUNT' | translate }}</th>
+            </ng-template>
             <th>{{ 'DASHBOARD.TABLE.STATUS' | translate }}</th>
           </tr>
         </thead>
@@ -57,20 +72,135 @@
               <span *ngIf="!p.booking" class="text-muted">—</span>
             </td>
             <td>{{ 'DASHBOARD.PAYMENT_METHOD.' + (p.method || p.paymentMethod || 'card').toUpperCase() | translate }}</td>
-            <td>{{ p.totalAmount | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
-            <td style="display: flex; gap: 8px; align-items: center;">
-              <span class="status-badge {{ p.status }}">
-                {{ 'DASHBOARD.FILTER_' + p.status.toUpperCase() | translate }}
-              </span>
-              <button *ngIf="p.status === 'pending' && p.booking?._id" 
-                      class="btn-pay-small" 
-                      (click)="goToCheckout(p.booking._id)">
-                {{ 'DASHBOARD.PAY_NOW' | translate }}
-              </button>
+            <ng-container *ngIf="isOwnerOrAgent; else buyerCells">
+              <td>{{ p.buyerPaid | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
+              <td>{{ p.commission | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
+              <td>{{ p.totalAmount | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
+            </ng-container>
+            <ng-template #buyerCells>
+              <td>{{ p.totalAmount | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
+            </ng-template>
+            <td>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="status-badge {{ p.status }}">
+                  {{ 'DASHBOARD.FILTER_' + p.status.toUpperCase() | translate }}
+                </span>
+                <button *ngIf="p.status === 'pending' && p.booking?._id" 
+                        class="btn-pay-small" 
+                        (click)="goToCheckout(p.booking._id)">
+                  {{ 'DASHBOARD.PAY_NOW' | translate }}
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Payout Requests History List -->
+  <div class="panel-card" style="margin-top: 2rem;" *ngIf="isOwnerOrAgent && payouts.length > 0">
+    <div class="panel-header" style="margin-bottom: 1.25rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0;">{{ 'DASHBOARD.PAYOUT_REQUESTS_TITLE' | translate }}</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ 'DASHBOARD.TABLE.DATE' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.AMOUNT' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.METHOD' | translate }}</th>
+            <th>{{ 'DASHBOARD.PAYOUT_MODAL.DETAILS' | translate }}</th>
+            <th>{{ 'DASHBOARD.TABLE.STATUS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of payouts">
+            <td>{{ p.created_at | date:'mediumDate' }}</td>
+            <td>{{ p.amount | currency:'EGP':'symbol':'1.0-0' }}</td>
+            <td>{{ 'DASHBOARD.PAYMENT_METHOD.' + p.method.toUpperCase() | translate }}</td>
+            <td>{{ p.accountDetails }}</td>
+            <td>
+              <span class="status-badge {{ p.status }}">
+                {{ 'DASHBOARD.FILTER_' + p.status.toUpperCase() | translate }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Payout Modal Dialog -->
+  <div class="dialog-overlay" *ngIf="showModal" (click)="closePayoutModal()">
+    <div class="dialog-box" (click)="$event.stopPropagation()">
+      <h3>{{ 'DASHBOARD.PAYOUT_MODAL.TITLE' | translate }}</h3>
+      
+      <div class="balance-info-row">
+        <div class="info-item">
+          <span class="label">{{ 'DASHBOARD.PAYOUT_MODAL.CUMULATIVE' | translate }}</span>
+          <span class="val">{{ (currentUser?.cumulativeBalance || 0) | currency:'EGP':'symbol':'1.0-0' }}</span>
+        </div>
+        <div class="info-item" *ngIf="pendingPayoutsSum > 0">
+          <span class="label">{{ 'DASHBOARD.PAYOUT_MODAL.PENDING' | translate }}</span>
+          <span class="val">{{ pendingPayoutsSum | currency:'EGP':'symbol':'1.0-0' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">{{ 'DASHBOARD.PAYOUT_MODAL.AVAILABLE' | translate }}</span>
+          <span class="val gold">{{ availableBalance | currency:'EGP':'symbol':'1.0-0' }}</span>
+        </div>
+      </div>
+
+      <form (submit)="submitPayout(); $event.preventDefault();">
+        <div class="form-group">
+          <label for="payoutAmount">{{ 'DASHBOARD.PAYOUT_MODAL.AMOUNT' | translate }}</label>
+          <input
+            id="payoutAmount"
+            type="number"
+            class="form-control"
+            required
+            min="1"
+            [max]="availableBalance"
+            [(ngModel)]="payoutAmount"
+            name="payoutAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="payoutMethod">{{ 'DASHBOARD.PAYOUT_MODAL.METHOD' | translate }}</label>
+          <select
+            id="payoutMethod"
+            class="form-control"
+            required
+            [(ngModel)]="payoutMethod"
+            name="payoutMethod"
+          >
+            <option value="paymob_wallet">{{ 'DASHBOARD.PAYOUT_MODAL.PAYMOB_WALLET' | translate }}</option>
+            <option value="paypal">{{ 'DASHBOARD.PAYOUT_MODAL.PAYPAL' | translate }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="accountDetails">{{ 'DASHBOARD.PAYOUT_MODAL.DETAILS' | translate }}</label>
+          <input
+            id="accountDetails"
+            type="text"
+            class="form-control"
+            required
+            [placeholder]="(payoutMethod === 'paypal' ? 'name@paypal.com' : '01xxxxxxxxx')"
+            [(ngModel)]="payoutDetails"
+            name="payoutDetails"
+          />
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" class="btn-ghost" (click)="closePayoutModal()">{{ 'DASHBOARD.PAYOUT_MODAL.CLOSE' | translate }}</button>
+          <button type="submit" class="btn-gold" [disabled]="isSubmitting || payoutAmount <= 0 || payoutAmount > availableBalance || !payoutDetails.trim()">
+            <span *ngIf="isSubmitting" class="spinner-xs"></span>
+            {{ 'DASHBOARD.PAYOUT_MODAL.SUBMIT' | translate }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

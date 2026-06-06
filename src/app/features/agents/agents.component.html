@@ -8,10 +8,10 @@
 
   <!-- Section Header -->
   <div class="section-header reveal">
-    <div class="eyebrow">EXPERT TEAM</div>
-    <h2 class="section-title">Elite <em>Agents</em></h2>
+    <div class="eyebrow">{{ 'AGENTS.EXPERT_TEAM' | translate }}</div>
+    <h2 class="section-title" [innerHTML]="'AGENTS.TITLE' | translate"></h2>
     <p class="section-sub">
-      Connect with our world-class property specialists.
+      {{ 'AGENTS.SUBTITLE' | translate }}
     </p>
   </div>
 
@@ -50,17 +50,17 @@
       <div class="agent-stats">
         <div class="stat-item">
           <div class="stat-val">{{ agent.sales }}</div>
-          <div class="stat-key">Sales</div>
+          <div class="stat-key">{{ 'AGENTS.SALES' | translate }}</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <div class="stat-val">{{ agent.volume }}</div>
-          <div class="stat-key">Volume</div>
+          <div class="stat-key">{{ 'AGENTS.VOLUME' | translate }}</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <div class="stat-val">★ {{ agent.rating }}</div>
-          <div class="stat-key">Rating</div>
+          <div class="stat-key">{{ 'AGENTS.RATING' | translate }}</div>
         </div>
       </div>
 
@@ -68,21 +68,21 @@
       <div class="agent-social">
         <button
           class="social-btn"
-          title="Email {{ agent.name }}"
+          [title]="'AGENTS.EMAIL_TITLE' | translate:{ name: agent.name }"
           (click)="onContactEmail(agent)"
         >
           EM
         </button>
         <button
           class="social-btn"
-          title="Call {{ agent.name }}"
+          [title]="'AGENTS.CALL_TITLE' | translate:{ name: agent.name }"
           (click)="onContactPhone(agent)"
         >
           PH
         </button>
         <button
           class="social-btn"
-          title="{{ agent.name }} on LinkedIn"
+          [title]="'AGENTS.LINKEDIN_TITLE' | translate:{ name: agent.name }"
           (click)="onLinkedIn(agent)"
         >
           IN

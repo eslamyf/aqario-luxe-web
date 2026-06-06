@@ -76,6 +76,42 @@ export class NavComponent {
     this.notificationsApi.markAsRead(id).subscribe();
   }
 
+  onNotificationClick(n: any): void {
+    this.notificationsApi.markAsRead(n._id).subscribe();
+    this.showNotifications = false;
+
+    const url = n.targetUrl || n.link;
+    if (url) {
+      this.router.navigateByUrl(url);
+    } else {
+      const type = n.metadata?.type || n.type;
+      switch (type) {
+        case 'payment':
+          this.router.navigate(['/dashboard/payments']);
+          break;
+        case 'booking':
+          const role = this.auth.currentUser?.role;
+          if (role === 'owner' || role === 'agent') {
+            this.router.navigate(['/dashboard/owner-bookings']);
+          } else {
+            this.router.navigate(['/dashboard/bookings']);
+          }
+          break;
+        case 'viewing':
+          const currentRole = this.auth.currentUser?.role;
+          if (currentRole === 'owner' || currentRole === 'agent') {
+            this.router.navigate(['/dashboard/owner-bookings']);
+          } else {
+            this.router.navigate(['/dashboard/viewing-requests']);
+          }
+          break;
+        default:
+          this.router.navigate(['/dashboard/overview']);
+          break;
+      }
+    }
+  }
+
   markAllAsRead(): void {
     this.notificationsApi.markAllAsRead().subscribe();
     this.showNotifications = false;

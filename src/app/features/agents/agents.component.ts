@@ -18,6 +18,7 @@ import {
 import { NotificationService }      from '../../shared/services/notification.service';
 import { MockDataService }          from '../../shared/services/mock-data.service';
 import { AgentService, Agent }      from './agent.service';
+import { TranslateService }         from '@ngx-translate/core';
 import { environment }              from '../../../environments/environment';
 
 @Component({
@@ -39,6 +40,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     private notificationService: NotificationService,
     private mockDataService:     MockDataService,
     private agentService:        AgentService,
+    private translateService:    TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -77,23 +79,38 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // ── Task 05: Social Buttons ───────────────────────────────────────────────
   onContactEmail(agent: Agent): void {
-    this.notificationService.show(`Connecting you with ${agent.name}...`, 'info');
+    this.notificationService.show(
+      this.translateService.instant('AGENTS.CONNECTING', { name: agent.name }),
+      'info'
+    );
     const t = setTimeout(() => {
-      this.notificationService.show(`${agent.name} will contact you shortly!`, 'success');
+      this.notificationService.show(
+        this.translateService.instant('AGENTS.WILL_CONTACT', { name: agent.name }),
+        'success'
+      );
     }, 1500);
     this.contactTimeouts.push(t);
   }
 
   onContactPhone(agent: Agent): void {
-    this.notificationService.show(`Connecting you with ${agent.name}...`, 'info');
+    this.notificationService.show(
+      this.translateService.instant('AGENTS.CONNECTING', { name: agent.name }),
+      'info'
+    );
     const t = setTimeout(() => {
-      this.notificationService.show(`${agent.name} will contact you shortly!`, 'success');
+      this.notificationService.show(
+        this.translateService.instant('AGENTS.WILL_CONTACT', { name: agent.name }),
+        'success'
+      );
     }, 1500);
     this.contactTimeouts.push(t);
   }
 
   onLinkedIn(agent: Agent): void {
-    this.notificationService.show(`Opening ${agent.name}'s LinkedIn profile...`, 'info');
+    this.notificationService.show(
+      this.translateService.instant('AGENTS.OPENING_LINKEDIN', { name: agent.name }),
+      'info'
+    );
   }
 
   // ── Scroll Reveal ─────────────────────────────────────────────────────────

@@ -205,7 +205,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   onScheduleViewing(propertyId: string): void {
     if (!this.authService.isAuthenticated()) {
       this.authService.openModal('login');
-      this.notificationService.show('Sign in to schedule a viewing', 'info');
+      this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.SIGN_IN_VIEWING'), 'info');
       return;
     }
 

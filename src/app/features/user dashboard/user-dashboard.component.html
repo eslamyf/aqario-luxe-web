@@ -60,15 +60,21 @@
           <span>{{ 'DASHBOARD.VIEWING_SCHEDULE' | translate }}</span>
         </a>
 
+        <a routerLink="inquiries" routerLinkActive="active" class="nav-item"
+          *ngIf="canListProperties(user)" (click)="closeSidebar()">
+          <i class="ph ph-chat-circle-dots"></i>
+          <span>{{ 'DASHBOARD.INQUIRIES' | translate }}</span>
+        </a>
+
+        <a routerLink="chat" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+          <i class="ph ph-chats-teardrop"></i>
+          <span>{{ 'NAV.MESSAGES' | translate }}</span>
+        </a>
+
         <a routerLink="saved" routerLinkActive="active" class="nav-item" *ngIf="canViewSaved(user)"
           (click)="closeSidebar()">
           <i class="ph ph-heart"></i>
           {{ 'DASHBOARD.SAVED' | translate }}
-        </a>
-
-        <a routerLink="viewing-requests" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-          <i class="ph ph-eye"></i>
-          {{ 'DASHBOARD.VIEWING_REQUESTS' | translate }}
         </a>
 
         <a routerLink="payments" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">

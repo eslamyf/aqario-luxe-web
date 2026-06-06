@@ -24,6 +24,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 // ✅ FIX: import standalone component
 import { AuthModalComponent } from './core/auth/auth-modal/auth-modal.component';
+import { TranslatePayloadPipe } from './shared/pipes/translate-payload.pipe';
 
 // Dynamic locale support
 import { LOCALE_ID } from '@angular/core';
@@ -74,6 +75,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     // ✅ FIX: standalone component must be in imports
     AuthModalComponent,
+    TranslatePayloadPipe,
 
     // Footer feature module — exports FooterComponent as <app-footer>
     FooterModule,

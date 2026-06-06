@@ -165,7 +165,10 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isSubmitting = false;
-          this.notificationService.show(err.error?.message || 'An error occurred. Please try again.', 'error');
+          this.notificationService.show(
+            err.error?.message || this.translateService.instant('PROPERTIES.DETAIL.NOTIF.ERROR_OCCURRED'),
+            'error'
+          );
         }
       });
   }
@@ -207,7 +210,10 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isSubmitting = false;
-          this.notificationService.show(err.error?.message || 'An error occurred. Please try again.', 'error');
+          this.notificationService.show(
+            err.error?.message || this.translateService.instant('PROPERTIES.DETAIL.NOTIF.ERROR_OCCURRED'),
+            'error'
+          );
         }
       });
   }

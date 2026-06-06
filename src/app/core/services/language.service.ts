@@ -52,5 +52,6 @@ export class LanguageService {
     const dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.setAttribute('dir', dir);
     document.documentElement.setAttribute('lang', lang);
+    document.body.setAttribute('dir', dir);
   }
 }

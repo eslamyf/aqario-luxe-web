@@ -14,6 +14,8 @@ import { UserProfileComponent }             from './user-profile.component';
 import { UserOwnerBookingsComponent }       from './user-owner-bookings.component';
 import { UserViewingRequestsComponent }     from './user-viewing-requests.component';
 import { UserOwnerViewingRequestsComponent } from './user-owner-viewing-requests.component';
+import { UserInquiriesComponent }            from './user-inquiries.component';
+import { UserChatComponent }                 from './user-chat.component';
 import { TranslatePropPipe } from './translate-prop.pipe';
 
 const routes: Routes = [
@@ -31,6 +33,9 @@ const routes: Routes = [
       { path: 'saved',                   component: UserSavedComponent                 },
       { path: 'payments',                component: UserPaymentsComponent              },
       { path: 'profile',                 component: UserProfileComponent               },
+      { path: 'inquiries',               component: UserInquiriesComponent             },
+      { path: 'chat',                    component: UserChatComponent                  },
+      { path: 'chat/:chatId',            component: UserChatComponent                  },
     ],
   },
 ];
@@ -47,6 +52,8 @@ const routes: Routes = [
     UserOwnerBookingsComponent,
     UserViewingRequestsComponent,
     UserOwnerViewingRequestsComponent,
+    UserInquiriesComponent,
+    UserChatComponent,
   ],
   imports: [
     CommonModule,

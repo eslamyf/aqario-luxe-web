@@ -2,33 +2,34 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserDashboardService } from '../user dashboard/user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-subscription-checkout',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <div class="checkout-page">
       <div class="checkout-container">
 
         <!-- Back button -->
         <button class="btn-back" (click)="router.navigate(['/dashboard'])">
-          ← Back to Dashboard
+          {{ 'SUBSCRIPTION.BACK_TO_DASHBOARD' | translate }}
         </button>
 
         <!-- Header -->
         <div class="checkout-header">
           <div class="checkout-crown">👑</div>
-          <h1>Activate Your Plan</h1>
-          <p>One step away from listing your properties on Luxe Estates</p>
+          <h1>{{ 'SUBSCRIPTION.ACTIVATE_PLAN' | translate }}</h1>
+          <p>{{ 'SUBSCRIPTION.ONE_STEP_AWAY' | translate }}</p>
         </div>
 
         <!-- Loading -->
         <div *ngIf="isLoading" class="checkout-loading">
           <div class="spinner"></div>
-          <p>Loading plan details...</p>
+          <p>{{ 'SUBSCRIPTION.LOADING_DETAILS' | translate }}</p>
         </div>
 
         <!-- Error -->
@@ -36,7 +37,7 @@ import { CommonModule } from '@angular/common';
           <span>⚠</span>
           <p>{{ errorMsg }}</p>
           <button class="btn-ghost" (click)="router.navigate(['/dashboard'])">
-            Return to Dashboard
+            {{ 'SUBSCRIPTION.RETURN_TO_DASHBOARD' | translate }}
           </button>
         </div>
 
@@ -48,7 +49,7 @@ import { CommonModule } from '@angular/common';
             <div class="plan-badge">{{ selectedPlan.name }}</div>
             <div class="plan-price">
               <span class="price-amount">{{ selectedPlan.price | currency:'EGP':'symbol':'1.0-0' }}</span>
-              <span class="price-period">/ {{ selectedPlan.durationDays }} days</span>
+              <span class="price-period">/ {{ selectedPlan.durationDays }} {{ 'SUBSCRIPTION.DAYS' | translate }}</span>
             </div>
             <ul class="plan-features">
               <li *ngFor="let f of selectedPlan.features">✓ {{ f }}</li>
@@ -58,30 +59,30 @@ import { CommonModule } from '@angular/common';
           <!-- Platform Fee Breakdown -->
           <div class="fee-breakdown" *ngIf="selectedPlan">
             <div class="fee-row">
-              <span>Plan Price</span>
+              <span>{{ 'SUBSCRIPTION.PLAN_PRICE' | translate }}</span>
               <span>{{ selectedPlan.price | currency:'EGP':'symbol':'1.0-0' }}</span>
             </div>
             <div class="fee-row">
-              <span>Platform Fee (2.5%)</span>
+              <span>{{ 'SUBSCRIPTION.PLATFORM_FEE' | translate }}</span>
               <span>{{ platformFee | currency:'EGP':'symbol':'1.0-0' }}</span>
             </div>
             <div class="fee-row total">
-              <span>Total</span>
+              <span>{{ 'SUBSCRIPTION.TOTAL' | translate }}</span>
               <span>{{ totalAmount | currency:'EGP':'symbol':'1.0-0' }}</span>
             </div>
           </div>
 
           <!-- Payment Method Selection -->
           <div class="payment-methods">
-            <h3>Choose Payment Method</h3>
+            <h3>{{ 'SUBSCRIPTION.CHOOSE_PAYMENT' | translate }}</h3>
             <div class="methods-grid">
               <button class="method-card"
                 [class.selected]="paymentMethod === 'paymob'"
                 (click)="paymentMethod = 'paymob'">
                 <div class="method-logo">💳</div>
                 <div class="method-info">
-                  <span class="method-name">Paymob</span>
-                  <span class="method-sub">Egyptian Cards & Wallets</span>
+                  <span class="method-name">{{ 'SUBSCRIPTION.PAYMOB_NAME' | translate }}</span>
+                  <span class="method-sub">{{ 'SUBSCRIPTION.PAYMOB_SUB' | translate }}</span>
                 </div>
                 <div class="method-check" *ngIf="paymentMethod === 'paymob'">✓</div>
               </button>
@@ -91,8 +92,8 @@ import { CommonModule } from '@angular/common';
                 (click)="paymentMethod = 'paypal'">
                 <div class="method-logo">🌐</div>
                 <div class="method-info">
-                  <span class="method-name">PayPal</span>
-                  <span class="method-sub">International Payments (USD)</span>
+                  <span class="method-name">{{ 'SUBSCRIPTION.PAYPAL_NAME' | translate }}</span>
+                  <span class="method-sub">{{ 'SUBSCRIPTION.PAYPAL_SUB' | translate }}</span>
                 </div>
                 <div class="method-check" *ngIf="paymentMethod === 'paypal'">✓</div>
               </button>
@@ -101,7 +102,7 @@ import { CommonModule } from '@angular/common';
 
           <!-- Security Notice -->
           <div class="security-notice">
-            🔒 Your payment is secured by 256-bit SSL encryption. We never store card details.
+            {{ 'SUBSCRIPTION.SECURITY_NOTICE' | translate }}
           </div>
 
           <!-- Checkout Button -->
@@ -109,17 +110,17 @@ import { CommonModule } from '@angular/common';
             [disabled]="!paymentMethod || isCheckingOut"
             (click)="checkout()">
             <span *ngIf="isCheckingOut" class="spinner-sm"></span>
-            <span *ngIf="!isCheckingOut">🚀 Proceed to Payment</span>
-            <span *ngIf="isCheckingOut">Processing...</span>
+            <span *ngIf="!isCheckingOut">🚀 {{ 'SUBSCRIPTION.PROCEED_PAYMENT' | translate }}</span>
+            <span *ngIf="isCheckingOut">{{ 'SUBSCRIPTION.PROCESSING' | translate }}</span>
           </button>
         </div>
 
         <!-- Payment Initiated — redirect state -->
         <div *ngIf="paymentInitiated" class="payment-initiated">
           <div class="redirect-icon">🔄</div>
-          <h2>Redirecting to Payment...</h2>
-          <p>You will be redirected to {{ paymentMethod === 'paymob' ? 'Paymob' : 'PayPal' }} to complete your payment.</p>
-          <p class="redirect-note">Do not close this window. Your subscription will activate automatically after payment.</p>
+          <h2>{{ 'SUBSCRIPTION.REDIRECTING' | translate }}</h2>
+          <p>{{ 'SUBSCRIPTION.REDIRECT_TO' | translate:{ method: (paymentMethod === 'paymob' ? ('SUBSCRIPTION.PAYMOB_NAME' | translate) : ('SUBSCRIPTION.PAYPAL_NAME' | translate)) } }}</p>
+          <p class="redirect-note">{{ 'SUBSCRIPTION.REDIRECT_NOTE' | translate }}</p>
           <div class="spinner spinner-lg"></div>
         </div>
 
@@ -216,14 +217,14 @@ import { CommonModule } from '@angular/common';
       list-style: none;
       padding: 0;
       margin: 0;
-      text-align: left;
+      text-align: start;
     }
     .plan-features li {
       padding: 0.3rem 0;
       color: #aaa;
       font-size: 0.875rem;
     }
-    .plan-features li::before { color: #4ade80; margin-right: 0.25rem; }
+    .plan-features li::before { color: #4ade80; margin-inline-end: 0.25rem; }
 
     .fee-breakdown {
       background: rgba(255,255,255,0.03);
@@ -270,7 +271,7 @@ import { CommonModule } from '@angular/common';
       background: rgba(255,255,255,0.03);
       cursor: pointer;
       transition: all 0.2s;
-      text-align: left;
+      text-align: start;
       width: 100%;
     }
     .method-card:hover { border-color: rgba(201,169,110,0.3); }
@@ -370,6 +371,7 @@ export class SubscriptionCheckoutComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private svc   = inject(UserDashboardService);
   private notif = inject(NotificationService);
+  private translateService = inject(TranslateService);
 
   selectedPlan: any  = null;
   plans: any[]       = [];
@@ -410,7 +412,7 @@ export class SubscriptionCheckoutComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.errorMsg = 'Failed to load plan details. Please try again.';
+        this.errorMsg = this.translateService.instant('SUBSCRIPTION.LOAD_FAILED');
         this.isLoading = false;
       }
     });
@@ -434,16 +436,16 @@ export class SubscriptionCheckoutComponent implements OnInit {
           const iframeId = '{{ PAYMOB_IFRAME_ID }}'; // From environment
           window.location.href = `https://accept.paymob.com/api/acceptance/iframes/${iframeId}?payment_token=${data.paymentKey}`;
         } else {
-          this.notif.show('Payment session created. Check your dashboard.', 'info');
+          this.notif.show(this.translateService.instant('SUBSCRIPTION.PAYMENT_CREATED'), 'info');
           this.router.navigate(['/dashboard']);
         }
       },
       error: (err) => {
         this.isCheckingOut = false;
-        const msg = err?.error?.message || 'Failed to initiate payment. Please try again.';
+        const msg = err?.error?.message || this.translateService.instant('SUBSCRIPTION.INITIATE_FAILED');
         this.notif.show(msg, 'error');
         if (err?.error?.code === 'PENDING_SUBSCRIPTION_EXISTS') {
-          this.notif.show('You have a pending payment. Please complete it first.', 'info');
+          this.notif.show(this.translateService.instant('SUBSCRIPTION.PENDING_PAYMENT'), 'info');
         }
       }
     });

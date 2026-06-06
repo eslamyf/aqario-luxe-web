@@ -125,8 +125,8 @@ import { TranslateService } from '@ngx-translate/core';
             <p>"{{ booking.notes }}"</p>
           </div>
 
-          <!-- Actions (only for pending bookings) -->
-          <div class="booking-actions" *ngIf="booking.status === 'pending'">
+          <!-- Actions (only for pending bookings that are NOT paid) -->
+          <div class="booking-actions" *ngIf="booking.status === 'pending' && booking.paymentStatus !== 'paid'">
             <button class="btn-approve"
               [disabled]="loadingMap[booking._id]"
               (click)="approve(booking._id)">
@@ -147,10 +147,35 @@ import { TranslateService } from '@ngx-translate/core';
             <button class="btn-ghost btn-sm" style="margin-left:auto" (click)="openCancelDialog(booking)">{{ 'DASHBOARD.CANCEL_BOOKING' | translate }}</button>
           </div>
 
-          <!-- Paid -->
-          <div class="booking-paid-notice" *ngIf="booking.paymentStatus === 'paid'">
-            <span class="notice-icon">✅</span>
-            {{ 'DASHBOARD.PAYMENT_CONFIRMED' | translate }}
+          <!-- Premium Transaction Details & Contact Buyer Badge (for paid bookings) -->
+          <div class="booking-paid-confirmed-badge" *ngIf="booking.paymentStatus === 'paid'">
+            <div class="badge-header">
+              <span class="badge-title">
+                <i class="ph ph-shield-check"></i>
+                {{ 'DASHBOARD.TRANSACTION_DETAILS' | translate }}
+              </span>
+              <span class="badge-success-label">
+                <i class="ph ph-check-circle"></i>
+                {{ 'DASHBOARD.PAYMENT_CONFIRMED' | translate }}
+              </span>
+            </div>
+            <div class="buyer-contact-details" *ngIf="booking.user_id?.phone || booking.user_id?.email">
+              <span class="contact-label">{{ 'DASHBOARD.CONTACT_BUYER' | translate }}:</span>
+              <div class="contact-buttons">
+                <a *ngIf="booking.user_id?.phone" [href]="'tel:' + booking.user_id.phone" class="contact-btn phone-btn">
+                  <i class="ph ph-phone"></i> {{ booking.user_id.phone }}
+                </a>
+                <a *ngIf="booking.user_id?.phone" [href]="'https://wa.me/' + cleanPhone(booking.user_id.phone)" target="_blank" class="contact-btn whatsapp-btn">
+                  <i class="ph ph-whatsapp-logo"></i> WhatsApp
+                </a>
+                <a *ngIf="booking.user_id?.email" [href]="'mailto:' + booking.user_id.email" class="contact-btn email-btn">
+                  <i class="ph ph-envelope"></i> {{ booking.user_id.email }}
+                </a>
+                <button (click)="startChat(booking.user_id?._id || booking.user_id)" class="contact-btn chat-btn" style="cursor:pointer;">
+                  <i class="ph ph-chat-circle"></i> {{ 'CHAT.START_CHAT' | translate }}
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- Request date -->
@@ -442,6 +467,102 @@ import { TranslateService } from '@ngx-translate/core';
     .booking-paid-notice     { background: rgba(74,222,128,0.1); color: #16a34a; border: 1px solid rgba(74,222,128,0.2); }
     .notice-icon { font-size: 1.1rem; }
 
+    .booking-paid-confirmed-badge {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-soft);
+    }
+    .booking-paid-confirmed-badge .badge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .booking-paid-confirmed-badge .badge-title {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--brand-gold-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .booking-paid-confirmed-badge .badge-title i {
+      font-size: 1.1rem;
+    }
+    .booking-paid-confirmed-badge .badge-success-label {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .booking-paid-confirmed-badge .buyer-contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .booking-paid-confirmed-badge .contact-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .booking-paid-confirmed-badge .contact-buttons {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .booking-paid-confirmed-badge .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .booking-paid-confirmed-badge .phone-btn {
+      background: color-mix(in srgb, var(--text-main) 5%, transparent);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+    .booking-paid-confirmed-badge .phone-btn:hover {
+      background: color-mix(in srgb, var(--text-main) 10%, transparent);
+    }
+    .booking-paid-confirmed-badge .whatsapp-btn {
+      background: rgba(37, 211, 102, 0.1);
+      color: #25d366;
+      border: 1px solid rgba(37, 211, 102, 0.2);
+    }
+    .booking-paid-confirmed-badge .whatsapp-btn:hover {
+      background: rgba(37, 211, 102, 0.18);
+    }
+    .booking-paid-confirmed-badge .email-btn {
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    .booking-paid-confirmed-badge .email-btn:hover {
+      background: rgba(59, 130, 246, 0.18);
+    }
+    .booking-paid-confirmed-badge .chat-btn {
+      background: rgba(201, 169, 110, 0.1);
+      color: var(--brand-gold);
+      border: 1px solid rgba(201, 169, 110, 0.25);
+    }
+    .booking-paid-confirmed-badge .chat-btn:hover {
+      background: rgba(201, 169, 110, 0.2);
+    }
+
     .booking-date { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
 
     /* Pagination */
@@ -676,6 +797,25 @@ export class UserOwnerBookingsComponent implements OnInit {
       error: (err: any) => {
         this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.NOTIF_BOOKING_CANCEL_FAILED'), 'error');
         this.isCancelling = false;
+      }
+    });
+  }
+
+  cleanPhone(phone: string): string {
+    if (!phone) return '';
+    return phone.replace(/[^0-9+]/g, '');
+  }
+
+  startChat(buyerId: string): void {
+    if (!buyerId) return;
+    this.svc.initiateChat(buyerId).subscribe({
+      next: (chat) => {
+        if (chat && chat._id) {
+          this.router.navigate(['/dashboard/chat', chat._id]);
+        }
+      },
+      error: (err: any) => {
+        console.error('Failed to initiate chat', err);
       }
     });
   }

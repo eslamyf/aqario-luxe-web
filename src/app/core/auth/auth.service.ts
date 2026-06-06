@@ -192,8 +192,10 @@ export class AuthService {
   logout(): void {
     // 1. Synchronously wipe local session state immediately
     if (typeof window !== 'undefined') {
-      localStorage.clear();
-      sessionStorage.clear();
+      localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.USER_KEY);
+      sessionStorage.removeItem(this.TOKEN_KEY);
+      sessionStorage.removeItem(this.USER_KEY);
     }
     this.socketService.disconnect();
     this._currentUser$.next(null);

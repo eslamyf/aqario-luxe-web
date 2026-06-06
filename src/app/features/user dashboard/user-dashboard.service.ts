@@ -136,7 +136,15 @@ export class UserDashboardService {
         'Failed to reject viewing request': 'DASHBOARD.ERR_REJECT_VR',
         'Failed to cancel viewing request': 'DASHBOARD.ERR_CANCEL_VR',
         'Failed to load payments': 'DASHBOARD.ERR_LOAD_PAYMENTS',
-        'Failed to load stats': 'DASHBOARD.ERR_LOAD_STATS'
+        'Failed to load stats': 'DASHBOARD.ERR_LOAD_STATS',
+        'Failed to request payout': 'DASHBOARD.PAYOUT_MODAL.ERR_REQUEST_FAILED',
+        'Failed to load payouts': 'DASHBOARD.PAYOUT_MODAL.ERR_LOAD_FAILED',
+        'Failed to load inquiries': 'DASHBOARD.ERR_LOAD_INQUIRIES',
+        'Failed to send reply': 'DASHBOARD.INQUIRY_REPLY_FAILED',
+        'Failed to load chats': 'CHAT.ERR_LOAD_CHATS',
+        'Failed to load messages': 'CHAT.ERR_LOAD_MESSAGES',
+        'Failed to initiate chat': 'CHAT.ERR_INITIATE_CHAT',
+        'Failed to upload file': 'CHAT.ERR_UPLOAD_FILE'
       };
 
       const transKey = keyMap[key] || key;
@@ -185,7 +193,7 @@ export class UserDashboardService {
 
   // ── Owner: Incoming Booking Requests ─────────────────────────────────────
   getOwnerBookings(page = 1, limit = 20): Observable<any> {
-    return this.http.get<ApiResponse<any>>(`${this.base}/bookings/owner-requests`, {
+    return this.http.get<ApiResponse<any>>(`${this.base}/bookings/owner`, {
       params: { page, limit }
     }).pipe(
       map((res) => res.data ?? res),
@@ -379,11 +387,96 @@ export class UserDashboardService {
     );
   }
 
+  getPayouts(): Observable<any> {
+    return this.http.get<ApiResponse<any>>(`${this.base}/payments/payouts`).pipe(
+      map((res) => res.data ?? res),
+      catchError(this.handleError('Failed to load payouts'))
+    );
+  }
+
+  requestPayout(amount: number, method: string, accountDetails: string): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.base}/payments/payout`, {
+      amount,
+      method,
+      accountDetails,
+    }).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to request payout'))
+    );
+  }
+
+  adminGetPayouts(): Observable<any> {
+    return this.http.get<ApiResponse<any>>(`${this.base}/payments/admin/payouts`).pipe(
+      map((res) => res.data ?? res),
+      catchError(this.handleError('Failed to load payouts'))
+    );
+  }
+
+  adminUpdatePayout(id: string, status: string): Observable<any> {
+    return this.http.patch<ApiResponse<any>>(`${this.base}/payments/admin/payouts/${id}`, {
+      status,
+    }).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to update payout status'))
+    );
+  }
+
   // ── Stats ── GET /dashboard/me/stats ───────────────────────────────
   getMyStats(): Observable<any> {
     return this.http.get<ApiResponse<any>>(`${this.base}/dashboard/me/stats`).pipe(
       map((res) => res.data),
       catchError(this.handleError('Failed to load stats'))
+    );
+  }
+
+  // ── Inquiries ── GET /inquiries/owner | POST /inquiries/:id/reply ────────
+  getOwnerInquiries(): Observable<any[]> {
+    return this.http.get<ApiResponse<any>>(`${this.base}/inquiries/owner`).pipe(
+      map((res) => {
+        if (Array.isArray(res.data)) return res.data;
+        return res.data?.inquiries ?? [];
+      }),
+      catchError(this.handleError('Failed to load inquiries'))
+    );
+  }
+
+  replyToInquiry(id: string, message: string): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.base}/inquiries/${id}/reply`, { message }).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to send reply'))
+    );
+  }
+
+  // ── Real-Time Chat APIs ──────────────────────────────────────────────────
+  getChats(): Observable<any[]> {
+    return this.http.get<ApiResponse<{ chats: any[] }>>(`${this.base}/chats`).pipe(
+      map((res) => res.data.chats),
+      catchError(this.handleError('Failed to load chats'))
+    );
+  }
+
+  getChatMessages(chatId: string, page = 1, limit = 50): Observable<any[]> {
+    return this.http.get<ApiResponse<{ messages: any[] }>>(`${this.base}/chats/${chatId}/messages`, {
+      params: { page, limit }
+    }).pipe(
+      map((res) => res.data.messages),
+      catchError(this.handleError('Failed to load messages'))
+    );
+  }
+
+  initiateChat(participantId: string): Observable<any> {
+    return this.http.post<ApiResponse<{ chat: any }>>(`${this.base}/chats`, { participantId }).pipe(
+      map((res) => res.data.chat),
+      catchError(this.handleError('Failed to initiate chat'))
+    );
+  }
+
+  uploadChatAttachment(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<ApiResponse<any>>(`${this.base}/chats/upload`, formData).pipe(
+      map((res) => res.data),
+      catchError(this.handleError('Failed to upload file'))
     );
   }
 
