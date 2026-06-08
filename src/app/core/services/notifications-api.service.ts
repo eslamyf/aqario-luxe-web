@@ -2,9 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { map, switchMap, tap, shareReplay, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { SocketService } from './socket.service';
+import { NotificationService } from '../../shared/services/notification.service';
 
 export interface BackendNotification {
   _id: string;
@@ -15,6 +17,11 @@ export interface BackendNotification {
   isRead: boolean;
   actionUrl?: string;
   createdAt: string;
+  metadata?: {
+    type?: string;
+    referenceId?: string;
+    chatId?: string;
+  };
 }
 
 export interface NotificationsResponse {
@@ -35,6 +42,8 @@ export class NotificationsApiService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
   private socketService = inject(SocketService);
+  private router = inject(Router);
+  private toastService = inject(NotificationService);
   private readonly base = environment.apiUrl;
 
   private unreadCountSubject = new BehaviorSubject<number>(0);
@@ -62,6 +71,14 @@ export class NotificationsApiService {
         if (!current.find(n => n._id === notif._id)) {
           this.notificationsSubject.next([notif, ...current]);
           this.unreadCountSubject.next(this.unreadCountSubject.value + 1);
+
+          // Active Viewport Toast Suppression
+          const currentUrl = this.router.url;
+          if (currentUrl.startsWith('/dashboard/chat') && (notif.type === 'inquiry' || notif.type === 'chat')) {
+            console.log('[NotificationsApiService] Toast suppressed for chat path:', currentUrl);
+          } else {
+            this.toastService.show(notif.message, 'info');
+          }
         }
       }
     });

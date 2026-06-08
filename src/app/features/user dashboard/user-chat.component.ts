@@ -6,7 +6,7 @@ import { SocketService } from '../../core/services/socket.service';
 import { AuthService, User } from '../../core/auth/auth.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-chat',
@@ -92,10 +92,11 @@ import { ActivatedRoute } from '@angular/router';
               </div>
               <div class="header-meta">
                 <span class="header-name">{{ getParticipant(selectedChat)?.name }}</span>
-                <span class="header-status" [class.online]="isParticipantOnline(getParticipant(selectedChat)?._id)">
-                  {{ (isParticipantOnline(getParticipant(selectedChat)?._id) ? 'CHAT.ONLINE' : 'CHAT.OFFLINE') | translate }}
-                </span>
               </div>
+              <a class="back-to-inquiries" (click)="navigateToInquiries()">
+                <i class="ph ph-arrow-left"></i>
+                <span>{{ 'CHAT.BACK_TO_INQUIRIES' | translate }}</span>
+              </a>
             </div>
 
             <!-- Messages Log -->
@@ -221,7 +222,7 @@ import { ActivatedRoute } from '@angular/router';
                 </button>
 
                 <!-- Send Button -->
-                <button class="send-message-btn" [disabled]="!newMessageText.trim() && !uploadingAttachment" (click)="sendTextMessage()">
+                <button class="send-message-btn" [class.active]="newMessageText.trim().length > 0 || uploadingAttachment" [disabled]="!newMessageText.trim() && !uploadingAttachment" (click)="sendTextMessage()">
                   <span *ngIf="uploadingAttachment" class="spinner-xs"></span>
                   <i *ngIf="!uploadingAttachment" class="ph ph-paper-plane-right"></i>
                 </button>
@@ -531,12 +532,23 @@ import { ActivatedRoute } from '@angular/router';
       color: var(--text-main);
       font-size: 1rem;
     }
-    .header-status {
-      font-size: 0.75rem;
+    .back-to-inquiries {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
       color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      margin-inline-start: auto;
     }
-    .header-status.online {
-      color: #10b981;
+    .back-to-inquiries:hover {
+      color: var(--brand-gold);
+    }
+    .back-to-inquiries i {
+      font-size: 1.1rem;
     }
 
     /* Messages Logs */
@@ -801,28 +813,29 @@ import { ActivatedRoute } from '@angular/router';
     }
 
     .send-message-btn {
-      background: var(--brand-gold);
-      color: #fff;
-      border: none;
+      background: var(--bg-deep);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
       border-radius: 50%;
       width: 40px;
       height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s;
+      cursor: not-allowed;
+      transition: all 0.3s ease;
       flex-shrink: 0;
       font-size: 1.1rem;
+      opacity: 0.7;
     }
-    .send-message-btn:hover {
+    .send-message-btn.active {
+      background: var(--brand-gold);
+      color: #fff;
+      cursor: pointer;
+      opacity: 1;
+    }
+    .send-message-btn.active:hover {
       background: var(--brand-gold-dark);
-    }
-    .send-message-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      background: var(--border-color);
-      color: var(--text-muted);
     }
 
     /* Voice Note Recorder Overlay inside input panel */
@@ -945,6 +958,9 @@ import { ActivatedRoute } from '@angular/router';
     .rtl {
       direction: rtl;
     }
+    .rtl .send-message-btn i {
+      transform: scaleX(-1);
+    }
     .rtl .chat-sidebar {
       border-right: none;
       border-left: 1px solid var(--border-color);
@@ -1035,7 +1051,8 @@ export class UserChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     private authService: AuthService,
     private notif: NotificationService,
     private translate: TranslateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.currentUser = this.authService.currentUser;
     this.isRtl = this.translate.currentLang === 'ar';
@@ -1059,8 +1076,8 @@ export class UserChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngOnDestroy(): void {
-    if (this.selectedChat && this.socket) {
-      this.socket.emit('leaveChat', this.selectedChat._id);
+    if (this.selectedChat) {
+      this.socketService.emit('leaveChat', { chatId: this.selectedChat._id });
     }
     this.cancelRecord();
     this.destroy$.next();
@@ -1097,7 +1114,7 @@ export class UserChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
           // Join active chat room if one was selected during reconnection
           if (this.selectedChat) {
-            this.socket.emit('joinChat', this.selectedChat._id);
+            this.socketService.emit('joinChat', { chatId: this.selectedChat._id });
           }
         }
       });
@@ -1145,16 +1162,14 @@ export class UserChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   // Select Chat Session
   selectChat(chat: any): void {
-    if (this.selectedChat && this.socket) {
-      this.socket.emit('leaveChat', this.selectedChat._id);
+    if (this.selectedChat) {
+      this.socketService.emit('leaveChat', { chatId: this.selectedChat._id });
     }
     this.selectedChat = chat;
     this.messages = [];
     this.loadingMessages = true;
 
-    if (this.socket) {
-      this.socket.emit('joinChat', chat._id);
-    }
+    this.socketService.emit('joinChat', { chatId: chat._id });
 
     this.chatService.getChatMessages(chat._id)
       .pipe(takeUntil(this.destroy$))
@@ -1171,11 +1186,15 @@ export class UserChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   closeChat(): void {
-    if (this.selectedChat && this.socket) {
-      this.socket.emit('leaveChat', this.selectedChat._id);
+    if (this.selectedChat) {
+      this.socketService.emit('leaveChat', { chatId: this.selectedChat._id });
     }
     this.selectedChat = null;
     this.messages = [];
+  }
+
+  navigateToInquiries(): void {
+    this.router.navigate(['/dashboard/inquiries']);
   }
 
   // Chat Helpers

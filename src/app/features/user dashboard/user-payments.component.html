@@ -5,19 +5,68 @@
       <h1>{{ 'DASHBOARD.PAYMENT_HISTORY' | translate }}</h1>
       <p>{{ 'DASHBOARD.PAYMENT_SUB' | translate }}</p>
     </div>
-    <div *ngIf="isOwnerOrAgent">
-      <button class="action-btn primary gold-btn" (click)="openPayoutModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 0.6rem 1.25rem; font-weight: 600; border-radius: 8px;">
-        <i class="ph ph-hand-coins" style="font-size: 1.15rem;"></i>
-        {{ 'DASHBOARD.REQUEST_PAYOUT_BTN' | translate }}
-      </button>
+    </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- UPPER TIER: Wallet Panel (Owner/Agent) or Stats (Buyer)       -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Owner/Agent: Unified Glassmorphic Digital Wallet Panel + Compact Stats -->
+  <div class="wallet-layout-container" *ngIf="isOwnerOrAgent">
+    <!-- Main Unified Digital Wallet Card -->
+    <div class="wallet-card glass-gold-card unified-wallet-card">
+      <div class="wallet-card-bg-glow"></div>
+      <div class="wallet-card-header">
+        <div class="wallet-title">
+          <i class="ph ph-wallet"></i>
+          {{ 'DASHBOARD.DIGITAL_WALLET' | translate }}
+        </div>
+      </div>
+      
+      <div class="unified-wallet-balances">
+        <!-- Single USD Balance Block -->
+        <div class="currency-block usd-block" style="width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; padding: 1rem 0;">
+          <div class="currency-info" style="display: flex; flex-direction: column; align-items: center;">
+            <span class="currency-label" style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85;">
+              {{ 'DASHBOARD.PAYOUT_MODAL.AVAILABLE' | translate }}
+            </span>
+            <span class="currency-value" style="font-size: 3rem; font-weight: 800; color: #f59e0b; margin-top: 0.5rem;">
+              {{ balance_USD | currency:'USD':'symbol':'1.0-0' }}
+            </span>
+          </div>
+          <button class="request-payout-btn instant-payout-btn usd-payout-btn" (click)="openPayoutModal('paypal')" style="width: auto; padding: 0.75rem 2rem; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 9999px; font-weight: 600;">
+            <i class="ph ph-lightning"></i>
+            {{ 'DASHBOARD.INSTANT_PAYOUT' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compact Stat Cards (Side Column) -->
+    <div class="stats-supplementary">
+      <article class="stat-card mini-card">
+        <span class="stat-label">{{ 'DASHBOARD.STATS.COMPLETED' | translate }}</span>
+        <span class="stat-value">{{ completedCount }}</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.COMPLETED_SUB' | translate }}</span>
+      </article>
+      <article class="stat-card mini-card">
+        <span class="stat-label">{{ 'DASHBOARD.STATS.ALL_RECORDS' | translate }}</span>
+        <span class="stat-value">{{ payments.length }}</span>
+        <span class="stat-note">{{ 'DASHBOARD.STATS.ALL_RECORDS_SUB' | translate }}</span>
+      </article>
     </div>
   </div>
 
-  <div class="stats-grid" style="grid-template-columns: repeat(3,1fr);margin-bottom:1.5rem">
+  <!-- Buyer: Standard Stats Grid -->
+  <div class="stats-grid" style="grid-template-columns: repeat(3,1fr); margin-bottom: 1.5rem;" *ngIf="!isOwnerOrAgent">
     <article class="stat-card">
-      <span class="stat-label">{{ (isOwnerOrAgent ? 'DASHBOARD.STATS.TOTAL_EARNED' : 'DASHBOARD.STATS.TOTAL_PAID') | translate }}</span>
-      <span class="stat-value">{{ (isOwnerOrAgent ? (currentUser?.cumulativeBalance || totalPaid) : totalPaid) | currency:(payments[0]?.currency || 'EGP'):'symbol':'1.0-0' }}</span>
-      <span class="stat-note">{{ (isOwnerOrAgent ? 'DASHBOARD.STATS.TOTAL_EARNED_SUB' : 'DASHBOARD.STATS.TOTAL_SPENT_SUB') | translate }}</span>
+      <span class="stat-label">{{ 'DASHBOARD.STATS.TOTAL_PAID' | translate }}</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span class="stat-value" style="font-size: 28px; line-height: 1.2;">
+          {{ totalPaidUSD | currency:'USD':'symbol':'1.0-0' }}
+        </span>
+      </div>
+      <span class="stat-note" style="margin-top: 8px;">{{ 'DASHBOARD.STATS.TOTAL_SPENT_SUB' | translate }}</span>
     </article>
     <article class="stat-card">
       <span class="stat-label">{{ 'DASHBOARD.STATS.COMPLETED' | translate }}</span>
@@ -30,6 +79,10 @@
       <span class="stat-note">{{ 'DASHBOARD.STATS.ALL_RECORDS_SUB' | translate }}</span>
     </article>
   </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- LOWER TIER: Payment History Table                              -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
 
   <div class="panel-card">
     <div *ngIf="isLoading" class="loading-state">{{ 'DASHBOARD.LOADING_PAYMENTS' | translate }}</div>
@@ -73,12 +126,12 @@
             </td>
             <td>{{ 'DASHBOARD.PAYMENT_METHOD.' + (p.method || p.paymentMethod || 'card').toUpperCase() | translate }}</td>
             <ng-container *ngIf="isOwnerOrAgent; else buyerCells">
-              <td>{{ p.buyerPaid | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
-              <td>{{ p.commission | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
-              <td>{{ p.totalAmount | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
+              <td>{{ p.buyerPaid | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td>{{ p.commission | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td>{{ p.totalAmount | currency:'USD':'symbol':'1.0-0' }}</td>
             </ng-container>
             <ng-template #buyerCells>
-              <td>{{ p.totalAmount | currency:(p.currency || 'EGP'):'symbol':'1.0-0' }}</td>
+              <td>{{ p.totalAmount | currency:'USD':'symbol':'1.0-0' }}</td>
             </ng-template>
             <td>
               <div style="display: flex; gap: 8px; align-items: center;">
@@ -98,10 +151,13 @@
     </div>
   </div>
 
-  <!-- Payout Requests History List -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- LOWER TIER: Payout Requests History (Owner/Agent only)         -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+ 
   <div class="panel-card" style="margin-top: 2rem;" *ngIf="isOwnerOrAgent && payouts.length > 0">
     <div class="panel-header" style="margin-bottom: 1.25rem;">
-      <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0;">{{ 'DASHBOARD.PAYOUT_REQUESTS_TITLE' | translate }}</h2>
+      <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0;">{{ 'DASHBOARD.INSTANT_PAYOUTS_HISTORY' | translate }}</h2>
     </div>
     <div class="table-wrap">
       <table>
@@ -117,7 +173,7 @@
         <tbody>
           <tr *ngFor="let p of payouts">
             <td>{{ p.created_at | date:'mediumDate' }}</td>
-            <td>{{ p.amount | currency:'EGP':'symbol':'1.0-0' }}</td>
+            <td>{{ p.amount | currency:'USD':'symbol':'1.0-0' }}</td>
             <td>{{ 'DASHBOARD.PAYMENT_METHOD.' + p.method.toUpperCase() | translate }}</td>
             <td>{{ p.accountDetails }}</td>
             <td>
@@ -130,42 +186,41 @@
       </table>
     </div>
   </div>
-
-  <!-- Payout Modal Dialog -->
+ 
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- Payout Modal Dialog                                            -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+ 
   <div class="dialog-overlay" *ngIf="showModal" (click)="closePayoutModal()">
     <div class="dialog-box" (click)="$event.stopPropagation()">
       <h3>{{ 'DASHBOARD.PAYOUT_MODAL.TITLE' | translate }}</h3>
       
       <div class="balance-info-row">
         <div class="info-item">
-          <span class="label">{{ 'DASHBOARD.PAYOUT_MODAL.CUMULATIVE' | translate }}</span>
-          <span class="val">{{ (currentUser?.cumulativeBalance || 0) | currency:'EGP':'symbol':'1.0-0' }}</span>
-        </div>
-        <div class="info-item" *ngIf="pendingPayoutsSum > 0">
-          <span class="label">{{ 'DASHBOARD.PAYOUT_MODAL.PENDING' | translate }}</span>
-          <span class="val">{{ pendingPayoutsSum | currency:'EGP':'symbol':'1.0-0' }}</span>
-        </div>
-        <div class="info-item">
           <span class="label">{{ 'DASHBOARD.PAYOUT_MODAL.AVAILABLE' | translate }}</span>
-          <span class="val gold">{{ availableBalance | currency:'EGP':'symbol':'1.0-0' }}</span>
+          <span class="val gold">
+            {{ modalAvailableBalance | currency:'USD':'symbol':'1.0-0' }}
+          </span>
         </div>
       </div>
-
+ 
       <form (submit)="submitPayout(); $event.preventDefault();">
         <div class="form-group">
-          <label for="payoutAmount">{{ 'DASHBOARD.PAYOUT_MODAL.AMOUNT' | translate }}</label>
+          <label for="payoutAmount">
+            {{ 'DASHBOARD.PAYOUT_MODAL.AMOUNT_USD' | translate }}
+          </label>
           <input
             id="payoutAmount"
             type="number"
             class="form-control"
             required
             min="1"
-            [max]="availableBalance"
+            [max]="modalAvailableBalance"
             [(ngModel)]="payoutAmount"
             name="payoutAmount"
           />
         </div>
-
+ 
         <div class="form-group">
           <label for="payoutMethod">{{ 'DASHBOARD.PAYOUT_MODAL.METHOD' | translate }}</label>
           <select
@@ -173,13 +228,14 @@
             class="form-control"
             required
             [(ngModel)]="payoutMethod"
+            (change)="onMethodChange()"
             name="payoutMethod"
           >
-            <option value="paymob_wallet">{{ 'DASHBOARD.PAYOUT_MODAL.PAYMOB_WALLET' | translate }}</option>
+            <option value="paymob">{{ 'DASHBOARD.PAYOUT_MODAL.PAYMOB' | translate }}</option>
             <option value="paypal">{{ 'DASHBOARD.PAYOUT_MODAL.PAYPAL' | translate }}</option>
           </select>
         </div>
-
+ 
         <div class="form-group">
           <label for="accountDetails">{{ 'DASHBOARD.PAYOUT_MODAL.DETAILS' | translate }}</label>
           <input
@@ -192,10 +248,10 @@
             name="payoutDetails"
           />
         </div>
-
+ 
         <div class="dialog-actions">
           <button type="button" class="btn-ghost" (click)="closePayoutModal()">{{ 'DASHBOARD.PAYOUT_MODAL.CLOSE' | translate }}</button>
-          <button type="submit" class="btn-gold" [disabled]="isSubmitting || payoutAmount <= 0 || payoutAmount > availableBalance || !payoutDetails.trim()">
+          <button type="submit" class="btn-gold" [disabled]="isSubmitting || payoutAmount <= 0 || payoutAmount > modalAvailableBalance || !payoutDetails.trim()">
             <span *ngIf="isSubmitting" class="spinner-xs"></span>
             {{ 'DASHBOARD.PAYOUT_MODAL.SUBMIT' | translate }}
           </button>

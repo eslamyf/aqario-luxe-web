@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { UserDashboardService } from './user-dashboard.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -88,9 +89,14 @@ import { TranslateService } from '@ngx-translate/core';
 
             <!-- Quick Inline Reply form action -->
             <div class="reply-action-box">
-              <button class="btn-toggle-reply" *ngIf="activeReplyId !== inq._id" (click)="toggleReply(inq._id)">
-                <i class="ph ph-chat-text"></i> {{ 'DASHBOARD.INQUIRY_REPLY' | translate }}
-              </button>
+              <div class="action-buttons-group" *ngIf="activeReplyId !== inq._id">
+                <button class="btn-toggle-reply" (click)="toggleReply(inq._id)">
+                  <i class="ph ph-chat-text"></i> {{ 'DASHBOARD.INQUIRY_REPLY' | translate }}
+                </button>
+                <button class="btn-go-to-chat gold-theme" (click)="goToChat(inq)">
+                  <i class="ph ph-chats"></i> {{ 'DASHBOARD.GO_TO_CHAT' | translate }}
+                </button>
+              </div>
 
               <div class="reply-form" *ngIf="activeReplyId === inq._id">
                 <textarea 
@@ -173,8 +179,11 @@ import { TranslateService } from '@ngx-translate/core';
 
     /* reply actions */
     .reply-action-box { display: flex; flex-direction: column; align-items: flex-start; }
+    .action-buttons-group { display: flex; gap: 0.75rem; }
     .btn-toggle-reply { display: inline-flex; align-items: center; gap: 6px; padding: 0.5rem 1.25rem; border-radius: 999px; border: 1px solid var(--brand-gold-soft); background: transparent; color: var(--brand-gold-dark); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
     .btn-toggle-reply:hover { background: color-mix(in srgb, var(--brand-gold) 8%, transparent); border-color: var(--brand-gold); }
+    .btn-go-to-chat { display: inline-flex; align-items: center; gap: 6px; padding: 0.5rem 1.25rem; border-radius: 999px; border: 1px solid var(--brand-gold); background: var(--brand-gold); color: #fff; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .btn-go-to-chat:hover { background: var(--brand-gold-dark); border-color: var(--brand-gold-dark); box-shadow: var(--shadow-soft); }
 
     .reply-form { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
     .reply-form textarea { width: 100%; padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-deep); color: var(--text-main); font-family: inherit; font-size: 0.875rem; resize: none; box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s; }
@@ -204,7 +213,8 @@ export class UserInquiriesComponent implements OnInit, OnDestroy {
   constructor(
     private svc: UserDashboardService,
     private notif: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) {}
 
   ngOnInit(): void { this.load(); }
@@ -238,7 +248,7 @@ export class UserInquiriesComponent implements OnInit, OnDestroy {
         next: (updatedInq) => {
           this.notif.show(this.translate.instant('DASHBOARD.INQUIRY_REPLY_SUCCESS'), 'success');
           this.inquiries = this.inquiries.map(inq => 
-            inq._id === id ? { ...inq, replies: updatedInq.replies || inq.replies } : inq
+            inq._id === id ? { ...inq, replies: updatedInq.inquiry?.replies || updatedInq.replies || inq.replies } : inq
           );
           this.toggleReply(null);
           this.submittingReply = false;
@@ -246,6 +256,24 @@ export class UserInquiriesComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.notif.show(err?.error?.message || this.translate.instant('DASHBOARD.INQUIRY_REPLY_FAILED'), 'error');
           this.submittingReply = false;
+        }
+      });
+  }
+
+  goToChat(inq: any): void {
+    const participantId = inq.sender?._id || inq.sender;
+    if (!participantId) return;
+
+    this.svc.initiateChat(participantId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (chat) => {
+          if (chat && chat._id) {
+            this.router.navigate(['/dashboard/chat', chat._id]);
+          }
+        },
+        error: (err) => {
+          this.notif.show(err?.error?.message || this.translate.instant('CHAT.ERR_INITIATE_CHAT'), 'error');
         }
       });
   }

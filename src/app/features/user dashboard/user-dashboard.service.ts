@@ -395,7 +395,7 @@ export class UserDashboardService {
   }
 
   requestPayout(amount: number, method: string, accountDetails: string): Observable<any> {
-    return this.http.post<ApiResponse<any>>(`${this.base}/payments/payout`, {
+    return this.http.post<ApiResponse<any>>(`${this.base}/payments/payouts`, {
       amount,
       method,
       accountDetails,

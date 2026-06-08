@@ -6,6 +6,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../shared/services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { SocketService } from '../../core/services/socket.service';
 
 @Component({
   selector: 'app-user-payments',
@@ -21,25 +22,40 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
 
   // Payout properties
   payouts: any[] = [];
-  pendingPayoutsSum = 0;
   showModal = false;
   payoutAmount = 0;
-  payoutMethod: 'paymob_wallet' | 'paypal' = 'paymob_wallet';
+  payoutMethod: 'paymob' | 'paypal' = 'paymob';
   payoutDetails = '';
   isSubmitting = false;
+  modalCurrency: 'EGP' | 'USD' = 'USD';
 
   constructor(
     private userService: UserDashboardService,
     private router: Router,
     public auth: AuthService,
     private notif: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit(): void {
     this.auth.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => this.currentUser = user);
+
+    this.socketService.socket$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((socketInstance) => {
+        if (socketInstance) {
+          socketInstance.on('balanceUpdate', (data: any) => {
+            if (this.currentUser) {
+              this.currentUser.balance_USD = data.balance_USD;
+            }
+            this.load();
+          });
+        }
+      });
+
     this.load();
   }
 
@@ -65,7 +81,6 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           this.payouts = res.payouts || [];
-          this.calculatePendingSum();
         },
         error: (err) => {
           console.error('Failed to load payouts', err);
@@ -73,33 +88,36 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
       });
   }
 
-  calculatePendingSum(): void {
-    this.pendingPayoutsSum = this.payouts
-      .filter(p => p.status === 'pending')
-      .reduce((sum, p) => sum + (p.amount || 0), 0);
+  get balance_USD(): number {
+    return this.currentUser?.balance_USD ?? 0;
   }
 
-  get availableBalance(): number {
-    return (this.currentUser?.cumulativeBalance || 0) - this.pendingPayoutsSum;
+  get modalAvailableBalance(): number {
+    return this.balance_USD;
   }
 
-  openPayoutModal(): void {
+  openPayoutModal(method: 'paymob' | 'paypal' = 'paymob'): void {
     this.showModal = true;
     this.payoutAmount = 0;
     this.payoutDetails = '';
-    this.payoutMethod = 'paymob_wallet';
+    this.payoutMethod = method;
+    this.modalCurrency = 'USD';
   }
 
   closePayoutModal(): void {
     this.showModal = false;
   }
 
+  onMethodChange(): void {
+    this.modalCurrency = 'USD';
+  }
+
   submitPayout(): void {
     if (this.payoutAmount <= 0) {
-      this.notif.show(this.translate.instant('DASHBOARD.PAYOUT_MODAL.ERR_MIN_AMOUNT'), 'error');
+      this.notif.show(this.translate.instant('DASHBOARD.PAYOUT_MODAL.ERR_MIN_AMOUNT_USD'), 'error');
       return;
     }
-    if (this.payoutAmount > this.availableBalance) {
+    if (this.payoutAmount > this.modalAvailableBalance) {
       this.notif.show(this.translate.instant('DASHBOARD.PAYOUT_MODAL.ERR_INSUFFICIENT'), 'error');
       return;
     }
@@ -124,14 +142,22 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
       });
   }
 
+  get isAr(): boolean {
+    return this.translate.currentLang === 'ar';
+  }
+
   get isOwnerOrAgent(): boolean {
     return this.currentUser?.role === 'owner' || this.currentUser?.role === 'agent';
   }
 
-  get totalPaid(): number {
+  get totalPaidUSD(): number {
     return this.payments
-      .filter((p) => p.status === 'paid')
+      .filter((p) => p.status === 'paid' && (p.currency || 'USD').toUpperCase() === 'USD')
       .reduce((sum, p) => sum + (p.totalAmount ?? 0), 0);
+  }
+
+  get totalPaid(): number {
+    return this.totalPaidUSD;
   }
 
   get completedCount(): number {
@@ -139,7 +165,7 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
   }
 
   propertyTitle(p: any): string {
-    return p.booking?.property_id?.title ?? p.property?.title ?? 'Unknown Property';
+    return p.booking?.property_id?.title ?? p.property?.title ?? 'Unknown';
   }
 
   goToCheckout(bookingId: string): void {

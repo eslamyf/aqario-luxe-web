@@ -80,6 +80,20 @@ export class NavComponent {
     this.notificationsApi.markAsRead(n._id).subscribe();
     this.showNotifications = false;
 
+    let chatId = n.metadata?.chatId;
+    if (!chatId) {
+      const url = n.targetUrl || n.link;
+      if (url && url.includes('/dashboard/chat/')) {
+        const parts = url.split('/');
+        chatId = parts[parts.length - 1];
+      }
+    }
+
+    if (chatId && chatId !== 'undefined') {
+      this.router.navigate(['/dashboard/chat', chatId]);
+      return;
+    }
+
     const url = n.targetUrl || n.link;
     if (url) {
       this.router.navigateByUrl(url);

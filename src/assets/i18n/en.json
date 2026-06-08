@@ -23,7 +23,7 @@
     "MY_PROPERTIES": "My Properties",
     "REQUESTS": "Requests",
     "SAVED": "Saved",
-    "PAYMENTS": "Payments",
+    "PAYMENTS": "Wallet & Payments",
     "ADMIN_CENTER": "Admin Center",
     "FAVOURITES": "Favourites",
     "MESSAGES": "Messages"
@@ -505,7 +505,10 @@
     "VIEWING_SCHEDULE": "Viewing Schedule",
     "SAVED": "Saved",
     "VIEWING_REQUESTS": "Viewing Requests",
-    "PAYMENTS": "Payments",
+    "PAYMENTS": "Wallet & Payments",
+    "DIGITAL_WALLET": "Digital Wallet",
+    "INSTANT_PAYOUT": "Instant Payout",
+    "INSTANT_PAYOUTS_HISTORY": "Instant Payouts History",
     "MANAGEMENT": "Management",
     "ADMIN_CENTER": "Admin Center",
     "LOG_OUT": "Log out",
@@ -729,8 +732,10 @@
     "PAYOUT_REQUESTS_TITLE": "Withdrawal Requests",
     "PAYOUT_MODAL": {
       "TITLE": "Request Payout",
-      "AMOUNT": "Withdrawal Amount (EGP)",
+      "AMOUNT_EGP": "Withdrawal Amount (EGP)",
+      "AMOUNT_USD": "Withdrawal Amount (USD)",
       "METHOD": "Withdrawal Method",
+      "PAYMOB": "Paymob Wallet",
       "PAYMOB_WALLET": "Paymob Mobile Wallet",
       "PAYPAL": "PayPal Account",
       "ACCOUNT_DETAILS": "Wallet Mobile Number / PayPal Email",
@@ -738,10 +743,14 @@
       "CLOSE": "Cancel",
       "SUCCESS": "Payout request submitted successfully!",
       "ERR_INSUFFICIENT": "Insufficient available balance.",
-      "ERR_MIN_AMOUNT": "Minimum withdrawal amount is 1 EGP.",
+      "ERR_MIN_AMOUNT_EGP": "Minimum withdrawal amount is 1 EGP.",
+      "ERR_MIN_AMOUNT_USD": "Minimum withdrawal amount is 1 USD.",
       "AVAILABLE": "Available Balance",
       "PENDING": "Pending Payouts",
-      "CUMULATIVE": "Total Balance"
+      "CUMULATIVE": "Total Balance",
+      "DETAILS": "Account Details",
+      "EGP_WALLET": "EGP Wallet",
+      "USD_WALLET": "USD Wallet"
     },
     "PROFILE": {
       "TITLE": "My Profile",
@@ -842,7 +851,8 @@
     "INQUIRY_REPLY": "Reply",
     "INQUIRY_REPLY_PLACEHOLDER": "Type your reply here...",
     "INQUIRY_REPLY_SUCCESS": "Reply sent successfully!",
-    "INQUIRY_REPLY_FAILED": "Failed to send reply."
+    "INQUIRY_REPLY_FAILED": "Failed to send reply.",
+    "GO_TO_CHAT": "Go to Chat"
   },
   "AUTH": {
     "SIGN_IN": "SIGN IN",
@@ -1475,6 +1485,7 @@
     "ERR_LOAD_MESSAGES": "Failed to load messages. Please try again.",
     "ERR_INITIATE_CHAT": "Failed to start conversation. Please try again.",
     "ERR_UPLOAD_FILE": "Failed to upload file. Please try again.",
-    "START_CHAT": "Start Chat"
+    "START_CHAT": "Start Chat",
+    "BACK_TO_INQUIRIES": "Back to Inquiries"
   }
 }

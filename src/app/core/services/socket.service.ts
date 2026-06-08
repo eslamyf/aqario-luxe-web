@@ -108,4 +108,16 @@ export class SocketService {
       })
     );
   }
+
+  emit(event: string, data: any): void {
+    if (this.socket) {
+      this.socket.emit(event, data);
+    } else if (this.socketPromise) {
+      this.socketPromise.then((socketInstance) => {
+        if (socketInstance) {
+          socketInstance.emit(event, data);
+        }
+      });
+    }
+  }
 }

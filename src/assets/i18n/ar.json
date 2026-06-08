@@ -23,7 +23,7 @@
     "MY_PROPERTIES": "عقاراتي",
     "REQUESTS": "الطلبات",
     "SAVED": "المحفوظات",
-    "PAYMENTS": "المدفوعات",
+    "PAYMENTS": "المحفظة والمدفوعات",
     "ADMIN_CENTER": "مركز الإدارة",
     "FAVOURITES": "المفضلة",
     "MESSAGES": "الرسائل"
@@ -505,7 +505,10 @@
     "VIEWING_SCHEDULE": "جدول المعاينات",
     "SAVED": "المحفوظة",
     "VIEWING_REQUESTS": "طلبات المعاينة",
-    "PAYMENTS": "المدفوعات",
+    "PAYMENTS": "المحفظة والمدفوعات",
+    "DIGITAL_WALLET": "المحفظة الرقمية",
+    "INSTANT_PAYOUT": "سحب فوري",
+    "INSTANT_PAYOUTS_HISTORY": "سجل السحوبات الفورية",
     "MANAGEMENT": "الإدارة",
     "ADMIN_CENTER": "مركز الإدارة",
     "LOG_OUT": "تسجيل الخروج",
@@ -729,8 +732,10 @@
     "PAYOUT_REQUESTS_TITLE": "طلبات سحب الأرباح",
     "PAYOUT_MODAL": {
       "TITLE": "طلب سحب الأرباح",
-      "AMOUNT": "مبلغ السحب (ج.م.)",
+      "AMOUNT_EGP": "مبلغ السحب (ج.م.)",
+      "AMOUNT_USD": "مبلغ السحب (دولار أمريكي)",
       "METHOD": "طريقة السحب",
+      "PAYMOB": "باي موب",
       "PAYMOB_WALLET": "محفظة الهاتف المحمول (Vodafone / Orange / Etisalat)",
       "PAYPAL": "حساب بايبال",
       "ACCOUNT_DETAILS": "رقم الهاتف المحمول للمحفظة / بريد بايبال الإلكتروني",
@@ -738,10 +743,14 @@
       "CLOSE": "إلغاء",
       "SUCCESS": "تم تقديم طلب سحب الأرباح بنجاح!",
       "ERR_INSUFFICIENT": "الرصيد المتاح غير كافٍ.",
-      "ERR_MIN_AMOUNT": "الحد الأدنى لمبلغ السحب هو 1 جنيه مصري.",
+      "ERR_MIN_AMOUNT_EGP": "الحد الأدنى لمبلغ السحب هو 1 جنيه مصري.",
+      "ERR_MIN_AMOUNT_USD": "الحد الأدنى لمبلغ السحب هو 1 دولار أمريكي.",
       "AVAILABLE": "الرصيد المتاح",
       "PENDING": "طلبات السحب المعلقة",
-      "CUMULATIVE": "إجمالي الرصيد"
+      "CUMULATIVE": "إجمالي الرصيد",
+      "DETAILS": "تفاصيل الحساب",
+      "EGP_WALLET": "محفظة الجنيه المصري",
+      "USD_WALLET": "محفظة الدولار الأمريكي"
     },
     "PROFILE": {
       "TITLE": "ملفي الشخصي",
@@ -832,17 +841,18 @@
     "CANCEL_APPROVED_SUB": "هل أنت متأكد أنك تريد إلغاء هذا الحجز المعتمد؟ يرجى تقديم سبب.",
     "REQUESTED_ON": "تاريخ الطلب",
     "ERR_LOAD_INQUIRIES": "فشل في تحميل الاستفسارات.",
-    "INQUIRIES": "الرسائل والاستفسارات",
+    "INQUIRIES": "الاستفسارات",
     "NO_INQUIRIES": "لا توجد استفسارات مستلمة بعد.",
     "NO_INQUIRIES_SUB": "عندما يرسل المشترون استفسارات حول عقاراتك، ستظهر هنا.",
-    "PROPERTY_INQUIRIES": "الرسائل والاستفسارات",
-    "PROPERTY_INQUIRIES_SUB": "عرض الرسائل والاستفسارات المرسلة من قبل المشترين المحتملين لعقاراتك المدرجة.",
+    "PROPERTY_INQUIRIES": "الاستفسارات",
+    "PROPERTY_INQUIRIES_SUB": "عرض الاستفسارات المرسلة من قبل المشترين المحتملين لعقاراتك المدرجة.",
     "CONTACT_BUYER": "التواصل مع المشتري",
     "TRANSACTION_DETAILS": "تفاصيل المعاملة",
     "INQUIRY_REPLY": "رد",
     "INQUIRY_REPLY_PLACEHOLDER": "اكتب ردك هنا...",
     "INQUIRY_REPLY_SUCCESS": "تم إرسال الرد بنجاح!",
-    "INQUIRY_REPLY_FAILED": "فشل في إرسال الرد."
+    "INQUIRY_REPLY_FAILED": "فشل في إرسال الرد.",
+    "GO_TO_CHAT": "الانتقال إلى المحادثة"
   },
   "AUTH": {
     "SIGN_IN": "تسجيل الدخول",
@@ -1460,6 +1470,7 @@
     "ERR_LOAD_MESSAGES": "فشل في تحميل الرسائل. يرجى المحاولة مرة أخرى.",
     "ERR_INITIATE_CHAT": "فشل في بدء المحادثة. يرجى المحاولة مرة أخرى.",
     "ERR_UPLOAD_FILE": "فشل في رفع الملف. يرجى المحاولة مرة أخرى.",
-    "START_CHAT": "بدء المحادثة"
+    "START_CHAT": "بدء المحادثة",
+    "BACK_TO_INQUIRIES": "الرجوع إلى الاستفسارات"
   }
 }
