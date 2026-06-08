@@ -851,7 +851,9 @@
   }
 }
 
-// ── Responsive ────────────────────────────────────────────────
+// ── Responsive ───────────────────────────────────────────────
+
+// Tablet — 1024px breakpoint: hide desktop links, reveal hamburger
 @media (max-width: 1024px) {
   .nav {
     padding: 16px 20px;
@@ -861,52 +863,67 @@
     }
   }
 
+  // Hide desktop nav links and CTA button
   .nav-links,
   .btn-list {
     display: none;
   }
-}
 
-@media (max-width: 768px) {
-  .user-name {
-    display: none; // Hide name on small screens for more space
-  }
-
-  .nav-actions {
-    gap: 8px; // Tighter gap
-  }
-
-  .nav-bell-wrapper {
-    padding: 6px; // Tighter padding
-  }
-
+  // Reveal hamburger at tablet breakpoint
   .hamburger {
     display: flex;
-    padding: 10px; // Increase touch target (Total area around 44x44px)
+    padding: 10px;
     margin-inline-start: 4px;
     z-index: 1002;
 
     .bar {
-      background: var(--brand-gold); // Clear gold contrast
+      background: var(--brand-gold);
       width: 24px;
       height: 2px;
     }
   }
+}
+
+// Mobile — 768px: tighten spacing, hide username
+@media (max-width: 768px) {
+  .user-name {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: 6px;
+  }
+
+  .nav-bell-wrapper {
+    padding: 6px;
+  }
 
   .btn-signin {
-    padding: 8px 16px;
+    padding: 8px 14px;
     font-size: 9px;
   }
 }
 
+// Ultra-small — 480px: minimal logo
 @media (max-width: 480px) {
-  .nav-logo {
+  .nav {
+    padding: 12px 14px;
 
+    &.scrolled {
+      padding: 10px 14px;
+    }
+  }
+
+  .nav-logo {
     .logo-word,
     .logo-dot {
       display: none;
     }
+  }
 
-    // Ultra minimal logo
+  .btn-signin {
+    padding: 7px 10px;
+    font-size: 8px;
+    letter-spacing: 1px;
   }
 }

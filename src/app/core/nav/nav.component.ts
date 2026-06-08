@@ -80,7 +80,16 @@ export class NavComponent {
     this.notificationsApi.markAsRead(n._id).subscribe();
     this.showNotifications = false;
 
-    let chatId = n.metadata?.chatId;
+    let metadata = n.metadata;
+    if (typeof metadata === 'string') {
+      try {
+        metadata = JSON.parse(metadata);
+      } catch {
+        metadata = null;
+      }
+    }
+
+    let chatId = metadata?.chatId || n.chatId || n.meta?.chatId;
     if (!chatId) {
       const url = n.targetUrl || n.link;
       if (url && url.includes('/dashboard/chat/')) {
@@ -95,10 +104,12 @@ export class NavComponent {
     }
 
     const url = n.targetUrl || n.link;
-    if (url) {
-      this.router.navigateByUrl(url);
+    if (url && url !== '/') {
+      this.router.navigateByUrl(url).catch(() => {
+        this.router.navigate(['/dashboard/overview']);
+      });
     } else {
-      const type = n.metadata?.type || n.type;
+      const type = metadata?.type || n.type;
       switch (type) {
         case 'payment':
           this.router.navigate(['/dashboard/payments']);
@@ -114,7 +125,7 @@ export class NavComponent {
         case 'viewing':
           const currentRole = this.auth.currentUser?.role;
           if (currentRole === 'owner' || currentRole === 'agent') {
-            this.router.navigate(['/dashboard/owner-bookings']);
+            this.router.navigate(['/dashboard/owner-viewing-requests']);
           } else {
             this.router.navigate(['/dashboard/viewing-requests']);
           }

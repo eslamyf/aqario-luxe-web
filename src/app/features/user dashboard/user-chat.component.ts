@@ -1079,6 +1079,9 @@ export class UserChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (this.selectedChat) {
       this.socketService.emit('leaveChat', { chatId: this.selectedChat._id });
     }
+    if (this.socket) {
+      this.socket.off('newMessage');
+    }
     this.cancelRecord();
     this.destroy$.next();
     this.destroy$.complete();

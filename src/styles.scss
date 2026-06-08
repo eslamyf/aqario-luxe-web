@@ -143,6 +143,17 @@ img {
     color: var(--text-main);
   }
 
+  // CRITICAL: hero headline and subtext MUST stay white in light mode.
+  // The hero sits over a full-bleed dark architectural photo — white text
+  // is always the correct choice regardless of the page theme.
+  .hero-headline {
+    color: #ffffff !important;
+  }
+
+  .hero-sub {
+    color: rgba(255, 255, 255, 0.78) !important;
+  }
+
   // Ensure property overlay gradient adapts to text readability
   .property-overlay {
     background: linear-gradient(

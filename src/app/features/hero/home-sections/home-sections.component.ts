@@ -72,10 +72,10 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   contactOptions = [
-    { id: 'call',    titleKey: 'HOME.CONTACT.CALL',    detail: '+20 1122 345 14' },
-    { id: 'chat',    titleKey: 'HOME.CONTACT.CHAT',    detail: '120 120 44 14'   },
-    { id: 'video',   titleKey: 'HOME.CONTACT.VIDEO',   detail: '+20 122 345 11'  },
-    { id: 'message', titleKey: 'HOME.CONTACT.MESSAGE', detail: '+20 133 145 14'  },
+    { id: 'call',    titleKey: 'HOME.CONTACT.CALL',    detail: '+201028103634' },
+    { id: 'chat',    titleKey: 'HOME.CONTACT.CHAT',    detail: '+201028103634' },
+    { id: 'video',   titleKey: 'HOME.CONTACT.VIDEO',   detail: '+201028103634' },
+    { id: 'message', titleKey: 'HOME.CONTACT.MESSAGE', detail: '+201028103634' },
   ];
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
