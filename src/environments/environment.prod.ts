@@ -1,15 +1,17 @@
 // ─────────────────────────────────────────────────────────────
-// LUXE ESTATES — Environment Config
-// Dev:  http://localhost:3000/api/v1
-// Prod: update apiUrl before deploying to production
+// LUXE ESTATES — Environment Production Config (LIVE)
 // ─────────────────────────────────────────────────────────────
 
 const getApiUrl = (): string => {
   const host = window.location.hostname;
-  if (host.includes('loca.lt') || (host !== 'localhost' && host !== '127.0.0.1' && host !== 'www.aqarioluxe.com')) {
+  
+  // لو شغال على تيونيل محلي (Localtunnel) سيبه يقرا السيرفر القديم للتجارب
+  if (host.includes('loca.lt')) {
     return 'https://aqario-luxe-eslam.loca.lt/api/v1';
   }
-  return 'https://www.aqarioluxe.com/api/v1';
+  
+  // في حالة الـ Production الفعلي، هيقرا مباشرة من سيرفر Railway اللايف الجديد
+  return 'https://real-estate-backend-production-3fce.up.railway.app/api';
 };
 
 export const environment = {
