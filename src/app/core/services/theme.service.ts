@@ -13,9 +13,10 @@ export class ThemeService {
     if (typeof window !== 'undefined' && window.localStorage) {
       const currentAttr = document.documentElement.getAttribute('data-theme') as ThemeMode;
       const savedTheme = localStorage.getItem(this.THEME_KEY) as ThemeMode;
-      return currentAttr || savedTheme || 'light';
+      // Priority: DOM attr set by inline script → localStorage → 'dark' default
+      return currentAttr || savedTheme || 'dark';
     }
-    return 'light';
+    return 'dark';
   }
 
   // Initialize synchronously to prevent FOUC
@@ -41,7 +42,7 @@ export class ThemeService {
     const savedTheme = localStorage.getItem(this.THEME_KEY) as ThemeMode;
     
     // 3. Determine initial theme (Attribute from index.html takes priority as it runs first)
-    const initialTheme: ThemeMode = currentAttr || savedTheme || 'light';
+    const initialTheme: ThemeMode = currentAttr || savedTheme || 'dark';
     
     this._theme$.next(initialTheme);
     this._applyTheme(initialTheme);

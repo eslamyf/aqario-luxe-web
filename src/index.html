@@ -28,22 +28,17 @@
   <script>
     (function () {
       var KEY = 'aqario_theme';
-      var theme = 'light'; // Requirement: Default to Light Mode
+      var theme = 'dark'; // Default: Dark Mode
       try {
         var stored = localStorage.getItem(KEY);
         if (stored === 'light' || stored === 'dark') {
+          // User has an explicit preference — always honour it
           theme = stored;
-        } else if (
-          window.matchMedia &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches
-        ) {
-          // If no preference is set, we still default to light per user request, 
-          // but we could respect OS preference here if desired. 
-          // Keeping 'light' as the primary fallback.
         }
+        // No stored preference → stay on 'dark' (the default above)
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {
-        document.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.setAttribute('data-theme', 'dark');
       }
     })();
   </script>
