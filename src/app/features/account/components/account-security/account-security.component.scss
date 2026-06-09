@@ -56,3 +56,43 @@ $gold:       var(--brand-gold);
   &:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(201,169,110,0.2); }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
+
+@media (max-width: 1024px) {
+  .content-header {
+    margin-bottom: 1.25rem;
+
+    h3 {
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+    }
+
+    p {
+      font-size: 11px;
+      line-height: 1.5;
+    }
+  }
+
+  .luxury-form {
+    .form-grid {
+      gap: 0.85rem;
+    }
+
+    .input-group {
+      gap: 0.4rem;
+
+      label {
+        font-size: 11px;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.85rem 0.9rem;
+        font-size: 11px;
+      }
+    }
+  }
+
+  .btn-gold {
+    width: 100%;
+    padding: 0.9rem 1rem;
+  }
+}

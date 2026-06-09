@@ -22,7 +22,7 @@
   </div>
 
   <!-- ── Filter tabs ─────────────────────────────────────────────────────── -->
-  <div class="properties-tabs">
+  <div class="properties-tabs scrollbar-none">
     <button *ngFor="let tab of filterTabs" class="prop-tab" [class.active]="currentTab === tab.id"
       (click)="onFilterChange(tab.id)" data-cursor-hover>
       {{ tab.labelKey | translate }}

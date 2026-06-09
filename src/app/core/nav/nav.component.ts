@@ -15,6 +15,7 @@ export class NavComponent {
   isScrolled = false;
   showDropdown = false; // User dropdown
   showNotifications = false; // Notifications dropdown
+  isMobileMenuOpen = false;
 
   get theme$() {
     return this.themeService.theme$;
@@ -23,6 +24,33 @@ export class NavComponent {
   get lang$() {
     return this.languageService.lang$;
   }
+
+  get currentUrl(): string {
+    return this.router.url || '/';
+  }
+
+  get isDashboardContext(): boolean {
+    return this.currentUrl.startsWith('/dashboard') || this.currentUrl.startsWith('/account');
+  }
+
+  get mobileNavItems() {
+    return this.isDashboardContext ? this.dashboardMobileNavItems : this.globalMobileNavItems;
+  }
+
+  readonly dashboardMobileNavItems = [
+    { label: 'Overview', icon: 'ph ph-squares-four', link: '/dashboard/overview' },
+    { label: 'My Bookings', icon: 'ph ph-calendar-check', link: '/dashboard/bookings' },
+    { label: 'Saved Properties', icon: 'ph ph-heart', link: '/dashboard/saved' },
+    { label: 'Wallet Analytics', icon: 'ph ph-wallet', link: '/dashboard/payments' },
+    { label: 'Profile Settings', icon: 'ph ph-user-circle-gear', link: '/account' },
+  ];
+
+  readonly globalMobileNavItems = [
+    { label: 'Home', icon: 'ph ph-house', link: '/' },
+    { label: 'Properties', icon: 'ph ph-buildings', link: '/properties' },
+    { label: 'Agents', icon: 'ph ph-users-three', link: '/agents' },
+    { label: 'Saved', icon: 'ph ph-heart', link: '/dashboard/saved' },
+  ];
 
   // Inject services via constructor
   constructor(
@@ -36,6 +64,16 @@ export class NavComponent {
 
   toggleDashboardSidebar(): void {
     this.dashboardUi.toggleSidebar();
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    this.showDropdown = false;
+    this.showNotifications = false;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
   }
 
   @HostListener('window:scroll', [])
@@ -147,6 +185,7 @@ export class NavComponent {
     this.auth.logout();
     this.showDropdown = false;
     this.showNotifications = false;
+    this.isMobileMenuOpen = false;
     this.router.navigate(['/']);
   }
 
@@ -169,17 +208,6 @@ export class NavComponent {
   // Open registration modal
   openLogin(): void {
     this.auth.openModal();
-  }
-
-  // ✅ 3. Mobile Menu Logic
-  isMobileMenuOpen = false;
-
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-  }
-
-  closeMobileMenu(): void {
-    this.isMobileMenuOpen = false;
   }
 
   toggleTheme(): void {

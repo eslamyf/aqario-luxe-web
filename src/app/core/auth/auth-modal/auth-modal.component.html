@@ -30,9 +30,9 @@
         <div class="auth-field">
           <label class="auth-label" for="login-password">{{ 'AUTH.PASSWORD' | translate }}</label>
           <div class="password-wrapper">
-            <input id="login-password" type="{{ showLoginPassword ? 'text' : 'password' }}" class="auth-input"
-              [class.invalid]="isFieldInvalid(loginForm, 'password')" formControlName="password"
-              placeholder="••••••••" />
+          <input id="login-password" type="{{ showLoginPassword ? 'text' : 'password' }}" class="auth-input"
+            [class.invalid]="isFieldInvalid(loginForm, 'password')" formControlName="password"
+            placeholder="••••••••" autocomplete="current-password" />
             <button type="button" class="eye-icon" (click)="togglePasswordVisibility('login')">
               <svg *ngIf="!showLoginPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -111,7 +111,7 @@
           <div class="password-wrapper">
             <input type="{{ showRegisterPassword ? 'text' : 'password' }}" class="auth-input"
               [class.invalid]="isFieldInvalid(registerForm, 'password')" formControlName="password"
-              placeholder="••••••••" />
+              placeholder="••••••••" autocomplete="new-password" />
             <button type="button" class="eye-icon" (click)="togglePasswordVisibility('register')">
               <svg *ngIf="!showRegisterPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -164,7 +164,7 @@
           <div class="password-wrapper">
             <input type="{{ showConfirmPassword ? 'text' : 'password' }}" class="auth-input"
               [class.invalid]="isFieldInvalid(registerForm, 'confirmPassword')" formControlName="confirmPassword"
-              placeholder="••••••••" />
+              placeholder="••••••••" autocomplete="new-password" />
             <button type="button" class="eye-icon" (click)="togglePasswordVisibility('confirm')">
               <svg *ngIf="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

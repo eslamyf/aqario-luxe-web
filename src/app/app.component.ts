@@ -26,6 +26,10 @@ import { filter } from 'rxjs/operators';
   styles: [`
     :host {
       display: block;
+      overflow-x: clip;
+    }
+    :host > div {
+      overflow-x: clip;
     }
     .admin-mode app-footer {
       display: block;

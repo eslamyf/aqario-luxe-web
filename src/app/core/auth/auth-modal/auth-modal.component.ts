@@ -128,6 +128,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
       script.src = this.googleIdentityScript;
       script.async = true;
       script.defer = true;
+      script.setAttribute('data-itp_support', 'true');
       script.onload = () => resolve();
       script.onerror = () => reject(new Error('Failed to load Google Identity Services script.'));
       document.head.appendChild(script);

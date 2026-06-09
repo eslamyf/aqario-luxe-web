@@ -8,6 +8,7 @@
 .properties-section {
   background: var(--obsidian-2);
   padding: 120px 60px;        // Template line 377: section { padding: 120px 60px }
+  overflow-x: hidden;
 }
 
 // ── Section header ───────────────────────────────────────────────────────────
@@ -79,15 +80,27 @@
 // ── Filter tabs — Template lines 1276–1295 ───────────────────────────────────
 .properties-tabs {
   display: flex;
-  justify-content: flex-start;
-  gap: 0;
+  align-items: center;
+  gap: 0.75rem;
+  overflow-x: auto;
+  white-space: nowrap;
   margin-bottom: 40px;
   border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  min-width: 0;
+
+  @media (min-width: 769px) {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    white-space: normal;
+  }
 }
 
 // Individual tab — Template lines 1281–1294
 .prop-tab {
-  padding: 16px 32px;
+  padding: 16px 24px;
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 2px;
@@ -109,6 +122,10 @@
   &:hover {
     color: var(--text-primary, var(--white));
   }
+
+  @media (max-width: 768px) {
+    flex: 0 0 auto;
+  }
 }
 
 // ── Search & Filter Bar ────────────────────────────────────────────────────────
@@ -117,6 +134,7 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 20px;
   margin-bottom: 40px;
+  overflow: hidden;
 
   :host-context([data-theme="light"]) & {
     background: rgba(0, 0, 0, 0.02);
@@ -491,3 +509,33 @@
   transition: stroke 0.3s ease, fill 0.3s ease;
 }
 
+.properties-tabs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 0.5rem;
+  user-select: none;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+
+  @media (min-width: 769px) {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    white-space: normal;
+  }
+}
+
+.properties-section,
+.properties-header,
+.header-text-container {
+  min-width: 0;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -4,6 +4,7 @@ $mist:       var(--text-muted);
 :host {
   display: block;
   animation: fadeIn 0.6s ease-out;
+  min-width: 0;
 }
 
 @keyframes fadeIn {
@@ -69,6 +70,92 @@ $mist:       var(--text-muted);
         transform: translateY(0);
       }
     }
+  }
+}
+
+@media (max-width: 1024px) {
+  .glass-header {
+    padding: 1.25rem;
+    border-radius: 20px;
+
+    .header-main {
+      display: block;
+    }
+  }
+
+  .avatar-container .avatar-ring {
+    width: 108px;
+    height: 108px;
+  }
+
+  .user-identity {
+    .name-row h1 {
+      font-size: clamp(1.4rem, 5vw, 2rem);
+      line-height: 1.05;
+    }
+
+    .email {
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .status-indicators {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+
+      .indicator {
+        padding: 0.55rem 0.8rem;
+        font-size: 0.72rem;
+      }
+    }
+  }
+
+  .avatar-container .photo-actions {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+
+    .action-btn {
+      padding: 0.55rem 0.85rem;
+      font-size: 0.78rem;
+    }
+  }
+
+  .luxury-form {
+    padding: 1.25rem;
+
+    .form-grid {
+      gap: 0.9rem;
+    }
+
+    .input-group {
+      gap: 0.45rem;
+
+      label {
+        font-size: 11px;
+      }
+
+      input {
+        width: 100%;
+        font-size: 11px;
+        padding: 0.85rem 0.95rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .glass-header .header-main {
+    gap: 1.25rem;
+  }
+
+  .user-identity .status-indicators {
+    grid-template-columns: 1fr;
+  }
+
+  .avatar-container .photo-actions .action-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 

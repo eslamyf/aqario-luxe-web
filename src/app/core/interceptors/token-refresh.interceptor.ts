@@ -41,6 +41,9 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
           request.url.includes('/auth/logout') ||
           request.url.includes('/auth/login')
         ) {
+          if (request.url.includes('/auth/refresh-token') && error instanceof HttpErrorResponse && error.status === 401) {
+            return this.forceLogout('Refresh token rejected with 401');
+          }
           return throwError(() => error);
         }
 
@@ -90,6 +93,9 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
         }),
         catchError((err) => {
           this.isRefreshing = false;
+          if (err instanceof HttpErrorResponse && err.status === 401) {
+            return this.forceLogout(err);
+          }
           return this.logoutAndRedirect(err);
         })
       );
@@ -115,10 +121,37 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
     });
   }
 
+  private clearAuthState(): void {
+    this.authService.clearSession();
+    localStorage.removeItem('aqario_theme');
+    localStorage.removeItem('aqario_lang');
+    sessionStorage.clear();
+
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const eqIndex = cookie.indexOf('=');
+      const name = (eqIndex > -1 ? cookie.slice(0, eqIndex) : cookie).trim();
+      if (!name) continue;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}`;
+    }
+  }
+
+  private forceLogout(err: any): Observable<never> {
+    console.error('[Auth] Refresh endpoint rejected the session, forcing logout', err);
+    this.isRefreshing = false;
+    this.refreshTokenSubject.next(null);
+    this.clearAuthState();
+    this.authService.logout();
+    this.router.navigate(['/login']);
+    return throwError(() => new Error('Session expired'));
+  }
+
   private logoutAndRedirect(err: any): Observable<never> {
     console.error('[Auth] Token refresh failed, logging out', err);
+    this.clearAuthState();
     this.authService.logout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
     return throwError(() => new Error('Session expired'));
   }
 }

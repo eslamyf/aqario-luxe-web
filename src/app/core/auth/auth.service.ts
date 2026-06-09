@@ -191,12 +191,7 @@ export class AuthService {
 
   logout(): void {
     // 1. Synchronously wipe local session state immediately
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(this.TOKEN_KEY);
-      localStorage.removeItem(this.USER_KEY);
-      sessionStorage.removeItem(this.TOKEN_KEY);
-      sessionStorage.removeItem(this.USER_KEY);
-    }
+    this.clearSession();
     this.socketService.disconnect();
     this._currentUser$.next(null);
     this._isAuthenticated$.next(false);
@@ -235,8 +230,16 @@ export class AuthService {
   }
 
   private clearStorage(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
+    this.clearSession();
     this._isAuthenticated$.next(false);
+  }
+
+  clearSession(): void {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.USER_KEY);
+      sessionStorage.removeItem(this.TOKEN_KEY);
+      sessionStorage.removeItem(this.USER_KEY);
+    }
   }
 }
