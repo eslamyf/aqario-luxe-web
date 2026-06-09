@@ -10,8 +10,8 @@ const getApiUrl = (): string => {
     return 'https://aqario-luxe-eslam.loca.lt/api/v1';
   }
   
-  // في حالة الـ Production الفعلي، هيقرا مباشرة من سيرفر Railway اللايف الجديد
-  return 'https://real-estate-backend-production-3fce.up.railway.app/api';
+  // 🔥 تعديل حاسم: أضفنا /v1 في الآخر عشان الطلبات تروح للمسار الصحيح في السيرفر علطول
+  return 'https://real-estate-backend-production-3fce.up.railway.app/api/v1';
 };
 
 export const environment = {
