@@ -1487,5 +1487,19 @@
     "ERR_UPLOAD_FILE": "Failed to upload file. Please try again.",
     "START_CHAT": "Start Chat",
     "BACK_TO_INQUIRIES": "Back to Inquiries"
+  },
+  "SUBSCRIPTION": {
+    "REQUIRED": "An active subscription is required to publish property listings.",
+    "FREE_LIMIT_REACHED": "You've used all {{limit}} free listings. Upgrade to a plan to keep publishing properties.",
+    "UPGRADE_HINT": "Visit the Subscriptions page to choose a plan and start listing your properties immediately.",
+    "LIMIT_REACHED": "You have reached your monthly listing limit ({{used}}/{{limit}}). Upgrade your plan to publish more.",
+    "UPGRADE_NOW": "Upgrade Plan",
+    "DISMISS": "Dismiss",
+    "BANNER_TITLE": "Subscription Required",
+    "BANNER_DESC": "You need an active subscription to list properties on Aqario Luxe.",
+    "FREE_BANNER_TITLE": "Free Listing Limit Reached",
+    "FREE_BANNER_DESC": "You've used all 3 free property listings. Choose a plan to unlock unlimited publishing.",
+    "LIMIT_BANNER_TITLE": "Monthly Limit Reached",
+    "LIMIT_BANNER_DESC": "You've used all your listings for this month. Upgrade to a higher plan for more."
   }
 }

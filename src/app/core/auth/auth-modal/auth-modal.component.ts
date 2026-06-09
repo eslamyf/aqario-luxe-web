@@ -153,7 +153,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         ux_mode: 'popup',
         itp_support: true,
         use_fedcm_for_prompt: false
-    });
+      });
 
       this.googleAccountsInitialized = true;
       resolve();

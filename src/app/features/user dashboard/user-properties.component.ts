@@ -221,13 +221,18 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.isSubmitting = false;
           console.error('❌ Property Submission Error:', err);
-          
+
+          // If the interceptor already handled the error (e.g. subscription 403),
+          // don't show a second generic toast — the user has already been notified
+          // and navigated to the appropriate page.
+          if ((err as any).handled) return;
+
           const errArr = err?.error?.errors;
           const msg = (Array.isArray(errArr) && errArr.length > 0 ? errArr[0] : null)
                    || err?.error?.message
                    || err?.message
                    || 'Failed to submit property. Check console for details.';
-          
+
           this.notif.show(msg, 'error');
         },
       });
