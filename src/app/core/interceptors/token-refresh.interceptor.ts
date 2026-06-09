@@ -35,14 +35,10 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error) => {
-        // Explicitly bypass and throw 401 errors from authentication-handling endpoints
-        if (
-          request.url.includes('/auth/refresh-token') ||
-          request.url.includes('/auth/logout') ||
-          request.url.includes('/auth/login')
-        ) {
-          if (request.url.includes('/auth/refresh-token') && error instanceof HttpErrorResponse && error.status === 401) {
-            return this.forceLogout('Refresh token rejected with 401');
+        // Hard-stop dead-session auth paths before any retry / refresh logic can run.
+        if (this.isDeadSessionAuthPath(request.url)) {
+          if (error instanceof HttpErrorResponse && error.status === 401) {
+            return this.hardStopAuthLoop(error);
           }
           return throwError(() => error);
         }
@@ -94,11 +90,11 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
         catchError((err) => {
           this.isRefreshing = false;
           if (err instanceof HttpErrorResponse && err.status === 401) {
-            return this.forceLogout(err);
+            return this.hardStopAuthLoop(err);
           }
           return this.logoutAndRedirect(err);
         })
-      );
+      ) as Observable<HttpEvent<any>>;
     } else {
       console.log('[AuthInterceptor] Refresh in progress. Queueing request:', request.url);
       // Queue the request while refreshing
@@ -122,9 +118,7 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
   }
 
   private clearAuthState(): void {
-    this.authService.clearSession();
-    localStorage.removeItem('aqario_theme');
-    localStorage.removeItem('aqario_lang');
+    localStorage.clear();
     sessionStorage.clear();
 
     const cookies = document.cookie.split(';');
@@ -137,21 +131,29 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
     }
   }
 
-  private forceLogout(err: any): Observable<never> {
-    console.error('[Auth] Refresh endpoint rejected the session, forcing logout', err);
+  private isDeadSessionAuthPath(url: string): boolean {
+    return url.includes('/auth/logout') || url.includes('/auth/refresh-token') || url.includes('/users/me');
+  }
+
+  private hardStopAuthLoop(err: any): Observable<never> {
+    console.error('[Auth] Dead-session auth path rejected the session, forcing logout', err);
     this.isRefreshing = false;
     this.refreshTokenSubject.next(null);
     this.clearAuthState();
-    this.authService.logout();
-    this.router.navigate(['/login']);
-    return throwError(() => new Error('Session expired'));
+    this.authService.setCurrentUser(null);
+    this.socketService.disconnect();
+    void this.router.navigate(['/login']);
+    return throwError(() => err);
   }
 
   private logoutAndRedirect(err: any): Observable<never> {
     console.error('[Auth] Token refresh failed, logging out', err);
+    this.isRefreshing = false;
+    this.refreshTokenSubject.next(null);
     this.clearAuthState();
-    this.authService.logout();
-    this.router.navigate(['/login']);
-    return throwError(() => new Error('Session expired'));
+    this.authService.setCurrentUser(null);
+    this.socketService.disconnect();
+    void this.router.navigate(['/login']);
+    return throwError(() => err);
   }
 }

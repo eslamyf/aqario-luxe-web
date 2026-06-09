@@ -44,6 +44,8 @@
   margin-inline: auto;
   gap: var(--space-xl);
   width: 100%;
+  min-width: 0;
+  flex-wrap: nowrap;
 }
 
 // ── Logo ─────────────────────────────────────────────────────
@@ -76,6 +78,8 @@
   gap: 8px;
   text-decoration: none;
   flex-shrink: 0;
+  min-width: 0;
+  max-width: clamp(120px, 34vw, 220px);
   transition:
     color 0.3s var(--transition),
     opacity 0.3s var(--transition);
@@ -105,11 +109,14 @@
 
 .logo-mark {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: clamp(14px, 2.5vw, 22px);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: clamp(1px, 0.5vw, 4px);
   color: var(--text-main);
   line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: color 0.3s var(--transition);
 }
 
@@ -186,6 +193,8 @@
   align-items: center;
   flex-shrink: 0;
   min-width: 0;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
 }
 
 // ── Theme Toggle Button ──────────────────────────────────────
@@ -643,7 +652,7 @@
   border: none;
   cursor: pointer;
   padding: 4px;
-  z-index: 1001;
+  z-index: 99999;
 
   .bar {
     width: 22px;
@@ -682,7 +691,7 @@
   background: rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  z-index: 1001; // Above everything
+  z-index: 9990; // Above everything
   display: grid;
   place-items: start center;
   padding: 0;
@@ -718,6 +727,21 @@
     border-radius: 24px;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
     padding: 1.5rem;
+  }
+
+  .close-menu-btn {
+    position: absolute;
+    top: 1rem;
+    inset-inline-end: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--brand-gold);
+    display: grid;
+    place-items: center;
+    z-index: 2;
   }
 
   .mobile-menu-user-header,
@@ -882,6 +906,24 @@
     }
   }
 
+  .nav-inner {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    width: 100%;
+  }
+
+  .nav-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+    min-width: 0;
+  }
+
   // Hide desktop nav links and CTA button
   .nav-links,
   .btn-list {
@@ -890,16 +932,74 @@
 
   // Reveal hamburger at tablet breakpoint
   .hamburger {
-    display: flex;
+    display: flex !important;
+    position: relative;
     padding: 10px;
     margin-inline-start: 4px;
-    z-index: 1002;
+    z-index: 99999 !important;
+    pointer-events: auto;
+    flex-shrink: 0;
+    min-width: 40px;
 
     .bar {
-      background: var(--brand-gold);
+      background: var(--white);
       width: 24px;
       height: 2px;
     }
+  }
+
+  .btn-signin,
+  .user-profile-wrapper,
+  .user-info {
+    display: flex !important;
+    visibility: visible !important;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 375px) {
+  .nav-inner {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100%;
+  }
+
+  .nav-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .nav-logo {
+    max-width: 140px;
+    gap: 6px;
+  }
+
+  .logo-icon {
+    width: 14px;
+    height: 18px;
+  }
+
+  .logo-mark {
+    font-size: 13px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .nav-actions {
+    gap: 8px !important;
+  }
+
+  #btn-sign-in,
+  #btn-hamburger {
+    display: flex !important;
+    visibility: visible !important;
+    z-index: 99999 !important;
+    flex-shrink: 0;
   }
 }
 

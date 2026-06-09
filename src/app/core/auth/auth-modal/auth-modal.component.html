@@ -22,7 +22,7 @@
         <div class="auth-field">
           <label class="auth-label" for="login-email">{{ 'AUTH.EMAIL' | translate }}</label>
           <input id="login-email" type="email" class="auth-input" [class.invalid]="isFieldInvalid(loginForm, 'email')"
-            formControlName="email" [placeholder]="'AUTH.EMAIL_PLACEHOLDER' | translate" />
+            formControlName="email" [placeholder]="'AUTH.EMAIL_PLACEHOLDER' | translate" autocomplete="username" />
           <span class="auth-validation" *ngIf="isFieldInvalid(loginForm, 'email')">{{ 'AUTH.EMAIL_REQ' | translate
             }}</span>
         </div>

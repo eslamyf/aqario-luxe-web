@@ -64,7 +64,7 @@
 
       <button id="btn-list-property" class="btn-list" (click)="navigateToAddProperty()" data-cursor-hover>{{ 'NAV.LIST_PROPERTY' | translate }}</button>
 
-      <button id="btn-hamburger" class="hamburger" [class.open]="isMobileMenuOpen" (click)="toggleMobileMenu()" aria-label="Toggle navigation menu" [attr.aria-expanded]="isMobileMenuOpen">
+      <button id="btn-hamburger" class="hamburger" [class.open]="isMobileMenuOpen" (click)="toggleMobileMenu()" aria-label="Toggle navigation menu" [attr.aria-expanded]="isMobileMenuOpen" type="button">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -74,6 +74,9 @@
 
   <div class="mobile-menu" [class.open]="isMobileMenuOpen" role="dialog" aria-label="Navigation menu">
     <div class="fixed inset-x-4 top-24 max-w-md mx-auto z-50 p-6 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+      <button class="close-menu-btn" type="button" (click)="closeMobileMenu()" aria-label="Close menu">
+        <i class="ph ph-x" aria-hidden="true"></i>
+      </button>
       <ng-container *ngIf="auth.currentUser$ | async as user">
         <div class="mobile-user-summary">
           <i class="ph ph-user-circle mobile-user-icon" aria-hidden="true"></i>
