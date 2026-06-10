@@ -149,7 +149,7 @@ export class AuthService {
   private socketService = inject(SocketService);
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, { email, password }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/login`, { email, password }, { withCredentials: true }).pipe(
       tap((res) => {
         if (res.status === 'success' && res.token && res.data?.user) {
           this.handleAuthSuccess(res.token, res.data.user);
@@ -174,19 +174,19 @@ export class AuthService {
 
   register(name: string, email: string, password: string): Observable<any> {
     // The backend handles the default role assignment securely
-    return this.http.post<any>(`${this.apiUrl}/register`, { name, email, password });
+    return this.http.post<any>(`${this.apiUrl}/register`, { name, email, password }, { withCredentials: true });
   }
 
   verifyAccount(email: string, otp: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/verify-otp`, { email, otp });
+    return this.http.post<any>(`${this.apiUrl}/verify-otp`, { email, otp }, { withCredentials: true });
   }
 
   forgotPassword(email: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/forgot-password`, { email });
+    return this.http.post<any>(`${this.apiUrl}/forgot-password`, { email }, { withCredentials: true });
   }
 
   resetPassword(token: string, newPassword: string): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/reset-password/${token}`, { password: newPassword });
+    return this.http.patch<any>(`${this.apiUrl}/reset-password/${token}`, { password: newPassword }, { withCredentials: true });
   }
 
   logout(): void {
@@ -197,7 +197,7 @@ export class AuthService {
     this._isAuthenticated$.next(false);
 
     // 2. Asynchronously notify the backend to clean up cookies/sessions (fire-and-forget)
-    this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
+    this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
       next: () => {
         console.log('[Auth] Backend logout successful');
       },
