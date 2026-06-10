@@ -33,6 +33,12 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    if (request.url.includes('/auth/login') || request.url.includes('/auth/google-login')) {
+      this.isRefreshing = false;
+      this.refreshTokenSubject.next(null);
+      return next.handle(request);
+    }
+
     return next.handle(request).pipe(
       catchError((error) => {
         // Hard-stop dead-session auth paths before any retry / refresh logic can run.

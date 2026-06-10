@@ -219,6 +219,9 @@ export class AuthService {
     };
     const fullUser: User = normalizedUser;
 
+    localStorage.clear();
+    sessionStorage.clear();
+
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(fullUser));
 
