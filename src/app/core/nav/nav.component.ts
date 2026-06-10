@@ -38,18 +38,18 @@ export class NavComponent {
   }
 
   readonly dashboardMobileNavItems = [
-    { label: 'Overview', icon: 'ph ph-squares-four', link: '/dashboard/overview' },
-    { label: 'My Bookings', icon: 'ph ph-calendar-check', link: '/dashboard/bookings' },
-    { label: 'Saved Properties', icon: 'ph ph-heart', link: '/dashboard/saved' },
-    { label: 'Wallet Analytics', icon: 'ph ph-wallet', link: '/dashboard/payments' },
-    { label: 'Profile Settings', icon: 'ph ph-user-circle-gear', link: '/account' },
+    { labelKey: 'NAV.OVERVIEW', icon: 'ph ph-squares-four', link: '/dashboard/overview' },
+    { labelKey: 'NAV.MY_BOOKINGS', icon: 'ph ph-calendar-check', link: '/dashboard/bookings' },
+    { labelKey: 'NAV.FAVOURITES', icon: 'ph ph-heart', link: '/dashboard/saved' },
+    { labelKey: 'NAV.PAYMENTS', icon: 'ph ph-wallet', link: '/dashboard/payments' },
+    { labelKey: 'NAV.MY_ACCOUNT', icon: 'ph ph-user-circle-gear', link: '/account' },
   ];
 
   readonly globalMobileNavItems = [
-    { label: 'Home', icon: 'ph ph-house', link: '/' },
-    { label: 'Properties', icon: 'ph ph-buildings', link: '/properties' },
-    { label: 'Agents', icon: 'ph ph-users-three', link: '/agents' },
-    { label: 'Saved', icon: 'ph ph-heart', link: '/dashboard/saved' },
+    { labelKey: 'NAV.HOME', icon: 'ph ph-house', link: '/' },
+    { labelKey: 'NAV.PROPERTIES', icon: 'ph ph-buildings', link: '/properties' },
+    { labelKey: 'NAV.AGENTS', icon: 'ph ph-users-three', link: '/agents' },
+    { labelKey: 'NAV.FAVOURITES', icon: 'ph ph-heart', link: '/dashboard/saved' },
   ];
 
   // Inject services via constructor

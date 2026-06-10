@@ -36,6 +36,10 @@
         </span>
       </button>
 
+      <button id="btn-lang-toggle" type="button" class="btn-lang-toggle" (click)="toggleLanguage()" [attr.aria-label]="(lang$ | async) === 'en' ? 'Switch to Arabic' : 'Switch to English'" data-cursor-hover>
+        <span class="lang-text"><i class="ph ph-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</span>
+      </button>
+
       <ng-template #guestTemplate>
         <button id="btn-sign-in" class="btn-signin" (click)="openLogin()" data-cursor-hover>{{ 'NAV.SIGN_IN' | translate }}</button>
       </ng-template>
@@ -74,28 +78,24 @@
 
   <div class="mobile-menu" [class.open]="isMobileMenuOpen" role="dialog" aria-label="Navigation menu">
     <div class="fixed inset-x-4 top-24 max-w-md mx-auto z-50 p-6 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-      <button class="close-menu-btn" type="button" (click)="closeMobileMenu()" aria-label="Close menu">
-        <i class="ph ph-x" aria-hidden="true"></i>
-      </button>
+      <button class="close-menu-btn" (click)="closeMobileMenu()"><i class="ph ph-x"></i></button>
+      
       <ng-container *ngIf="auth.currentUser$ | async as user">
         <div class="mobile-user-summary">
-          <i class="ph ph-user-circle mobile-user-icon" aria-hidden="true"></i>
-          <div class="mobile-user-copy">
-            <strong>{{ user.name }}</strong>
-            <span>{{ user.role | titlecase }}</span>
-          </div>
+          <i class="ph ph-user-circle text-gold" aria-hidden="true"></i>
+          <span class="mobile-user-name">{{ user.name }}</span>
         </div>
       </ng-container>
 
       <ul class="mobile-nav-links" role="list">
         <li *ngFor="let item of mobileNavItems">
-          <a [routerLink]="item.link" routerLinkActive="active" (click)="closeMobileMenu()"><i [class]="item.icon"></i> {{ item.label }}</a>
+          <a [routerLink]="item.link" routerLinkActive="active" (click)="closeMobileMenu()"><i [class]="item.icon"></i> {{ item.labelKey | translate }}</a>
         </li>
       </ul>
 
       <div class="mobile-nav-actions">
         <button type="button" class="btn-theme-toggle btn-theme-toggle--mobile" (click)="toggleTheme()">{{ (theme$ | async) === 'light' ? ('NAV.LIGHT_MODE' | translate) : ('NAV.DARK_MODE' | translate) }}</button>
-        <button type="button" class="btn-lang-toggle btn-lang-toggle--mobile" (click)="toggleLanguage()">{{ (lang$ | async) === 'en' ? 'العربية' : 'English' }}</button>
+        <button type="button" class="btn-lang-toggle btn-lang-toggle--mobile" (click)="toggleLanguage()"><i class="ph ph-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</button>
         <ng-container *ngIf="auth.currentUser$ | async; else guestMobileActions">
           <button class="btn-logout-mobile" (click)="onLogout(); closeMobileMenu()"><i class="ph ph-sign-out"></i> {{ 'NAV.SIGN_OUT' | translate }}</button>
         </ng-container>
