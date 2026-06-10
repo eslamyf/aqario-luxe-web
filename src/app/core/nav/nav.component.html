@@ -17,6 +17,10 @@
     </ul>
 
     <div class="nav-actions">
+      <button id="btn-lang-toggle" type="button" class="btn-lang-toggle" (click)="toggleLanguage()" [attr.aria-label]="(lang$ | async) === 'en' ? 'Switch to Arabic' : 'Switch to English'" data-cursor-hover>
+        <span class="lang-text"><i class="ph ph-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</span>
+      </button>
+
       <button id="btn-theme-toggle" type="button" class="btn-theme-toggle" (click)="toggleTheme()" [attr.aria-label]="(theme$ | async) === 'light' ? 'Switch to dark mode' : 'Switch to light mode'" data-cursor-hover>
         <span class="theme-icon" aria-hidden="true">
           <svg *ngIf="(theme$ | async) === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
@@ -36,24 +40,64 @@
         </span>
       </button>
 
-      <button id="btn-lang-toggle" type="button" class="btn-lang-toggle" (click)="toggleLanguage()" [attr.aria-label]="(lang$ | async) === 'en' ? 'Switch to Arabic' : 'Switch to English'" data-cursor-hover>
-        <span class="lang-text"><i class="ph ph-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</span>
-      </button>
+      <!-- NOTIFICATIONS -->
+      <div class="notifications-wrapper notifications-dropdown-container">
+        <button type="button" class="btn-notification" (click)="toggleNotifications($event)" data-cursor-hover aria-label="Notifications">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notification-badge" *ngIf="((notificationsApi.unreadCount$ | async) || 0) > 0">
+            {{ (notificationsApi.unreadCount$ | async) }}
+          </span>
+        </button>
+        
+        <div class="notifications-dropdown" *ngIf="showNotifications" role="menu">
+          <div class="notifications-header">
+            <span class="notifications-title">{{ 'NAV.NOTIFICATIONS' | translate }}</span>
+            <button class="mark-all-btn" (click)="markAllNotificationsAsRead()">{{ ('NAV.MARK_ALL_AS_READ' | translate) !== 'NAV.MARK_ALL_AS_READ' ? ('NAV.MARK_ALL_AS_READ' | translate) : 'Mark all as read' }}</button>
+          </div>
+          <div class="notifications-body">
+            <ng-container *ngIf="(notificationsApi.notifications$ | async) as notifications; else noNotifications">
+              <div *ngIf="notifications.length === 0" class="empty-notifications">
+                {{ 'NAV.NO_NOTIFICATIONS' | translate }}
+              </div>
+              <div class="notification-item" *ngFor="let n of notifications" (click)="onNotificationClick(n)" [class.unread]="!n.isRead" role="menuitem">
+                <div class="notification-content">
+                  <span class="notification-title">{{ n.title }}</span>
+                  <span class="notification-desc">{{ n.message }}</span>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #noNotifications>
+              <div class="empty-notifications">
+                {{ 'NAV.NO_NOTIFICATIONS' | translate }}
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
 
       <ng-template #guestTemplate>
-        <button id="btn-sign-in" class="btn-signin" (click)="openLogin()" data-cursor-hover>{{ 'NAV.SIGN_IN' | translate }}</button>
+        <button id="btn-sign-in" class="btn-signin btn-auth-trigger" (click)="openLogin()" data-cursor-hover>
+          <span class="auth-text">{{ 'NAV.SIGN_IN' | translate }}</span>
+          <svg class="auth-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
       </ng-template>
 
       <ng-container *ngIf="auth.currentUser$ | async as user; else guestTemplate">
         <div class="user-profile-wrapper user-dropdown-container">
-          <div class="user-info" (click)="toggleDropdown($event)" data-cursor-hover>
+          <div class="user-info user-profile-trigger" (click)="toggleDropdown($event)" data-cursor-hover>
             <ng-container *ngIf="user.photo; else textAvatar">
               <img [src]="user.photo" alt="Avatar" class="user-avatar user-avatar-img">
             </ng-container>
             <ng-template #textAvatar>
               <div class="user-avatar">{{ user.name[0] | uppercase }}</div>
             </ng-template>
-            <span class="user-name">{{ user.name }}</span>
+            <span class="user-name user-label-text">{{ user.name }}</span>
             <span class="chevron" [class.open]="showDropdown" aria-hidden="true">▾</span>
           </div>
           <div class="user-dropdown" *ngIf="showDropdown" role="menu">
@@ -68,7 +112,7 @@
 
       <button id="btn-list-property" class="btn-list" (click)="navigateToAddProperty()" data-cursor-hover>{{ 'NAV.LIST_PROPERTY' | translate }}</button>
 
-      <button id="btn-hamburger" class="hamburger" [class.open]="isMobileMenuOpen" (click)="toggleMobileMenu()" aria-label="Toggle navigation menu" [attr.aria-expanded]="isMobileMenuOpen" type="button">
+      <button id="btn-hamburger" class="hamburger btn-menu-toggle" [class.open]="isMobileMenuOpen" (click)="toggleMobileMenu()" aria-label="Toggle navigation menu" [attr.aria-expanded]="isMobileMenuOpen" type="button">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>

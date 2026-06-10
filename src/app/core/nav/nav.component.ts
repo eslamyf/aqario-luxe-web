@@ -117,6 +117,7 @@ export class NavComponent {
   onNotificationClick(n: any): void {
     this.notificationsApi.markAsRead(n._id).subscribe();
     this.showNotifications = false;
+    this.closeMobileMenu();
 
     let metadata = n.metadata;
     if (typeof metadata === 'string') {
@@ -176,6 +177,11 @@ export class NavComponent {
   }
 
   markAllAsRead(): void {
+    this.notificationsApi.markAllAsRead().subscribe();
+    this.showNotifications = false;
+  }
+
+  markAllNotificationsAsRead(): void {
     this.notificationsApi.markAllAsRead().subscribe();
     this.showNotifications = false;
   }
