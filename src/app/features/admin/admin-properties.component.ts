@@ -116,9 +116,28 @@ export class AdminPropertiesComponent implements OnInit, OnDestroy {
 
     this.activePropertyId = property._id;
     this.adminService.updatePropertyApproval(property._id, decision).subscribe({
-      next: () => {
+      next: (res) => {
         this.activePropertyId = null;
         this.selectedProperty = null;
+
+        // Dynamically update the specific property object state in the local array
+        const index = this.properties.findIndex(p => p._id === property._id);
+        if (index !== -1) {
+          const updatedProperty = res?.property || res?.data?.property;
+          if (updatedProperty) {
+            this.properties[index] = { ...this.properties[index], ...updatedProperty };
+          } else {
+            // Fallback in-place update if property is not nested in the payload
+            this.properties[index] = {
+              ...this.properties[index],
+              isApproved: decision === 'approve',
+              approvalStatus: decision === 'approve' ? 'approved' : 'rejected',
+              status: decision === 'approve' ? 'available' : 'unavailable'
+            };
+          }
+        }
+
+        // Clean refetch
         this.loadProperties();
       },
       error: () => {
