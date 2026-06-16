@@ -174,3 +174,187 @@ img {
 .text-white   { color: var(--text-main); }
 .font-mono    { font-family: var(--font-mono); }
 .font-display { font-family: var(--font-display); }
+
+// ── Admin Dashboard Light Mode Theme Overrides ─────────────────
+[data-theme='light'] {
+  .admin-layout {
+    background-color: var(--bg-base) !important;
+    color: var(--text-main) !important;
+
+    .admin-sidebar {
+      background-color: var(--bg-surface) !important;
+      border-inline-end: 1px solid var(--border-color) !important;
+
+      .sidebar-brand {
+        border-bottom: 1px solid var(--border-color) !important;
+      }
+      .nav-section {
+        color: var(--text-muted) !important;
+      }
+      .nav-item {
+        color: var(--text-muted) !important;
+        &:hover {
+          background: var(--bg-deep) !important;
+          color: var(--text-main) !important;
+        }
+        &.active {
+          background: var(--brand-gold-soft) !important;
+          color: var(--brand-gold) !important;
+        }
+      }
+      .sidebar-footer {
+        background: var(--bg-surface) !important;
+        border-top: 1px solid var(--border-color) !important;
+        .name {
+          color: var(--text-main) !important;
+        }
+        .role {
+          color: var(--text-muted) !important;
+        }
+      }
+    }
+
+    .admin-main {
+      background-color: var(--bg-base) !important;
+    }
+
+    // Typography
+    .page-title, .section-title, .metric-title, .chart-header h2, .panel-title {
+      color: var(--text-main) !important;
+    }
+    .page-subtitle, .quote, .chart-header p, .metric-desc {
+      color: var(--text-muted) !important;
+    }
+
+    // Cards / Panels / KPI metrics / Chart section
+    .metric-card, .kpi-card, .stat-card, .chart-section, .panel {
+      background: var(--bg-surface) !important;
+      border: 1px solid var(--border-color) !important;
+      box-shadow: var(--shadow-soft) !important;
+    }
+
+    // Input / Search
+    .search-field input {
+      background: var(--bg-input) !important;
+      border: 1px solid var(--border-color) !important;
+      color: var(--text-main) !important;
+      &::placeholder {
+        color: var(--text-muted) !important;
+      }
+      &:focus {
+        border-color: var(--brand-gold) !important;
+      }
+    }
+    .search-field .search-icon, .search-field .clear-search {
+      color: var(--text-muted) !important;
+    }
+
+    // Select dropdowns
+    .filter-select {
+      background: var(--bg-input) !important;
+      border: 1px solid var(--border-color) !important;
+      color: var(--text-main) !important;
+      option {
+        background: var(--bg-surface) !important;
+        color: var(--text-main) !important;
+      }
+      &:focus, &:hover {
+        border-color: var(--brand-gold) !important;
+      }
+    }
+
+    // Secondary buttons
+    .btn-secondary {
+      background: var(--bg-surface) !important;
+      color: var(--text-muted) !important;
+      border: 1px solid var(--border-color) !important;
+      &:hover {
+        background: var(--bg-deep) !important;
+        color: var(--text-main) !important;
+        border-color: var(--brand-gold) !important;
+      }
+    }
+
+    // Table elements
+    .table-container, .table-wrap {
+      background: var(--bg-surface) !important;
+      border: 1px solid var(--border-color) !important;
+      box-shadow: var(--shadow-soft) !important;
+    }
+
+    table {
+      thead tr {
+        background: var(--bg-deep) !important;
+        border-bottom: 1px solid var(--border-color) !important;
+      }
+      th {
+        color: var(--text-muted) !important;
+      }
+      tr {
+        border-bottom: 1px solid var(--border-color) !important;
+        color: var(--text-main) !important;
+        background: var(--bg-surface) !important;
+        &:hover {
+          background: var(--bg-deep) !important;
+        }
+      }
+      td {
+        color: var(--text-main) !important;
+      }
+      .user-name, .booking-title, .prop-title, .audit-actor {
+        color: var(--text-main) !important;
+      }
+      .user-email, .booking-sub, .prop-sub, .audit-details {
+        color: var(--text-muted) !important;
+      }
+      .joined-date, .date-cell, .time-cell {
+        color: var(--text-muted) !important;
+      }
+    }
+
+    // Table footer / Pagination
+    .table-footer {
+      border-top: 1px solid var(--border-color) !important;
+      background: var(--bg-deep) !important;
+      .result-count, .pagination-info {
+        color: var(--text-muted) !important;
+        strong {
+          color: var(--text-main) !important;
+        }
+      }
+    }
+
+    .page-btn {
+      border: 1px solid var(--border-color) !important;
+      background: var(--bg-input) !important;
+      color: var(--text-muted) !important;
+      &:hover:not(:disabled):not(.active) {
+        background: var(--bg-deep) !important;
+        color: var(--text-main) !important;
+      }
+      &.active {
+        background: var(--brand-gold-soft) !important;
+        border-color: var(--brand-gold) !important;
+        color: var(--brand-gold) !important;
+      }
+    }
+
+    // Status badges & Indicators
+    .kyc-badge {
+      background: rgba(var(--text-main-rgb), 0.05) !important;
+      color: var(--text-muted) !important;
+      &.approved {
+        background: rgba(74, 222, 128, 0.1) !important;
+        color: #4ade80 !important;
+      }
+      &.pending {
+        background: rgba(251, 191, 36, 0.1) !important;
+        color: #fbbf24 !important;
+      }
+      &.rejected {
+        background: rgba(248, 113, 113, 0.1) !important;
+        color: #f87171 !important;
+      }
+    }
+  }
+}

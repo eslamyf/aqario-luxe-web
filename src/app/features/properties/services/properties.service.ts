@@ -128,9 +128,8 @@ export class PropertiesService {
 
     if (filters?.search) {
       params = params.set('search', filters.search);
-      // Strictly prevent conflict: do not send city if we are doing a full-text search
-      params = params.delete('city');
-    } else if (filters?.city) {
+    }
+    if (filters?.city) {
       params = params.set('city', filters.city);
     }
 
