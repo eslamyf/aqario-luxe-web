@@ -11,7 +11,7 @@ const getApiUrl = (): string => {
   }
   
   // 🔥 تعديل حاسم: أضفنا /v1 في الآخر عشان الطلبات تروح للمسار الصحيح في السيرفر علطول
-  return 'https://real-estate-backend-production-3fce.up.railway.app/api/v1';
+  return 'https://aqario-luxe-apii.vercel.app/api/v1';
 };
 
 export const environment = {
