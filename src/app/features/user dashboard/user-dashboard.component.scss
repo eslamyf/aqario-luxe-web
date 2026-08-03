@@ -29,20 +29,19 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  text-decoration: none;
   border-bottom: 1px solid color-mix(in srgb, var(--white) 5%, transparent);
 
-  .brand-logo-fallback {
-    width: 24px;
-    height: 24px;
-    background: var(--gold);
-    border-radius: 4px;
-  }
+  .brand-logo-img-sidebar {
+    height: 36px !important;
+    max-height: 36px !important;
+    width: auto !important;
+    object-fit: contain;
+    display: block;
 
-  .brand-text {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    letter-spacing: 2px;
-    color: var(--gold);
+    [data-theme="dark"] & {
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.75)) brightness(1.25);
+    }
   }
 }
 

@@ -6,10 +6,9 @@
   <!-- ── Sidebar ──────────────────────────────────────────────── -->
   <aside class="user-sidebar" [class.open]="sidebarOpen">
 
-    <div class="sidebar-brand">
-      <div class="brand-logo-fallback"></div>
-      <span class="brand-text">{{ 'BRAND_NAME' | translate }}</span>
-    </div>
+    <a class="sidebar-brand" routerLink="/">
+      <img src="assets/images/logo.png" alt="AQARIO" class="brand-logo-img-sidebar" />
+    </a>
 
     <!-- User Context -->
     <ng-container *ngIf="user$ | async as user">
@@ -60,13 +59,14 @@
           <span>{{ 'DASHBOARD.VIEWING_SCHEDULE' | translate }}</span>
         </a>
 
-        <a routerLink="inquiries" routerLinkActive="active" class="nav-item"
-          *ngIf="canListProperties(user)" (click)="closeSidebar()">
+        <a routerLink="inquiries" routerLinkActive="active" class="nav-item" *ngIf="canListProperties(user)"
+          (click)="closeSidebar()">
           <i class="ph ph-chat-circle-dots"></i>
           <span>{{ 'DASHBOARD.INQUIRIES' | translate }}</span>
         </a>
 
-        <a routerLink="chat" routerLinkActive="active" class="nav-item" *ngIf="!canListProperties(user)" (click)="closeSidebar()">
+        <a routerLink="chat" routerLinkActive="active" class="nav-item" *ngIf="!canListProperties(user)"
+          (click)="closeSidebar()">
           <i class="ph ph-chats-teardrop"></i>
           <span>{{ 'NAV.MESSAGES' | translate }}</span>
         </a>

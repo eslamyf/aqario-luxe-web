@@ -53,13 +53,22 @@
 // Logo: font-display, 28px, weight 600, letter-spacing 4px
 // Reference: .footer-logo (lines 950–957)
 .footer-logo {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: 4px;
-  color: var(--white);
+  display: inline-block;
   margin-bottom: 20px;
-  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.footer-logo-img {
+  height: 42px !important;
+  max-height: 42px !important;
+  width: auto !important;
+  object-fit: contain;
+  display: block;
+
+  [data-theme="dark"] & {
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.75)) brightness(1.25);
+  }
 }
 
 // The · separator in the logo gets gold accent (reference line 957)

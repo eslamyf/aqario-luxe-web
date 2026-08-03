@@ -470,3 +470,10 @@ $mist:       var(--text-muted);
   h3 { font-size: 1.8rem; color: var(--text-main); margin: 0 0 0.5rem 0; font-weight: 800; }
   p { color: var(--text-muted); font-size: 1rem; }
 }
+
+.loading-logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
+}

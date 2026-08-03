@@ -14,10 +14,10 @@
 
     <!-- Column 1: Brand ──────────────────────────────────── -->
     <div class="footer-brand reveal">
-      <!-- Logo: font-display, 28px, letter-spacing 4px (reference line 950) -->
-      <div class="footer-logo" [attr.aria-label]="'BRAND_NAME' | translate" routerLink="/" [attr.data-cursor-hover]="true">
-        {{ 'BRAND_NAME' | translate }}
-      </div>
+      <!-- Logo image -->
+      <a class="footer-logo" routerLink="/" [attr.aria-label]="'BRAND_NAME' | translate" [attr.data-cursor-hover]="true">
+        <img src="assets/images/logo.png" alt="AQARIO" class="footer-logo-img" />
+      </a>
 
       <!-- Description (reference line 958) -->
       <p class="footer-desc">
@@ -41,7 +41,8 @@
       <ul class="footer-links" role="list">
         <li *ngFor="let link of col.links" role="listitem">
           <!-- Render Router Link if present, else fallback to standard anchor -->
-          <a *ngIf="link.routerLink" [routerLink]="link.routerLink" [queryParams]="link.queryParams" class="footer-link" [attr.data-cursor-hover]="true">
+          <a *ngIf="link.routerLink" [routerLink]="link.routerLink" [queryParams]="link.queryParams" class="footer-link"
+            [attr.data-cursor-hover]="true">
             {{ link.labelKey | translate }}
           </a>
           <a *ngIf="!link.routerLink" [href]="link.href || '#'" class="footer-link" [attr.data-cursor-hover]="true">
