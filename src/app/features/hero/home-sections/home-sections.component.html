@@ -46,56 +46,11 @@
 
     <!-- Properties grid — real data from MongoDB Atlas -->
     <div class="props-grid home-reveal stagger-container" *ngIf="!isLoading && !hasError && featuredProperties.length > 0">
-      <div
-        class="prop-card stagger-item"
-        *ngFor="let prop of featuredProperties"
-        (click)="navigateToProperty(prop._id)"
-        [id]="'prop-card-' + prop._id"
-      >
-        <!-- Image resolved from DB -->
-        <div class="prop-img-wrap">
-          <img
-            *ngIf="prop.primaryImage"
-            [src]="prop.primaryImage"
-            [alt]="prop.title"
-            class="prop-img"
-            loading="lazy"
-            (error)="prop.primaryImage = ''"
-          />
-          <div *ngIf="!prop.primaryImage" class="prop-img-placeholder">
-            <span class="placeholder-icon">🏠</span>
-          </div>
-          <div class="prop-tag" [class.rent]="prop.status === 'for-rent'">
-            {{ (prop.status === 'for-rent' ? 'REAL_ESTATE.FOR_RENT' : 'REAL_ESTATE.FOR_SALE') | translate }}
-          </div>
-        </div>
-
-        <!-- Info from DB -->
-        <div class="prop-info">
-          <div class="prop-price">{{ prop.formattedPrice }}</div>
-          <div class="prop-title">{{ prop.title }}</div>
-          <div class="prop-location">
-            <span class="loc-icon">📍</span>
-            {{ prop.city }}
-          </div>
-          <div class="prop-specs">
-            <span *ngIf="prop.bedrooms">🛏 {{ prop.bedrooms }} {{ 'REAL_ESTATE.BED_SHORT' | translate }}</span>
-            <span *ngIf="prop.bathrooms">🚿 {{ prop.bathrooms }} {{ 'REAL_ESTATE.BATH_SHORT' | translate }}</span>
-            <span *ngIf="prop.area">📐 {{ prop.area }}{{ 'REAL_ESTATE.AREA_UNIT' | translate }}</span>
-          </div>
-
-          <!-- View Details Action Button -->
-          <div class="prop-actions">
-            <button
-              class="prop-action-btn"
-              [routerLink]="['/properties', prop._id]"
-              (click)="$event.stopPropagation()"
-              data-cursor-hover>
-              {{ 'REAL_ESTATE.VIEW_DETAILS' | translate }}
-            </button>
-          </div>
-        </div>
-      </div>
+      <app-property-card
+        *ngFor="let prop of featuredProperties; let i = index"
+        [property]="prop"
+        [isFirst]="i === 0">
+      </app-property-card>
     </div>
 
     <!-- Empty state -->

@@ -154,14 +154,9 @@ img {
     color: rgba(255, 255, 255, 0.78) !important;
   }
 
-  // Ensure property overlay gradient adapts to text readability
+  // Ensure property overlay is transparent in light mode for crisp white cards
   .property-overlay {
-    background: linear-gradient(
-      to top,
-      rgba(var(--text-main-rgb), 0.92) 0%,
-      rgba(var(--text-main-rgb), 0.25) 50%,
-      transparent 100%
-    );
+    background: transparent !important;
   }
 }
 

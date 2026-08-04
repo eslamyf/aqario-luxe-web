@@ -123,52 +123,52 @@
 // MUST be a top-level rule — never nest inside :root
 [data-theme='light'] {
   // ── Semantic Surface Tokens ──────────────────────────────
-  --bg-base:           #F9FAFB;   // Light Gray — soft SaaS page background
-  --bg-surface:        #FFFFFF;   // Pure White — cards and elevated sections
+  --bg-base:           #F8FAFC;   // Soft alabaster / ivory slate background
+  --bg-surface:        #FFFFFF;   // Crisp Pure White — cards and elevated sections
   --bg-elevated:       #FFFFFF;   // Elevated cards
-  --bg-input:          #FFFFFF;   // Input fields
-  --bg-deep:           #F3F4F6;   // Nested/deep elements, hover states
+  --bg-input:          #F1F5F9;   // Input fields & subtle wells
+  --bg-deep:           #E2E8F0;   // Nested/deep elements, hover states
 
   // ── Semantic Text Tokens ──────────────────────────────────
-  --text-main:         #111827;   // Deep Charcoal — high contrast readability
-  --text-muted:        #4B5563;   // High contrast charcoal gray
-  --text-primary:      #111827;
-  --text-secondary:    #4B5563;
-  --placeholder-color: #4B5563;   // High contrast placeholder
+  --text-main:         #0F172A;   // Deep Slate Black — max contrast & legibility
+  --text-muted:        #334155;   // Dark Slate Gray — 7:1 WCAG contrast
+  --text-primary:      #0F172A;
+  --text-secondary:    #334155;
+  --placeholder-color: #64748B;   // Clear slate placeholder
 
   // ── Semantic Border / Overlay ────────────────────────────
-  --border-color:      #111827;   // High contrast borders
+  --border-color:      rgba(15, 23, 42, 0.12); // Refined soft slate border (no harsh black)
   --overlay-color:     rgba(255, 255, 255, 0.95);
-  --surface-glass:     rgba(255, 255, 255, 0.85);
+  --surface-glass:     rgba(255, 255, 255, 0.88);
 
-  // ── Brand Gold (deeper for light bg readability) ──────────
-  --brand-gold:        #8B6914;
-  --brand-gold-light:  #C9A96E;
-  --brand-gold-dark:   #5E4510;
-  --brand-gold-soft:   rgba(139, 105, 20, 0.1);
+  // ── Brand Gold (Deep rich warm gold for high contrast on light bg) ──
+  --brand-gold:        #8C6207;   // Deep Rich Luxury Gold (4.8:1 WCAG contrast on white)
+  --brand-gold-light:  #B8860B;   // Warm Amber Gold
+  --brand-gold-dark:   #5E4204;   // Deep Bronze
+  --brand-gold-soft:   rgba(140, 98, 7, 0.12);
 
   // ── Hero Layer Tokens ─────────────────────────────────────
   --hero-gradient-start: #FFFFFF;
-  --hero-gradient-mid:   #F9FAFB;
-  --hero-gradient-end:   #F3F4F6;
-  --hero-grid-color:     rgba(0, 0, 0, 0.03);
-  --hero-orb-gold:       rgba(139, 105, 20, 0.08);
+  --hero-gradient-mid:   #F8FAFC;
+  --hero-gradient-end:   #F1F5F9;
+  --hero-grid-color:     rgba(0, 0, 0, 0.04);
+  --hero-orb-gold:       rgba(140, 98, 7, 0.08);
   --hero-orb-sapphire:   rgba(41, 128, 185, 0.06);
-  --ticker-bg:           rgba(255, 255, 255, 0.95);
-  --ticker-border:       #E5E7EB;
+  --ticker-bg:           rgba(255, 255, 255, 0.96);
+  --ticker-border:       rgba(15, 23, 42, 0.10);
 
-  // ── Shadows (crisp SaaS elevation) ───────────
-  --shadow-soft:         0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  --shadow-pop:          0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-  --shadow-gold:         0 10px 15px -3px rgba(139, 105, 20, 0.15);
+  // ── Shadows (crisp elevation) ─────────────────────────────
+  --shadow-soft:         0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --shadow-pop:          0 12px 24px -4px rgba(15, 23, 42, 0.10), 0 4px 8px -2px rgba(15, 23, 42, 0.05);
+  --shadow-gold:         0 10px 20px -3px rgba(140, 98, 7, 0.20);
 
   // ── Noise & Misc ─────────────────────────────────────────
   --noise-opacity:       0.01;
 
   // ── RGB Channel Splits ────────────────────────────────────
   --bg-surface-rgb:    255, 255, 255;
-  --text-main-rgb:     17, 24, 39;
-  --text-muted-rgb:    107, 114, 128;
+  --text-main-rgb:     15, 23, 42;
+  --text-muted-rgb:    51, 65, 85;
 
   // ── Legacy Aliases (auto-update via semantic tokens) ──────
   --obsidian:          var(--bg-base);

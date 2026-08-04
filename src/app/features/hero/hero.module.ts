@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HeroComponent } from './hero.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { HomeSectionsComponent } from './home-sections/home-sections.component';
+import { PropertyCardModule } from '../properties/components/property-card/property-card.module';
 
 const routes: Routes = [
   { path: '', component: HeroComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     TranslateModule,
+    PropertyCardModule,
   ],
 })
 export class HeroModule {}
