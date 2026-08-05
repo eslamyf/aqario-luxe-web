@@ -26,11 +26,26 @@ export class TranslatePropPipe implements PipeTransform {
       const clean = value.replace(/\s+/g, ' ').replace(/[.\s]+$/, '').trim();
       for (const key of Object.keys(AR_TRANSLATIONS)) {
         const cleanKey = key.replace(/\s+/g, ' ').replace(/[.\s]+$/, '').trim();
-        if (clean === cleanKey) {
+        if (clean.toLowerCase() === cleanKey.toLowerCase()) {
           return AR_TRANSLATIONS[key];
         }
       }
-      return AR_TRANSLATIONS[value] || AR_TRANSLATIONS[value.trim()] || value;
+
+      if (AR_TRANSLATIONS[value]) return AR_TRANSLATIONS[value];
+      if (AR_TRANSLATIONS[value.trim()]) return AR_TRANSLATIONS[value.trim()];
+
+      // Fallback term replacement if exact key is missing
+      let fallback = value;
+      fallback = fallback.replace(/\bMarbella\b/gi, 'ماربيا')
+                         .replace(/\bCairo\b/gi, 'القاهرة')
+                         .replace(/\bNew Cairo\b/gi, 'القاهرة الجديدة')
+                         .replace(/\bLuxury Villa\b/gi, 'فيلا فاخرة')
+                         .replace(/\bFamily House\b/gi, 'بيت عائلي')
+                         .replace(/\bPrime Location\b/gi, 'موقع متميز')
+                         .replace(/\bSwimming Pool\b/gi, 'مسبح خاص')
+                         .replace(/\bClassic Brick\b/gi, 'كلاسيكي من الطوب');
+
+      return fallback;
     }
 
     return String(value);

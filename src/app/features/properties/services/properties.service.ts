@@ -240,11 +240,26 @@ export class PropertiesService {
       const clean = str.replace(/\s+/g, ' ').replace(/[.\s]+$/, '').trim();
       for (const key of Object.keys(AR_TRANSLATIONS)) {
         const cleanKey = key.replace(/\s+/g, ' ').replace(/[.\s]+$/, '').trim();
-        if (clean === cleanKey) {
+        if (clean.toLowerCase() === cleanKey.toLowerCase()) {
           return AR_TRANSLATIONS[key];
         }
       }
-      return AR_TRANSLATIONS[str] || AR_TRANSLATIONS[str.trim()] || str;
+
+      if (AR_TRANSLATIONS[str]) return AR_TRANSLATIONS[str];
+      if (AR_TRANSLATIONS[str.trim()]) return AR_TRANSLATIONS[str.trim()];
+
+      // Fallback term replacement if exact key is missing
+      let fallback = str;
+      fallback = fallback.replace(/\bMarbella\b/gi, 'ماربيا')
+                         .replace(/\bCairo\b/gi, 'القاهرة')
+                         .replace(/\bNew Cairo\b/gi, 'القاهرة الجديدة')
+                         .replace(/\bLuxury Villa\b/gi, 'فيلا فاخرة')
+                         .replace(/\bFamily House\b/gi, 'بيت عائلي')
+                         .replace(/\bPrime Location\b/gi, 'موقع متميز')
+                         .replace(/\bSwimming Pool\b/gi, 'مسبح خاص')
+                         .replace(/\bClassic Brick\b/gi, 'كلاسيكي من الطوب');
+
+      return fallback;
     };
 
     let resolvedTitle = '';
@@ -345,6 +360,9 @@ export class PropertiesService {
 
 export const AR_TRANSLATIONS: Record<string, string> = {
   // Titles
+  'Marbella Luxury Villa': 'فيلا فاخرة في ماربيا',
+  'Classic Brick Family House in Prime Location': 'بيت عائلي كلاسيكي من الطوب في موقع متميز',
+  'Luxury Villa with Private Swimming Pool': 'فيلا فاخرة مع مسبح خاص',
   'Luxury Penthouse in Dubai Marina with Sea View': 'بنتهاوس فاخر في مرسى دبي مع إطلالة بحرية',
   'Sky Penthouse — Dubai Marina': 'بنتهاوس السماء — مرسى دبي',
   'Mayfair Garden Apartment': 'شقة مايفير مع حديقة',
@@ -385,6 +403,12 @@ export const AR_TRANSLATIONS: Record<string, string> = {
   'Luxury fully furnished penthouse located in the heart of Dubai Marina with panoramic sea view, modern design, high-end finishes, smart home system, and access to premium amenities including pool, gym, and 24/7 security. Perfect for investment or residential living.': 'بنتهاوس فاخر مفروش بالكامل يقع في قلب مرسى دبي مع إطلالة بانورامية على البحر، وتصميم عصري، وتشطيبات راقية، ونظام منزل ذكي، وإمكانية الوصول إلى المرافق الفاخرة بما في ذلك المسبح، وصالة الألعاب الرياضية، والأمن على مدار الساعة. مثالي للاستثمار أو السكن.',
 
   // Locations / Cities / Districts
+  'MARBELLA': 'ماربيا',
+  'Marbella': 'ماربيا',
+  'CAIRO': 'القاهرة',
+  'Cairo': 'القاهرة',
+  'NEW CAIRO': 'القاهرة الجديدة',
+  'New Cairo': 'القاهرة الجديدة',
   'Dubai': 'دبي',
   'Marina': 'مرسى دبي',
   'JBR Walk': 'ممشى جي بي آر',
@@ -397,7 +421,6 @@ export const AR_TRANSLATIONS: Record<string, string> = {
   'Nice': 'نيس',
   'Promenade': 'البروميناد',
   'Bord de Mer': 'بورد دي مير',
-  'Cairo': 'القاهرة',
   'Zamalek': 'الزمالك',
   'Mohamed Mazhar': 'محمد مظهر',
   'Riyadh': 'الرياض',
@@ -412,7 +435,6 @@ export const AR_TRANSLATIONS: Record<string, string> = {
   'Los Angeles': 'لوس أنجلوس',
   'Beverly Hills': 'بيفرلي هيلز',
   'Sunset Blvd': 'شارع Sunset',
-  'New Cairo': 'القاهرة الجديدة',
   'Group 120': 'المجموعة 120',
   'Dubai Hills': 'دبي هيلز',
   'Parkway Vistas': 'باركواي فيستاز',

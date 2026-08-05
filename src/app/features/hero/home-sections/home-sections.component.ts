@@ -44,15 +44,6 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   openAccordion: number | null = 0;
 
   // ── Static data ────────────────────────────────────────────────────────────
-  partners = [
-    { nameKey: 'HOME.PARTNERS.PLD.NAME', abbrKey: 'HOME.PARTNERS.PLD.ABBR' },
-    { nameKey: 'HOME.PARTNERS.AMT.NAME', abbrKey: 'HOME.PARTNERS.AMT.ABBR' },
-    { nameKey: 'HOME.PARTNERS.EQIX.NAME', abbrKey: 'HOME.PARTNERS.EQIX.ABBR' },
-    { nameKey: 'HOME.PARTNERS.DLR.NAME', abbrKey: 'HOME.PARTNERS.DLR.ABBR' },
-    { nameKey: 'HOME.PARTNERS.SPG.NAME', abbrKey: 'HOME.PARTNERS.SPG.ABBR' },
-    { nameKey: 'HOME.PARTNERS.WELL.NAME', abbrKey: 'HOME.PARTNERS.WELL.ABBR' },
-  ];
-
   valueFeatures = [
     {
       icon: '◈',

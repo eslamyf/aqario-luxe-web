@@ -56,20 +56,7 @@ export class FooterComponent {
         { labelKey: 'FOOTER.SECTIONS.ABOUT_US',  routerLink: '/about' },
         { labelKey: 'FOOTER.SECTIONS.OUR_TEAM',  routerLink: '/agents' },
         { labelKey: 'NAV.FAVOURITES',            routerLink: '/dashboard/saved' },
-        { labelKey: 'FOOTER.SECTIONS.CAREERS',   routerLink: '/careers' },
-        { labelKey: 'FOOTER.SECTIONS.PRESS',     routerLink: '/press' },
-        { labelKey: 'FOOTER.SECTIONS.PARTNERS',  routerLink: '/partners' },
         { labelKey: 'FOOTER.SECTIONS.CONTACT',   routerLink: '/contact' },
-      ],
-    },
-    {
-      titleKey: 'FOOTER.SECTIONS.LEGAL',
-      links: [
-        { labelKey: 'FOOTER.SECTIONS.PRIVACY',    routerLink: '/privacy' },
-        { labelKey: 'FOOTER.SECTIONS.TERMS',      routerLink: '/terms' },
-        { labelKey: 'FOOTER.SECTIONS.COOKIE',     routerLink: '/cookie' },
-        { labelKey: 'FOOTER.SECTIONS.AML',        routerLink: '/aml' },
-        { labelKey: 'FOOTER.SECTIONS.API',        routerLink: '/api' },
       ],
     },
   ];

@@ -27,7 +27,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/agents/agents.module').then((m) => m.AgentsModule),
   },
-  
+
   {
     path: 'become-agent',
     component: BecomeAgentComponent,
@@ -78,7 +78,7 @@ const routes: Routes = [
     path: 'reset-password/:token',
     loadComponent: () => import('./core/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
   },
-  
+
   // Account verification route (OTP)
   {
     path: 'verify-otp',
@@ -106,7 +106,7 @@ const routes: Routes = [
     pathMatch: 'full',
   },
 ];
- 
+
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
@@ -116,4 +116,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
