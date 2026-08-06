@@ -27,7 +27,7 @@ export class CursorComponent implements OnInit, OnDestroy {
     this.isMobile = !window.matchMedia('(hover: hover)').matches;
 
     if (!this.isMobile) {
-      this.renderer.setStyle(document.body, 'cursor', 'none');
+      // Custom cursor disabled in favor of standard pointer
       
       // Run listeners outside the Zone for performance optimization
       this.ngZone.runOutsideAngular(() => {

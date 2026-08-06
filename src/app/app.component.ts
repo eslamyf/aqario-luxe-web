@@ -6,13 +6,10 @@ import { ThemeService } from './core/services/theme.service';
 import { LanguageService } from './core/services/language.service';
 import { filter } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-root',
   template: `
     <div [class.admin-mode]="isAdminRoute">
-      <app-cursor></app-cursor>
-      
       <app-nav></app-nav>
       
       <router-outlet></router-outlet>

@@ -213,7 +213,7 @@
   background: var(--brand-gold);
   border: none;
   padding: 16px 40px;
-  cursor: none;
+  cursor: pointer;
   position: relative;
   overflow: hidden;
   transition:
@@ -254,7 +254,7 @@
   background: transparent;
   border: 1px solid var(--border-color);
   padding: 16px 40px;
-  cursor: none;
+  cursor: pointer;
   transition:
     border-color 0.3s var(--transition),
     color 0.3s var(--transition),

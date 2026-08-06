@@ -18,7 +18,6 @@ body {
   font-family: var(--font-body);
   background: var(--bg-base);
   color: var(--text-main);
-  cursor: none;
   overflow-x: hidden;
   line-height: 1.7;
   // Targeted transition — NO global * rule
@@ -26,10 +25,6 @@ body {
   transition:
     background-color 0.3s var(--transition),
     color 0.3s var(--transition);
-
-  @media (hover: none) {
-    cursor: auto;
-  }
 }
 
 // ── Noise Texture Overlay ────────────────────────────────────
@@ -102,19 +97,6 @@ textarea,
 @keyframes globalShimmer {
   to {
     transform: translateX(120%);
-  }
-}
-
-// ── Cursor: none on interactive elements (desktop only) ──────
-@media (hover: hover) {
-
-  a,
-  button,
-  [role='button'],
-  input,
-  select,
-  textarea {
-    cursor: none;
   }
 }
 
