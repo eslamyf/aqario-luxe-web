@@ -6,9 +6,9 @@
 
 // ── Card Shell ───────────────────────────────────────────────
 .search-card {
-  background: var(--surface-glass);       // SEMANTIC — adapts dark/light
-  border: 1px solid var(--border-color);  // SEMANTIC
-  box-shadow: var(--shadow-soft);         // SEMANTIC
+  background: var(--surface-glass); // SEMANTIC — adapts dark/light
+  border: 1px solid var(--border-color); // SEMANTIC
+  box-shadow: var(--shadow-soft); // SEMANTIC
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   overflow: hidden;
@@ -22,7 +22,7 @@
 // ── Filter Chips Row ─────────────────────────────────────────
 .chips-row {
   display: flex;
-  border-bottom: 1px solid var(--border-color);  // SEMANTIC
+  border-bottom: 1px solid var(--border-color); // SEMANTIC
   background: rgba(var(--bg-surface-rgb), 0.06);
 }
 
@@ -32,10 +32,10 @@
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--text-muted);     // SEMANTIC — mist in dark / dark muted in light
+  color: var(--text-muted); // SEMANTIC — mist in dark / dark muted in light
   background: transparent;
   border: none;
-  border-inline-end: 1px solid var(--border-color);  // RTL-safe
+  border-inline-end: 1px solid var(--border-color); // RTL-safe
   padding: 16px 28px;
   cursor: pointer;
   position: relative;
@@ -51,26 +51,30 @@
     inset-inline-start: 20px;
     inset-inline-end: 20px;
     height: 2px;
-    background: var(--brand-gold);  // SEMANTIC
+    background: var(--brand-gold); // SEMANTIC
     transform: scaleX(0);
     transition: transform 0.25s var(--transition);
     transform-origin: left;
   }
 
   &:hover {
-    color: var(--text-main);                             // SEMANTIC
+    color: var(--text-main); // SEMANTIC
     background-color: rgba(var(--bg-surface-rgb), 0.10);
   }
 
   &.active {
-    color: var(--text-main);                             // SEMANTIC
+    color: var(--text-main); // SEMANTIC
     background-color: rgba(var(--bg-surface-rgb), 0.10);
 
     // Gold underline visible + subtle glow in dark mode
-    &::after { transform: scaleX(1); }
+    &::after {
+      transform: scaleX(1);
+    }
   }
 
-  &:last-child { border-inline-end: none; }
+  &:last-child {
+    border-inline-end: none;
+  }
 }
 
 // ── Fields Row ───────────────────────────────────────────────
@@ -94,7 +98,7 @@
   font-size: 9px;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--brand-gold);  // SEMANTIC — deeper gold in light mode
+  color: var(--brand-gold); // SEMANTIC — deeper gold in light mode
   display: block;
   flex-shrink: 0;
 }
@@ -104,7 +108,7 @@
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 400;
-  color: var(--text-main);    // SEMANTIC — white in dark / near-black in light
+  color: var(--text-main); // SEMANTIC — white in dark / near-black in light
   background: var(--bg-input); // SEMANTIC — dedicated input token
   border: 1px solid var(--border-color); // SEMANTIC
   border-radius: 12px;
@@ -120,25 +124,25 @@
     color 0.3s var(--transition);
 
   &::placeholder {
-    color: var(--placeholder-color);  // SEMANTIC token: dark=#B5B5B5 | light=#4A4A4A
+    color: var(--placeholder-color); // SEMANTIC token: dark=#B5B5B5 | light=#4A4A4A
     opacity: 1;
   }
 
   &:focus {
     border-color: var(--brand-gold);
-    background: var(--bg-elevated);  // Slightly lighter on focus
+    background: var(--bg-elevated); // Slightly lighter on focus
   }
 
   option {
-    background: var(--bg-elevated);  // SEMANTIC
-    color: var(--text-main);         // SEMANTIC
+    background: var(--bg-elevated); // SEMANTIC
+    color: var(--text-main); // SEMANTIC
   }
 }
 
 // Vertical divider between field groups
 .field-divider {
   width: 1px;
-  background: var(--border-color);  // SEMANTIC
+  background: var(--border-color); // SEMANTIC
   flex-shrink: 0;
   margin: 18px 0;
 }
@@ -147,12 +151,12 @@
 // font-mono REQUIRED — coding-rules §3.2: never use font-family on a button
 // without var(--font-mono)
 .btn-search {
-  font-family: var(--font-mono);   // ✅ Rule §3.2 compliant
+  font-family: var(--font-mono); // ✅ Rule §3.2 compliant
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--bg-base);            // Deep on gold — readable in both themes
+  color: var(--bg-base); // Deep on gold — readable in both themes
   background: var(--brand-gold);
   border: none;
   padding: 18px 32px;
@@ -190,13 +194,13 @@
   justify-content: space-between;
   gap: 16px;
   padding: 16px 24px;
-  border-top: 1px solid var(--border-color);  // SEMANTIC
+  border-top: 1px solid var(--border-color); // SEMANTIC
 }
 
 .secondary-text {
   font-family: var(--font-body);
   font-size: 12px;
-  color: var(--text-muted);  // SEMANTIC
+  color: var(--text-muted); // SEMANTIC
   font-weight: 400;
 }
 
@@ -205,9 +209,9 @@
   font-size: 10px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--brand-gold);          // SEMANTIC
+  color: var(--brand-gold); // SEMANTIC
   background: transparent;
-  border: 1px solid var(--border-color);  // SEMANTIC
+  border: 1px solid var(--border-color); // SEMANTIC
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 10px;
@@ -219,7 +223,7 @@
   &:hover {
     background-color: var(--brand-gold-soft);
     border-color: var(--brand-gold);
-    color: var(--bg-base);           // Deep dark text on gold — always readable
+    color: var(--bg-base); // Deep dark text on gold — always readable
   }
 }
 

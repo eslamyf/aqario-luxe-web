@@ -14,14 +14,9 @@
   <div class="hero-visual" [@heroImage]="animState" aria-hidden="true">
     <div class="hero-visual-frame">
       <!-- Primary: high-quality luxury villa photograph -->
-      <img
-        class="hero-visual-img"
+      <img class="hero-visual-img"
         src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85"
-        [alt]="'HOME.HERO.IMAGE_ALT' | translate"
-        loading="eager"
-        decoding="async"
-        (error)="onImageError($event)"
-      />
+        [alt]="'HOME.HERO.IMAGE_ALT' | translate" loading="eager" decoding="async" (error)="onImageError($event)" />
       <!-- Gradient fade mask — blends image into the hero background -->
       <div class="hero-visual-mask"></div>
     </div>
@@ -52,18 +47,10 @@
 
       <!-- CTA Buttons -->
       <div class="hero-actions" [@buttons]="animState">
-        <button
-          id="btn-explore-properties"
-          class="btn-primary"
-          data-cursor-hover
-          (click)="scrollToProperties()">
+        <button id="btn-explore-properties" class="btn-primary" data-cursor-hover (click)="scrollToProperties()">
           {{ 'HOME.HERO.EXPLORE' | translate }}
         </button>
-        <button
-          id="btn-list-property"
-          class="btn-secondary"
-          data-cursor-hover
-          (click)="navigateToAddProperty()">
+        <button id="btn-list-property" class="btn-secondary" data-cursor-hover (click)="navigateToAddProperty()">
           {{ 'HOME.HERO.LIST' | translate }}
         </button>
       </div>

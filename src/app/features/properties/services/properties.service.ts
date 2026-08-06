@@ -10,8 +10,8 @@ import { NotificationService } from '../../../shared/services/notification.servi
 
 // ── API response shapes ───────────────────────────────────────────────────────
 interface ApiResponse<T> {
-  status:   string;
-  data:     T;
+  status: string;
+  data: T;
   message?: string;
 }
 
@@ -20,9 +20,9 @@ interface PaginatedPropertiesResponse {
 }
 
 export interface PaginationMeta {
-  total:   number;
-  page:    number;
-  pages:   number;
+  total: number;
+  page: number;
+  pages: number;
   results: number;
   nextCursor?: string;
 }
@@ -30,20 +30,20 @@ export interface PaginationMeta {
 // ─────────────────────────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class PropertiesService {
-  private http                = inject(HttpClient);
+  private http = inject(HttpClient);
   private notificationService = inject(NotificationService);
-  private translateService    = inject(TranslateService);
-  private readonly base       = environment.apiUrl;
+  private translateService = inject(TranslateService);
+  private readonly base = environment.apiUrl;
 
   // ── Reactive State ────────────────────────────────────────────────────────
-  private _filters$    = new BehaviorSubject<PropertyFilters>({});
-  readonly filters$    = this._filters$.asObservable();
+  private _filters$ = new BehaviorSubject<PropertyFilters>({});
+  readonly filters$ = this._filters$.asObservable();
 
-  private _loading$    = new BehaviorSubject<boolean>(false);
-  readonly loading$    = this._loading$.asObservable();
+  private _loading$ = new BehaviorSubject<boolean>(false);
+  readonly loading$ = this._loading$.asObservable();
 
-  private _error$      = new BehaviorSubject<string | null>(null);
-  readonly error$      = this._error$.asObservable();
+  private _error$ = new BehaviorSubject<string | null>(null);
+  readonly error$ = this._error$.asObservable();
 
   private _pagination$ = new BehaviorSubject<PaginationMeta | null>(null);
   readonly pagination$ = this._pagination$.asObservable();
@@ -99,13 +99,13 @@ export class PropertiesService {
     };
 
     const typeMap: Record<string, PropertyType> = {
-      apartment:  'apartment',
-      villa:      'villa',
-      house:      'house',
-      studio:     'studio',
-      office:     'office',
-      shop:       'shop',
-      land:       'land',
+      apartment: 'apartment',
+      villa: 'villa',
+      house: 'house',
+      studio: 'studio',
+      office: 'office',
+      shop: 'shop',
+      land: 'land',
       commercial: 'commercial',
     };
 
@@ -133,14 +133,14 @@ export class PropertiesService {
       params = params.set('city', filters.city);
     }
 
-    if (filters?.type)     params = params.set('type',     filters.type);
+    if (filters?.type) params = params.set('type', filters.type);
     if (filters?.maxPrice) params = params.set('maxPrice', String(filters.maxPrice));
     if (filters?.minPrice) params = params.set('minPrice', String(filters.minPrice));
-    if (filters?.bedrooms)  params = params.set('bedrooms',  String(filters.bedrooms));
+    if (filters?.bedrooms) params = params.set('bedrooms', String(filters.bedrooms));
     if (filters?.bathrooms) params = params.set('bathrooms', String(filters.bathrooms));
-    if (filters?.page)     params = params.set('page',     String(filters.page));
-    if (filters?.limit)    params = params.set('limit',    String(filters.limit));
-    if (filters?.cursor)   params = params.set('cursor',   filters.cursor);
+    if (filters?.page) params = params.set('page', String(filters.page));
+    if (filters?.limit) params = params.set('limit', String(filters.limit));
+    if (filters?.cursor) params = params.set('cursor', filters.cursor);
 
     return this.http
       .get<any>(`${this.base}/properties`, { params })
@@ -149,9 +149,9 @@ export class PropertiesService {
           // Update pagination metadata
           if (res.total !== undefined) {
             this._pagination$.next({
-              total:   res.total   ?? 0,
-              page:    res.page    ?? 1,
-              pages:   res.pages   ?? 1,
+              total: res.total ?? 0,
+              page: res.page ?? 1,
+              pages: res.pages ?? 1,
               results: res.results ?? 0,
               nextCursor: res.nextCursor,
             });
@@ -201,21 +201,21 @@ export class PropertiesService {
     const mapped = {
       ...p,
       listingType,
-      status:             listingType === 'rent' ? 'for-rent' as const : 'for-sale' as const,
+      status: listingType === 'rent' ? 'for-rent' as const : 'for-sale' as const,
       availabilityStatus: p.status,
-      currency:           p.currency,
-      featured:           p.featured   ?? false,
-      avgRating:          p.avgRating,
-      reviewCount:        p.reviewCount,
-      owner:              p.owner,
+      currency: p.currency,
+      featured: p.featured ?? false,
+      avgRating: p.avgRating,
+      reviewCount: p.reviewCount,
+      owner: p.owner,
       _original: {
-        title:       p.title,
+        title: p.title,
         description: p.description,
-        location:    p.location,
-        city:        p.location?.city ?? p.city,
-        district:    p.location?.district ?? p.district,
-        badge:       p.badge ?? (listingType === 'rent' ? 'For Rent' : 'For Sale'),
-        features:    [...(p.features || [])],
+        location: p.location,
+        city: p.location?.city ?? p.city,
+        district: p.location?.district ?? p.district,
+        badge: p.badge ?? (listingType === 'rent' ? 'For Rent' : 'For Sale'),
+        features: [...(p.features || [])],
       }
     };
     return this.translateProperty(mapped);
@@ -226,13 +226,13 @@ export class PropertiesService {
     const isAr = activeLang === 'ar';
 
     const original = (p as any)._original || {
-      title:       p.title,
+      title: p.title,
       description: p.description,
-      location:    p.location,
-      city:        p.city,
-      district:    (p as any).district,
-      badge:       p.badge,
-      features:    [...(p.features || [])],
+      location: p.location,
+      city: p.city,
+      district: (p as any).district,
+      badge: p.badge,
+      features: [...(p.features || [])],
     };
 
     const t = (str: string | undefined): string => {
@@ -251,13 +251,13 @@ export class PropertiesService {
       // Fallback term replacement if exact key is missing
       let fallback = str;
       fallback = fallback.replace(/\bMarbella\b/gi, 'ماربيا')
-                         .replace(/\bCairo\b/gi, 'القاهرة')
-                         .replace(/\bNew Cairo\b/gi, 'القاهرة الجديدة')
-                         .replace(/\bLuxury Villa\b/gi, 'فيلا فاخرة')
-                         .replace(/\bFamily House\b/gi, 'بيت عائلي')
-                         .replace(/\bPrime Location\b/gi, 'موقع متميز')
-                         .replace(/\bSwimming Pool\b/gi, 'مسبح خاص')
-                         .replace(/\bClassic Brick\b/gi, 'كلاسيكي من الطوب');
+        .replace(/\bCairo\b/gi, 'القاهرة')
+        .replace(/\bNew Cairo\b/gi, 'القاهرة الجديدة')
+        .replace(/\bLuxury Villa\b/gi, 'فيلا فاخرة')
+        .replace(/\bFamily House\b/gi, 'بيت عائلي')
+        .replace(/\bPrime Location\b/gi, 'موقع متميز')
+        .replace(/\bSwimming Pool\b/gi, 'مسبح خاص')
+        .replace(/\bClassic Brick\b/gi, 'كلاسيكي من الطوب');
 
       return fallback;
     };
@@ -309,13 +309,13 @@ export class PropertiesService {
 
     return {
       ...p,
-      title:       resolvedTitle,
+      title: resolvedTitle,
       description: resolvedDesc,
-      city:        resolvedCity,
-      location:    resolvedLocation,
-      badge:       resolvedBadge,
-      features:    resolvedFeatures,
-      _original:   original,
+      city: resolvedCity,
+      location: resolvedLocation,
+      badge: resolvedBadge,
+      features: resolvedFeatures,
+      _original: original,
     } as any;
   }
 
@@ -339,15 +339,15 @@ export class PropertiesService {
         price >= 1_000_000
           ? `${(price / 1_000_000).toFixed(1)} مليون ${symbol}`
           : price >= 1_000
-          ? `${(price / 1_000).toFixed(0)} ألف ${symbol}`
-          : `${price.toLocaleString('en-US')} ${symbol}`;
+            ? `${(price / 1_000).toFixed(0)} ألف ${symbol}`
+            : `${price.toLocaleString('en-US')} ${symbol}`;
     } else {
       formatted =
         price >= 1_000_000
           ? `${symbol}${(price / 1_000_000).toFixed(1)}M`
           : price >= 1_000
-          ? `${symbol}${(price / 1_000).toFixed(0)}K`
-          : `${symbol}${price.toLocaleString()}`;
+            ? `${symbol}${(price / 1_000).toFixed(0)}K`
+            : `${symbol}${price.toLocaleString()}`;
     }
 
     if (status === 'for-rent') {

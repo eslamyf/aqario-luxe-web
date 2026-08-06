@@ -95,10 +95,7 @@
   object-fit: contain;
   display: block;
   transition: transform 0.3s var(--transition), filter 0.3s var(--transition);
-
-  [data-theme="dark"] & {
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.75)) brightness(1.25);
-  }
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.75)) brightness(1.25);
 }
 
 .logo-icon {
@@ -1224,5 +1221,92 @@
     flex-shrink: 0 !important;
     width: 32px !important;
     height: 32px !important;
+  }
+}
+
+// ── Light Mode Override: Lock Navbar to Exact Dark Mode Colors ──
+[data-theme='light'] {
+
+  .nav,
+  .mobile-menu,
+  .user-dropdown,
+  .notifications-dropdown {
+    --bg-base: #0F1115;
+    --bg-surface: #161B22;
+    --bg-elevated: #1C2128;
+    --bg-input: #22272E;
+    --text-main: #FFFFFF;
+    --text-muted: #FFFFFF;
+    --text-primary: #FFFFFF;
+    --text-secondary: #FFFFFF;
+    --border-color: rgba(255, 255, 255, 0.2);
+    --surface-glass: rgba(15, 17, 21, 0.85);
+    --brand-gold: #C9A96E;
+    --brand-gold-light: #E8D5B0;
+    --brand-gold-dark: #8B6914;
+    --brand-gold-soft: rgba(201, 169, 110, 0.15);
+    --shadow-pop: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-gold: 0 10px 15px -3px rgba(201, 169, 110, 0.15);
+  }
+
+  .nav {
+    .nav-links a {
+      color: #ffffff !important;
+
+      &:hover,
+      &.active {
+        color: #ffffff !important;
+
+        &::after {
+          background: #C9A96E !important;
+          transform: scaleX(1) !important;
+        }
+      }
+    }
+
+    // أضف عقارك
+    .btn-list {
+      color: #ffffff !important;
+      background-color: #C9A96E !important;
+      border-color: #C9A96E !important;
+    }
+
+    // تسجيل الدخول
+    .btn-signin {
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+
+      .auth-text {
+        color: #ffffff !important;
+      }
+
+      .auth-icon {
+        stroke: #ffffff !important;
+      }
+    }
+
+    // EN / AR
+    .btn-lang-toggle {
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+
+      .lang-text {
+        color: #ffffff !important;
+      }
+
+      i {
+        color: #C9A96E !important;
+      }
+    }
+
+    // علامة تغير الوضع (Theme Toggle Icon)
+    .btn-theme-toggle {
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+
+      svg {
+        stroke: #ffffff !important;
+      }
+    }
   }
 }

@@ -6,10 +6,10 @@
 
 const getApiUrl = (): string => {
   const host = window.location.hostname;
-  if (host.includes('loca.lt') || (host !== 'localhost' && host !== '127.0.0.1')) {
+  if (host.includes('loca.lt')) {
     return 'https://aqario-luxe-eslam.loca.lt/api/v1';
   }
-  return 'http://localhost:5002/api/v1';
+  return 'https://aqario-luxe-apii.vercel.app/api/v1';
 };
 
 export const environment = {

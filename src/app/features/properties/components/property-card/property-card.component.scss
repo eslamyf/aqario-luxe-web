@@ -34,6 +34,7 @@
 
       .arrow-icon {
         transform: translateX(-4px);
+
         [dir="ltr"] & {
           transform: translateX(4px);
         }
@@ -286,6 +287,7 @@
 
   .arrow-icon {
     transition: transform 0.3s ease;
+
     [dir="rtl"] & {
       transform: rotate(180deg);
     }
