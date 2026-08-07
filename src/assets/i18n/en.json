@@ -141,10 +141,10 @@
       "ARCH_EXCELLENCE": "Architectural Excellence",
       "ARCH_SUB": "World-class design & quality",
       "GLOBAL_CITIES": "Global Cities",
-      "OUR_VALUE": "OUR VALUE",
-      "VALUE_TITLE": "Value We",
-      "VALUE_EMPHASIS": "Give to You",
-      "VALUE_SUB": "We are always ready to help by providing the best service. We believe a good place to live can make your life better.",
+      "OUR_VALUE": "What We Offer You",
+      "VALUE_TITLE": "We Make Finding the Right Property",
+      "VALUE_EMPHASIS": "Easier & More Confident",
+      "VALUE_SUB": "We provide clear property options that fit your needs and budget, with all the details you need to make the right decision with confidence.",
       "OUR_CONTACT": "OUR CONTACT US",
       "CONTACT_TITLE": "Easy to",
       "CONTACT_EMPHASIS": "Contact Us",
@@ -159,16 +159,16 @@
     },
     "VALUES": {
       "INTEREST_RATES": {
-        "TITLE": "Best Interest Rates on the Market",
-        "DESC": "We work with top financial institutions to secure the most competitive mortgage rates available globally, saving you thousands over the life of your investment."
+        "TITLE": "Clear Pricing from the Start",
+        "DESC": "See the property's price and details clearly, so you can make the right decision for your budget with no surprises."
       },
       "UNSTABLE_PRICES": {
-        "TITLE": "Prevent Unstable Prices",
-        "DESC": "Our AI-driven market analytics lock in fair valuations, shielding your investment from volatile fluctuations and ensuring long-term capital preservation."
+        "TITLE": "Options That Fit Your Needs",
+        "DESC": "Apartments, homes, land, and shops in different locations, making it easier to find what you're looking for."
       },
       "BEST_PRICE": {
-        "TITLE": "Best Price on the Market",
-        "DESC": "Access exclusive off-market listings and early access deals before they go public, negotiated directly by our expert team on your behalf."
+        "TITLE": "Everything You Need to Know",
+        "DESC": "See the property's location, price, and details before visiting, so you can make your decision with confidence."
       }
     },
     "CONTACT": {
