@@ -13,7 +13,7 @@
   justify-content: center;
   box-sizing: border-box;
   // Extra bottom padding so search-bar overlay doesn't hide content
-  padding-bottom: 160px;
+  padding-bottom: 220px;
   overflow: hidden;
 
   @media (max-width: 1024px) {
@@ -84,7 +84,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 220px);
   width: 100%;
 }
 
@@ -444,23 +444,26 @@
 // ── Search Bar Wrapper ────────────────────────────────────────
 .hero-search-wrap {
   position: absolute;
-  bottom: 0;
+  bottom: 36px;
   inset-inline-start: 0;
   inset-inline-end: 0;
   z-index: 10;
-  transform: translateY(50%);
+  transform: none;
   padding-inline: 60px;
 
   @media (max-width: 1024px) {
     padding-inline: 30px;
     position: relative;
+    bottom: auto;
     transform: none;
     margin-top: 40px;
+    margin-bottom: 36px;
     width: 100%;
   }
 
   @media (max-width: 768px) {
     padding-inline: 20px;
+    margin-bottom: 24px;
   }
 }
 
