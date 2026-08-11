@@ -360,72 +360,66 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   }
 
   openWhatsApp(property: Property): void {
-    if (!property?.owner?.phone) {
+    const prop = property as any;
+    const rawPhone = prop?.owner?.phone || prop?.agent?.phone || prop?.contactPhone;
+    if (!rawPhone) {
       this.notificationService.show(this.translateService.instant('PROPERTIES.DETAIL.NOTIF.WHATSAPP_NOT_AVAILABLE'), 'info');
       return;
     }
-    let phone = property.owner.phone.replace(/\D/g, '');
-    
+    let phone = String(rawPhone).replace(/\D/g, '');
+
     // Auto-format Egyptian numbers (01x) to international format (201x)
-    // WhatsApp Desktop drops the pre-filled text if the number is not in international format
     if (phone.startsWith('01') && phone.length === 11) {
       phone = '2' + phone;
     }
-    
-    const refNumber = this.generateReferenceNumber(property);
-    const message = this.translateService.instant('PROPERTIES.DETAIL.NOTIF.WHATSAPP_MESSAGE', { refNumber });
-    
+
+    const baseUrl = window.location.origin.includes('localhost')
+      ? 'https://aqario-luxe.vercel.app'
+      : window.location.origin;
+
+    const propertyCode = this.generateReferenceNumber(property);
+    const propertyUrl = `${baseUrl}/properties/${property._id}`;
+
+    const message = `مرحباً، أرغب في الاستفسار عن / حجز العقار:\n*${property.title}*\n(كود: ${propertyCode})\n\n🔗 الرابط:\n${propertyUrl}`;
+
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   }
 
   getEmailUrl(property: Property): string {
-    if (!property?.owner?.email) {
+    const email = property?.owner?.email || (property as any)?.agent?.email;
+    if (!email) {
       return 'javascript:void(0)';
     }
-    const refNumber = this.generateReferenceNumber(property);
-    const subject = this.translateService.instant('PROPERTIES.DETAIL.NOTIF.EMAIL_SUBJECT', { title: property.title });
-    const body = this.translateService.instant('PROPERTIES.DETAIL.NOTIF.EMAIL_BODY', { name: property.owner.name, refNumber });
-    // Using Gmail Web Compose URL to bypass issues where the user has no default OS mail client configured
-    return `https://mail.google.com/mail/?view=cm&fs=1&to=${property.owner.email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    const baseUrl = window.location.origin.includes('localhost')
+      ? 'https://aqario-luxe.vercel.app'
+      : window.location.origin;
+
+    const propertyCode = this.generateReferenceNumber(property);
+    const propertyUrl = `${baseUrl}/properties/${property._id}`;
+
+    const subject = `استفسار / حجز عقار: ${property.title}`;
+    const body = `مرحباً، أرغب في الاستفسار عن / حجز العقار:\n${property.title}\n(كود: ${propertyCode})\n\n🔗 الرابط:\n${propertyUrl}`;
+
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
+  /**
+   * Generates a clean, standardized, sequential reference code in English (e.g. AQR-1001, AQR-1002).
+   * Simple, English only, uniform pattern with clean incremental sequence.
+   */
   generateReferenceNumber(property: Property | null): string {
-    if (!property) return '';
+    if (!property) return 'AQR-1001';
 
-    // 1. Owner initials (e.g., "Eslam Yasser" -> "EY")
-    let ownerInitials = 'AG';
-    if (property.owner?.name) {
-      const nameParts = property.owner.name.split(' ').filter(p => p.length > 0);
-      if (nameParts.length > 1) {
-        ownerInitials = (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
-      } else if (nameParts.length === 1) {
-        ownerInitials = nameParts[0].substring(0, 2).toUpperCase();
-      }
+    // Extract a deterministic 4-digit sequential integer (1001-9999) from property._id
+    const id = property._id || '1001';
+    let numericHash = 0;
+    for (let i = 0; i < id.length; i++) {
+      numericHash = (numericHash * 31 + id.charCodeAt(i)) % 8999;
     }
+    const sequenceNumber = 1000 + Math.abs(numericHash);
 
-    // 2. Property initials (first 2 words, e.g., "Luxury Penthouse" -> "LP")
-    let propInitials = 'PR';
-    if (property.title) {
-      const titleParts = property.title.split(' ').filter(p => p.length > 0);
-      if (titleParts.length > 1) {
-        propInitials = (titleParts[0].charAt(0) + titleParts[1].charAt(0)).toUpperCase();
-      } else if (titleParts.length === 1) {
-        propInitials = titleParts[0].substring(0, 2).toUpperCase();
-      }
-    }
-
-    // 3. City code (e.g., "Dubai" -> "DUB")
-    let cityCode = 'LOC';
-    if (property.city) {
-      cityCode = property.city.substring(0, 3).toUpperCase();
-    } else if (property.location) {
-      cityCode = property.location.substring(0, 3).toUpperCase();
-    }
-
-    // 4. Unique ID chunk (last 4 chars)
-    const uniqueId = property._id ? property._id.substring(property._id.length - 4).toUpperCase() : '0000';
-
-    return `${ownerInitials}-${propInitials}-${cityCode}-${uniqueId}`;
+    return `AQR-${sequenceNumber}`;
   }
 }

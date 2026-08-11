@@ -37,11 +37,11 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
   @Input() isFirst = false;
 
   // ── Outputs ────────────────────────────────────────────────────────────────
-  @Output() favoriteToggled  = new EventEmitter<string>();
+  @Output() favoriteToggled = new EventEmitter<string>();
 
   // ── Local state ────────────────────────────────────────────────────────────
-  isFavorited  = false;
-  imageError   = false;
+  isFavorited = false;
+  imageError = false;
 
   private destroy$ = new Subject<void>();
 
@@ -91,5 +91,38 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
 
   onImageError(): void {
     this.imageError = true;
+  }
+
+  onCallClick(event: MouseEvent): void {
+    event.stopPropagation();
+    const prop = this.property as any;
+    const phone = prop?.owner?.phone || prop?.agent?.phone || prop?.contactPhone || '+201000000000';
+    window.location.href = `tel:${phone}`;
+  }
+
+  onWhatsAppClick(event: MouseEvent): void {
+    event.stopPropagation();
+    const prop = this.property as any;
+    const rawPhone = prop?.owner?.phone || prop?.agent?.phone || prop?.contactPhone || '201000000000';
+    let cleanPhone = String(rawPhone).replace(/[^0-9]/g, '');
+    if (cleanPhone.startsWith('01') && cleanPhone.length === 11) {
+      cleanPhone = '2' + cleanPhone;
+    }
+
+    let hash = 0;
+    const id = this.property._id || '1001';
+    for (let i = 0; i < id.length; i++) {
+      hash = (hash * 31 + id.charCodeAt(i)) % 8999;
+    }
+    const propertyCode = `AQR-${1000 + Math.abs(hash)}`;
+
+    const baseUrl = window.location.origin.includes('localhost')
+      ? 'https://aqario-luxe.vercel.app'
+      : window.location.origin;
+
+    const propertyUrl = `${baseUrl}/properties/${this.property._id}`;
+
+    const message = `مرحباً، أرغب في الاستفسار عن / حجز العقار:\n*${this.property.title}*\n(كود: ${propertyCode})\n\n🔗 الرابط:\n${propertyUrl}`;
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
   }
 }

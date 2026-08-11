@@ -64,6 +64,14 @@ export interface Property {
     photo?: string;
     bio?: string;
   };
+  agent?: {
+    _id?: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+    photo?: string;
+  };
+  contactPhone?: string;
   isApproved: boolean;
   promotionScore: number;
   promotion: {
