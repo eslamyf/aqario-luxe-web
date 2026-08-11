@@ -224,11 +224,27 @@
 
 .property-price {
   font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--brand-gold);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
   margin-bottom: 16px;
-  letter-spacing: -0.3px;
+
+  .price-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--brand-gold);
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+
+  .price-unit {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
 }
 
 .property-features {

@@ -152,6 +152,16 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.openAccordion = this.openAccordion === index ? null : index;
   }
 
+  scrollProps(direction: 'left' | 'right'): void {
+    const grid = document.querySelector('.featured-section .props-grid');
+    if (grid) {
+      const scrollAmount = direction === 'left' ? -380 : 380;
+      grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    } else {
+      this.router.navigate(['/properties']);
+    }
+  }
+
   navigateToProperties(): void {
     this.router.navigate(['/properties']);
   }

@@ -112,6 +112,41 @@ h6 {
   color: var(--text-main);
 }
 
+// Arabic Typography Fix: Prevent letter-spacing from breaking Arabic script ligatures
+[dir='rtl'],
+:lang(ar),
+[lang='ar'] {
+  font-family: 'Cairo', 'DM Sans', sans-serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .hero-headline,
+  .hero-eyebrow,
+  .btn-primary,
+  .btn-secondary,
+  .btn-search,
+  .btn-signin,
+  .btn-list,
+  .nav-links a,
+  .stat-label,
+  .ticker-label,
+  .field-label,
+  .section-eyebrow,
+  .section-title {
+    letter-spacing: 0 !important;
+    word-spacing: normal;
+  }
+
+  .hero-headline {
+    font-family: 'Cairo', var(--font-display);
+    font-weight: 700;
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;

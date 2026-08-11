@@ -14,102 +14,102 @@
 // ---- DARK MODE (Default — :root) ---------------------------
 :root {
   // ── Semantic Surface Tokens ──────────────────────────────
-  --bg-base:           #0F1115;   // Deep slate — page bg
-  --bg-surface:        #161B22;   // GitHub-style dark surface
-  --bg-elevated:       #1C2128;   // Cards, panels
-  --bg-input:          #22272E;   // Input fields, selects
-  --bg-deep:           #0D1117;   // Deep elements
+  --bg-base: #0F1115; // Deep slate — page bg
+  --bg-surface: #161B22; // GitHub-style dark surface
+  --bg-elevated: #1C2128; // Cards, panels
+  --bg-input: #22272E; // Input fields, selects
+  --bg-deep: #0D1117; // Deep elements
 
   // ── Semantic Text Tokens ──────────────────────────────────
-  --text-main:         #F9FAFB;   // Crisp off-white
-  --text-muted:        #9CA3AF;   // Muted slate gray
-  --text-primary:      var(--text-main);
-  --text-secondary:    var(--text-muted);
-  --placeholder-color: #6B7280;   // Search/input placeholder
+  --text-main: #F9FAFB; // Crisp off-white
+  --text-muted: #9CA3AF; // Muted slate gray
+  --text-primary: var(--text-main);
+  --text-secondary: var(--text-muted);
+  --placeholder-color: #6B7280; // Search/input placeholder
 
   // ── Semantic Border / Overlay ────────────────────────────
-  --border-color:      rgba(255, 255, 255, 0.1);
-  --overlay-color:     rgba(15, 17, 21, 0.95);
-  --surface-glass:     rgba(15, 17, 21, 0.82);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --overlay-color: rgba(15, 17, 21, 0.95);
+  --surface-glass: rgba(15, 17, 21, 0.82);
 
   // ── Brand Gold ───────────────────────────────────────────
-  --brand-gold:        #C9A96E;
-  --brand-gold-light:  #E8D5B0;
-  --brand-gold-dark:   #8B6914;
-  --brand-gold-soft:   rgba(201, 169, 110, 0.15);
+  --brand-gold: #C9A96E;
+  --brand-gold-light: #E8D5B0;
+  --brand-gold-dark: #8B6914;
+  --brand-gold-soft: rgba(201, 169, 110, 0.15);
 
   // ── Hero Layer Tokens ─────────────────────────────────────
   --hero-gradient-start: #0F1115;
-  --hero-gradient-mid:   #161B22;
-  --hero-gradient-end:   #1C2128;
-  --hero-grid-color:     rgba(255, 255, 255, 0.03);
-  --hero-orb-gold:       rgba(201, 169, 110, 0.1);
-  --hero-orb-sapphire:   rgba(41, 128, 185, 0.08);
-  --ticker-bg:           rgba(15, 17, 21, 0.90);
-  --ticker-border:       rgba(255, 255, 255, 0.08);
+  --hero-gradient-mid: #161B22;
+  --hero-gradient-end: #1C2128;
+  --hero-grid-color: rgba(255, 255, 255, 0.03);
+  --hero-orb-gold: rgba(201, 169, 110, 0.1);
+  --hero-orb-sapphire: rgba(41, 128, 185, 0.08);
+  --ticker-bg: rgba(15, 17, 21, 0.90);
+  --ticker-border: rgba(255, 255, 255, 0.08);
 
   // ── Shadows ───────────────────────────────────────────────
-  --shadow-soft:         0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  --shadow-pop:          0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --shadow-gold:         0 10px 15px -3px rgba(201, 169, 110, 0.15);
+  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-pop: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-gold: 0 10px 15px -3px rgba(201, 169, 110, 0.15);
 
   // ── Noise & Misc ─────────────────────────────────────────
-  --noise-opacity:       0.015;
+  --noise-opacity: 0.015;
 
   // ── RGB Channel Splits (for rgba() in SCSS) ──────────────
-  --bg-surface-rgb:    22, 27, 34;
-  --text-main-rgb:     249, 250, 251;
-  --text-muted-rgb:    156, 163, 175;
+  --bg-surface-rgb: 22, 27, 34;
+  --text-main-rgb: 249, 250, 251;
+  --text-muted-rgb: 156, 163, 175;
 
   // ── Legacy Alias Tokens ───────────────────────────────────
   // These point to semantic tokens so components using the old
   // naming continue to work and automatically theme-switch.
-  --obsidian:          var(--bg-base);
-  --obsidian-2:        var(--bg-surface);
-  --obsidian-3:        var(--bg-elevated);
-  --obsidian-4:        var(--bg-deep);
-  --slate:             #2E2E3E;
-  --white:             var(--text-main);
-  --mist:              var(--text-muted);
-  --gold:              var(--brand-gold);
-  --gold-light:        var(--brand-gold-light);
-  --gold-dark:         var(--brand-gold-dark);
-  --pearl:             #F4F1EB;
+  --obsidian: var(--bg-base);
+  --obsidian-2: var(--bg-surface);
+  --obsidian-3: var(--bg-elevated);
+  --obsidian-4: var(--bg-deep);
+  --slate: #2E2E3E;
+  --white: var(--text-main);
+  --mist: var(--text-muted);
+  --gold: var(--brand-gold);
+  --gold-light: var(--brand-gold-light);
+  --gold-dark: var(--brand-gold-dark);
+  --pearl: #F4F1EB;
 
   // Status / accent (not themed — consistent across modes)
-  --crimson:           #C0392B;
-  --emerald:           #27AE60;
-  --sapphire:          #2980B9;
+  --crimson: #C0392B;
+  --emerald: #27AE60;
+  --sapphire: #2980B9;
 
   // ── Typography ───────────────────────────────────────────
   --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'DM Sans', 'Helvetica Neue', sans-serif;
-  --font-mono:    'Space Mono', 'Courier New', monospace;
+  --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: 'Space Mono', 'Courier New', monospace;
 
   // ── Easing Curves ────────────────────────────────────────
-  --transition:        cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --transition-fast:   all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition-base:   all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition-slow:   all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-fast: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-base: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-slow: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   // ── Spacing Scale ─────────────────────────────────────────
-  --space-xs:  4px;
-  --space-sm:  8px;
-  --space-md:  16px;
-  --space-lg:  24px;
-  --space-xl:  40px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
   --space-2xl: 60px;
   --space-3xl: 96px;
 
   // ── Z-Index Layers ───────────────────────────────────────
-  --z-base:         1;
-  --z-overlay:      100;
-  --z-modal:        500;
-  --z-nav:          1000;
+  --z-base: 1;
+  --z-overlay: 100;
+  --z-modal: 500;
+  --z-nav: 1000;
   --z-notification: 9000;
-  --z-noise:        9999;
-  --z-cursor:       99999;
+  --z-noise: 9999;
+  --z-cursor: 99999;
 
   // ── Container ────────────────────────────────────────────
   --container-max: 1400px;
@@ -123,95 +123,95 @@
 // MUST be a top-level rule — never nest inside :root
 [data-theme='light'] {
   // ── Semantic Surface Tokens ──────────────────────────────
-  --bg-base:           #F8FAFC;   // Soft alabaster / ivory slate background
-  --bg-surface:        #FFFFFF;   // Crisp Pure White — cards and elevated sections
-  --bg-elevated:       #FFFFFF;   // Elevated cards
-  --bg-input:          #F1F5F9;   // Input fields & subtle wells
-  --bg-deep:           #E2E8F0;   // Nested/deep elements, hover states
+  --bg-base: #F8FAFC; // Soft alabaster / ivory slate background
+  --bg-surface: #FFFFFF; // Crisp Pure White — cards and elevated sections
+  --bg-elevated: #FFFFFF; // Elevated cards
+  --bg-input: #F1F5F9; // Input fields & subtle wells
+  --bg-deep: #E2E8F0; // Nested/deep elements, hover states
 
   // ── Semantic Text Tokens ──────────────────────────────────
-  --text-main:         #0F172A;   // Deep Slate Black — max contrast & legibility
-  --text-muted:        #334155;   // Dark Slate Gray — 7:1 WCAG contrast
-  --text-primary:      #0F172A;
-  --text-secondary:    #334155;
-  --placeholder-color: #64748B;   // Clear slate placeholder
+  --text-main: #0F172A; // Deep Slate Black — max contrast & legibility
+  --text-muted: #334155; // Dark Slate Gray — 7:1 WCAG contrast
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --placeholder-color: #64748B; // Clear slate placeholder
 
   // ── Semantic Border / Overlay ────────────────────────────
-  --border-color:      rgba(15, 23, 42, 0.12); // Refined soft slate border (no harsh black)
-  --overlay-color:     rgba(255, 255, 255, 0.95);
-  --surface-glass:     rgba(255, 255, 255, 0.88);
+  --border-color: rgba(15, 23, 42, 0.12); // Refined soft slate border (no harsh black)
+  --overlay-color: rgba(255, 255, 255, 0.95);
+  --surface-glass: rgba(255, 255, 255, 0.88);
 
   // ── Brand Gold (Deep rich warm gold for high contrast on light bg) ──
-  --brand-gold:        #8C6207;   // Deep Rich Luxury Gold (4.8:1 WCAG contrast on white)
-  --brand-gold-light:  #B8860B;   // Warm Amber Gold
-  --brand-gold-dark:   #5E4204;   // Deep Bronze
-  --brand-gold-soft:   rgba(140, 98, 7, 0.12);
+  --brand-gold: #8C6207; // Deep Rich Luxury Gold (4.8:1 WCAG contrast on white)
+  --brand-gold-light: #B8860B; // Warm Amber Gold
+  --brand-gold-dark: #5E4204; // Deep Bronze
+  --brand-gold-soft: rgba(140, 98, 7, 0.12);
 
   // ── Hero Layer Tokens ─────────────────────────────────────
   --hero-gradient-start: #FFFFFF;
-  --hero-gradient-mid:   #F8FAFC;
-  --hero-gradient-end:   #F1F5F9;
-  --hero-grid-color:     rgba(0, 0, 0, 0.04);
-  --hero-orb-gold:       rgba(140, 98, 7, 0.08);
-  --hero-orb-sapphire:   rgba(41, 128, 185, 0.06);
-  --ticker-bg:           rgba(255, 255, 255, 0.96);
-  --ticker-border:       rgba(15, 23, 42, 0.10);
+  --hero-gradient-mid: #F8FAFC;
+  --hero-gradient-end: #F1F5F9;
+  --hero-grid-color: rgba(0, 0, 0, 0.04);
+  --hero-orb-gold: rgba(140, 98, 7, 0.08);
+  --hero-orb-sapphire: rgba(41, 128, 185, 0.06);
+  --ticker-bg: rgba(255, 255, 255, 0.96);
+  --ticker-border: rgba(15, 23, 42, 0.10);
 
   // ── Shadows (crisp elevation) ─────────────────────────────
-  --shadow-soft:         0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-  --shadow-pop:          0 12px 24px -4px rgba(15, 23, 42, 0.10), 0 4px 8px -2px rgba(15, 23, 42, 0.05);
-  --shadow-gold:         0 10px 20px -3px rgba(140, 98, 7, 0.20);
+  --shadow-soft: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --shadow-pop: 0 12px 24px -4px rgba(15, 23, 42, 0.10), 0 4px 8px -2px rgba(15, 23, 42, 0.05);
+  --shadow-gold: 0 10px 20px -3px rgba(140, 98, 7, 0.20);
 
   // ── Noise & Misc ─────────────────────────────────────────
-  --noise-opacity:       0.01;
+  --noise-opacity: 0.01;
 
   // ── RGB Channel Splits ────────────────────────────────────
-  --bg-surface-rgb:    255, 255, 255;
-  --text-main-rgb:     15, 23, 42;
-  --text-muted-rgb:    51, 65, 85;
+  --bg-surface-rgb: 255, 255, 255;
+  --text-main-rgb: 15, 23, 42;
+  --text-muted-rgb: 51, 65, 85;
 
   // ── Legacy Aliases (auto-update via semantic tokens) ──────
-  --obsidian:          var(--bg-base);
-  --obsidian-2:        var(--bg-surface);
-  --obsidian-3:        var(--bg-elevated);
-  --obsidian-4:        var(--bg-deep);
-  --white:             var(--text-main);
-  --mist:              var(--text-muted);
-  --gold:              var(--brand-gold);
-  --gold-light:        var(--brand-gold-light);
-  --gold-dark:         var(--brand-gold-dark);
+  --obsidian: var(--bg-base);
+  --obsidian-2: var(--bg-surface);
+  --obsidian-3: var(--bg-elevated);
+  --obsidian-4: var(--bg-deep);
+  --white: var(--text-main);
+  --mist: var(--text-muted);
+  --gold: var(--brand-gold);
+  --gold-light: var(--brand-gold-light);
+  --gold-dark: var(--brand-gold-dark);
 }
 
 
 // ---- SCSS Compile-Time Variables ----------------------------
 // Used for SCSS functions/logic only (not CSS custom properties)
-$gold:       #C9A96E;
+$gold: #C9A96E;
 $gold-light: #E8D5B0;
-$gold-dark:  #8B6914;
-$obsidian:   #0A0A0F;
+$gold-dark: #8B6914;
+$obsidian: #0A0A0F;
 $obsidian-2: #111118;
 $obsidian-3: #1A1A24;
 $obsidian-4: #22222E;
-$slate:      #2E2E3E;
-$mist:       #8A8AA0;
-$pearl:      #F4F1EB;
-$white:      #FAFAF8;
-$crimson:    #C0392B;
-$emerald:    #27AE60;
-$sapphire:   #2980B9;
+$slate: #2E2E3E;
+$mist: #8A8AA0;
+$pearl: #F4F1EB;
+$white: #FAFAF8;
+$crimson: #C0392B;
+$emerald: #27AE60;
+$sapphire: #2980B9;
 
 // Breakpoints
-$bp-mobile:  480px;
-$bp-tablet:  768px;
+$bp-mobile: 480px;
+$bp-tablet: 768px;
 $bp-desktop: 1024px;
-$bp-wide:    1400px;
+$bp-wide: 1400px;
 
 
 // ---- Mixins -------------------------------------------------
 
 @mixin container {
   max-width: var(--container-max);
-  margin-inline: auto;    // RTL-safe (no margin-left/right)
+  margin-inline: auto; // RTL-safe (no margin-left/right)
   padding-inline: var(--container-pad);
 
   @media (max-width: 768px) {
@@ -247,13 +247,19 @@ $bp-wide:    1400px;
 
 // gold-border: themed via --border-color token
 @mixin gold-border($side: 'all') {
-  @if $side == 'all' {
+  @if $side =='all' {
     border: 1px solid var(--border-color);
-  } @else if $side == 'bottom' {
+  }
+
+  @else if $side =='bottom' {
     border-bottom: 1px solid var(--border-color);
-  } @else if $side == 'top' {
+  }
+
+  @else if $side =='top' {
     border-top: 1px solid var(--border-color);
-  } @else if $side == 'left' {
+  }
+
+  @else if $side =='left' {
     border-inline-start: 1px solid var(--border-color);
   }
 }

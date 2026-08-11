@@ -15,8 +15,8 @@
         <h2 class="section-title">{{ 'HOME.SECTIONS.POPULAR_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.POPULAR_EMPHASIS' | translate }}</em></h2>
       </div>
       <div class="section-nav">
-        <button class="nav-arrow" (click)="navigateToProperties()" id="btn-prev-props" aria-label="Previous">‹</button>
-        <button class="nav-arrow" (click)="navigateToProperties()" id="btn-next-props" aria-label="Next">›</button>
+        <button class="nav-arrow" (click)="scrollProps('left')" id="btn-prev-props" aria-label="Previous">‹</button>
+        <button class="nav-arrow" (click)="scrollProps('right')" id="btn-next-props" aria-label="Next">›</button>
       </div>
     </div>
 

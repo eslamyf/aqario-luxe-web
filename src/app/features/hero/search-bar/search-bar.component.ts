@@ -78,10 +78,10 @@ export class SearchBarComponent {
 
   onExplore(): void {
     const { searchQuery, propertyType, listingType, budget } = this.searchForm.value;
-    
+
     const input = (searchQuery || '').trim();
     const isAdvancedSearch = input.includes(' ') || input.length > 10;
-    
+
     const payload: SearchPayload = {
       search: isAdvancedSearch && input ? input : undefined,
       city: !isAdvancedSearch && input ? input : undefined,

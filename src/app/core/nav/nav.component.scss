@@ -480,7 +480,7 @@
   z-index: 1000 !important;
   background: transparent;
   border: none;
-  color: #e5c158;
+  color: var(--text-muted);
   width: 36px;
   height: 36px;
   cursor: pointer;
@@ -490,6 +490,7 @@
     transform 0.4s var(--transition);
 
   &:hover {
+    color: var(--brand-gold);
     transform: rotate(15deg) scale(1.1);
   }
 

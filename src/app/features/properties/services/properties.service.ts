@@ -319,42 +319,59 @@ export class PropertiesService {
     } as any;
   }
 
-  // ── Price formatting ──────────────────────────────────────────────────────
-  formatPrice(price: number, currency: string, status: 'for-sale' | 'for-rent'): string {
+  formatPriceParts(price: number, currency: string = 'EGP', status?: 'for-sale' | 'for-rent'): { value: string; unit: string } {
     const isAr = (this.translateService.currentLang || this.translateService.defaultLang) === 'ar';
+    const activeCurr = currency || 'EGP';
 
     const symbols: Record<string, string> = {
       USD: isAr ? 'دولار' : '$',
       GBP: isAr ? 'جنيه إسترليني' : '£',
       EUR: isAr ? 'يورو' : '€',
-      AED: isAr ? 'درهم إماراتي' : 'AED ',
-      SAR: isAr ? 'ريال سعودي' : 'SAR ',
-      EGP: isAr ? 'جنيه مصري' : 'EGP ',
+      AED: isAr ? 'درهم' : 'AED',
+      SAR: isAr ? 'ريال' : 'SAR',
+      EGP: isAr ? 'جنيه مصري' : 'EGP',
     };
-    const symbol = symbols[currency] ?? (isAr ? currency : '$');
+    const symbol = symbols[activeCurr] ?? (isAr ? activeCurr : 'EGP');
 
-    let formatted = '';
+    let value = '';
+    let unit = '';
+
     if (isAr) {
-      formatted =
-        price >= 1_000_000
-          ? `${(price / 1_000_000).toFixed(1)} مليون ${symbol}`
-          : price >= 1_000
-            ? `${(price / 1_000).toFixed(0)} ألف ${symbol}`
-            : `${price.toLocaleString('en-US')} ${symbol}`;
+      if (price >= 1_000_000) {
+        value = (price / 1_000_000).toFixed(1);
+        unit = `مليون ${symbol}`;
+      } else if (price >= 1_000) {
+        value = (price / 1_000).toFixed(0);
+        unit = `ألف ${symbol}`;
+      } else {
+        value = price.toLocaleString('en-US');
+        unit = symbol;
+      }
     } else {
-      formatted =
-        price >= 1_000_000
-          ? `${symbol}${(price / 1_000_000).toFixed(1)}M`
-          : price >= 1_000
-            ? `${symbol}${(price / 1_000).toFixed(0)}K`
-            : `${symbol}${price.toLocaleString()}`;
+      if (price >= 1_000_000) {
+        value = (price / 1_000_000).toFixed(1);
+        unit = `M ${symbol}`;
+      } else if (price >= 1_000) {
+        value = (price / 1_000).toFixed(0);
+        unit = `K ${symbol}`;
+      } else {
+        value = price.toLocaleString();
+        unit = symbol;
+      }
     }
 
     if (status === 'for-rent') {
-      const suffix = isAr ? ' / شهرياً' : ' / mo';
-      return `${formatted}${suffix}`;
+      unit += isAr ? ' / شهرياً' : ' / mo';
     }
-    return formatted;
+
+    return { value, unit };
+  }
+
+  // ── Price formatting ──────────────────────────────────────────────────────
+  formatPrice(price: number, currency: string, status: 'for-sale' | 'for-rent'): string {
+    const parts = this.formatPriceParts(price, currency, status);
+    const isAr = (this.translateService.currentLang || this.translateService.defaultLang) === 'ar';
+    return isAr ? `${parts.value} ${parts.unit}` : `${parts.unit} ${parts.value}`;
   }
 }
 

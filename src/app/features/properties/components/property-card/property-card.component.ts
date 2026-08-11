@@ -60,10 +60,18 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  get priceParts(): { value: string; unit: string } {
+    return this.propertiesService.formatPriceParts(
+      this.property.price,
+      this.property.currency ?? 'EGP',
+      this.property.status
+    );
+  }
+
   get formattedPrice(): string {
     return this.propertiesService.formatPrice(
       this.property.price,
-      this.property.currency ?? 'USD',
+      this.property.currency ?? 'EGP',
       this.property.status
     );
   }

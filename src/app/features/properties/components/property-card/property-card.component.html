@@ -71,7 +71,8 @@
 
       <!-- Price -->
       <div class="property-price">
-        {{ formattedPrice }}
+        <span class="price-value">{{ priceParts.value }}</span>
+        <span class="price-unit">{{ priceParts.unit }}</span>
       </div>
     </div>
 
@@ -79,7 +80,7 @@
     <div class="property-features" *ngIf="property.bedrooms || property.bathrooms || property.area">
       <div *ngIf="property.bedrooms" class="property-feature">
         <span class="feature-icon-wrapper">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
             <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"></path>
           </svg>
         </span>
@@ -87,7 +88,7 @@
       </div>
       <div *ngIf="property.bathrooms" class="property-feature">
         <span class="feature-icon-wrapper">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
             <path d="M9 9a3 3 0 1 1 6 0M12 12v3M2 15h20M20 15v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2"></path>
           </svg>
         </span>
@@ -95,7 +96,7 @@
       </div>
       <div *ngIf="property.area" class="property-feature">
         <span class="feature-icon-wrapper">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             <path d="M9 3v18M15 3v18M3 9h18M3 15h18"></path>
           </svg>
