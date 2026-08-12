@@ -76,21 +76,37 @@ $red: var(--crimson);
       cursor: pointer;
       transition: all 0.3s;
       z-index: 10;
+      color: var(--white);
+      font-size: 18px;
 
-      &::before {
-        content: '❤';
-        font-size: 20px;
-        color: $white;
-        transition: color 0.3s;
+      i {
+        font-size: 18px;
+        color: var(--white);
+        transition: transform 0.25s ease, color 0.25s ease;
+      }
+
+      &:hover {
+        transform: scale(1.1);
+        border-color: var(--brand-gold, #C9A96E);
+        color: var(--brand-gold, #C9A96E);
+
+        i {
+          color: var(--brand-gold, #C9A96E);
+        }
       }
 
       &.active {
-        background: $gold;
-        border-color: $gold;
-        &::before { color: $obsidian; }
-      }
+        background: #ffffff;
+        border-color: #ffffff;
+        color: var(--brand-gold, #C9A96E);
+        box-shadow: 0 4px 18px rgba(201, 169, 110, 0.55);
 
-      &:hover { transform: scale(1.1); }
+        i {
+          color: var(--brand-gold, #C9A96E);
+          transform: scale(1.15);
+          filter: drop-shadow(0 0 2px rgba(201, 169, 110, 0.6));
+        }
+      }
     }
 
     .property-badge {

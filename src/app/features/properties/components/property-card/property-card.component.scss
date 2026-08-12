@@ -171,20 +171,26 @@
   &:hover {
     transform: scale(1.1);
     background: #ffffff;
-    color: #e11d48;
+    color: var(--brand-gold, #C9A96E);
     border-color: #ffffff;
-    box-shadow: 0 6px 16px rgba(225, 29, 72, 0.3);
+    box-shadow: 0 6px 18px rgba(201, 169, 110, 0.4);
 
     .heart-icon {
       transform: scale(1.15);
+      color: var(--brand-gold, #C9A96E);
     }
   }
 
   &--active {
     background: #ffffff;
-    color: #e11d48;
+    color: var(--brand-gold, #C9A96E);
     border-color: #ffffff;
-    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+    box-shadow: 0 4px 16px rgba(201, 169, 110, 0.5);
+
+    .heart-icon {
+      color: var(--brand-gold, #C9A96E);
+      filter: drop-shadow(0 0 2px rgba(201, 169, 110, 0.6));
+    }
   }
 }
 

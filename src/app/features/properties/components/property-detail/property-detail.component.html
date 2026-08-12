@@ -23,8 +23,8 @@
       <div class="gallery-section">
         <div class="main-image-wrap">
           <img [src]="property.images[activeImageIndex]" [alt]="property.title" loading="lazy" class="main-image">
-          <button class="fav-btn" [class.active]="isFavorited$ | async" (click)="onToggleFavorite(property._id)">
-            <i class="fa-solid fa-heart" aria-hidden="true"></i>
+          <button class="fav-btn" [class.active]="isFavorited$ | async" (click)="onToggleFavorite(property._id)" aria-label="Toggle Favorite">
+            <i [class]="(isFavorited$ | async) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'" aria-hidden="true"></i>
           </button>
           <div class="property-badge">{{ property.badge }}</div>
         </div>
