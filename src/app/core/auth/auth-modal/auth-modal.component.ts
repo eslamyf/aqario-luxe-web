@@ -232,6 +232,11 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         // Reset state when opening
         this.isFormSubmitted = false;
         this.errorMsg = '';
+
+        // Auto-preload Google OAuth script & overlay button for instant 1-click login
+        setTimeout(() => {
+          this.preloadGoogleAuth();
+        }, 50);
       }
     });
 
@@ -576,8 +581,19 @@ export class AuthModalComponent implements OnInit, OnDestroy {
           throw new Error('Google Identity Services have not been initialized.');
         }
 
-        this.showGoogleNativeButton = true;
         this.renderGoogleButton();
+
+        // Prompt Google Account Chooser immediately on single click
+        google.accounts.id.prompt((notification: any) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            const container = document.getElementById('google-signin-button-container');
+            const nativeBtn = container?.querySelector('div[role="button"]') as HTMLElement | null;
+            if (nativeBtn) {
+              nativeBtn.click();
+            }
+          }
+        });
+
         this.isGoogleLoading = false;
       })
       .catch((err: any) => {
@@ -592,6 +608,14 @@ export class AuthModalComponent implements OnInit, OnDestroy {
           'error'
         );
       });
+  }
+
+  private preloadGoogleAuth(): void {
+    if (!this.isGoogleConfigured) return;
+    this.loadGoogleScript()
+      .then(() => this.initGoogleAccounts())
+      .then(() => this.renderGoogleButton())
+      .catch(() => {});
   }
 
 }

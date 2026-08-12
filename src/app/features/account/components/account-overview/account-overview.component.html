@@ -2,7 +2,7 @@
   
   <!-- Premium Header Area -->
   <div class="glass-header">
-    <div class="header-main">
+    <div class="header-top">
       <div class="avatar-container">
         <div class="avatar-ring" [class.verified]="user.isVerified">
           <img [src]="user.photo || 'assets/images/default-avatar.png'" 
@@ -11,7 +11,7 @@
                (error)="$any($event.target).src = 'https://ui-avatars.com/api/?name=' + user.name + '&background=C9A96E&color=000&size=256'">
         </div>
 
-        <!-- Buttons moved below the circle -->
+        <!-- Buttons below the circle -->
         <div class="photo-actions">
           <ng-container *ngIf="!isUploadingPhoto; else uploadingSpinner">
             <label for="photo-upload" class="action-btn upload" [title]="'ACCOUNT.CHANGE_PHOTO' | translate">
@@ -45,7 +45,7 @@
         <p class="email">{{ user.email }}</p>
         <div class="status-indicators">
           <div class="indicator" [class.active]="user.isVerified">
-            <i class="fa-solid" [class.fa-check-circle]="user.isVerified" [class.fa-circle-xmark]="!user.isVerified"></i>
+            <i class="fa-solid" [class.fa-circle-check]="user.isVerified" [class.fa-circle-xmark]="!user.isVerified"></i>
             <span>{{ (user.isVerified ? 'ACCOUNT.VERIFIED_IDENTITY' : 'ACCOUNT.UNVERIFIED_ACCOUNT') | translate }}</span>
           </div>
           <div class="indicator kyc" [ngClass]="user.kycStatus" *ngIf="user.role !== 'admin'">
@@ -54,17 +54,18 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="header-actions" *ngIf="user.role === 'admin' || user.role === 'owner'">
-        <a *ngIf="user.role === 'admin'" routerLink="/admin" class="btn-dashboard">
-          <i class="fa-solid fa-gauge-high"></i>
-          <span>{{ 'ACCOUNT.GO_TO_ADMIN_DASHBOARD' | translate }}</span>
-        </a>
-        <a *ngIf="user.role === 'owner'" routerLink="/dashboard" class="btn-dashboard">
-          <i class="fa-solid fa-gauge-high"></i>
-          <span>{{ 'ACCOUNT.GO_TO_OWNER_DASHBOARD' | translate }}</span>
-        </a>
-      </div>
+    <!-- Dashboard Action Button at Bottom -->
+    <div class="header-bottom-actions" *ngIf="user.role === 'admin' || user.role === 'owner'">
+      <a *ngIf="user.role === 'admin'" routerLink="/admin" class="btn-dashboard">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>{{ 'ACCOUNT.GO_TO_ADMIN_DASHBOARD' | translate }}</span>
+      </a>
+      <a *ngIf="user.role === 'owner'" routerLink="/dashboard" class="btn-dashboard">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>{{ 'ACCOUNT.GO_TO_OWNER_DASHBOARD' | translate }}</span>
+      </a>
     </div>
   </div>
 

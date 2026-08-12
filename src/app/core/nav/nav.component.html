@@ -15,7 +15,7 @@
     <div class="nav-actions">
       <button id="btn-lang-toggle" type="button" class="btn-lang-toggle" (click)="toggleLanguage()"
         [attr.aria-label]="(lang$ | async) === 'en' ? 'Switch to Arabic' : 'Switch to English'" data-cursor-hover>
-        <span class="lang-text"><i class="ph ph-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN'
+        <span class="lang-text"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN'
           }}</span>
       </button>
 
@@ -23,22 +23,8 @@
         [attr.aria-label]="(theme$ | async) === 'light' ? 'Switch to dark mode' : 'Switch to light mode'"
         data-cursor-hover>
         <span class="theme-icon" aria-hidden="true">
-          <svg *ngIf="(theme$ | async) === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" width="16" height="16">
-            <circle cx="12" cy="12" r="5" />
-            <line x1="12" y1="1" x2="12" y2="3" />
-            <line x1="12" y1="21" x2="12" y2="23" />
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-            <line x1="1" y1="12" x2="3" y2="12" />
-            <line x1="21" y1="12" x2="23" y2="12" />
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-          </svg>
-          <svg *ngIf="(theme$ | async) === 'light'" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" width="16" height="16">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
+          <i *ngIf="(theme$ | async) === 'dark'" class="fa-solid fa-sun"></i>
+          <i *ngIf="(theme$ | async) === 'light'" class="fa-solid fa-moon"></i>
         </span>
       </button>
 
@@ -46,11 +32,7 @@
       <div class="notifications-wrapper notifications-dropdown-container">
         <button type="button" class="btn-notification" (click)="toggleNotifications($event)" data-cursor-hover
           aria-label="Notifications">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
+          <i class="fa-solid fa-bell"></i>
           <span class="notification-badge" *ngIf="((notificationsApi.unreadCount$ | async) || 0) > 0">
             {{ (notificationsApi.unreadCount$ | async) }}
           </span>
@@ -87,11 +69,7 @@
       <ng-template #guestTemplate>
         <button id="btn-sign-in" class="btn-signin btn-auth-trigger" (click)="openLogin()" data-cursor-hover>
           <span class="auth-text">{{ 'NAV.SIGN_IN' | translate }}</span>
-          <svg class="auth-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
+          <i class="fa-solid fa-user auth-icon" aria-hidden="true"></i>
         </button>
       </ng-template>
 
@@ -108,15 +86,25 @@
             <span class="chevron" [class.open]="showDropdown" aria-hidden="true">▾</span>
           </div>
           <div class="user-dropdown" *ngIf="showDropdown" role="menu">
-            <a class="dropdown-item" routerLink="/account" (click)="showDropdown = false" role="menuitem">{{
-              'NAV.MY_ACCOUNT' | translate }}</a>
+            <a class="dropdown-item" routerLink="/account" (click)="showDropdown = false" role="menuitem">
+              <i class="fa-solid fa-user dropdown-icon" aria-hidden="true"></i>
+              <span>{{ 'NAV.MY_ACCOUNT' | translate }}</span>
+            </a>
             <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview"
-              (click)="showDropdown = false" role="menuitem">{{ 'NAV.MY_DASHBOARD' | translate }}</a>
+              (click)="showDropdown = false" role="menuitem">
+              <i class="fa-solid fa-table-cells-large dropdown-icon" aria-hidden="true"></i>
+              <span>{{ 'NAV.MY_DASHBOARD' | translate }}</span>
+            </a>
             <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false"
-              role="menuitem">{{ 'NAV.ADMIN_PANEL' | translate }}</a>
+              role="menuitem">
+              <i class="fa-solid fa-shield-halved dropdown-icon" aria-hidden="true"></i>
+              <span>{{ 'NAV.ADMIN_PANEL' | translate }}</span>
+            </a>
             <div class="dropdown-divider" role="separator"></div>
-            <button class="dropdown-item logout-btn" (click)="onLogout()" role="menuitem">{{ 'NAV.SIGN_OUT' | translate
-              }}</button>
+            <button class="dropdown-item logout-btn" (click)="onLogout()" role="menuitem">
+              <i class="fa-solid fa-right-from-bracket dropdown-icon" aria-hidden="true"></i>
+              <span>{{ 'NAV.SIGN_OUT' | translate }}</span>
+            </button>
           </div>
         </div>
       </ng-container>
@@ -137,11 +125,11 @@
   <div class="mobile-menu" [class.open]="isMobileMenuOpen" role="dialog" aria-label="Navigation menu">
     <div
       class="fixed inset-x-4 top-24 max-w-md mx-auto z-50 p-6 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-      <button class="close-menu-btn" (click)="closeMobileMenu()"><i class="ph ph-x"></i></button>
+      <button class="close-menu-btn" (click)="closeMobileMenu()"><i class="fa-solid fa-xmark"></i></button>
 
       <ng-container *ngIf="auth.currentUser$ | async as user">
         <div class="mobile-user-summary">
-          <i class="ph ph-user-circle text-gold" aria-hidden="true"></i>
+          <i class="fa-solid fa-user-circle text-gold" aria-hidden="true"></i>
           <span class="mobile-user-name">{{ user.name }}</span>
         </div>
       </ng-container>
@@ -157,9 +145,9 @@
         <button type="button" class="btn-theme-toggle btn-theme-toggle--mobile" (click)="toggleTheme()">{{ (theme$ |
           async) === 'light' ? ('NAV.LIGHT_MODE' | translate) : ('NAV.DARK_MODE' | translate) }}</button>
         <button type="button" class="btn-lang-toggle btn-lang-toggle--mobile" (click)="toggleLanguage()"><i
-            class="ph ph-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</button>
+            class="fa-solid fa-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</button>
         <ng-container *ngIf="auth.currentUser$ | async; else guestMobileActions">
-          <button class="btn-logout-mobile" (click)="onLogout(); closeMobileMenu()"><i class="ph ph-sign-out"></i> {{
+          <button class="btn-logout-mobile" (click)="onLogout(); closeMobileMenu()"><i class="fa-solid fa-right-from-bracket"></i> {{
             'NAV.SIGN_OUT' | translate }}</button>
         </ng-container>
         <ng-template #guestMobileActions>

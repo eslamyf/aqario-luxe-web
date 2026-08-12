@@ -29,12 +29,11 @@ export class FooterComponent {
   readonly currentYear = new Date().getFullYear();
 
   // ── Social Icons ─────────────────────────────────────────
-  // Text placeholders per task spec — no SVG dependency needed
   readonly socialLinks = [
-    { label: '𝕏',  href: '#', ariaLabel: 'X (Twitter)' },
-    { label: 'IG', href: '#', ariaLabel: 'Instagram'    },
-    { label: 'IN', href: '#', ariaLabel: 'LinkedIn'     },
-    { label: 'YT', href: '#', ariaLabel: 'YouTube'      },
+    { icon: 'fa-brands fa-x-twitter',  href: '#', ariaLabel: 'X (Twitter)' },
+    { icon: 'fa-brands fa-instagram',  href: '#', ariaLabel: 'Instagram'    },
+    { icon: 'fa-brands fa-linkedin-in', href: '#', ariaLabel: 'LinkedIn'     },
+    { icon: 'fa-brands fa-youtube',     href: '#', ariaLabel: 'YouTube'      },
   ];
 
   // ── Navigation Columns (template lines 1772–1803) ────────

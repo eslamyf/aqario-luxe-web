@@ -13,10 +13,7 @@
 
     <!-- Placeholder when no image or image failed to load -->
     <div *ngIf="!property.images.length || imageError" class="property-img-placeholder">
-      <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-      </svg>
+      <i class="fa-solid fa-house placeholder-icon" aria-hidden="true"></i>
     </div>
 
     <!-- Gradient Overlay over Image -->
@@ -25,17 +22,11 @@
     <!-- Promotion Badges -->
     <div class="promotion-badges">
       <div class="promo-badge featured" *ngIf="property.promotion.isFeatured">
-        <svg class="badge-icon" viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
-          <polygon
-            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-          </polygon>
-        </svg>
+        <i class="fa-solid fa-star badge-icon" aria-hidden="true"></i>
         <span>{{ 'PROPERTIES.PROMO.FEATURED' | translate }}</span>
       </div>
       <div class="promo-badge boosted" *ngIf="property.promotion.isBoosted && !property.promotion.isFeatured">
-        <svg class="badge-icon" viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
+        <i class="fa-solid fa-bolt badge-icon" aria-hidden="true"></i>
         <span>{{ 'PROPERTIES.PROMO.BOOSTED' | translate }}</span>
       </div>
     </div>
@@ -49,12 +40,7 @@
     <button class="property-favorite" [class.property-favorite--active]="isFavorited" (click)="onFavoriteClick($event)"
       [attr.aria-label]="(isFavorited ? 'PROPERTIES.NOTIF.REMOVED_FAVORITES' : 'PROPERTIES.NOTIF.ADDED_FAVORITES') | translate"
       data-cursor-hover>
-      <svg class="heart-icon" viewBox="0 0 24 24" [attr.fill]="isFavorited ? 'currentColor' : 'none'"
-        stroke="currentColor" stroke-width="2" width="16" height="16">
-        <path
-          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-        </path>
-      </svg>
+      <i [class]="isFavorited ? 'fa-solid fa-heart' : 'fa-regular fa-heart'" class="heart-icon" aria-hidden="true"></i>
     </button>
   </div>
 
@@ -64,11 +50,7 @@
       <!-- City / Location -->
       <div class="property-location">
         <span class="location-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
-            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
-          </svg>
+          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
         </span>
         <span class="location-name">{{ property.city }}</span>
       </div>
@@ -87,29 +69,19 @@
     <div class="property-features" *ngIf="property.bedrooms || property.bathrooms || property.area">
       <div *ngIf="property.bedrooms" class="property-feature">
         <span class="feature-icon-wrapper">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-            <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"></path>
-          </svg>
+          <i class="fa-solid fa-bed" aria-hidden="true"></i>
         </span>
         <span class="feature-text">{{ property.bedrooms }} {{ 'REAL_ESTATE.BED_SHORT' | translate }}</span>
       </div>
       <div *ngIf="property.bathrooms" class="property-feature">
         <span class="feature-icon-wrapper">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-            <path d="M9 9a3 3 0 1 1 6 0M12 12v3M2 15h20M20 15v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2"></path>
-          </svg>
+          <i class="fa-solid fa-bath" aria-hidden="true"></i>
         </span>
         <span class="feature-text">{{ property.bathrooms }} {{ 'REAL_ESTATE.BATH_SHORT' | translate }}</span>
       </div>
       <div *ngIf="property.area" class="property-feature">
         <span class="feature-icon-wrapper">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <path d="M9 3v18M15 3v18M3 9h18M3 15h18"></path>
-          </svg>
+          <i class="fa-solid fa-ruler-combined" aria-hidden="true"></i>
         </span>
         <span class="feature-text">{{ property.area }} {{ 'REAL_ESTATE.AREA_UNIT' | translate }}</span>
       </div>
@@ -120,10 +92,7 @@
       <button class="property-action-btn btn-book-now" [routerLink]="['/properties', property._id]"
         (click)="$event.stopPropagation()" data-cursor-hover>
         <span>{{ 'REAL_ESTATE.BOOK_NOW' | translate }}</span>
-        <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
-          <path d="M19 12H5M12 19l-7-7 7-7"></path>
-        </svg>
+        <i class="fa-solid fa-arrow-left arrow-icon" aria-hidden="true"></i>
       </button>
     </div>
   </div>

@@ -7,13 +7,13 @@
 
   <!-- KYC alerts -->
   <div class="kyc-alert warning" *ngIf="user && dashboard?.kycPending">
-    <i class="ph ph-clock"></i>
+    <i class="fa-solid fa-clock" aria-hidden="true"></i>
     <div>
       <strong>{{ 'DASHBOARD.KYC.PENDING_STRONG' | translate }}</strong> {{ 'DASHBOARD.KYC.PENDING_TEXT' | translate }}
     </div>
   </div>
   <div class="kyc-alert error" *ngIf="user && dashboard?.kycRejected">
-    <i class="ph ph-x-circle"></i>
+    <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
     <div>
       <strong>{{ 'DASHBOARD.KYC.REJECTED_STRONG' | translate }}</strong>
       {{ dashboard?.kycRejectionReason || ('DASHBOARD.KYC.REJECTED_DEFAULT' | translate) }}
@@ -21,7 +21,7 @@
     </div>
   </div>
   <div class="kyc-alert success" *ngIf="user && dashboard?.kycApproved">
-    <i class="ph ph-check-circle"></i>
+    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
     <div><strong>{{ 'DASHBOARD.KYC.APPROVED_STRONG' | translate }}</strong> {{ 'DASHBOARD.KYC.APPROVED_TEXT' | translate }}</div>
   </div>
 
@@ -169,23 +169,23 @@
     <h2>{{ 'DASHBOARD.QUICK_ACTIONS' | translate }}</h2>
     <div class="quick-actions">
       <a routerLink="../bookings" class="quick-card">
-        <i class="ph ph-calendar-check"></i>
+        <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
         {{ 'DASHBOARD.MY_BOOKINGS' | translate }}
       </a>
       <a routerLink="../properties" class="quick-card" *ngIf="isOwnerOrAgent">
-        <i class="ph ph-buildings"></i>
+        <i class="fa-solid fa-building" aria-hidden="true"></i>
         {{ 'DASHBOARD.MY_PROPERTIES' | translate }}
       </a>
       <a routerLink="../saved" class="quick-card" *ngIf="isBuyer || isAdmin">
-        <i class="ph ph-heart"></i>
+        <i class="fa-solid fa-heart" aria-hidden="true"></i>
         {{ 'DASHBOARD.SAVED' | translate }}
       </a>
       <a routerLink="../payments" class="quick-card">
-        <i class="ph ph-wallet"></i>
+        <i class="fa-solid fa-wallet" aria-hidden="true"></i>
         {{ 'DASHBOARD.PAYMENTS' | translate }}
       </a>
       <a routerLink="../profile" class="quick-card">
-        <i class="ph ph-user"></i>
+        <i class="fa-solid fa-user" aria-hidden="true"></i>
         {{ 'DASHBOARD.EDIT_PROFILE' | translate }}
       </a>
     </div>

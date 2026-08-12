@@ -23,7 +23,7 @@
 
       <!-- KYC warning banner -->
       <div class="kyc-banner" *ngIf="!user.isVerified">
-        <i class="ph ph-warning"></i>
+        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
         <span>{{ 'DASHBOARD.IDENTITY_NOT_VERIFIED' | translate }}</span>
       </div>
 
@@ -32,53 +32,53 @@
         <span class="nav-section">{{ 'DASHBOARD.MY_ACCOUNT' | translate }}</span>
 
         <a routerLink="overview" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-          <i class="ph ph-squares-four"></i>
+          <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
           {{ 'DASHBOARD.OVERVIEW' | translate }}
         </a>
 
         <a routerLink="bookings" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-          <i class="ph ph-calendar-check"></i>
+          <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
           {{ 'DASHBOARD.MY_BOOKINGS' | translate }}
         </a>
 
         <a routerLink="properties" routerLinkActive="active" class="nav-item" *ngIf="canListProperties(user)"
           (click)="closeSidebar()">
-          <i class="ph ph-buildings"></i>
+          <i class="fa-solid fa-building" aria-hidden="true"></i>
           <span>{{ 'DASHBOARD.MY_PROPERTIES' | translate }}</span>
         </a>
 
         <a routerLink="owner-bookings" routerLinkActive="active" class="nav-item" *ngIf="canListProperties(user)"
           (click)="closeSidebar()">
-          <i class="ph ph-bell-ringing"></i>
+          <i class="fa-solid fa-bell" aria-hidden="true"></i>
           <span>{{ 'DASHBOARD.INCOMING_REQUESTS' | translate }}</span>
         </a>
 
         <a routerLink="owner-viewing-requests" routerLinkActive="active" class="nav-item"
           *ngIf="canListProperties(user)" (click)="closeSidebar()">
-          <i class="ph ph-calendar-dots"></i>
+          <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
           <span>{{ 'DASHBOARD.VIEWING_SCHEDULE' | translate }}</span>
         </a>
 
         <a routerLink="inquiries" routerLinkActive="active" class="nav-item" *ngIf="canListProperties(user)"
           (click)="closeSidebar()">
-          <i class="ph ph-chat-circle-dots"></i>
+          <i class="fa-solid fa-comments" aria-hidden="true"></i>
           <span>{{ 'DASHBOARD.INQUIRIES' | translate }}</span>
         </a>
 
         <a routerLink="chat" routerLinkActive="active" class="nav-item" *ngIf="!canListProperties(user)"
           (click)="closeSidebar()">
-          <i class="ph ph-chats-teardrop"></i>
+          <i class="fa-solid fa-message" aria-hidden="true"></i>
           <span>{{ 'NAV.MESSAGES' | translate }}</span>
         </a>
 
         <a routerLink="saved" routerLinkActive="active" class="nav-item" *ngIf="canViewSaved(user)"
           (click)="closeSidebar()">
-          <i class="ph ph-heart"></i>
+          <i class="fa-solid fa-heart" aria-hidden="true"></i>
           {{ 'DASHBOARD.SAVED' | translate }}
         </a>
 
         <a routerLink="payments" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-          <i class="ph ph-wallet"></i>
+          <i class="fa-solid fa-wallet" aria-hidden="true"></i>
           {{ 'DASHBOARD.PAYMENTS' | translate }}
         </a>
 
@@ -86,7 +86,7 @@
         <ng-container *ngIf="user.role === 'admin'">
           <span class="nav-section">{{ 'DASHBOARD.MANAGEMENT' | translate }}</span>
           <a routerLink="/admin" class="nav-item admin-link" (click)="closeSidebar()">
-            <i class="ph ph-shield-check"></i>
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
             {{ 'DASHBOARD.ADMIN_CENTER' | translate }}
           </a>
         </ng-container>
@@ -96,7 +96,7 @@
     <!-- Sidebar footer -->
     <div class="sidebar-footer">
       <button class="logout-link" (click)="logout()" [disabled]="isLoggingOut">
-        <i class="ph ph-sign-out"></i>
+        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
         {{ isLoggingOut ? ('DASHBOARD.LOGGING_OUT' | translate) : ('DASHBOARD.LOG_OUT' | translate) }}
       </button>
     </div>

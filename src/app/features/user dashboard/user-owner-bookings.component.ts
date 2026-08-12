@@ -32,14 +32,14 @@ import { TranslateService } from '@ngx-translate/core';
 
       <!-- Error -->
       <div *ngIf="errorMsg && !isLoading" class="bookings-error">
-        <span class="error-icon">⚠</span>
+        <span class="error-icon"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>
         <p>{{ errorMsg }}</p>
         <button class="btn-ghost" (click)="loadBookings()">{{ 'DASHBOARD.RETRY' | translate }}</button>
       </div>
 
       <!-- Empty -->
       <div *ngIf="!isLoading && !errorMsg && bookings.length === 0" class="bookings-empty">
-        <div class="empty-icon">📋</div>
+        <div class="empty-icon"><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i></div>
         <h3>{{ 'DASHBOARD.NO_BOOKINGS' | translate }}</h3>
         <p>{{ 'DASHBOARD.NO_BOOKINGS_SUB' | translate }}</p>
       </div>
@@ -51,6 +51,7 @@ import { TranslateService } from '@ngx-translate/core';
           <!-- Booking Header -->
           <div class="booking-card-header">
             <div class="booking-type-badge" [class]="'type-' + booking.bookingType">
+              <i [class]="booking.bookingType === 'rent' ? 'fa-solid fa-key' : 'fa-solid fa-tag'" class="badge-type-icon" aria-hidden="true"></i>
               {{ (booking.bookingType === 'rent' ? 'DASHBOARD.RENTAL_REQUEST' : 'DASHBOARD.PURCHASE_OFFER') | translate }}
             </div>
             <div class="booking-status-badge" [class]="'status-' + booking.status">
@@ -66,7 +67,8 @@ import { TranslateService } from '@ngx-translate/core';
             <div class="property-info">
               <h3 class="property-title">{{ (booking.property_id?.title || ('DASHBOARD.TABLE.PROPERTY' | translate)) | translateProp }}</h3>
               <p class="property-location">
-                📍 {{ (booking.property_id?.location?.city || 'N/A') | translateProp }}
+                <i class="fa-solid fa-location-dot location-pin-icon" aria-hidden="true"></i>
+                {{ (booking.property_id?.location?.city || 'N/A') | translateProp }}
               </p>
             </div>
           </div>
@@ -142,7 +144,7 @@ import { TranslateService } from '@ngx-translate/core';
 
           <!-- Approved — waiting for payment -->
           <div class="booking-approved-notice" *ngIf="booking.status === 'approved' && booking.paymentStatus === 'not_initiated'">
-            <span class="notice-icon">⏳</span>
+            <span class="notice-icon"><i class="fa-solid fa-hourglass-half text-gold" aria-hidden="true"></i></span>
             {{ 'DASHBOARD.APPROVED_AWAITING_PAYMENT' | translate }}
             <button class="btn-ghost btn-sm" style="margin-left:auto" (click)="openCancelDialog(booking)">{{ 'DASHBOARD.CANCEL_BOOKING' | translate }}</button>
           </div>
@@ -151,11 +153,11 @@ import { TranslateService } from '@ngx-translate/core';
           <div class="booking-paid-confirmed-badge" *ngIf="booking.paymentStatus === 'paid'">
             <div class="badge-header">
               <span class="badge-title">
-                <i class="ph ph-shield-check"></i>
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
                 {{ 'DASHBOARD.TRANSACTION_DETAILS' | translate }}
               </span>
               <span class="badge-success-label">
-                <i class="ph ph-check-circle"></i>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
                 {{ 'DASHBOARD.PAYMENT_CONFIRMED' | translate }}
               </span>
             </div>
@@ -163,16 +165,16 @@ import { TranslateService } from '@ngx-translate/core';
               <span class="contact-label">{{ 'DASHBOARD.CONTACT_BUYER' | translate }}:</span>
               <div class="contact-buttons">
                 <a *ngIf="booking.user_id?.phone" [href]="'tel:' + booking.user_id.phone" class="contact-btn phone-btn">
-                  <i class="ph ph-phone"></i> {{ booking.user_id.phone }}
+                  <i class="fa-solid fa-phone" aria-hidden="true"></i> {{ booking.user_id.phone }}
                 </a>
                 <a *ngIf="booking.user_id?.phone" [href]="'https://wa.me/' + cleanPhone(booking.user_id.phone)" target="_blank" class="contact-btn whatsapp-btn">
-                  <i class="ph ph-whatsapp-logo"></i> WhatsApp
+                  <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp
                 </a>
                 <a *ngIf="booking.user_id?.email" [href]="'mailto:' + booking.user_id.email" class="contact-btn email-btn">
-                  <i class="ph ph-envelope"></i> {{ booking.user_id.email }}
+                  <i class="fa-solid fa-envelope" aria-hidden="true"></i> {{ booking.user_id.email }}
                 </a>
                 <button (click)="startChat(booking.user_id?._id || booking.user_id)" class="contact-btn chat-btn" style="cursor:pointer;">
-                  <i class="ph ph-chat-circle"></i> {{ 'CHAT.START_CHAT' | translate }}
+                  <i class="fa-solid fa-comments" aria-hidden="true"></i> {{ 'CHAT.START_CHAT' | translate }}
                 </button>
               </div>
             </div>
@@ -328,9 +330,14 @@ import { TranslateService } from '@ngx-translate/core';
     .booking-type-badge {
       font-size: 0.8rem;
       font-weight: 600;
-      padding: 0.3rem 0.75rem;
+      padding: 0.35rem 0.85rem;
       border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
     }
+    .badge-type-icon { font-size: 0.85rem; }
+    .location-pin-icon { color: var(--brand-gold, #c9a96e); margin-inline-end: 0.3rem; }
     .type-rent { background: rgba(59, 130, 246, 0.1); color: #2563eb; border: 1px solid rgba(59, 130, 246, 0.2); }
     .type-sale { background: rgba(139, 105, 20, 0.1); color: var(--brand-gold-dark); border: 1px solid rgba(139, 105, 20, 0.2); }
 

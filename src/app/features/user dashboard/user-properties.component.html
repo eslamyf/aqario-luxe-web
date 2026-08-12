@@ -7,7 +7,7 @@
       <p>{{ 'DASHBOARD.PROPERTIES_SUB' | translate }}</p>
     </div>
     <button class="action-btn primary" *ngIf="currentView === 'table'" (click)="currentView = 'form'">
-      <i class="ph ph-plus"></i> {{ 'DASHBOARD.ADD_NEW_PROPERTY' | translate }}
+      <i class="fa-solid fa-plus" aria-hidden="true"></i> {{ 'DASHBOARD.ADD_NEW_PROPERTY' | translate }}
     </button>
   </div>
 
@@ -15,7 +15,7 @@
   <div class="success-promote-view" *ngIf="currentView === 'success'">
     <div class="success-hero">
       <div class="success-icon">
-        <i class="ph ph-check-circle"></i>
+        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
       </div>
       <h2>{{ 'DASHBOARD.SUBMITTED.TITLE' | translate }}</h2>
       <p>{{ 'DASHBOARD.SUBMITTED.SUB' | translate }}</p>
@@ -25,7 +25,7 @@
       <!-- Featured -->
       <div class="promo-card featured">
         <div class="promo-label">{{ 'DASHBOARD.PROMO.MAX_VISIBILITY' | translate }}</div>
-        <div class="promo-icon"><i class="ph ph-star-fill"></i></div>
+        <div class="promo-icon"><i class="fa-solid fa-star" aria-hidden="true"></i></div>
         <h3>{{ 'DASHBOARD.PROMO.FEATURED_TITLE' | translate }}</h3>
         <p>{{ 'DASHBOARD.PROMO.FEATURED_DESC' | translate }}</p>
         <div class="promo-price">$49.99 <small>{{ 'DASHBOARD.PROMO.MONTH' | translate }}</small></div>
@@ -35,7 +35,7 @@
       <!-- Boost -->
       <div class="promo-card boosted">
         <div class="promo-label">{{ 'DASHBOARD.PROMO.SMART_REACH' | translate }}</div>
-        <div class="promo-icon"><i class="ph ph-lightning-fill"></i></div>
+        <div class="promo-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
         <h3>{{ 'DASHBOARD.PROMO.BOOST_TITLE' | translate }}</h3>
         <p>{{ 'DASHBOARD.PROMO.BOOST_DESC' | translate }}</p>
         <div class="promo-price">$24.99 <small>{{ 'DASHBOARD.PROMO.MONTH' | translate }}</small></div>
@@ -45,7 +45,7 @@
       <!-- Badge -->
       <div class="promo-card badge">
         <div class="promo-label">{{ 'DASHBOARD.PROMO.TRUST' | translate }}</div>
-        <div class="promo-icon"><i class="ph ph-seal-check-fill"></i></div>
+        <div class="promo-icon"><i class="fa-solid fa-certificate" aria-hidden="true"></i></div>
         <h3>{{ 'DASHBOARD.PROMO.BADGE_TITLE' | translate }}</h3>
         <p>{{ 'DASHBOARD.PROMO.BADGE_DESC' | translate }}</p>
         <div class="promo-price">$14.99 <small>{{ 'DASHBOARD.PROMO.MONTH' | translate }}</small></div>
@@ -170,7 +170,7 @@
              (dragover)="onDragOver($event)"
              (dragleave)="onDragLeave($event)">
           <div class="dropzone-content">
-            <i class="ph ph-cloud-arrow-up"></i>
+            <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
             <p>{{ 'DASHBOARD.FORM.DRAG_DROP' | translate }}</p>
             <span class="sub-text">{{ 'DASHBOARD.FORM.BROWSE' | translate }}</span>
           </div>
@@ -179,14 +179,14 @@
         <!-- MODE 2: Active State (Inline Zone + Grid) -->
         <div class="image-preview-grid" *ngIf="imagePreviews.length > 0">
           <label for="prop-images" class="upload-drop-zone inline-zone" [class.active]="isDragging">
-            <i class="ph ph-plus-circle"></i>
+            <i class="fa-solid fa-plus" aria-hidden="true"></i>
             <span>{{ 'DASHBOARD.FORM.ADD_MORE' | translate }}</span>
           </label>
 
           <div class="preview-item" *ngFor="let preview of imagePreviews; let i = index">
             <img [src]="preview" />
             <button type="button" class="remove-img-btn" (click)="removeImage(i)" title="Remove image">
-              <i class="ph ph-x"></i>
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             </button>
             <span class="img-badge" *ngIf="i === 0">{{ 'DASHBOARD.FORM.MAIN_PHOTO' | translate }}</span>
           </div>

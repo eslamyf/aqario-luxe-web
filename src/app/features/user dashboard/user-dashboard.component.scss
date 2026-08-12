@@ -33,14 +33,16 @@
   border-bottom: 1px solid color-mix(in srgb, var(--white) 5%, transparent);
 
   .brand-logo-img-sidebar {
-    height: 36px !important;
-    max-height: 36px !important;
+    height: 38px !important;
+    max-height: 38px !important;
     width: auto !important;
     object-fit: contain;
     display: block;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.75)) brightness(1.25) !important;
+    transition: transform 0.3s var(--transition, ease), filter 0.3s var(--transition, ease);
 
-    [data-theme="dark"] & {
-      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.75)) brightness(1.25);
+    &:hover {
+      filter: drop-shadow(0 0 5px rgba(201, 169, 110, 0.95)) brightness(1.35) !important;
     }
   }
 }
@@ -95,22 +97,28 @@
     font-size: 1.1rem;
     width: 20px;
     text-align: center;
-    color: rgba(201, 169, 110, 0.5);
-    transition: color 0.3s ease;
+    color: rgba(201, 169, 110, 0.65);
+    transition: transform 0.25s var(--transition), color 0.25s var(--transition);
   }
 
   &:hover {
     background: color-mix(in srgb, var(--white) 3%, transparent);
     color: var(--white);
+
+    i {
+      color: var(--brand-gold);
+      transform: scale(1.15);
+    }
   }
 
   &.active {
-    background: rgba(201, 169, 110, 0.1);
-    color: var(--gold);
-    font-weight: 500;
+    background: rgba(201, 169, 110, 0.12);
+    color: var(--brand-gold);
+    font-weight: 600;
 
     i {
-      color: var(--gold);
+      color: var(--brand-gold);
+      transform: scale(1.1);
     }
   }
 }

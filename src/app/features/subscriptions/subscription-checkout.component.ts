@@ -34,7 +34,7 @@ import { CommonModule } from '@angular/common';
 
         <!-- Error -->
         <div *ngIf="errorMsg" class="checkout-error">
-          <span>⚠</span>
+          <span><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>
           <p>{{ errorMsg }}</p>
           <button class="btn-ghost" (click)="router.navigate(['/dashboard'])">
             {{ 'SUBSCRIPTION.RETURN_TO_DASHBOARD' | translate }}

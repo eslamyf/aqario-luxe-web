@@ -35,7 +35,7 @@ import { ActivatedRoute, Router } from '@angular/router';
             </div>
 
             <div *ngIf="!loadingChats && filteredChats.length === 0" class="empty-chats">
-              <i class="ph ph-chat-circle"></i>
+              <i class="fa-solid fa-comments" aria-hidden="true"></i>
               <p>{{ 'CHAT.NO_CHATS' | translate }}</p>
               <span class="subtext">{{ 'CHAT.NO_CHATS_SUB' | translate }}</span>
             </div>
@@ -73,7 +73,7 @@ import { ActivatedRoute, Router } from '@angular/router';
           <!-- Selection Splash -->
           <div class="no-selection-splash" *ngIf="!selectedChat">
             <div class="splash-icon-box">
-              <i class="ph ph-chats-teardrop"></i>
+              <i class="fa-solid fa-message" aria-hidden="true"></i>
             </div>
             <h2>{{ 'CHAT.TITLE' | translate }}</h2>
             <p>{{ 'CHAT.SELECT_CONVERSATION' | translate }}</p>
@@ -84,7 +84,7 @@ import { ActivatedRoute, Router } from '@angular/router';
             <!-- Header -->
             <div class="chat-header">
               <button class="back-btn" (click)="closeChat()">
-                <i class="ph ph-arrow-left"></i>
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
               </button>
               <div class="header-avatar">
                 <img *ngIf="getParticipant(selectedChat)?.photo" [src]="getParticipant(selectedChat)?.photo" [alt]="getParticipant(selectedChat)?.name" />
@@ -94,7 +94,7 @@ import { ActivatedRoute, Router } from '@angular/router';
                 <span class="header-name">{{ getParticipant(selectedChat)?.name }}</span>
               </div>
               <a class="back-to-inquiries" (click)="navigateToInquiries()">
-                <i class="ph ph-arrow-left"></i>
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                 <span>{{ 'CHAT.BACK_TO_INQUIRIES' | translate }}</span>
               </a>
             </div>
@@ -139,7 +139,7 @@ import { ActivatedRoute, Router } from '@angular/router';
                     <!-- Audio/Voice Note Type -->
                     <div class="bubble-audio-box" *ngIf="msg.messageType === 'audio'">
                       <div class="audio-note-label">
-                        <i class="ph ph-microphone"></i>
+                        <i class="fa-solid fa-microphone" aria-hidden="true"></i>
                         <span>{{ 'CHAT.VOICE_NOTE' | translate }}</span>
                       </div>
                       <audio [src]="msg.fileUrl" controls preload="auto"></audio>
@@ -148,15 +148,15 @@ import { ActivatedRoute, Router } from '@angular/router';
                     <!-- PDF/Word Attachment Type -->
                     <div class="bubble-file-card" *ngIf="msg.messageType === 'file'">
                       <div class="file-card-info">
-                        <i class="ph ph-file-pdf" *ngIf="msg.text.endsWith('.pdf')"></i>
-                        <i class="ph ph-file-doc" *ngIf="!msg.text.endsWith('.pdf')"></i>
+                        <i class="fa-solid fa-file-pdf" *ngIf="msg.text.endsWith('.pdf')" aria-hidden="true"></i>
+                        <i class="fa-solid fa-file-word" *ngIf="!msg.text.endsWith('.pdf')" aria-hidden="true"></i>
                         <div class="file-meta">
                           <span class="file-name">{{ msg.text }}</span>
                           <span class="file-type">{{ 'CHAT.ATTACHMENT' | translate }}</span>
                         </div>
                       </div>
                       <a [href]="msg.fileUrl" target="_blank" download class="file-download-btn">
-                        <i class="ph ph-download-simple"></i>
+                        <i class="fa-solid fa-download" aria-hidden="true"></i>
                       </a>
                     </div>
                   </div>
@@ -174,10 +174,10 @@ import { ActivatedRoute, Router } from '@angular/router';
                 <canvas #visualizer class="waveform-canvas"></canvas>
                 <div class="recorder-actions">
                   <button class="action-btn cancel-record" (click)="cancelRecord()">
-                    <i class="ph ph-trash"></i>
+                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
                   </button>
                   <button class="action-btn stop-record" (click)="stopRecord()">
-                    <i class="ph ph-check"></i>
+                    <i class="fa-solid fa-check" aria-hidden="true"></i>
                   </button>
                 </div>
               </div>
@@ -186,7 +186,7 @@ import { ActivatedRoute, Router } from '@angular/router';
               <div class="input-actions-bar" *ngIf="!isRecording">
                 <!-- Media Uploader (Camera Button) -->
                 <button class="input-icon-btn" (click)="triggerMediaPicker()">
-                  <i class="ph ph-camera"></i>
+                  <i class="fa-solid fa-camera" aria-hidden="true"></i>
                 </button>
                 <input 
                   type="file" 
@@ -198,7 +198,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
                 <!-- File Picker (Paperclip Button) -->
                 <button class="input-icon-btn" (click)="triggerFilePicker()">
-                  <i class="ph ph-paperclip"></i>
+                  <i class="fa-solid fa-paperclip" aria-hidden="true"></i>
                 </button>
                 <input 
                   type="file" 
@@ -218,13 +218,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
                 <!-- Audio Recorder Trigger (Microphone Button) -->
                 <button class="input-icon-btn microphone-trigger" (click)="startRecord()">
-                  <i class="ph ph-microphone"></i>
+                  <i class="fa-solid fa-microphone" aria-hidden="true"></i>
                 </button>
 
                 <!-- Send Button -->
                 <button class="send-message-btn" [class.active]="newMessageText.trim().length > 0 || uploadingAttachment" [disabled]="!newMessageText.trim() && !uploadingAttachment" (click)="sendTextMessage()">
                   <span *ngIf="uploadingAttachment" class="spinner-xs"></span>
-                  <i *ngIf="!uploadingAttachment" class="ph ph-paper-plane-right"></i>
+                  <i *ngIf="!uploadingAttachment" class="fa-solid fa-paper-plane" aria-hidden="true"></i>
                 </button>
               </div>
             </div>

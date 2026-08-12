@@ -283,6 +283,34 @@ $red: var(--crimson);
   }
 }
 
+.google-btn-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.google-signin-button-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.001;
+  z-index: 5;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+
+  div[role="button"], iframe {
+    width: 100% !important;
+    height: 100% !important;
+    transform: scale(2.5);
+    cursor: pointer !important;
+  }
+}
+
 .auth-google-btn {
   background: transparent;
   border: 1px solid color-mix(in srgb, $gold 35%, transparent);

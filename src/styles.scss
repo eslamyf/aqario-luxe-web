@@ -1,5 +1,95 @@
+@import 'node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 @import 'styles/variables';
 @import 'styles/animations';
+
+/* ── Font Awesome & Phosphor Icon Enforcements & RTL Protection ── */
+.fa-solid, .fas,
+.fa-regular, .far,
+.fa-brands, .fab,
+i.fa-solid, i.fa-regular, i.fa-brands,
+[class*=" fa-"], [class^="fa-"] {
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  line-height: 1 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.ph, [class*=" ph-"], [class^="ph-"] {
+  font-family: "Phosphor" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  line-height: 1 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+html[dir='rtl'] .fa-solid,
+html[dir='rtl'] i.fa-solid,
+[dir='rtl'] .fa-solid,
+.fa-solid, .fas {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
+
+html[dir='rtl'] .fa-regular,
+html[dir='rtl'] i.fa-regular,
+[dir='rtl'] .fa-regular,
+.fa-regular, .far {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 400 !important;
+}
+
+html[dir='rtl'] .fa-brands,
+html[dir='rtl'] i.fa-brands,
+[dir='rtl'] .fa-brands,
+.fa-brands, .fab {
+  font-family: "Font Awesome 6 Brands" !important;
+  font-weight: 400 !important;
+}
+
+/* Luxury Control Icon Animations */
+.btn-lang-toggle i,
+.btn-theme-toggle i,
+.btn-notification i {
+  font-size: 16px;
+  transition: transform 0.25s var(--transition), color 0.25s var(--transition);
+}
+
+.btn-lang-toggle:hover i,
+.btn-theme-toggle:hover i,
+.btn-notification:hover i {
+  transform: scale(1.15);
+  color: var(--brand-gold);
+}
+
+/* ── AQARIO Universal Brand Logo Formatting & Glow Filter ───── */
+img[src*="logo.png"],
+.brand-logo-img,
+.brand-logo-img-sidebar,
+.footer-logo-img,
+.auth-logo-img,
+.brand-logo {
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.75)) brightness(1.25) !important;
+  transition: transform 0.3s var(--transition, ease), filter 0.3s var(--transition, ease);
+}
+
+img[src*="logo.png"]:hover,
+.brand-logo-img:hover,
+.brand-logo-img-sidebar:hover,
+.footer-logo-img:hover,
+.auth-logo-img:hover {
+  filter: drop-shadow(0 0 5px rgba(201, 169, 110, 0.95)) brightness(1.35) !important;
+}
 
 // ── Reset ────────────────────────────────────────────────────
 * {

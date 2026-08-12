@@ -15,7 +15,7 @@
           <div class="avatar-lg" *ngIf="!user.photo">{{ initials }}</div>
           <img class="avatar-lg-img" *ngIf="user.photo" [src]="user.photo" [alt]="user.name" />
           <label for="profile-upload" class="avatar-overlay" data-cursor-hover>
-            <i class="ph ph-camera"></i>
+            <i class="fa-solid fa-camera" aria-hidden="true"></i>
             <span>{{ 'ACCOUNT.CHANGE_PHOTO' | translate }}</span>
           </label>
           <input type="file" id="profile-upload" (change)="onPhotoChange($event)" accept="image/*" style="display:none" />

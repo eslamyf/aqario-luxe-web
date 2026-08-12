@@ -48,7 +48,7 @@ import { TranslateService } from '@ngx-translate/core';
               <div class="prop-thumb placeholder" *ngIf="!inq.property?.images?.length">&#127968;</div>
               <div class="prop-info">
                 <h3 class="prop-title">{{ (inq.property?.title || ('DASHBOARD.TABLE.PROPERTY' | translate)) | translateProp }}</h3>
-                <p class="prop-location">&#128205; {{ (inq.property?.location?.city || 'N/A') | translateProp }}</p>
+                <p class="prop-location"><i class="fa-solid fa-location-dot text-gold" aria-hidden="true"></i> {{ (inq.property?.location?.city || 'N/A') | translateProp }}</p>
               </div>
               <div class="price-badge">
                 {{ inq.property?.price | currency:(inq.property?.currency || 'EGP'):'symbol':'1.0-0' }}
@@ -64,8 +64,8 @@ import { TranslateService } from '@ngx-translate/core';
               <div class="sender-meta">
                 <p class="sender-name">{{ inq.sender?.name || ('DASHBOARD.ROLES.BUYER' | translate) }}</p>
                 <div class="sender-contacts">
-                  <span class="contact-item"><i class="ph ph-envelope"></i> {{ inq.sender?.email }}</span>
-                  <span class="contact-item" *ngIf="inq.sender?.phone"><i class="ph ph-phone"></i> {{ inq.sender?.phone }}</span>
+                  <span class="contact-item"><i class="fa-solid fa-envelope" aria-hidden="true"></i> {{ inq.sender?.email }}</span>
+                  <span class="contact-item" *ngIf="inq.sender?.phone"><i class="fa-solid fa-phone" aria-hidden="true"></i> {{ inq.sender?.phone }}</span>
                 </div>
               </div>
             </div>
@@ -91,10 +91,10 @@ import { TranslateService } from '@ngx-translate/core';
             <div class="reply-action-box">
               <div class="action-buttons-group" *ngIf="activeReplyId !== inq._id">
                 <button class="btn-toggle-reply" (click)="toggleReply(inq._id)">
-                  <i class="ph ph-chat-text"></i> {{ 'DASHBOARD.INQUIRY_REPLY' | translate }}
+                  <i class="fa-solid fa-comment-dots" aria-hidden="true"></i> {{ 'DASHBOARD.INQUIRY_REPLY' | translate }}
                 </button>
                 <button class="btn-go-to-chat gold-theme" (click)="goToChat(inq)">
-                  <i class="ph ph-chats"></i> {{ 'DASHBOARD.GO_TO_CHAT' | translate }}
+                  <i class="fa-solid fa-comments" aria-hidden="true"></i> {{ 'DASHBOARD.GO_TO_CHAT' | translate }}
                 </button>
               </div>
 
