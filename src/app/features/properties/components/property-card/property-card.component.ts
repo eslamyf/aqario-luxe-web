@@ -20,6 +20,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Property } from '../../models/property.model';
 import { PropertiesService } from '../../services/properties.service';
 import { FavoritesService } from '../../services/favorites.service';
+import { AuthService } from '../../../../core/auth/auth.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-property-card',
@@ -28,9 +31,12 @@ import { FavoritesService } from '../../services/favorites.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PropertyCardComponent implements OnInit, OnDestroy {
-  private propertiesService = inject(PropertiesService);
-  private favoritesService = inject(FavoritesService);
-  private cdr = inject(ChangeDetectorRef);
+  private propertiesService  = inject(PropertiesService);
+  private favoritesService   = inject(FavoritesService);
+  private authService        = inject(AuthService);
+  private notificationService = inject(NotificationService);
+  private translateService   = inject(TranslateService);
+  private cdr                = inject(ChangeDetectorRef);
 
   // ── Inputs ─────────────────────────────────────────────────────────────────
   @Input() property!: Property;
@@ -86,6 +92,33 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
 
   onFavoriteClick(event: MouseEvent): void {
     event.stopPropagation();
+
+    if (!this.authService.isAuthenticated()) {
+      this.authService.openModal('login');
+      this.notificationService.show(
+        this.translateService.instant('PROPERTIES.NOTIF.SIGN_IN_FAVORITES'),
+        'info'
+      );
+      return;
+    }
+
+    this.favoritesService.toggleFavorite(this.property._id).subscribe({
+      next: (isFav) => {
+        this.notificationService.show(
+          this.translateService.instant(
+            isFav ? 'PROPERTIES.NOTIF.ADDED_FAVORITES' : 'PROPERTIES.NOTIF.REMOVED_FAVORITES'
+          ),
+          isFav ? 'success' : 'info'
+        );
+      },
+      error: () => {
+        this.notificationService.show(
+          this.translateService.instant('PROPERTIES.NOTIF.FAILED_FAVORITES'),
+          'error'
+        );
+      }
+    });
+
     this.favoriteToggled.emit(this.property._id);
   }
 

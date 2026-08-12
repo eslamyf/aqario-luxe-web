@@ -99,9 +99,9 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = true;
     this.hasError  = false;
 
-    // Direct isolated call with limit=3, no side-effects on the shared service state
+    // Fetch featured properties list (limit: 10) for horizontal property slider
     this.propertiesService
-      .getProperties({ limit: 3, page: 1 })
+      .getProperties({ limit: 10, page: 1 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (props: Property[]) => {
@@ -153,13 +153,20 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   scrollProps(direction: 'left' | 'right'): void {
-    const grid = document.querySelector('.featured-section .props-grid');
-    if (grid) {
-      const scrollAmount = direction === 'left' ? -380 : 380;
-      grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    } else {
-      this.router.navigate(['/properties']);
+    const grid = document.querySelector('.featured-section .props-grid') as HTMLElement;
+    if (!grid) return;
+
+    const firstCard = grid.querySelector('app-property-card, .prop-skeleton') as HTMLElement;
+    const cardWidth = firstCard ? firstCard.offsetWidth + 24 : 360;
+
+    const isRtl = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl' || document.dir === 'rtl';
+
+    let scrollAmount = direction === 'right' ? cardWidth : -cardWidth;
+    if (isRtl) {
+      scrollAmount = direction === 'right' ? -cardWidth : cardWidth;
     }
+
+    grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
 
   navigateToProperties(): void {

@@ -2,6 +2,25 @@
 @import 'styles/variables';
 @import 'styles/animations';
 
+/* ── Hardware GPU Acceleration & Performance Rendering Rules ── */
+.nav,
+.hero-section,
+.property-card,
+.property-favorite,
+.modal-backdrop,
+.auth-modal {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Rendering Containment & Off-screen Layout Shift Protection */
+.props-grid,
+.property-list,
+.featured-section {
+  contain: content;
+}
+
 /* ── Font Awesome & Phosphor Icon Enforcements & RTL Protection ── */
 .fa-solid, .fas,
 .fa-regular, .far,

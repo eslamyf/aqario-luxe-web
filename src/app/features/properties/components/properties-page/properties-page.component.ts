@@ -190,23 +190,7 @@ export class PropertiesPageComponent implements OnInit {
   }
 
   onFavoriteToggled(propertyId: string): void {
-    if (!this.authService.isAuthenticated()) {
-      this.authService.openModal('login');
-      this.notificationService.show(this.translateService.instant('PROPERTIES.NOTIF.SIGN_IN_FAVORITES'), 'info');
-      return;
-    }
-
-    this.favoritesService.toggleFavorite(propertyId).subscribe({
-      next: (isFav) => {
-        this.notificationService.show(
-          this.translateService.instant(isFav ? 'PROPERTIES.NOTIF.ADDED_FAVORITES' : 'PROPERTIES.NOTIF.REMOVED_FAVORITES'),
-          isFav ? 'success' : 'info'
-        );
-      },
-      error: () => {
-        this.notificationService.show(this.translateService.instant('PROPERTIES.NOTIF.FAILED_FAVORITES'), 'error');
-      }
-    });
+    // PropertyCardComponent handles favorite toggling, auth checks, and notifications internally.
   }
 
   onViewAll(): void {

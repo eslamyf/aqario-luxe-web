@@ -185,13 +185,20 @@
     background: #ffffff;
     color: var(--brand-gold, #C9A96E);
     border-color: #ffffff;
-    box-shadow: 0 4px 16px rgba(201, 169, 110, 0.5);
+    box-shadow: 0 4px 18px rgba(201, 169, 110, 0.55);
 
     .heart-icon {
       color: var(--brand-gold, #C9A96E);
+      animation: heartPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       filter: drop-shadow(0 0 2px rgba(201, 169, 110, 0.6));
     }
   }
+}
+
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.38); }
+  100% { transform: scale(1); }
 }
 
 .property-overlay {
