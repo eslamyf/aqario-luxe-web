@@ -22,6 +22,41 @@ $red: var(--crimson);
   }
 }
 
+.property-detail-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.breadcrumb-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: $mist;
+  margin-bottom: 24px;
+
+  a {
+    color: $mist;
+    text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $gold;
+    }
+  }
+
+  .sep {
+    color: color-mix(in srgb, $mist 40%, transparent);
+    font-size: 12px;
+  }
+
+  .current {
+    color: $gold;
+    font-weight: 500;
+  }
+}
+
 .content-grid {
   max-width: 1200px;
   margin: 0 auto;
@@ -188,7 +223,7 @@ $red: var(--crimson);
     flex-direction: column;
     gap: 4px;
 
-    .stat-icon { font-size: 24px; margin-bottom: 4px; }
+    .stat-icon { font-size: 24px; margin-bottom: 4px; color: $gold; }
     .stat-value { font-size: 18px; font-weight: 700; }
     .stat-label { font-size: 11px; color: $mist; text-transform: uppercase; letter-spacing: 1px; }
   }

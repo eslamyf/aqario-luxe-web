@@ -15,21 +15,23 @@
   </div>
 
   <!-- Main Content -->
-  <div *ngIf="!isLoading && !error && property" class="content-grid">
+  <div *ngIf="!isLoading && !error && property" class="property-detail-wrapper">
 
     <!-- Breadcrumb Nav -->
     <nav class="breadcrumb-nav" aria-label="Breadcrumb">
-      <a routerLink="/">الرئيسية</a>
+      <a routerLink="/">{{ 'NAV.HOME' | translate }}</a>
       <span class="sep">/</span>
-      <a routerLink="/properties">عقارات صعيد مصر</a>
-      <span class="sep">/</span>
-      <a [routerLink]="['/properties']" [queryParams]="{ city: property.city }">{{ property.city || 'صعيد مصر' }}</a>
+      <a routerLink="/properties">{{ 'NAV.PROPERTIES' | translate }}</a>
+      <span class="sep" *ngIf="property.city">/</span>
+      <a *ngIf="property.city" [routerLink]="['/properties']" [queryParams]="{ city: property.city }">{{ property.city }}</a>
       <span class="sep">/</span>
       <span class="current">{{ property.title }}</span>
     </nav>
 
-    <!-- Left Column: Gallery & Description -->
-    <div class="main-content">
+    <div class="content-grid">
+
+      <!-- Left Column: Gallery & Description -->
+      <div class="main-content">
       <!-- Gallery Section -->
       <div class="gallery-section">
         <div class="main-image-wrap">
@@ -318,6 +320,7 @@
       </div>
     </aside>
 
+    </div>
   </div>
 </div>
 
