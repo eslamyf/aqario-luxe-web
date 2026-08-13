@@ -96,12 +96,8 @@
           <option value="rent">{{ 'DASHBOARD.FORM.FOR_RENT' | translate }}</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>{{ 'DASHBOARD.FORM.CURRENCY' | translate }}</label>
+      <div class="form-group" style="display: none;">
         <select formControlName="currency">
-          <option value="USD">USD</option>
-          <option value="AED">AED</option>
-          <option value="EUR">EUR</option>
           <option value="EGP">EGP</option>
         </select>
       </div>
@@ -244,7 +240,7 @@
                 <span class="text-muted" *ngIf="!p.promotion?.isFeatured && !p.promotion?.isBoosted && !p.promotion?.hasPremiumBadge">-</span>
               </div>
             </td>
-            <td>{{ p.price | currency:p.currency }}</td>
+            <td>{{ p.price | currency:'EGP':'symbol':'1.0-0' }}</td>
             <td>
               <div class="action-group">
                 <button class="action-btn view" (click)="lastCreatedProperty = p; currentView = 'success'">{{ 'DASHBOARD.PROMO.PROMOTE_NOW' | translate }}</button>

@@ -28,6 +28,16 @@
 
     <div class="field-divider"></div>
 
+    <!-- Location / Region -->
+    <div class="field-group">
+      <label class="field-label">{{ 'SEARCH.LABEL_LOCATION' | translate }}</label>
+      <select class="field-input" formControlName="location">
+        <option *ngFor="let loc of locations" [value]="loc.value">{{ loc.labelKey | translate }}</option>
+      </select>
+    </div>
+
+    <div class="field-divider"></div>
+
     <!-- Listing Type -->
     <div class="field-group">
       <label class="field-label">{{ 'SEARCH.LABEL_LIST_TYPE' | translate }}</label>

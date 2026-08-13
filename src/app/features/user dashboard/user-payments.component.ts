@@ -27,7 +27,7 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
   payoutMethod: 'paymob' | 'paypal' = 'paymob';
   payoutDetails = '';
   isSubmitting = false;
-  modalCurrency: 'EGP' | 'USD' = 'USD';
+  modalCurrency: string = 'EGP';
 
   constructor(
     private userService: UserDashboardService,
@@ -101,7 +101,7 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
     this.payoutAmount = 0;
     this.payoutDetails = '';
     this.payoutMethod = method;
-    this.modalCurrency = 'USD';
+    this.modalCurrency = 'EGP';
   }
 
   closePayoutModal(): void {
@@ -109,7 +109,7 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
   }
 
   onMethodChange(): void {
-    this.modalCurrency = 'USD';
+    this.modalCurrency = 'EGP';
   }
 
   submitPayout(): void {
@@ -152,7 +152,7 @@ export class UserPaymentsComponent implements OnInit, OnDestroy {
 
   get totalPaidUSD(): number {
     return this.payments
-      .filter((p) => p.status === 'paid' && (p.currency || 'USD').toUpperCase() === 'USD')
+      .filter((p) => p.status === 'paid')
       .reduce((sum, p) => sum + (p.totalAmount ?? 0), 0);
   }
 

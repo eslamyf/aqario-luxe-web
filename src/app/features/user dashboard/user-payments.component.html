@@ -31,7 +31,7 @@
               {{ 'DASHBOARD.PAYOUT_MODAL.AVAILABLE' | translate }}
             </span>
             <span class="currency-value" style="font-size: 3rem; font-weight: 800; color: #f59e0b; margin-top: 0.5rem;">
-              {{ balance_USD | currency:'USD':'symbol':'1.0-0' }}
+              {{ balance_USD | currency:'EGP':'symbol':'1.0-0' }}
             </span>
           </div>
           <button class="request-payout-btn instant-payout-btn usd-payout-btn" (click)="openPayoutModal('paypal')" style="width: auto; padding: 0.75rem 2rem; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 9999px; font-weight: 600;">
@@ -63,7 +63,7 @@
       <span class="stat-label">{{ 'DASHBOARD.STATS.TOTAL_PAID' | translate }}</span>
       <div style="display: flex; flex-direction: column; gap: 4px;">
         <span class="stat-value" style="font-size: 28px; line-height: 1.2;">
-          {{ totalPaidUSD | currency:'USD':'symbol':'1.0-0' }}
+          {{ totalPaidUSD | currency:'EGP':'symbol':'1.0-0' }}
         </span>
       </div>
       <span class="stat-note" style="margin-top: 8px;">{{ 'DASHBOARD.STATS.TOTAL_SPENT_SUB' | translate }}</span>
@@ -126,12 +126,12 @@
             </td>
             <td>{{ 'DASHBOARD.PAYMENT_METHOD.' + (p.method || p.paymentMethod || 'card').toUpperCase() | translate }}</td>
             <ng-container *ngIf="isOwnerOrAgent; else buyerCells">
-              <td>{{ p.buyerPaid | currency:'USD':'symbol':'1.0-0' }}</td>
-              <td>{{ p.commission | currency:'USD':'symbol':'1.0-0' }}</td>
-              <td>{{ p.totalAmount | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td>{{ p.buyerPaid | currency:'EGP':'symbol':'1.0-0' }}</td>
+              <td>{{ p.commission | currency:'EGP':'symbol':'1.0-0' }}</td>
+              <td>{{ p.totalAmount | currency:'EGP':'symbol':'1.0-0' }}</td>
             </ng-container>
             <ng-template #buyerCells>
-              <td>{{ p.totalAmount | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td>{{ p.totalAmount | currency:'EGP':'symbol':'1.0-0' }}</td>
             </ng-template>
             <td>
               <div style="display: flex; gap: 8px; align-items: center;">
@@ -173,7 +173,7 @@
         <tbody>
           <tr *ngFor="let p of payouts">
             <td>{{ p.created_at | date:'mediumDate' }}</td>
-            <td>{{ p.amount | currency:'USD':'symbol':'1.0-0' }}</td>
+            <td>{{ p.amount | currency:'EGP':'symbol':'1.0-0' }}</td>
             <td>{{ 'DASHBOARD.PAYMENT_METHOD.' + p.method.toUpperCase() | translate }}</td>
             <td>{{ p.accountDetails }}</td>
             <td>
@@ -199,7 +199,7 @@
         <div class="info-item">
           <span class="label">{{ 'DASHBOARD.PAYOUT_MODAL.AVAILABLE' | translate }}</span>
           <span class="val gold">
-            {{ modalAvailableBalance | currency:'USD':'symbol':'1.0-0' }}
+            {{ modalAvailableBalance | currency:'EGP':'symbol':'1.0-0' }}
           </span>
         </div>
       </div>

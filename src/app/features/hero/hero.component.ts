@@ -40,14 +40,14 @@ function fadeInUp(triggerName: string, delayMs: number) {
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.scss'],
   animations: [
-    fadeInUp('eyebrow',    200),
-    fadeInUp('headline1',  400),
-    fadeInUp('headline2',  600),
-    fadeInUp('subText',    800),
-    fadeInUp('buttons',   1000),
-    fadeInUp('stats',     1200),
+    fadeInUp('eyebrow', 200),
+    fadeInUp('headline1', 400),
+    fadeInUp('headline2', 600),
+    fadeInUp('subText', 800),
+    fadeInUp('buttons', 1000),
+    fadeInUp('stats', 1200),
     // Hero image panel: slightly longer delay for staggered entrance feel
-    fadeInUp('heroImage',  500),
+    fadeInUp('heroImage', 500),
   ],
 })
 export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -58,30 +58,26 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
 
   animState: 'hidden' | 'visible' = 'hidden';
 
-  countriesVal = 0;
-  propertiesVal = 0;
-  citiesVal = 0;
-
   private destroy$ = new Subject<void>();
 
   tickerItems = [
-    { key: 'DUBAI_MARINA',          label: 'DUBAI MARINA',        change: 12.4, positive: true  },
-    { key: 'MANHATTAN_PENTHOUSE',   label: 'MANHATTAN PENTHOUSE', change: 8.2,  positive: true  },
-    { key: 'LONDON_MAYFAIR',        label: 'LONDON MAYFAIR',      change: 2.1,  positive: false },
-    { key: 'PALM_JUMEIRAH',         label: 'PALM JUMEIRAH',       change: 15.7, positive: true  },
-    { key: 'PARIS_8EME',            label: 'PARIS 8ÈME',          change: 5.3,  positive: true  },
-    { key: 'HONG_KONG_PEAK',        label: 'HONG KONG PEAK',      change: 1.8,  positive: false },
-    { key: 'MONACO_WATERFRONT',     label: 'MONACO WATERFRONT',   change: 9.1,  positive: true  },
-    { key: 'MILAN_CENTRO',          label: 'MILAN CENTRO',        change: 3.4,  positive: true  },
-    { key: 'TOKYO_ROPPONGI',        label: 'TOKYO ROPPONGI',      change: 0.7,  positive: false },
-    { key: 'SYDNEY_HARBOUR',        label: 'SYDNEY HARBOUR',      change: 6.9,  positive: true  },
+    { key: 'DUBAI_MARINA', label: 'DUBAI MARINA', change: 12.4, positive: true },
+    { key: 'MANHATTAN_PENTHOUSE', label: 'MANHATTAN PENTHOUSE', change: 8.2, positive: true },
+    { key: 'LONDON_MAYFAIR', label: 'LONDON MAYFAIR', change: 2.1, positive: false },
+    { key: 'PALM_JUMEIRAH', label: 'PALM JUMEIRAH', change: 15.7, positive: true },
+    { key: 'PARIS_8EME', label: 'PARIS 8ÈME', change: 5.3, positive: true },
+    { key: 'HONG_KONG_PEAK', label: 'HONG KONG PEAK', change: 1.8, positive: false },
+    { key: 'MONACO_WATERFRONT', label: 'MONACO WATERFRONT', change: 9.1, positive: true },
+    { key: 'MILAN_CENTRO', label: 'MILAN CENTRO', change: 3.4, positive: true },
+    { key: 'TOKYO_ROPPONGI', label: 'TOKYO ROPPONGI', change: 0.7, positive: false },
+    { key: 'SYDNEY_HARBOUR', label: 'SYDNEY HARBOUR', change: 6.9, positive: true },
   ];
 
   get allTickerItems() {
     return [...this.tickerItems, ...this.tickerItems];
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
@@ -89,9 +85,8 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
         this.ngZone.run(() => {
           this.animState = 'visible';
           this.cdr.detectChanges();
-          this.startCounters();
         }),
-      50);
+        50);
     });
   }
 
@@ -135,37 +130,5 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
     img.style.display = 'none'; // CSS fallback gradient shows through
-  }
-
-  private startCounters(): void {
-    this.animateCounter(0, 120, 2000,
-      (v) => this.ngZone.run(() => { this.countriesVal = Math.floor(v); this.cdr.detectChanges(); }));
-    this.animateCounter(0, 50, 2000,
-      (v) => this.ngZone.run(() => { this.propertiesVal = Math.floor(v); this.cdr.detectChanges(); }));
-    this.animateCounter(0, 45, 2000,
-      (v) => this.ngZone.run(() => { this.citiesVal = Math.floor(v); this.cdr.detectChanges(); }));
-  }
-
-  private animateCounter(
-    from: number,
-    to: number,
-    duration: number,
-    setter: (val: number) => void
-  ): void {
-    const stepTime = 16;
-    const steps = duration / stepTime;
-    const increment = (to - from) / steps;
-    let current = from;
-
-    interval(stepTime)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (current >= to) {
-          setter(to);
-          return;
-        }
-        current = Math.min(current + increment, to);
-        setter(current);
-      });
   }
 }

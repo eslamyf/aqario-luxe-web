@@ -12,7 +12,8 @@
     <div class="section-header home-reveal">
       <div>
         <div class="section-eyebrow">{{ 'HOME.SECTIONS.BEST_CHOICES' | translate }}</div>
-        <h2 class="section-title">{{ 'HOME.SECTIONS.POPULAR_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.POPULAR_EMPHASIS' | translate }}</em></h2>
+        <h2 class="section-title">{{ 'HOME.SECTIONS.POPULAR_TITLE' | translate }} <em>{{
+            'HOME.SECTIONS.POPULAR_EMPHASIS' | translate }}</em></h2>
       </div>
       <div class="section-nav">
         <button class="nav-arrow" (click)="scrollProps('left')" id="btn-prev-props" aria-label="Previous">‹</button>
@@ -28,22 +29,22 @@
     <!-- Error state -->
     <div class="empty-state" *ngIf="!isLoading && hasError">
       <p>{{ 'HOME.SECTIONS.ERROR_LOAD' | translate }}</p>
-      <button class="btn-gold" (click)="retry()" id="btn-retry-props">{{ 'HOME.SECTIONS.TRY_AGAIN' | translate }}</button>
+      <button class="btn-gold" (click)="retry()" id="btn-retry-props">{{ 'HOME.SECTIONS.TRY_AGAIN' | translate
+        }}</button>
     </div>
 
     <!-- Properties grid — real data from MongoDB Atlas -->
-    <div class="props-grid home-reveal stagger-container" *ngIf="!isLoading && !hasError && featuredProperties.length > 0">
-      <app-property-card
-        *ngFor="let prop of featuredProperties; let i = index"
-        [property]="prop"
-        [isFirst]="i === 0">
+    <div class="props-grid home-reveal stagger-container"
+      *ngIf="!isLoading && !hasError && featuredProperties.length > 0">
+      <app-property-card *ngFor="let prop of featuredProperties; let i = index" [property]="prop" [isFirst]="i === 0">
       </app-property-card>
     </div>
 
     <!-- Empty state -->
     <div class="empty-state" *ngIf="!isLoading && !hasError && featuredProperties.length === 0">
       <p>{{ 'HOME.SECTIONS.EMPTY_PROPERTIES' | translate }}</p>
-      <button class="btn-gold" (click)="navigateToProperties()" id="btn-view-all-empty">{{ 'HOME.SECTIONS.BROWSE_ALL' | translate }}</button>
+      <button class="btn-gold" (click)="navigateToProperties()" id="btn-view-all-empty">{{ 'HOME.SECTIONS.BROWSE_ALL' |
+        translate }}</button>
     </div>
 
     <!-- View all CTA -->
@@ -71,33 +72,21 @@
           <div class="value-img-sub">{{ 'HOME.SECTIONS.ARCH_SUB' | translate }}</div>
         </div>
       </div>
-      <!-- Floating badge -->
-      <div class="value-badge">
-        <span class="badge-number">45</span>
-        <span class="badge-text">{{ 'HOME.SECTIONS.GLOBAL_CITIES' | translate }}</span>
-      </div>
     </div>
 
     <!-- Right: Accordion -->
     <div class="value-content home-reveal">
       <div class="section-eyebrow">{{ 'HOME.SECTIONS.OUR_VALUE' | translate }}</div>
-      <h2 class="section-title">{{ 'HOME.SECTIONS.VALUE_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.VALUE_EMPHASIS' | translate }}</em></h2>
+      <h2 class="section-title">{{ 'HOME.SECTIONS.VALUE_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.VALUE_EMPHASIS' |
+          translate }}</em></h2>
       <p class="value-sub">
         {{ 'HOME.SECTIONS.VALUE_SUB' | translate }}
       </p>
 
       <div class="accordion">
-        <div
-          class="accordion-item"
-          *ngFor="let feat of valueFeatures; let i = index"
-          [class.open]="openAccordion === i"
-          [id]="'accordion-' + i"
-        >
-          <button
-            class="accordion-trigger"
-            (click)="toggleAccordion(i)"
-            [attr.aria-expanded]="openAccordion === i"
-          >
+        <div class="accordion-item" *ngFor="let feat of valueFeatures; let i = index" [class.open]="openAccordion === i"
+          [id]="'accordion-' + i">
+          <button class="accordion-trigger" (click)="toggleAccordion(i)" [attr.aria-expanded]="openAccordion === i">
             <span class="accordion-icon">{{ feat.icon }}</span>
             <span class="accordion-title">{{ feat.titleKey | translate }}</span>
             <span class="accordion-arrow">{{ openAccordion === i ? '−' : '+' }}</span>
@@ -119,17 +108,14 @@
     <!-- Left: Options grid -->
     <div class="contact-content home-reveal">
       <div class="section-eyebrow">{{ 'HOME.SECTIONS.OUR_CONTACT' | translate }}</div>
-      <h2 class="section-title">{{ 'HOME.SECTIONS.CONTACT_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.CONTACT_EMPHASIS' | translate }}</em></h2>
+      <h2 class="section-title">{{ 'HOME.SECTIONS.CONTACT_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.CONTACT_EMPHASIS'
+          | translate }}</em></h2>
       <p class="contact-sub">
         {{ 'HOME.SECTIONS.CONTACT_SUB' | translate }}
       </p>
 
       <div class="contact-grid stagger-container">
-        <div
-          *ngFor="let opt of contactOptions; let i = index"
-          class="contact-card stagger-item"
-          [id]="'contact-' + i"
-        >
+        <div *ngFor="let opt of contactOptions; let i = index" class="contact-card stagger-item" [id]="'contact-' + i">
           <span class="contact-icon" [ngSwitch]="opt.id">
             <!-- Call Icon -->
             <i *ngSwitchCase="'call'" class="fa-solid fa-phone" aria-hidden="true"></i>
@@ -178,7 +164,8 @@
 <!-- ── SECTION 5: Newsletter CTA ─────────────────────────────────── -->
 <section class="cta-section home-reveal">
   <div class="cta-inner">
-    <h2 class="cta-title">{{ 'HOME.SECTIONS.GET_STARTED_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.GET_STARTED_EMPHASIS' | translate }}</em></h2>
+    <h2 class="cta-title">{{ 'HOME.SECTIONS.GET_STARTED_TITLE' | translate }} <em>{{
+        'HOME.SECTIONS.GET_STARTED_EMPHASIS' | translate }}</em></h2>
     <p class="cta-sub">{{ 'HOME.SECTIONS.GET_STARTED_SUB' | translate }}</p>
     <button class="cta-btn" (click)="navigateToProperties()" id="btn-get-started">
       {{ 'HOME.SECTIONS.GET_STARTED_BTN' | translate }}

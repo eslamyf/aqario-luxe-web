@@ -16,6 +16,7 @@ import { Property } from '../../models/property.model';
 import { BookingsService } from '../../../../features/bookings/bookings.service';
 import { LoadingService } from '../../../../core/services/loading.service';
 import { ViewingService, ViewingStatus } from '../../services/viewing.service';
+import { SeoService } from '../../../../core/services/seo.service';
 
 @Component({
   selector: 'app-property-detail',
@@ -33,6 +34,7 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   private propertyActionsService = inject(PropertyActionsService);
   private inquiryService    = inject(InquiryService);
   private viewingService    = inject(ViewingService);
+  private seoService        = inject(SeoService);
 
   public authService          = inject(AuthService);
   private notificationService = inject(NotificationService);
@@ -109,8 +111,34 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
       if (property) {
         this.loadAdditionalData(property._id);
         this.refreshViewingStatus(property._id);
+        this.updatePropertySeo(property);
       }
     });
+  }
+
+  private updatePropertySeo(property: Property): void {
+    const cityName = property.city || 'صعيد مصر';
+    const titleStr = `${property.title} في ${cityName}`;
+    const descStr = `${property.description || property.title} - شقق وعقارات للبيع والإيجار في ${cityName} بصعيد مصر بأسعار شفافة بالجنيه المصري EGP.`;
+    const canonicalUrl = `https://aqario.app/properties/${property._id}`;
+
+    this.seoService.updateSeo({
+      title: titleStr,
+      description: descStr,
+      canonicalUrl,
+      ogTitle: titleStr,
+      ogDescription: descStr,
+      ogImage: property.images?.[0]
+    });
+
+    this.seoService.setBreadcrumbSchema([
+      { name: 'الرئيسية', url: 'https://aqario.app/' },
+      { name: 'عقارات صعيد مصر', url: 'https://aqario.app/properties' },
+      { name: `عقارات ${cityName}`, url: `https://aqario.app/properties?city=${encodeURIComponent(cityName)}` },
+      { name: property.title, url: canonicalUrl }
+    ]);
+
+    this.seoService.setPropertySchema(property);
   }
 
   ngOnDestroy(): void {

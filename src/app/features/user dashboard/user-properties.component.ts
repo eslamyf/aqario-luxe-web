@@ -79,7 +79,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
       address:     [''],
       type:        ['apartment', Validators.required],
       listingType: ['sale', Validators.required],
-      currency:    ['USD'],
+      currency:    ['EGP'],
     });
   }
 
@@ -150,7 +150,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
   }
 
   resetForm(): void {
-    this.form.reset({ type: 'apartment', listingType: 'sale', currency: 'USD' });
+    this.form.reset({ type: 'apartment', listingType: 'sale', currency: 'EGP' });
     this.selectedFiles = [];
     this.imagePreviews = [];
     this.currentView = 'table';
@@ -190,7 +190,7 @@ export class UserPropertiesComponent implements OnInit, OnDestroy {
     fd.append('price', String(v.price));
     fd.append('type', v.type);
     fd.append('listingType', v.listingType);
-    fd.append('currency', v.currency || 'USD');
+    fd.append('currency', 'EGP');
 
     // ── Location (nested object → bracket notation) ──
     fd.append('location[city][en]', v.city.en);

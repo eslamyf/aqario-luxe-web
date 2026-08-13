@@ -17,6 +17,17 @@
   <!-- Main Content -->
   <div *ngIf="!isLoading && !error && property" class="content-grid">
 
+    <!-- Breadcrumb Nav -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <a routerLink="/">الرئيسية</a>
+      <span class="sep">/</span>
+      <a routerLink="/properties">عقارات صعيد مصر</a>
+      <span class="sep">/</span>
+      <a [routerLink]="['/properties']" [queryParams]="{ city: property.city }">{{ property.city || 'صعيد مصر' }}</a>
+      <span class="sep">/</span>
+      <span class="current">{{ property.title }}</span>
+    </nav>
+
     <!-- Left Column: Gallery & Description -->
     <div class="main-content">
       <!-- Gallery Section -->
@@ -42,7 +53,7 @@
         <div class="info-header">
           <h1 class="property-title">{{ property.title }}</h1>
           <p class="property-location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {{ property.location }}</p>
-          <div class="property-price">{{ formatPrice(property.price, property.currency || 'USD', property.status) }}
+          <div class="property-price">{{ formatPrice(property.price, 'EGP', property.status) }}
           </div>
         </div>
 
@@ -207,9 +218,9 @@
                     <div class="price-breakdown" *ngIf="nights > 0">
                       <div class="breakdown-row">
                         <span>{{ 'PROPERTIES.DETAIL.NIGHTS_X' | translate:{ price: (property.price |
-                          currency:property.currency:'symbol':'1.0-0'), count: nights } }}</span>
+                          currency:'EGP':'symbol':'1.0-0'), count: nights } }}</span>
                         <span class="total-price">{{ getBookingTotal(property.price) |
-                          currency:property.currency:'symbol':'1.0-0' }}</span>
+                          currency:'EGP':'symbol':'1.0-0' }}</span>
                       </div>
                     </div>
                   </ng-container>
@@ -217,7 +228,7 @@
                   <div class="price-breakdown" *ngIf="property.status === 'for-sale'">
                     <div class="breakdown-row">
                       <span>{{ 'PROPERTIES.DETAIL.PURCHASE_PRICE' | translate }}</span>
-                      <span class="total-price">{{ property.price | currency:property.currency:'symbol':'1.0-0'
+                      <span class="total-price">{{ property.price | currency:'EGP':'symbol':'1.0-0'
                         }}</span>
                     </div>
                   </div>

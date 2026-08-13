@@ -114,7 +114,7 @@ export class PropertyModalComponent implements OnInit, OnDestroy {
   get formattedPrice(): string {
     return this.propertiesService.formatPrice(
       this.property.price,
-      this.property.currency ?? 'USD',
+      'EGP',
       this.property.status
     );
   }

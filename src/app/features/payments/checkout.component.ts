@@ -41,15 +41,15 @@ import { TranslateModule } from '@ngx-translate/core';
           <div class="invoice-details">
             <div class="invoice-row">
               <span>{{ 'CHECKOUT.PROPERTY_TOTAL' | translate }}</span>
-              <span>{{ booking.amount | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
+              <span>{{ booking.amount | currency:'EGP':'symbol':'1.0-0' }}</span>
             </div>
             <div class="invoice-row service-fee">
               <span>{{ 'CHECKOUT.SERVICE_FEE' | translate }}</span>
-              <span>{{ serviceFee | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
+              <span>{{ serviceFee | currency:'EGP':'symbol':'1.0-0' }}</span>
             </div>
             <div class="invoice-row total-row">
               <span>{{ 'CHECKOUT.FINAL_TOTAL' | translate }}</span>
-              <span class="final-price">{{ finalPrice | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
+              <span class="final-price">{{ finalPrice | currency:'EGP':'symbol':'1.0-0' }}</span>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@ import { TranslateModule } from '@ngx-translate/core';
           <button class="action-btn full-width" 
                   [disabled]="isProcessing" 
                   (click)="processPayment()">
-            <span *ngIf="!isProcessing">{{ 'CHECKOUT.PAY' | translate }} {{ finalPrice | currency:booking.property?.currency:'symbol':'1.0-0' }}</span>
+            <span *ngIf="!isProcessing">{{ 'CHECKOUT.PAY' | translate }} {{ finalPrice | currency:'EGP':'symbol':'1.0-0' }}</span>
             <div *ngIf="isProcessing" class="spinner-small"></div>
           </button>
         </div>

@@ -38,22 +38,34 @@ export class SearchBarComponent {
     { value: 'Penthouse', labelKey: 'REAL_ESTATE.PENTHOUSE' },
     { value: 'Estate', labelKey: 'REAL_ESTATE.ESTATE' }
   ];
+
+  locations = [
+    { value: '', labelKey: 'SEARCH.ALL_LOCATIONS' },
+    { value: 'Qena', labelKey: 'SEARCH.LOCATION_QENA' },
+    { value: 'New Qena', labelKey: 'SEARCH.LOCATION_NEW_QENA' },
+    { value: 'Luxor', labelKey: 'SEARCH.LOCATION_LUXOR' },
+    { value: 'Hurghada', labelKey: 'SEARCH.LOCATION_HURGHADA' },
+    { value: 'Other Upper Egypt', labelKey: 'SEARCH.LOCATION_OTHER_UPPER_EGYPT' }
+  ];
+
   listingTypes = [
     { value: 'For Sale', labelKey: 'REAL_ESTATE.FOR_SALE' },
     { value: 'For Rent', labelKey: 'REAL_ESTATE.FOR_RENT' }
   ];
+
   budgets = [
     { value: 'Any Budget', labelKey: 'SEARCH.ANY_BUDGET' },
-    { value: 'Up to $500K', labelKey: 'SEARCH.BUDGET_500K' },
-    { value: '$500K – $1M', labelKey: 'SEARCH.BUDGET_500K_1M' },
-    { value: '$1M – $3M', labelKey: 'SEARCH.BUDGET_1M_3M' },
-    { value: '$3M – $10M', labelKey: 'SEARCH.BUDGET_3M_10M' },
-    { value: '$10M+', labelKey: 'SEARCH.BUDGET_10M_PLUS' }
+    { value: 'Up to 500K EGP', labelKey: 'SEARCH.BUDGET_500K' },
+    { value: '500K – 1.5M EGP', labelKey: 'SEARCH.BUDGET_500K_1_5M' },
+    { value: '1.5M – 3M EGP', labelKey: 'SEARCH.BUDGET_1_5M_3M' },
+    { value: '3M – 5M EGP', labelKey: 'SEARCH.BUDGET_3M_5M' },
+    { value: '5M+ EGP', labelKey: 'SEARCH.BUDGET_5M_PLUS' }
   ];
 
   constructor() {
     this.searchForm = this.fb.group({
       searchQuery: [''],
+      location: [''],
       propertyType: ['All Types'],
       listingType: ['For Sale'],
       budget: ['Any Budget'],
@@ -77,14 +89,15 @@ export class SearchBarComponent {
   }
 
   onExplore(): void {
-    const { searchQuery, propertyType, listingType, budget } = this.searchForm.value;
+    const { searchQuery, location, propertyType, listingType, budget } = this.searchForm.value;
 
     const input = (searchQuery || '').trim();
     const isAdvancedSearch = input.includes(' ') || input.length > 10;
+    const cityVal = location || (!isAdvancedSearch && input ? input : undefined);
 
     const payload: SearchPayload = {
       search: isAdvancedSearch && input ? input : undefined,
-      city: !isAdvancedSearch && input ? input : undefined,
+      city: cityVal,
       type: propertyType === 'All Types' ? undefined : propertyType.toLowerCase(),
       listingType: listingType === 'For Sale' ? 'for-sale' : 'for-rent',
       ...this.budgetToRange(budget)
@@ -103,16 +116,19 @@ export class SearchBarComponent {
 
   private budgetToRange(budget: string): { minPrice?: number; maxPrice?: number } {
     switch (budget) {
+      case 'Up to 500K EGP':
       case 'Up to $500K':
         return { maxPrice: 500000 };
-      case '$500K – $1M':
-        return { minPrice: 500000, maxPrice: 1000000 };
+      case '500K – 1.5M EGP':
+        return { minPrice: 500000, maxPrice: 1500000 };
+      case '1.5M – 3M EGP':
       case '$1M – $3M':
-        return { minPrice: 1000000, maxPrice: 3000000 };
-      case '$3M – $10M':
-        return { minPrice: 3000000, maxPrice: 10000000 };
+        return { minPrice: 1500000, maxPrice: 3000000 };
+      case '3M – 5M EGP':
+        return { minPrice: 3000000, maxPrice: 5000000 };
+      case '5M+ EGP':
       case '$10M+':
-        return { minPrice: 10000000 };
+        return { minPrice: 5000000 };
       default:
         return {};
     }

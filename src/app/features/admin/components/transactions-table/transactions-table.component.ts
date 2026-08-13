@@ -42,7 +42,7 @@ import { AdminService } from '../../admin.service';
                   {{ 'ADMIN.DASHBOARD.TRANSACTIONS.STATUS.' + (txn.status | uppercase) | translate }}
                 </span>
               </td>
-              <td class="amount">{{ txn.totalAmount | currency:'USD':'symbol':'1.0-0' }}</td>
+              <td class="amount">{{ txn.totalAmount | currency:'EGP':'symbol':'1.0-0' }}</td>
               <td>
                 <button 
                   *ngIf="txn.status === 'completed' && !isProcessingRefund(txn._id)"

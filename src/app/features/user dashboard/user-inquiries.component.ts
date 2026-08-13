@@ -51,7 +51,7 @@ import { TranslateService } from '@ngx-translate/core';
                 <p class="prop-location"><i class="fa-solid fa-location-dot text-gold" aria-hidden="true"></i> {{ (inq.property?.location?.city || 'N/A') | translateProp }}</p>
               </div>
               <div class="price-badge">
-                {{ inq.property?.price | currency:(inq.property?.currency || 'EGP'):'symbol':'1.0-0' }}
+                {{ inq.property?.price | currency:'EGP':'symbol':'1.0-0' }}
               </div>
             </div>
 

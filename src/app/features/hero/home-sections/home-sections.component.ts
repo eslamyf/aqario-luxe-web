@@ -125,7 +125,7 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
       ...p,
       formattedPrice: this.propertiesService.formatPrice(
         p.price,
-        p.currency ?? 'USD',
+        'EGP',
         p.status
       ),
       primaryImage: this.resolveImageUrl(p.images),

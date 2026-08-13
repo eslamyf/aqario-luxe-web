@@ -3,12 +3,98 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Aqario Luxe — Global Real Estate Platform</title>
+  <title>AQARIO — سوق العقارات في صعيد مصر | شقق، أراضي، وفلل للبيع والإيجار</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description"
-    content="Discover extraordinary properties curated for the discerning — from penthouse suites in Manhattan to waterfront villas in Dubai.">
+    content="منصة AQARIO الرائدة لسوق العقارات في صعيد مصر. اكتشف أفضل العقارات والشقق والأراضي والفلل بأسعار شفافة، وتواصل مباشرة مع أصحاب العقارات والمسوقين.">
   <meta name="color-scheme" content="dark light">
+
+  <link rel="canonical" href="https://aqario.app/">
+  <link rel="alternate" hreflang="ar" href="https://aqario.app/">
+  <link rel="alternate" hreflang="en" href="https://aqario.app/">
+
+  <!-- Geo Meta Tags for Upper Egypt -->
+  <meta name="geo.region" content="EG-UE">
+  <meta name="geo.placename" content="Upper Egypt">
+  <meta name="geo.position" content="26.1551;32.7160">
+  <meta name="ICBM" content="26.1551, 32.7160">
+
+  <!-- OpenGraph Meta Tags -->
+  <meta property="og:site_name" content="AQARIO">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AQARIO — سوق العقارات في صعيد مصر | شقق، أراضي، وفلل للبيع والإيجار">
+  <meta property="og:description" content="منصة AQARIO الرائدة لسوق العقارات في صعيد مصر. اكتشف أفضل العقارات والشقق والأراضي والفلل بأسعار شفافة.">
+  <meta property="og:url" content="https://aqario.app/">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AQARIO — سوق العقارات في صعيد مصر">
+  <meta name="twitter:description" content="منصة AQARIO الرائدة لسوق العقارات في صعيد مصر. اكتشف شقق وأراضي وفلل للبيع والإيجار.">
+
+  <!-- Schema.org JSON-LD Structured Data: RealEstateAgent & WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "RealEstateAgent",
+        "@id": "https://aqario.app/#organization",
+        "name": "AQARIO",
+        "alternateName": "عقاريو",
+        "url": "https://aqario.app/",
+        "logo": "https://aqario.app/assets/images/logo.png",
+        "description": "منصة العقارات الرائدة لخدمة سوق العقارات في صعيد مصر.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Upper Egypt",
+          "addressCountry": "EG"
+        },
+        "areaServed": [
+          {
+            "@type": "AdministrativeArea",
+            "name": "Upper Egypt"
+          },
+          {
+            "@type": "City",
+            "name": "Qena"
+          },
+          {
+            "@type": "City",
+            "name": "Luxor"
+          },
+          {
+            "@type": "City",
+            "name": "Sohag"
+          },
+          {
+            "@type": "City",
+            "name": "Asyut"
+          },
+          {
+            "@type": "City",
+            "name": "Hurghada"
+          }
+        ],
+        "priceRange": "EGP"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://aqario.app/#website",
+        "url": "https://aqario.app/",
+        "name": "AQARIO",
+        "publisher": {
+          "@id": "https://aqario.app/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://aqario.app/properties?search={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
 
   <!--
     ════════════════════════════════════════════════════════════
@@ -56,16 +142,23 @@
   <link rel="dns-prefetch" href="https://unpkg.com">
 
   <!-- Asynchronous Non-Blocking Google Fonts Loading (FOUT/FOIT Mitigated) -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'">
   <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet">
   </noscript>
 
   <!-- Non-Blocking Font Awesome 6 CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'" />
   <!-- Non-Blocking Phosphor Icons CDN -->
-  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.css" media="print"
+    onload="this.media='all'" />
 </head>
 
 <body>
