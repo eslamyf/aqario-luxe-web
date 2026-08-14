@@ -14,7 +14,7 @@
   box-sizing: border-box;
   // Extra bottom padding so search-bar overlay doesn't hide content
   padding-bottom: 220px;
-  overflow: hidden;
+  overflow: visible;
 
   @media (max-width: 1024px) {
     min-height: 100svh;
@@ -444,7 +444,7 @@
 // ── Search Bar Wrapper ────────────────────────────────────────
 .hero-search-wrap {
   position: absolute;
-  bottom: 36px;
+  bottom: 75px;
   inset-inline-start: 0;
   inset-inline-end: 0;
   z-index: 10;
@@ -478,6 +478,8 @@
   overflow: hidden;
   position: relative;
   z-index: 20;
+  display: flex;
+  align-items: center;
   transition: background-color 0.3s var(--transition);
 
   &::after {
@@ -495,7 +497,8 @@
   display: flex;
   align-items: center;
   width: max-content;
-  animation: marquee 35s linear infinite;
+  will-change: transform;
+  animation: marqueeLTR 35s linear infinite;
   padding: 12px 0;
 
   &:hover {
@@ -503,13 +506,33 @@
   }
 }
 
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
+.ticker-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
 
+@keyframes marqueeLTR {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+[dir='rtl'] .ticker-track,
+html[dir='rtl'] .ticker-track,
+:host-context([dir='rtl']) .ticker-track {
+  animation-name: marqueeRTL;
+}
+
+@keyframes marqueeRTL {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(50%, 0, 0);
   }
 }
 

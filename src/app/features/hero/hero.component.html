@@ -50,20 +50,11 @@
         <button id="btn-explore-properties" class="btn-primary" data-cursor-hover (click)="scrollToProperties()">
           {{ 'HOME.HERO.EXPLORE' | translate }}
         </button>
-        <button id="btn-list-property" class="btn-secondary" data-cursor-hover (click)="navigateToAddProperty()">
-          {{ 'HOME.HERO.LIST' | translate }}
-        </button>
       </div>
 
     </div><!-- /hero-content -->
 
   </div><!-- /hero-body -->
-
-  <!-- Scroll indicator: bottom-left -->
-  <div class="hero-scroll-indicator">
-    <span class="scroll-label">{{ 'HOME.HERO.SCROLL' | translate }}</span>
-    <div class="scroll-line"></div>
-  </div>
 
   <!-- Search Bar — positioned at hero bottom -->
   <div class="hero-search-wrap" [@buttons]="animState">
@@ -78,13 +69,24 @@
      ════════════════════════════════════════════════════════════ -->
 <div class="ticker-wrap">
   <div class="ticker-track">
-    <span class="ticker-item" *ngFor="let item of allTickerItems">
-      <span class="ticker-label">{{ 'HOME.TICKER.' + item.key | translate }}</span>
-      <span class="ticker-change" [class.positive]="item.positive" [class.negative]="!item.positive">
-        {{ item.positive ? '↑' : '↓' }} {{ item.change }}%
+    <div class="ticker-group">
+      <span class="ticker-item" *ngFor="let item of tickerItems">
+        <span class="ticker-label">{{ 'HOME.TICKER.' + item.key | translate }}</span>
+        <span class="ticker-change" [class.positive]="item.positive" [class.negative]="!item.positive">
+          {{ item.positive ? '↑' : '↓' }} {{ item.change }}%
+        </span>
+        <span class="ticker-sep">·</span>
       </span>
-      <span class="ticker-sep">·</span>
-    </span>
+    </div>
+    <div class="ticker-group" aria-hidden="true">
+      <span class="ticker-item" *ngFor="let item of tickerItems">
+        <span class="ticker-label">{{ 'HOME.TICKER.' + item.key | translate }}</span>
+        <span class="ticker-change" [class.positive]="item.positive" [class.negative]="!item.positive">
+          {{ item.positive ? '↑' : '↓' }} {{ item.change }}%
+        </span>
+        <span class="ticker-sep">·</span>
+      </span>
+    </div>
   </div>
 </div>
 

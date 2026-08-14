@@ -19,41 +19,112 @@
     <div class="field-divider"></div>
 
     <!-- Property Type -->
-    <div class="field-group">
+    <div class="field-group custom-select-group" (click)="$event.stopPropagation()">
       <label class="field-label">{{ 'SEARCH.LABEL_PROP_TYPE' | translate }}</label>
-      <select class="field-input" formControlName="propertyType">
-        <option *ngFor="let t of propertyTypes" [value]="t.value">{{ t.labelKey | translate }}</option>
-      </select>
+      <button type="button" class="custom-select-trigger" (click)="toggleDropdown('propertyType', $event)">
+        <span>{{ getSelectedDisplay('propertyType') }}</span>
+        <i class="fa-solid fa-chevron-down chevron-icon" [class.rotated]="openDropdown === 'propertyType'"></i>
+      </button>
+
+      <div class="custom-dropdown-menu" *ngIf="openDropdown === 'propertyType'">
+        <div class="dropdown-header">
+          <span>{{ currentLang === 'ar' ? 'اختر نوع العقار' : 'Select Property Type' }}</span>
+        </div>
+        <div class="dropdown-list">
+          <div *ngFor="let t of propertyTypes" class="dropdown-item"
+            [class.selected]="searchForm.value.propertyType === t.value"
+            (click)="selectOption('propertyType', t.value, $event)">
+            <div class="item-name-wrapper">
+              <span class="item-name-primary">{{ currentLang === 'ar' ? t.nameAr : t.nameEn }}</span>
+              <span class="item-name-secondary">({{ currentLang === 'ar' ? t.nameEn : t.nameAr }})</span>
+            </div>
+            <i class="fa-solid fa-check check-icon" *ngIf="searchForm.value.propertyType === t.value"></i>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="field-divider"></div>
 
     <!-- Location / Region -->
-    <div class="field-group">
+    <div class="field-group custom-select-group" (click)="$event.stopPropagation()">
       <label class="field-label">{{ 'SEARCH.LABEL_LOCATION' | translate }}</label>
-      <select class="field-input" formControlName="location">
-        <option *ngFor="let loc of locations" [value]="loc.value">{{ loc.labelKey | translate }}</option>
-      </select>
+      <button type="button" class="custom-select-trigger" (click)="toggleDropdown('location', $event)">
+        <span>{{ getSelectedDisplay('location') }}</span>
+        <i class="fa-solid fa-chevron-down chevron-icon" [class.rotated]="openDropdown === 'location'"></i>
+      </button>
+
+      <div class="custom-dropdown-menu" *ngIf="openDropdown === 'location'">
+        <div class="dropdown-header">
+          <span>{{ currentLang === 'ar' ? 'اختر المدينة أو المركز' : 'Select City or District' }}</span>
+        </div>
+        <div class="dropdown-list">
+          <div *ngFor="let loc of locations" class="dropdown-item"
+            [class.selected]="searchForm.value.location === loc.value"
+            (click)="selectOption('location', loc.value, $event)">
+            <div class="item-name-wrapper">
+              <span class="item-name-primary">{{ currentLang === 'ar' ? loc.nameAr : loc.nameEn }}</span>
+              <span class="item-name-secondary" *ngIf="loc.value">({{ currentLang === 'ar' ? loc.nameEn : loc.nameAr
+                }})</span>
+            </div>
+            <i class="fa-solid fa-check check-icon" *ngIf="searchForm.value.location === loc.value"></i>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="field-divider"></div>
 
     <!-- Listing Type -->
-    <div class="field-group">
+    <div class="field-group custom-select-group" (click)="$event.stopPropagation()">
       <label class="field-label">{{ 'SEARCH.LABEL_LIST_TYPE' | translate }}</label>
-      <select class="field-input" formControlName="listingType">
-        <option *ngFor="let lt of listingTypes" [value]="lt.value">{{ lt.labelKey | translate }}</option>
-      </select>
+      <button type="button" class="custom-select-trigger" (click)="toggleDropdown('listingType', $event)">
+        <span>{{ getSelectedDisplay('listingType') }}</span>
+        <i class="fa-solid fa-chevron-down chevron-icon" [class.rotated]="openDropdown === 'listingType'"></i>
+      </button>
+
+      <div class="custom-dropdown-menu" *ngIf="openDropdown === 'listingType'">
+        <div class="dropdown-header">
+          <span>{{ currentLang === 'ar' ? 'اختر نوع العرض' : 'Select Listing Type' }}</span>
+        </div>
+        <div class="dropdown-list">
+          <div *ngFor="let lt of listingTypes" class="dropdown-item"
+            [class.selected]="searchForm.value.listingType === lt.value"
+            (click)="selectOption('listingType', lt.value, $event)">
+            <div class="item-name-wrapper">
+              <span class="item-name-primary">{{ currentLang === 'ar' ? lt.nameAr : lt.nameEn }}</span>
+              <span class="item-name-secondary">({{ currentLang === 'ar' ? lt.nameEn : lt.nameAr }})</span>
+            </div>
+            <i class="fa-solid fa-check check-icon" *ngIf="searchForm.value.listingType === lt.value"></i>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="field-divider"></div>
 
     <!-- Max Budget -->
-    <div class="field-group">
+    <div class="field-group custom-select-group" (click)="$event.stopPropagation()">
       <label class="field-label">{{ 'SEARCH.LABEL_BUDGET' | translate }}</label>
-      <select class="field-input" formControlName="budget">
-        <option *ngFor="let b of budgets" [value]="b.value">{{ b.labelKey | translate }}</option>
-      </select>
+      <button type="button" class="custom-select-trigger" (click)="toggleDropdown('budget', $event)">
+        <span>{{ getSelectedDisplay('budget') }}</span>
+        <i class="fa-solid fa-chevron-down chevron-icon" [class.rotated]="openDropdown === 'budget'"></i>
+      </button>
+
+      <div class="custom-dropdown-menu" *ngIf="openDropdown === 'budget'">
+        <div class="dropdown-header">
+          <span>{{ currentLang === 'ar' ? 'اختر الميزانية / السعر' : 'Select Budget / Price' }}</span>
+        </div>
+        <div class="dropdown-list">
+          <div *ngFor="let b of budgets" class="dropdown-item" [class.selected]="searchForm.value.budget === b.value"
+            (click)="selectOption('budget', b.value, $event)">
+            <div class="item-name-wrapper">
+              <span class="item-name-primary">{{ currentLang === 'ar' ? b.nameAr : b.nameEn }}</span>
+            </div>
+            <i class="fa-solid fa-check check-icon" *ngIf="searchForm.value.budget === b.value"></i>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Search Button -->
@@ -62,12 +133,6 @@
       <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
     </button>
 
-  </div>
-
-  <!-- Secondary Row: List Property -->
-  <div class="secondary-row">
-    <span class="secondary-text">{{ 'SEARCH.OWN_LUXURY' | translate }}</span>
-    <button class="btn-list-prop" type="button">{{ 'SEARCH.BTN_LIST' | translate }}</button>
   </div>
 
 </div>
