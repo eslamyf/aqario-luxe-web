@@ -40,11 +40,66 @@
           <input type="text" formControlName="search" [placeholder]="'PROPERTIES.SEARCH_PLACEHOLDER' | translate" />
         </div>
 
-        <div class="input-group">
+        <div class="input-group city-select-container">
           <span class="input-icon">
             <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
           </span>
-          <input type="text" formControlName="city" [placeholder]="'PROPERTIES.CITY_PLACEHOLDER' | translate" />
+          <input
+            type="text"
+            formControlName="city"
+            [placeholder]="'PROPERTIES.CITY_PLACEHOLDER' | translate"
+            (focus)="openCityDropdown()"
+            (input)="onCityInput($event)"
+            (keydown.escape)="closeCityDropdown()"
+            autocomplete="off"
+          />
+          <button
+            type="button"
+            class="btn-clear-city"
+            *ngIf="filterForm.value.city"
+            (click)="clearCityInput($event)"
+            [title]="'PROPERTIES.CLEAR_ALL' | translate"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <button type="button" class="btn-toggle-city-dropdown" (click)="toggleCityDropdown($event)" aria-label="Toggle city menu">
+            <i class="fa-solid fa-chevron-down" [class.rotated]="isCityDropdownOpen"></i>
+          </button>
+
+          <!-- Custom City Dropdown Menu -->
+          <div class="city-dropdown-menu" *ngIf="isCityDropdownOpen">
+            <div class="city-dropdown-header" *ngIf="filteredLocations.length > 0">
+              <span>{{ currentLang === 'ar' ? 'اختر المدينة أو المركز' : 'Select City or District' }}</span>
+            </div>
+            
+            <div class="city-dropdown-list">
+              <div
+                class="city-dropdown-item"
+                [class.selected]="!filterForm.value.city"
+                (click)="selectCity(null)"
+              >
+                <span class="city-name-primary">{{ currentLang === 'ar' ? 'جميع المناطق' : 'All Locations' }}</span>
+                <i class="fa-solid fa-check check-icon" *ngIf="!filterForm.value.city"></i>
+              </div>
+
+              <div
+                class="city-dropdown-item"
+                *ngFor="let loc of filteredLocations"
+                [class.selected]="isCitySelected(loc)"
+                (click)="selectCity(loc)"
+              >
+                <div class="city-name-wrapper">
+                  <span class="city-name-primary">{{ currentLang === 'ar' ? loc.nameAr : loc.nameEn }}</span>
+                  <span class="city-name-secondary">({{ currentLang === 'ar' ? loc.nameEn : loc.nameAr }})</span>
+                </div>
+                <i class="fa-solid fa-check check-icon" *ngIf="isCitySelected(loc)"></i>
+              </div>
+
+              <div class="city-no-results" *ngIf="filteredLocations.length === 0">
+                <span>{{ currentLang === 'ar' ? 'لا توجد مواقع مطابقة' : 'No matching locations found' }}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <button type="button" class="btn-toggle-filters" (click)="toggleFilterPanel()"
@@ -62,11 +117,11 @@
         <div class="filter-row">
           <div class="filter-group">
             <label>{{ 'PROPERTIES.MIN_PRICE' | translate }}</label>
-            <input type="number" formControlName="minPrice" [placeholder]="'PROPERTIES.ANY' | translate" />
+            <input type="number" formControlName="minPrice" [placeholder]="'PROPERTIES.ANY' | translate" min="0" />
           </div>
           <div class="filter-group">
             <label>{{ 'PROPERTIES.MAX_PRICE' | translate }}</label>
-            <input type="number" formControlName="maxPrice" [placeholder]="'PROPERTIES.ANY' | translate" />
+            <input type="number" formControlName="maxPrice" [placeholder]="'PROPERTIES.ANY' | translate" min="0" />
           </div>
           <div class="filter-group">
             <label>{{ 'PROPERTIES.BEDROOMS_LABEL' | translate }}</label>
@@ -91,8 +146,7 @@
             </select>
           </div>
           <div class="filter-actions">
-            <button type="button" class="btn-secondary" (click)="clearFilters()">{{ 'PROPERTIES.CLEAR_ALL' | translate
-              }}</button>
+            <button type="button" class="btn-secondary" (click)="clearFilters()">{{ 'PROPERTIES.CLEAR_ALL' | translate }}</button>
           </div>
         </div>
       </div>
@@ -114,24 +168,47 @@
   </div>
 
   <!-- ── Error state ─────────────────────────────────────────────────────── -->
-  <div *ngIf="(error$ | async) as err" class="properties-error">
+  <div *ngIf="(error$ | async) as errKey" class="properties-error">
     <div class="error-card">
-      <span class="error-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="24" height="24">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
-      </span>
-      <p class="error-message">{{ err }}</p>
-      <button class="btn-secondary" (click)="retryLoad()" data-cursor-hover>
-        {{ 'PROPERTIES.TRY_AGAIN' | translate }}
-      </button>
+      <div class="error-icon-badge">
+        <i *ngIf="errKey === 'NETWORK_ERROR'" class="fa-solid fa-wifi"></i>
+        <i *ngIf="errKey === 'INVALID_FILTER' || errKey === 'CAST_ERROR'" class="fa-solid fa-sliders"></i>
+        <i *ngIf="errKey === 'SERVER_ERROR'" class="fa-solid fa-circle-exclamation"></i>
+      </div>
+
+      <h3 class="error-title">
+        <ng-container [ngSwitch]="errKey">
+          <span *ngSwitchCase="'NETWORK_ERROR'">{{ 'PROPERTIES.ERRORS.NETWORK_ERROR_TITLE' | translate }}</span>
+          <span *ngSwitchCase="'INVALID_FILTER'">{{ 'PROPERTIES.ERRORS.INVALID_FILTER_TITLE' | translate }}</span>
+          <span *ngSwitchCase="'CAST_ERROR'">{{ 'PROPERTIES.ERRORS.CAST_ERROR_TITLE' | translate }}</span>
+          <span *ngSwitchDefault>{{ 'PROPERTIES.ERRORS.SERVER_ERROR_TITLE' | translate }}</span>
+        </ng-container>
+      </h3>
+
+      <p class="error-message">
+        <ng-container [ngSwitch]="errKey">
+          <span *ngSwitchCase="'NETWORK_ERROR'">{{ 'PROPERTIES.ERRORS.NETWORK_ERROR_SUB' | translate }}</span>
+          <span *ngSwitchCase="'INVALID_FILTER'">{{ 'PROPERTIES.ERRORS.INVALID_FILTER_SUB' | translate }}</span>
+          <span *ngSwitchCase="'CAST_ERROR'">{{ 'PROPERTIES.ERRORS.CAST_ERROR_SUB' | translate }}</span>
+          <span *ngSwitchDefault>{{ 'PROPERTIES.ERRORS.SERVER_ERROR_SUB' | translate }}</span>
+        </ng-container>
+      </p>
+
+      <div class="error-actions">
+        <button *ngIf="errKey === 'NETWORK_ERROR' || errKey === 'SERVER_ERROR'" class="btn-gold" (click)="retryLoad()" data-cursor-hover>
+          <i class="fa-solid fa-rotate-right" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.RETRY' | translate }}
+        </button>
+        <button *ngIf="errKey === 'INVALID_FILTER' || errKey === 'CAST_ERROR'" class="btn-gold" (click)="onModifyFilters()" data-cursor-hover>
+          <i class="fa-solid fa-sliders" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.MODIFY_FILTERS' | translate }}
+        </button>
+        <button class="btn-secondary" (click)="clearFilters()" data-cursor-hover>
+          <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.RESET_FILTERS' | translate }}
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- ── Properties grid ─────────────────────────────────────────────────── -->
+  <!-- ── Properties grid & Empty State ───────────────────────────────────── -->
   <ng-container *ngIf="(isLoading$ | async) === false && (error$ | async) === null">
     <div *ngIf="(properties$ | async)?.length" class="properties-grid">
       <app-property-card *ngFor="let prop of properties$ | async; let i = index; trackBy: trackById" [property]="prop"
@@ -139,12 +216,23 @@
       </app-property-card>
     </div>
 
-    <!-- Empty state -->
+    <!-- Empty state (Case 1: No matching properties) -->
     <div class="properties-empty" *ngIf="!(properties$ | async)?.length">
-      <p class="properties-empty-text">{{ 'PROPERTIES.EMPTY_TEXT' | translate }}</p>
-      <button class="btn-secondary" (click)="onViewAll()" data-cursor-hover>
-        {{ 'PROPERTIES.VIEW_ALL' | translate }}
-      </button>
+      <div class="empty-card">
+        <div class="empty-icon-badge">
+          <i class="fa-solid fa-sliders"></i>
+        </div>
+        <h3 class="empty-title">{{ 'PROPERTIES.ERRORS.NO_MATCH_TITLE' | translate }}</h3>
+        <p class="properties-empty-text">{{ 'PROPERTIES.ERRORS.NO_MATCH_SUB' | translate }}</p>
+        <div class="empty-actions">
+          <button class="btn-gold" (click)="onModifyFilters()" data-cursor-hover>
+            <i class="fa-solid fa-sliders" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.MODIFY_FILTERS' | translate }}
+          </button>
+          <button class="btn-secondary" (click)="clearFilters()" data-cursor-hover>
+            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.RESET_FILTERS' | translate }}
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- ── Pagination ─────────────────────────────────────────────────────── -->

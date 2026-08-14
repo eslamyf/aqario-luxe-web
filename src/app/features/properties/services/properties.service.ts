@@ -122,25 +122,70 @@ export class PropertiesService {
     let params = new HttpParams();
 
     // Map frontend status (for-sale/for-rent) → backend listingType (sale/rent)
-    if (filters?.status) {
+    if (filters?.status && (filters.status === 'for-rent' || filters.status === 'for-sale')) {
       params = params.set('listingType', filters.status === 'for-rent' ? 'rent' : 'sale');
     }
 
     if (filters?.search) {
-      params = params.set('search', filters.search);
-    }
-    if (filters?.city) {
-      params = params.set('city', filters.city);
+      const search = String(filters.search).trim();
+      if (search && search !== 'undefined' && search !== 'null') {
+        params = params.set('search', search);
+      }
     }
 
-    if (filters?.type) params = params.set('type', filters.type);
-    if (filters?.maxPrice) params = params.set('maxPrice', String(filters.maxPrice));
-    if (filters?.minPrice) params = params.set('minPrice', String(filters.minPrice));
-    if (filters?.bedrooms) params = params.set('bedrooms', String(filters.bedrooms));
-    if (filters?.bathrooms) params = params.set('bathrooms', String(filters.bathrooms));
-    if (filters?.page) params = params.set('page', String(filters.page));
-    if (filters?.limit) params = params.set('limit', String(filters.limit));
-    if (filters?.cursor) params = params.set('cursor', filters.cursor);
+    if (filters?.city) {
+      const city = String(filters.city).trim();
+      if (city && city !== 'undefined' && city !== 'null' && city !== 'all' && city !== 'any') {
+        params = params.set('city', city);
+      }
+    }
+
+    if (filters?.type) {
+      const validTypes: PropertyType[] = ['apartment', 'villa', 'house', 'studio', 'commercial', 'office', 'shop', 'land'];
+      if (validTypes.includes(filters.type)) {
+        params = params.set('type', filters.type);
+      }
+    }
+
+    if (filters?.maxPrice !== undefined && filters?.maxPrice !== null) {
+      const num = Number(filters.maxPrice);
+      if (!isNaN(num) && num > 0) {
+        params = params.set('maxPrice', String(num));
+      }
+    }
+
+    if (filters?.minPrice !== undefined && filters?.minPrice !== null) {
+      const num = Number(filters.minPrice);
+      if (!isNaN(num) && num > 0) {
+        params = params.set('minPrice', String(num));
+      }
+    }
+
+    if (filters?.bedrooms !== undefined && filters?.bedrooms !== null) {
+      const num = Number(filters.bedrooms);
+      if (!isNaN(num) && num > 0) {
+        params = params.set('bedrooms', String(num));
+      }
+    }
+
+    if (filters?.bathrooms !== undefined && filters?.bathrooms !== null) {
+      const num = Number(filters.bathrooms);
+      if (!isNaN(num) && num > 0) {
+        params = params.set('bathrooms', String(num));
+      }
+    }
+
+    if (filters?.page && !isNaN(Number(filters.page)) && Number(filters.page) > 0) {
+      params = params.set('page', String(Number(filters.page)));
+    }
+
+    if (filters?.limit && !isNaN(Number(filters.limit)) && Number(filters.limit) > 0) {
+      params = params.set('limit', String(Number(filters.limit)));
+    }
+
+    if (filters?.cursor && String(filters.cursor).trim()) {
+      params = params.set('cursor', String(filters.cursor).trim());
+    }
 
     return this.http
       .get<any>(`${this.base}/properties`, { params })
@@ -156,16 +201,34 @@ export class PropertiesService {
               nextCursor: res.nextCursor,
             });
           }
+          // Clear any previous error on successful fetch
+          this._error$.next(null);
         }),
         map((res) => {
           const properties: any[] = res.data?.properties ?? [];
           return properties.map((p) => this.mapProperty(p));
         }),
         catchError((err: any) => {
-          const message = err.error?.message ?? this.translateService.instant('PROPERTIES.LOAD_FAILED');
-          this._error$.next(message);
-          this.notificationService.show(message, 'error');
-          return of([] as Property[]); // Graceful degradation — return empty array, don't crash
+          // Keep technical error ONLY in developer browser console
+          console.error('[PropertiesService] Technical API Error:', err);
+
+          let errorKey = 'SERVER_ERROR';
+
+          if (err.status === 0) {
+            errorKey = 'NETWORK_ERROR';
+          } else if (
+            err.status === 400 ||
+            err.error?.message?.includes('CastError') ||
+            err.error?.message?.includes('Cast to') ||
+            err.error?.name === 'CastError'
+          ) {
+            errorKey = err.error?.message?.includes('Cast') ? 'CAST_ERROR' : 'INVALID_FILTER';
+          } else if (err.status >= 500) {
+            errorKey = 'SERVER_ERROR';
+          }
+
+          this._error$.next(errorKey);
+          return of([] as Property[]);
         })
       );
   }

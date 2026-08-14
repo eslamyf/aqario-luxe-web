@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,7 +10,7 @@ import { PropertiesService } from '../../services/properties.service';
 import { FavoritesService } from '../../services/favorites.service';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
-import { Property, PropertyFilters, PropertyType } from '../../models/property.model';
+import { Property, PropertyFilters, PropertyType, ListingStatus } from '../../models/property.model';
 import { SeoService } from '../../../../core/services/seo.service';
 
 export interface CitySeoMeta {
@@ -55,6 +55,14 @@ export class PropertiesPageComponent implements OnInit {
   currentTab = 'all';
   selectedCity = '';
 
+  // Custom City Dropdown state
+  isCityDropdownOpen = false;
+  filteredLocations: Array<{ id: string; nameAr: string; nameEn: string }> = [];
+
+  get currentLang(): string {
+    return this.translateService.currentLang || 'ar';
+  }
+
   // ── Quick City Filters for Local SEO (Upper Egypt Governorates & Centers) ───
   cityFilters = [
     { id: '', labelAr: 'كل مناطق الصعيد', labelEn: 'All Upper Egypt' },
@@ -65,6 +73,43 @@ export class PropertiesPageComponent implements OnInit {
     { id: 'Sohag', labelAr: 'سوهاج', labelEn: 'Sohag' },
     { id: 'Asyut', labelAr: 'أسيوط', labelEn: 'Asyut' },
     { id: 'Hurghada', labelAr: 'الغردقة', labelEn: 'Hurghada' },
+  ];
+
+  // ── Upper Egypt Detailed Locations List ─────────────────────────────────────
+  upperEgyptLocations = [
+    // قنا
+    { id: 'Qena', nameAr: 'قنا', nameEn: 'Qena' },
+    { id: 'New Qena', nameAr: 'قنا الجديدة', nameEn: 'New Qena' },
+    { id: 'Nag Hammadi', nameAr: 'نجع حمادي', nameEn: 'Nag Hammadi' },
+    { id: 'Qous', nameAr: 'قوص', nameEn: 'Qous' },
+    { id: 'Deshna', nameAr: 'دشنا', nameEn: 'Deshna' },
+    { id: 'Naqada', nameAr: 'نقادة', nameEn: 'Naqada' },
+    { id: 'Abu Tesht', nameAr: 'أبو تشت', nameEn: 'Abu Tesht' },
+    { id: 'Farshoot', nameAr: 'فرشوط', nameEn: 'Farshoot' },
+    { id: 'El-Waqf', nameAr: 'الوقف', nameEn: 'El-Waqf' },
+    // الأقصر
+    { id: 'Luxor', nameAr: 'الأقصر', nameEn: 'Luxor' },
+    { id: 'Esna', nameAr: 'إسنا', nameEn: 'Esna' },
+    { id: 'Armant', nameAr: 'أرمنت', nameEn: 'Armant' },
+    { id: 'El-Qurna', nameAr: 'القرنة', nameEn: 'El-Qurna' },
+    { id: 'El-Bayadiya', nameAr: 'البياضية', nameEn: 'El-Bayadiya' },
+    // سوهاج
+    { id: 'Sohag', nameAr: 'سوهاج', nameEn: 'Sohag' },
+    { id: 'Akhmim', nameAr: 'أخميم', nameEn: 'Akhmim' },
+    { id: 'Girga', nameAr: 'جرجا', nameEn: 'Girga' },
+    { id: 'Tahta', nameAr: 'طهطا', nameEn: 'Tahta' },
+    { id: 'El-Maragha', nameAr: 'المراغة', nameEn: 'El-Maragha' },
+    { id: 'El-Balyana', nameAr: 'البلينا', nameEn: 'El-Balyana' },
+    // أسيوط
+    { id: 'Asyut', nameAr: 'أسيوط', nameEn: 'Asyut' },
+    { id: 'Dayrout', nameAr: 'ديروط', nameEn: 'Dayrout' },
+    { id: 'Manfalout', nameAr: 'منفلوط', nameEn: 'Manfalout' },
+    { id: 'El-Qousiya', nameAr: 'القوصية', nameEn: 'El-Qousiya' },
+    { id: 'Abnoub', nameAr: 'أبنوب', nameEn: 'Abnoub' },
+    // البحر الأحمر
+    { id: 'Hurghada', nameAr: 'الغردقة', nameEn: 'Hurghada' },
+    { id: 'Safaga', nameAr: 'سفاجا', nameEn: 'Safaga' },
+    { id: 'El-Qoseir', nameAr: 'القصير', nameEn: 'El-Qoseir' },
   ];
 
   readonly cityMetaMap: Record<string, CitySeoMeta> = {
@@ -150,6 +195,8 @@ export class PropertiesPageComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.filteredLocations = [...this.upperEgyptLocations];
+
     // Sync filters from URL query parameters
     this.route.queryParams
       .pipe(
@@ -203,6 +250,75 @@ export class PropertiesPageComponent implements OnInit {
       });
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target && !target.closest('.city-select-container')) {
+      this.isCityDropdownOpen = false;
+    }
+  }
+
+  openCityDropdown(): void {
+    this.isCityDropdownOpen = true;
+    const currentVal = this.filterForm.value.city || '';
+    this.filterCityList(currentVal);
+  }
+
+  closeCityDropdown(): void {
+    this.isCityDropdownOpen = false;
+  }
+
+  toggleCityDropdown(event: Event): void {
+    event.stopPropagation();
+    this.isCityDropdownOpen = !this.isCityDropdownOpen;
+    if (this.isCityDropdownOpen) {
+      const currentVal = this.filterForm.value.city || '';
+      this.filterCityList(currentVal);
+    }
+  }
+
+  onCityInput(event: Event): void {
+    const val = (event.target as HTMLInputElement).value || '';
+    this.isCityDropdownOpen = true;
+    this.filterCityList(val);
+  }
+
+  filterCityList(term: string): void {
+    if (!term || !term.trim()) {
+      this.filteredLocations = [...this.upperEgyptLocations];
+      return;
+    }
+    const clean = term.toLowerCase().trim();
+    this.filteredLocations = this.upperEgyptLocations.filter(
+      (loc) =>
+        loc.nameAr.toLowerCase().includes(clean) ||
+        loc.nameEn.toLowerCase().includes(clean) ||
+        loc.id.toLowerCase().includes(clean)
+    );
+  }
+
+  selectCity(loc: { id: string; nameAr: string; nameEn: string } | null): void {
+    const val = loc ? loc.nameAr : '';
+    this.filterForm.patchValue({ city: val });
+    this.isCityDropdownOpen = false;
+  }
+
+  isCitySelected(loc: { id: string; nameAr: string; nameEn: string }): boolean {
+    const current = (this.filterForm.value.city || '').trim().toLowerCase();
+    return (
+      current === loc.nameAr.toLowerCase() ||
+      current === loc.nameEn.toLowerCase() ||
+      current === loc.id.toLowerCase()
+    );
+  }
+
+  clearCityInput(event: Event): void {
+    event.stopPropagation();
+    this.filterForm.patchValue({ city: '' });
+    this.filteredLocations = [...this.upperEgyptLocations];
+    this.isCityDropdownOpen = false;
+  }
+
   selectCityFilter(cityId: string): void {
     const queryParams: any = { ...this.route.snapshot.queryParams, page: 1 };
     if (cityId) {
@@ -249,19 +365,41 @@ export class PropertiesPageComponent implements OnInit {
 
     if (Object.keys(params).length === 0) return baseFilters;
 
+    const cleanStr = (val: any): string | undefined => {
+      if (!val || typeof val !== 'string') return undefined;
+      const s = val.trim();
+      if (!s || s === 'all' || s === 'any' || s === 'undefined' || s === 'null') return undefined;
+      return s;
+    };
+
+    const cleanNum = (val: any): number | undefined => {
+      if (val === null || val === undefined || val === '') return undefined;
+      const n = Number(val);
+      if (isNaN(n) || n <= 0) return undefined;
+      return n;
+    };
+
+    const validTypes: PropertyType[] = ['apartment', 'villa', 'house', 'studio', 'commercial', 'office', 'shop', 'land'];
+    const typeParam = cleanStr(params['type']);
+    const type = typeParam && validTypes.includes(typeParam as PropertyType) ? (typeParam as PropertyType) : undefined;
+
+    const listingType = cleanStr(params['listingType']) || cleanStr(params['status']);
+    let status: ListingStatus | undefined = undefined;
+    if (listingType === 'rent' || listingType === 'for-rent') status = 'for-rent';
+    else if (listingType === 'sale' || listingType === 'for-sale') status = 'for-sale';
+
     return {
       ...baseFilters,
-      search: params['search'] || undefined,
-      city: params['location'] || params['city'] || undefined,
-      type: params['type'] as PropertyType | undefined,
-      status: params['listingType'] === 'rent' ? 'for-rent' :
-        params['listingType'] === 'sale' ? 'for-sale' : undefined,
-      minPrice: params['minPrice'] ? Number(params['minPrice']) : undefined,
-      maxPrice: params['maxPrice'] ? Number(params['maxPrice']) : undefined,
-      bedrooms: params['bedrooms'] ? Number(params['bedrooms']) : undefined,
-      bathrooms: params['bathrooms'] ? Number(params['bathrooms']) : undefined,
-      page: params['page'] ? Number(params['page']) : 1,
-      cursor: params['cursor'] || undefined,
+      search: cleanStr(params['search']),
+      city: cleanStr(params['location']) || cleanStr(params['city']),
+      type,
+      status,
+      minPrice: cleanNum(params['minPrice']),
+      maxPrice: cleanNum(params['maxPrice']),
+      bedrooms: cleanNum(params['bedrooms']),
+      bathrooms: cleanNum(params['bathrooms']),
+      page: cleanNum(params['page']) || 1,
+      cursor: cleanStr(params['cursor']),
     };
   }
 
@@ -280,8 +418,9 @@ export class PropertiesPageComponent implements OnInit {
     // Clear type and listingType to reset tab state properly
     delete queryParams.type;
     delete queryParams.listingType;
+    delete queryParams.status;
 
-    const statusMap: Record<string, string> = { 'for-sale': 'sale', 'for-rent': 'rent' };
+    const statusMap: Record<string, string> = { 'for-sale': 'sale', 'for-rent': 'rent', sale: 'sale', rent: 'rent' };
     const typeMap: Record<string, string> = {
       apartment: 'apartment', villa: 'villa', house: 'house',
       studio: 'studio', office: 'office', shop: 'shop',
@@ -296,21 +435,67 @@ export class PropertiesPageComponent implements OnInit {
 
   applyFilters(): void {
     const val = this.filterForm.value;
-    const queryParams: any = { ...this.route.snapshot.queryParams, page: 1 };
+    const queryParams: any = { page: 1 };
 
-    if (val.search) queryParams.search = val.search; else delete queryParams.search;
-    if (val.city) queryParams.city = val.city; else delete queryParams.city;
-    if (val.minPrice) queryParams.minPrice = val.minPrice; else delete queryParams.minPrice;
-    if (val.maxPrice) queryParams.maxPrice = val.maxPrice; else delete queryParams.maxPrice;
-    if (val.bedrooms) queryParams.bedrooms = val.bedrooms; else delete queryParams.bedrooms;
-    if (val.bathrooms) queryParams.bathrooms = val.bathrooms; else delete queryParams.bathrooms;
+    // Retain listing type or property type tab if selected
+    if (this.route.snapshot.queryParams['listingType']) {
+      queryParams.listingType = this.route.snapshot.queryParams['listingType'];
+    }
+    if (this.route.snapshot.queryParams['type']) {
+      queryParams.type = this.route.snapshot.queryParams['type'];
+    }
+
+    const cleanStr = (v: any) => {
+      if (!v) return undefined;
+      const s = String(v).trim();
+      if (!s || s === 'all' || s === 'any' || s === 'undefined' || s === 'null') return undefined;
+      return s;
+    };
+
+    const cleanNum = (v: any) => {
+      if (v === null || v === undefined || v === '') return undefined;
+      const n = Number(v);
+      if (isNaN(n) || n <= 0) return undefined;
+      return String(n);
+    };
+
+    const search = cleanStr(val.search);
+    const city = cleanStr(val.city);
+    const minPrice = cleanNum(val.minPrice);
+    const maxPrice = cleanNum(val.maxPrice);
+    const bedrooms = cleanNum(val.bedrooms);
+    const bathrooms = cleanNum(val.bathrooms);
+
+    if (search) queryParams.search = search;
+    if (city) queryParams.city = city;
+    if (minPrice) queryParams.minPrice = minPrice;
+    if (maxPrice) queryParams.maxPrice = maxPrice;
+    if (bedrooms) queryParams.bedrooms = bedrooms;
+    if (bathrooms) queryParams.bathrooms = bathrooms;
 
     this.router.navigate([], { queryParams });
   }
 
   clearFilters(): void {
-    this.filterForm.reset();
+    this.filterForm.reset({
+      search: '',
+      city: '',
+      minPrice: '',
+      maxPrice: '',
+      bedrooms: '',
+      bathrooms: ''
+    });
+    this.filteredLocations = [...this.upperEgyptLocations];
+    this.isCityDropdownOpen = false;
+    this.currentTab = 'all';
+    this.selectedCity = '';
     this.router.navigate([]);
+  }
+
+  onModifyFilters(): void {
+    this.isFilterExpanded = true;
+    const el = document.querySelector('.properties-search-bar') as HTMLElement;
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   }
 
   toggleFilterPanel(): void {
