@@ -1,24 +1,27 @@
-<nav class="nav" [class.scrolled]="isScrolled">
+<header class="nav" [class.scrolled]="isScrolled">
   <div class="nav-inner">
+    <!-- Brand Logo -->
     <a class="nav-logo" routerLink="/" id="nav-logo" data-cursor-hover>
       <img src="assets/images/logo.png" alt="AQARIO" class="brand-logo-img" />
     </a>
 
+    <!-- Desktop Navigation Links (Hidden on Mobile) -->
     <ul class="nav-links" role="list">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'NAV.HOME' |
-          translate }}</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'NAV.HOME' | translate }}</a></li>
       <li><a routerLink="/properties" routerLinkActive="active">{{ 'NAV.PROPERTIES' | translate }}</a></li>
       <li><a routerLink="/agents" routerLinkActive="active">{{ 'NAV.AGENTS' | translate }}</a></li>
       <li><a routerLink="/dashboard/saved" routerLinkActive="active">{{ 'NAV.FAVOURITES' | translate }}</a></li>
     </ul>
 
+    <!-- Top Header Control Actions -->
     <div class="nav-actions">
+      <!-- Language Switcher -->
       <button id="btn-lang-toggle" type="button" class="btn-lang-toggle" (click)="toggleLanguage()"
         [attr.aria-label]="(lang$ | async) === 'en' ? 'Switch to Arabic' : 'Switch to English'" data-cursor-hover>
-        <span class="lang-text"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN'
-          }}</span>
+        <span class="lang-text"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</span>
       </button>
 
+      <!-- Theme Switcher (Light / Dark) -->
       <button id="btn-theme-toggle" type="button" class="btn-theme-toggle" (click)="toggleTheme()"
         [attr.aria-label]="(theme$ | async) === 'light' ? 'Switch to dark mode' : 'Switch to light mode'"
         data-cursor-hover>
@@ -28,10 +31,9 @@
         </span>
       </button>
 
-      <!-- NOTIFICATIONS -->
+      <!-- Notifications Bell -->
       <div class="notifications-wrapper notifications-dropdown-container">
-        <button type="button" class="btn-notification" (click)="toggleNotifications($event)" data-cursor-hover
-          aria-label="Notifications">
+        <button type="button" class="btn-notification" (click)="toggleNotifications($event)" data-cursor-hover aria-label="Notifications">
           <i class="fa-solid fa-bell"></i>
           <span class="notification-badge" *ngIf="((notificationsApi.unreadCount$ | async) || 0) > 0">
             {{ (notificationsApi.unreadCount$ | async) }}
@@ -41,16 +43,14 @@
         <div class="notifications-dropdown" *ngIf="showNotifications" role="menu">
           <div class="notifications-header">
             <span class="notifications-title">{{ 'NAV.NOTIFICATIONS' | translate }}</span>
-            <button class="mark-all-btn" (click)="markAllNotificationsAsRead()">{{ ('NAV.MARK_ALL_AS_READ' | translate)
-              !== 'NAV.MARK_ALL_AS_READ' ? ('NAV.MARK_ALL_AS_READ' | translate) : 'Mark all as read' }}</button>
+            <button class="mark-all-btn" (click)="markAllNotificationsAsRead()">{{ ('NAV.MARK_ALL_AS_READ' | translate) !== 'NAV.MARK_ALL_AS_READ' ? ('NAV.MARK_ALL_AS_READ' | translate) : 'Mark all as read' }}</button>
           </div>
           <div class="notifications-body">
             <ng-container *ngIf="(notificationsApi.notifications$ | async) as notifications; else noNotifications">
               <div *ngIf="notifications.length === 0" class="empty-notifications">
                 {{ 'NAV.NO_NOTIFICATIONS' | translate }}
               </div>
-              <div class="notification-item" *ngFor="let n of notifications" (click)="onNotificationClick(n)"
-                [class.unread]="!n.isRead" role="menuitem">
+              <div class="notification-item" *ngFor="let n of notifications" (click)="onNotificationClick(n)" [class.unread]="!n.isRead" role="menuitem">
                 <div class="notification-content">
                   <span class="notification-title">{{ n.title }}</span>
                   <span class="notification-desc">{{ n.message }}</span>
@@ -66,10 +66,11 @@
         </div>
       </div>
 
+      <!-- Auth User / Profile Avatar / Sign-In Button -->
       <ng-template #guestTemplate>
         <button id="btn-sign-in" class="btn-signin btn-auth-trigger" (click)="openLogin()" data-cursor-hover>
-          <span class="auth-text">{{ 'NAV.SIGN_IN' | translate }}</span>
           <i class="fa-solid fa-user auth-icon" aria-hidden="true"></i>
+          <span class="auth-text">{{ 'NAV.SIGN_IN' | translate }}</span>
         </button>
       </ng-template>
 
@@ -90,13 +91,11 @@
               <i class="fa-solid fa-user dropdown-icon" aria-hidden="true"></i>
               <span>{{ 'NAV.MY_ACCOUNT' | translate }}</span>
             </a>
-            <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview"
-              (click)="showDropdown = false" role="menuitem">
+            <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview" (click)="showDropdown = false" role="menuitem">
               <i class="fa-solid fa-table-cells-large dropdown-icon" aria-hidden="true"></i>
               <span>{{ 'NAV.MY_DASHBOARD' | translate }}</span>
             </a>
-            <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false"
-              role="menuitem">
+            <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false" role="menuitem">
               <i class="fa-solid fa-shield-halved dropdown-icon" aria-hidden="true"></i>
               <span>{{ 'NAV.ADMIN_PANEL' | translate }}</span>
             </a>
@@ -109,53 +108,19 @@
         </div>
       </ng-container>
 
-      <button id="btn-list-property" class="btn-list" (click)="navigateToAddProperty()" data-cursor-hover>{{
-        'NAV.LIST_PROPERTY' | translate }}</button>
-
-      <button id="btn-hamburger" class="hamburger btn-menu-toggle" [class.open]="isMobileMenuOpen"
-        (click)="toggleMobileMenu()" aria-label="Toggle navigation menu" [attr.aria-expanded]="isMobileMenuOpen"
-        type="button">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+      <button id="btn-list-property" class="btn-list" (click)="navigateToAddProperty()" data-cursor-hover>{{ 'NAV.LIST_PROPERTY' | translate }}</button>
     </div>
   </div>
+</header>
 
-  <div class="mobile-menu" [class.open]="isMobileMenuOpen" role="dialog" aria-label="Navigation menu">
-    <div
-      class="fixed inset-x-4 top-24 max-w-md mx-auto z-50 p-6 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-      <button class="close-menu-btn" (click)="closeMobileMenu()"><i class="fa-solid fa-xmark"></i></button>
-
-      <ng-container *ngIf="auth.currentUser$ | async as user">
-        <div class="mobile-user-summary">
-          <i class="fa-solid fa-user-circle text-gold" aria-hidden="true"></i>
-          <span class="mobile-user-name">{{ user.name }}</span>
-        </div>
-      </ng-container>
-
-      <ul class="mobile-nav-links" role="list">
-        <li *ngFor="let item of mobileNavItems">
-          <a [routerLink]="item.link" routerLinkActive="active" (click)="closeMobileMenu()"><i [class]="item.icon"></i>
-            {{ item.labelKey | translate }}</a>
-        </li>
-      </ul>
-
-      <div class="mobile-nav-actions">
-        <button type="button" class="btn-theme-toggle btn-theme-toggle--mobile" (click)="toggleTheme()">{{ (theme$ |
-          async) === 'light' ? ('NAV.LIGHT_MODE' | translate) : ('NAV.DARK_MODE' | translate) }}</button>
-        <button type="button" class="btn-lang-toggle btn-lang-toggle--mobile" (click)="toggleLanguage()"><i
-            class="fa-solid fa-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</button>
-        <ng-container *ngIf="auth.currentUser$ | async; else guestMobileActions">
-          <button class="btn-logout-mobile" (click)="onLogout(); closeMobileMenu()"><i class="fa-solid fa-right-from-bracket"></i> {{
-            'NAV.SIGN_OUT' | translate }}</button>
-        </ng-container>
-        <ng-template #guestMobileActions>
-          <button class="btn-signin" (click)="openLogin(); closeMobileMenu()">{{ 'NAV.SIGN_IN' | translate }}</button>
-        </ng-template>
-        <button *ngIf="!isDashboardContext" class="btn-list" (click)="navigateToAddProperty(); closeMobileMenu()">{{
-          'NAV.LIST_PROPERTY' | translate }}</button>
-      </div>
-    </div>
+<!-- ── Dynamic Floating Capsule Bottom Navigation Bar (Mobile Only) ── -->
+<div class="mobile-floating-nav" role="navigation" aria-label="Mobile Navigation">
+  <div class="floating-nav-pill" [class.dashboard-pill]="isDashboardContext">
+    <ng-container *ngFor="let item of floatingBottomNavItems; trackBy: trackByNav">
+      <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }" class="nav-dock-item" [title]="item.labelKey | translate">
+        <i [class]="item.icon" aria-hidden="true"></i>
+        <span class="dock-item-label">{{ item.labelKey | translate }}</span>
+      </a>
+    </ng-container>
   </div>
-</nav>
+</div>

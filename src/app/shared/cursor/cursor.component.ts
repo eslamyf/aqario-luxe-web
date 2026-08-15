@@ -21,14 +21,14 @@ export class CursorComponent implements OnInit, OnDestroy {
   constructor(
     private ngZone: NgZone,
     private renderer: Renderer2
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isMobile = !window.matchMedia('(hover: hover)').matches;
 
     if (!this.isMobile) {
       // Custom cursor disabled in favor of standard pointer
-      
+
       // Run listeners outside the Zone for performance optimization
       this.ngZone.runOutsideAngular(() => {
         window.addEventListener('mousemove', this.onMouseMove.bind(this));
@@ -75,7 +75,7 @@ export class CursorComponent implements OnInit, OnDestroy {
       // Smoothing the movement
       this.dotX = lerp(this.dotX, this.targetX, 0.35);
       this.dotY = lerp(this.dotY, this.targetY, 0.35);
-      
+
       this.followerX = lerp(this.followerX, this.targetX, 0.15);
       this.followerY = lerp(this.followerY, this.targetY, 0.15);
 

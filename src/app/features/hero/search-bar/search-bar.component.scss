@@ -28,7 +28,17 @@
   background: rgba(var(--bg-surface-rgb), 0.06);
   border-top-left-radius: 28px;
   border-top-right-radius: 28px;
-  overflow: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  /* Hide scrollbar for clean luxury design */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .chip {
@@ -44,6 +54,8 @@
   padding: 16px 28px;
   cursor: pointer;
   position: relative;
+  flex-shrink: 0;
+  scroll-snap-align: start;
   transition:
     color 0.3s var(--transition),
     background-color 0.3s var(--transition);
@@ -320,15 +332,13 @@
 }
 
 // ── Search Button ─────────────────────────────────────────────
-// font-mono REQUIRED — coding-rules §3.2: never use font-family on a button
-// without var(--font-mono)
 .btn-search {
-  font-family: var(--font-mono); // ✅ Rule §3.2 compliant
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--bg-base); // Deep on gold — readable in both themes
+  color: var(--bg-base);
   background: var(--brand-gold);
   border: none;
   padding: 20px 38px;
@@ -395,35 +405,52 @@
   &:hover {
     background-color: var(--brand-gold-soft);
     border-color: var(--brand-gold);
-    color: var(--bg-base); // Deep dark text on gold — always readable
+    color: var(--bg-base);
   }
 }
 
 // ── Responsive ────────────────────────────────────────────────
 @media (max-width: 1024px) {
+  .search-card {
+    border-radius: 20px;
+  }
+
+  .chips-row {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .chip {
+    padding: 12px 20px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+
   .fields-row {
     flex-direction: column;
   }
 
+  .field-group {
+    padding: 14px 18px;
+  }
+
+  .field-input,
+  .custom-select-trigger {
+    font-size: 14px;
+    padding: 11px 14px;
+  }
+
   .field-divider {
-    width: calc(100% - 48px);
+    width: calc(100% - 36px);
     height: 1px;
-    margin: 0 24px;
+    margin: 0 18px;
   }
 
   .btn-search {
-    width: calc(100% - 48px);
-    margin-inline: 24px;
-    margin-block: 16px;
-    padding: 18px 24px;
+    width: calc(100% - 36px);
+    margin-inline: 18px;
+    margin-block: 12px 18px;
+    padding: 15px 20px;
     justify-content: center;
-  }
-
-  .chips-row {
-    flex-wrap: wrap;
-  }
-
-  .chip {
-    border-bottom: 1px solid var(--border-color);
   }
 }

@@ -14,7 +14,7 @@
     "NOTIFICATIONS": "الإشعارات",
     "NO_NOTIFICATIONS": "لا توجد إشعارات جديدة",
     "MARK_ALL_READ": "تحديد الكل كمقروء",
-    "BACK_TO_SITE": "العودة للموقع الرئيسي",
+    "BACK_TO_SITE": "العودة للصفحة الرئيسية",
     "LIGHT_MODE": "الوضع المضيء",
     "DARK_MODE": "الوضع الداكن",
     "ACCOUNT_MGMT": "إدارة الحساب",
@@ -26,7 +26,8 @@
     "PAYMENTS": "المحفظة والمدفوعات",
     "ADMIN_CENTER": "مركز الإدارة",
     "FAVOURITES": "المفضلة",
-    "MESSAGES": "الرسائل"
+    "MESSAGES": "الرسائل",
+    "MENU": "القائمة"
   },
   "COMMON": {
     "SEARCH": "بحث",

@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { ThemeService } from '../services/theme.service';
@@ -11,7 +11,7 @@ import { LanguageService } from '../services/language.service';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
 })
-export class NavComponent {
+export class NavComponent implements OnDestroy {
   isScrolled = false;
   showDropdown = false; // User dropdown
   showNotifications = false; // Notifications dropdown
@@ -30,29 +30,54 @@ export class NavComponent {
   }
 
   get isDashboardContext(): boolean {
-    return this.currentUrl.startsWith('/dashboard') || this.currentUrl.startsWith('/account');
+    const url = this.currentUrl;
+    return url.includes('/dashboard') || url.includes('/account') || url.includes('/admin');
   }
 
-  get mobileNavItems() {
-    return this.isDashboardContext ? this.dashboardMobileNavItems : this.globalMobileNavItems;
+  // Dynamic Floating Bottom Navigation Bar Items
+  get floatingBottomNavItems() {
+    const isDash = this.isDashboardContext;
+    const user = this.auth.currentUser;
+    const role = user?.role || 'guest';
+
+    if (isDash) {
+      const items: Array<{ labelKey: string; icon: string; link: string; exact?: boolean }> = [
+        { labelKey: 'DASHBOARD.OVERVIEW', icon: 'fa-solid fa-chart-pie', link: '/dashboard/overview' },
+        { labelKey: 'NAV.MY_ACCOUNT', icon: 'fa-solid fa-user-gear', link: '/account' },
+        { labelKey: 'DASHBOARD.MY_BOOKINGS', icon: 'fa-solid fa-calendar-days', link: '/dashboard/bookings' },
+      ];
+
+      if (user && (role === 'owner' || role === 'agent' || role === 'admin')) {
+        items.push({ labelKey: 'DASHBOARD.MY_PROPERTIES', icon: 'fa-solid fa-city', link: '/dashboard/properties' });
+        items.push({ labelKey: 'DASHBOARD.INCOMING_REQUESTS', icon: 'fa-solid fa-inbox', link: '/dashboard/owner-bookings' });
+        items.push({ labelKey: 'DASHBOARD.VIEWING_SCHEDULE', icon: 'fa-solid fa-calendar-check', link: '/dashboard/owner-viewing-requests' });
+      }
+
+      items.push({ labelKey: 'DASHBOARD.PAYMENTS', icon: 'fa-solid fa-wallet', link: '/dashboard/payments' });
+
+      if (user && role === 'admin') {
+        items.push({ labelKey: 'DASHBOARD.ADMIN_CENTER', icon: 'fa-solid fa-shield-halved', link: '/admin' });
+      }
+
+      items.push({ labelKey: 'NAV.BACK_TO_SITE', icon: 'fa-solid fa-house', link: '/', exact: true });
+
+      return items;
+    }
+
+    // Public / Main site mode
+    return [
+      { labelKey: 'NAV.HOME', icon: 'fa-solid fa-house', link: '/', exact: true },
+      { labelKey: 'NAV.PROPERTIES', icon: 'fa-solid fa-building', link: '/properties' },
+      { labelKey: 'NAV.AGENTS', icon: 'fa-solid fa-users', link: '/agents' },
+      { labelKey: 'NAV.FAVOURITES', icon: 'fa-solid fa-heart', link: '/dashboard/saved' },
+      { labelKey: user ? 'NAV.MY_DASHBOARD' : 'NAV.SIGN_IN', icon: 'fa-solid fa-gauge', link: user ? '/dashboard/overview' : '/account' },
+    ];
   }
 
-  readonly dashboardMobileNavItems = [
-    { labelKey: 'NAV.OVERVIEW', icon: 'ph ph-squares-four', link: '/dashboard/overview' },
-    { labelKey: 'NAV.MY_BOOKINGS', icon: 'ph ph-calendar-check', link: '/dashboard/bookings' },
-    { labelKey: 'NAV.FAVOURITES', icon: 'ph ph-heart', link: '/dashboard/saved' },
-    { labelKey: 'NAV.PAYMENTS', icon: 'ph ph-wallet', link: '/dashboard/payments' },
-    { labelKey: 'NAV.MY_ACCOUNT', icon: 'ph ph-user-circle-gear', link: '/account' },
-  ];
+  trackByNav(index: number, item: { link: string }): string {
+    return item ? item.link : index.toString();
+  }
 
-  readonly globalMobileNavItems = [
-    { labelKey: 'NAV.HOME', icon: 'ph ph-house', link: '/' },
-    { labelKey: 'NAV.PROPERTIES', icon: 'ph ph-buildings', link: '/properties' },
-    { labelKey: 'NAV.AGENTS', icon: 'ph ph-users-three', link: '/agents' },
-    { labelKey: 'NAV.FAVOURITES', icon: 'ph ph-heart', link: '/dashboard/saved' },
-  ];
-
-  // Inject services via constructor
   constructor(
     public auth: AuthService,
     private router: Router,
@@ -66,26 +91,26 @@ export class NavComponent {
     this.dashboardUi.toggleSidebar();
   }
 
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    this.showDropdown = false;
-    this.showNotifications = false;
-  }
-
   closeMobileMenu(): void {
     this.isMobileMenuOpen = false;
   }
 
+  ngOnDestroy(): void {}
+
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
-    this.isScrolled = window.scrollY > 50;
+    if (typeof window === 'undefined') return;
+    const scrolled = window.scrollY > 50;
+    if (this.isScrolled !== scrolled) {
+      this.isScrolled = scrolled;
+    }
   }
 
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
+    if (!this.showDropdown && !this.showNotifications) return;
     
-    // Select the wrapper elements
+    const target = event.target as HTMLElement;
     const userWrapper = document.querySelector('.user-dropdown-container');
     const notifWrapper = document.querySelector('.notifications-dropdown-container');
 
@@ -99,13 +124,13 @@ export class NavComponent {
   }
 
   toggleDropdown(event: MouseEvent): void {
-    event.stopPropagation(); // Prevent document:click from closing it immediately
+    event.stopPropagation();
     this.showDropdown = !this.showDropdown;
     if (this.showDropdown) this.showNotifications = false;
   }
 
   toggleNotifications(event: MouseEvent): void {
-    event.stopPropagation(); // Prevent document:click from closing it immediately
+    event.stopPropagation();
     this.showNotifications = !this.showNotifications;
     if (this.showNotifications) this.showDropdown = false;
   }
@@ -117,7 +142,6 @@ export class NavComponent {
   onNotificationClick(n: any): void {
     this.notificationsApi.markAsRead(n._id).subscribe();
     this.showNotifications = false;
-    this.closeMobileMenu();
 
     let metadata = n.metadata;
     if (typeof metadata === 'string') {
@@ -186,32 +210,25 @@ export class NavComponent {
     this.showNotifications = false;
   }
 
-  // Logout and reset state
   onLogout(): void {
     this.auth.logout();
     this.showDropdown = false;
     this.showNotifications = false;
-    this.isMobileMenuOpen = false;
     this.router.navigate(['/']);
   }
 
-  // Intelligent function to control "List Property" button based on roles
   navigateToAddProperty(): void {
     const currentUser = this.auth.currentUser;
 
     if (!currentUser) {
-      // If no user is logged in, open the login modal
       this.auth.openModal();
     } else if (currentUser.role === 'owner' || currentUser.role === 'agent' || currentUser.role === 'admin') {
-      // Condition A: If owner/agent/admin, redirect to "Add Property" page in the dashboard
       this.router.navigate(['/dashboard/properties'], { queryParams: { view: 'form' } });
     } else {
-      // Condition B: Standard user / not owner -> redirect immediately to KYC page
       this.router.navigate(['/kyc']);
     }
   }
 
-  // Open registration modal
   openLogin(): void {
     this.auth.openModal();
   }

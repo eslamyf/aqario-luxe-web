@@ -16,6 +16,7 @@ const getApiUrl = (): string => {
 
 export const environment = {
   production: true,
+  enableSockets: false,
   get apiUrl(): string {
     return getApiUrl();
   },

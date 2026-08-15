@@ -14,7 +14,7 @@
     "NOTIFICATIONS": "Notifications",
     "NO_NOTIFICATIONS": "No new notifications",
     "MARK_ALL_READ": "Mark all as read",
-    "BACK_TO_SITE": "Back to Main Site",
+    "BACK_TO_SITE": "Back to Home Page",
     "LIGHT_MODE": "Light Mode",
     "DARK_MODE": "Dark Mode",
     "ACCOUNT_MGMT": "Account Management",
@@ -26,7 +26,8 @@
     "PAYMENTS": "Wallet & Payments",
     "ADMIN_CENTER": "Admin Center",
     "FAVOURITES": "Favourites",
-    "MESSAGES": "Messages"
+    "MESSAGES": "Messages",
+    "MENU": "Menu"
   },
   "COMMON": {
     "SEARCH": "Search",

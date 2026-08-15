@@ -17,9 +17,9 @@
   overflow: visible;
 
   @media (max-width: 1024px) {
-    min-height: 100svh;
-    padding-top: 120px;
-    padding-bottom: 60px;
+    min-height: auto;
+    padding-top: 90px;
+    padding-bottom: 24px;
   }
 }
 
@@ -86,6 +86,11 @@
   align-items: center;
   min-height: calc(100vh - 220px);
   width: 100%;
+
+  @media (max-width: 1024px) {
+    min-height: auto;
+    padding-block: 20px 10px;
+  }
 }
 
 // ── Hero Content — Centered Panel ─────────────────────────────
@@ -107,12 +112,12 @@
 
   @media (max-width: 768px) {
     padding-inline: 20px;
-    padding-block: 24px;
+    padding-block: 20px;
   }
 
   @media (max-width: 480px) {
     padding-inline: 16px;
-    padding-block: 16px;
+    padding-block: 12px;
   }
 }
 
@@ -137,16 +142,26 @@
     background: var(--brand-gold);
     flex-shrink: 0;
   }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+    letter-spacing: 2px;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    &::before,
+    &::after {
+      width: 20px;
+    }
+  }
 }
 
 // Headline: perfectly centered — ALWAYS white in both themes
-// The hero sits over a full-bleed dark photo, so the headline
-// must be #ffffff unconditionally, regardless of data-theme.
 .hero-headline {
   font-family: var(--font-display);
   font-size: clamp(36px, 6vw, 96px);
   font-weight: 300;
-  line-height: 1;
+  line-height: 1.1;
   letter-spacing: -2px;
   margin-bottom: 32px;
   text-align: center;
@@ -154,14 +169,15 @@
   display: block;
 
   @media (max-width: 768px) {
-    font-size: clamp(32px, 10vw, 56px);
-    letter-spacing: -1px;
-    line-height: 1.1;
+    font-size: clamp(26px, 7vw, 38px);
+    letter-spacing: 0;
+    line-height: 1.25;
+    margin-bottom: 16px;
   }
 
   @media (max-width: 480px) {
-    font-size: clamp(28px, 9vw, 44px);
-    margin-bottom: 20px;
+    font-size: clamp(24px, 6.5vw, 32px);
+    margin-bottom: 14px;
   }
 }
 
@@ -178,13 +194,14 @@
 
   @media (max-width: 768px) {
     font-size: 14px;
-    margin-bottom: 32px;
+    line-height: 1.6;
+    margin-bottom: 24px;
   }
 
   @media (max-width: 480px) {
     font-size: 13px;
     max-width: 100%;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 }
 
