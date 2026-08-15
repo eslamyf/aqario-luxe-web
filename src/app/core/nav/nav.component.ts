@@ -29,49 +29,68 @@ export class NavComponent implements OnDestroy {
     return this.router.url || '/';
   }
 
+  isBottomSheetOpen = false;
+
   get isDashboardContext(): boolean {
     const url = this.currentUrl;
     return url.includes('/dashboard') || url.includes('/account') || url.includes('/admin');
   }
 
-  // Dynamic Floating Bottom Navigation Bar Items
-  get floatingBottomNavItems() {
-    const isDash = this.isDashboardContext;
-    const user = this.auth.currentUser;
-    const role = user?.role || 'guest';
-
-    if (isDash) {
-      const items: Array<{ labelKey: string; icon: string; link: string; exact?: boolean }> = [
-        { labelKey: 'DASHBOARD.OVERVIEW', icon: 'fa-solid fa-chart-pie', link: '/dashboard/overview' },
-        { labelKey: 'NAV.MY_ACCOUNT', icon: 'fa-solid fa-user-gear', link: '/account' },
-        { labelKey: 'DASHBOARD.MY_BOOKINGS', icon: 'fa-solid fa-calendar-days', link: '/dashboard/bookings' },
-      ];
-
-      if (user && (role === 'owner' || role === 'agent' || role === 'admin')) {
-        items.push({ labelKey: 'DASHBOARD.MY_PROPERTIES', icon: 'fa-solid fa-city', link: '/dashboard/properties' });
-        items.push({ labelKey: 'DASHBOARD.INCOMING_REQUESTS', icon: 'fa-solid fa-inbox', link: '/dashboard/owner-bookings' });
-        items.push({ labelKey: 'DASHBOARD.VIEWING_SCHEDULE', icon: 'fa-solid fa-calendar-check', link: '/dashboard/owner-viewing-requests' });
-      }
-
-      items.push({ labelKey: 'DASHBOARD.PAYMENTS', icon: 'fa-solid fa-wallet', link: '/dashboard/payments' });
-
-      if (user && role === 'admin') {
-        items.push({ labelKey: 'DASHBOARD.ADMIN_CENTER', icon: 'fa-solid fa-shield-halved', link: '/admin' });
-      }
-
-      items.push({ labelKey: 'NAV.BACK_TO_SITE', icon: 'fa-solid fa-house', link: '/', exact: true });
-
-      return items;
-    }
-
-    // Public / Main site mode
+  // 1. Strictly 5 Fixed Items for Bottom Bar (Zero horizontal scroll)
+  get fixedBottomNavItems() {
     return [
       { labelKey: 'NAV.HOME', icon: 'fa-solid fa-house', link: '/', exact: true },
       { labelKey: 'NAV.PROPERTIES', icon: 'fa-solid fa-building', link: '/properties' },
       { labelKey: 'NAV.AGENTS', icon: 'fa-solid fa-users', link: '/agents' },
       { labelKey: 'NAV.FAVOURITES', icon: 'fa-solid fa-heart', link: '/dashboard/saved' },
-      { labelKey: user ? 'NAV.MY_DASHBOARD' : 'NAV.SIGN_IN', icon: 'fa-solid fa-gauge', link: user ? '/dashboard/overview' : '/account' },
+      { labelKey: 'NAV.MENU', icon: 'fa-solid fa-bars-staggered', link: '', isMenuTrigger: true },
     ];
+  }
+
+  // 2. Dynamic Role-Based Items for Bottom Sheet Menu
+  get bottomSheetItems() {
+    const user = this.auth.currentUser;
+    const role = user?.role || 'guest';
+
+    const items: Array<{ labelKey: string; icon: string; link: string; exact?: boolean }> = [
+      { labelKey: 'DASHBOARD.OVERVIEW', icon: 'fa-solid fa-table-cells-large', link: '/dashboard/overview' },
+      { labelKey: 'DASHBOARD.MY_ACCOUNT', icon: 'fa-solid fa-user-gear', link: '/account' },
+      { labelKey: 'DASHBOARD.MY_BOOKINGS', icon: 'fa-solid fa-calendar-check', link: '/dashboard/bookings' },
+      { labelKey: 'DASHBOARD.SAVED', icon: 'fa-solid fa-heart', link: '/dashboard/saved' },
+      { labelKey: 'DASHBOARD.INQUIRIES', icon: 'fa-solid fa-comments', link: '/dashboard/inquiries' },
+      { labelKey: 'DASHBOARD.PAYMENTS', icon: 'fa-solid fa-wallet', link: '/dashboard/payments' },
+    ];
+
+    if (user && (role === 'owner' || role === 'agent' || role === 'admin')) {
+      items.push({ labelKey: 'DASHBOARD.MY_PROPERTIES', icon: 'fa-solid fa-building', link: '/dashboard/properties' });
+      items.push({ labelKey: 'DASHBOARD.INCOMING_REQUESTS', icon: 'fa-solid fa-bell', link: '/dashboard/owner-bookings' });
+      items.push({ labelKey: 'DASHBOARD.VIEWING_SCHEDULE', icon: 'fa-solid fa-calendar-days', link: '/dashboard/owner-viewing-requests' });
+    }
+
+    if (user && role === 'admin') {
+      items.push({ labelKey: 'DASHBOARD.ADMIN_CENTER', icon: 'fa-solid fa-shield-halved', link: '/admin' });
+    }
+
+    return items;
+  }
+
+  toggleBottomSheet(event?: Event): void {
+    if (event) event.stopPropagation();
+    this.isBottomSheetOpen = !this.isBottomSheetOpen;
+  }
+
+  closeBottomSheet(): void {
+    this.isBottomSheetOpen = false;
+  }
+
+  logoutAndClose(): void {
+    this.closeBottomSheet();
+    this.auth.logout();
+  }
+
+  openLoginAndClose(): void {
+    this.closeBottomSheet();
+    this.openLogin();
   }
 
   trackByNav(index: number, item: { link: string }): string {

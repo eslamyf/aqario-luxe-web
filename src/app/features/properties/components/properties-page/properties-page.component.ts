@@ -361,7 +361,7 @@ export class PropertiesPageComponent implements OnInit {
 
   private mapToFilters(params: Params): PropertyFilters {
     // Always request up to 1000 properties to display them all on one page
-    const baseFilters: PropertyFilters = { limit: 1000 };
+    const baseFilters: PropertyFilters = { limit: 100 };
 
     if (Object.keys(params).length === 0) return baseFilters;
 

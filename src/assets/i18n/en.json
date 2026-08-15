@@ -27,7 +27,11 @@
     "ADMIN_CENTER": "Admin Center",
     "FAVOURITES": "Favourites",
     "MESSAGES": "Messages",
-    "MENU": "Menu"
+    "MENU": "Menu",
+    "WELCOME": "Welcome",
+    "GUEST": "Guest",
+    "AUTH_REQUIRED_TITLE": "Sign In Required",
+    "AUTH_REQUIRED_DESC": "Sign in to access your dashboard, manage your properties and bookings"
   },
   "COMMON": {
     "SEARCH": "Search",

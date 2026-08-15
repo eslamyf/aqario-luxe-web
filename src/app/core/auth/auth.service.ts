@@ -190,6 +190,8 @@ export class AuthService {
   }
 
   logout(): void {
+    const hasToken = !!localStorage.getItem('aqario_token');
+
     // 1. Synchronously wipe local session state immediately
     this.clearSession();
     this.socketService.disconnect();
@@ -197,14 +199,12 @@ export class AuthService {
     this._isAuthenticated$.next(false);
 
     // 2. Asynchronously notify the backend to clean up cookies/sessions (fire-and-forget)
-    this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
-      next: () => {
-        console.log('[Auth] Backend logout successful');
-      },
-      error: (err) => {
-        console.warn('[Auth] Backend logout failed (safely ignored):', err?.message || err);
-      }
-    });
+    if (hasToken) {
+      this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
+        next: () => {},
+        error: () => {} // Silent ignore
+      });
+    }
   }
 
   // ── Private Helpers ──────────────────────────────────────────────────────

@@ -5,10 +5,11 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpErrorResponse,
+  HttpResponse,
   HttpClient,
   HttpBackend
 } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
@@ -39,6 +40,15 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
+    if (request.url.includes('/auth/logout')) {
+      return next.handle(request).pipe(
+        catchError(() => {
+          // Gracefully catch 401 on logout for unauthenticated sessions
+          return of(new HttpResponse({ status: 200 }));
+        })
+      );
+    }
+
     return next.handle(request).pipe(
       catchError((error) => {
         // Hard-stop dead-session auth paths before any retry / refresh logic can run.
@@ -58,21 +68,17 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
   }
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('[AuthInterceptor] Intercepted 401 error for:', request.url);
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
-      console.log('[AuthInterceptor] Starting token refresh process...');
 
       // Call refresh token endpoint, ensuring cookies are sent
       return this.http.post<any>(`${environment.apiUrl}/auth/refresh-token`, {}, { withCredentials: true }).pipe(
         switchMap((res: any) => {
-          console.log('[AuthInterceptor] Refresh token response received:', res);
           this.isRefreshing = false;
           const token = res.token;
           
           if (token) {
-            console.log('[AuthInterceptor] Successfully obtained new token. Retrying original request...');
             // Update token in storage
             localStorage.setItem('aqario_token', token);
             
@@ -102,13 +108,11 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
         })
       ) as Observable<HttpEvent<any>>;
     } else {
-      console.log('[AuthInterceptor] Refresh in progress. Queueing request:', request.url);
       // Queue the request while refreshing
       return this.refreshTokenSubject.pipe(
         filter((token) => token !== null),
         take(1),
         switchMap((token) => {
-          console.log('[AuthInterceptor] Queue released! Retrying queued request:', request.url);
           return next.handle(this.addToken(request, token!));
         })
       );
@@ -142,24 +146,30 @@ export class TokenRefreshInterceptor implements HttpInterceptor {
   }
 
   private hardStopAuthLoop(err: any): Observable<never> {
-    console.error('[Auth] Dead-session auth path rejected the session, forcing logout', err);
     this.isRefreshing = false;
     this.refreshTokenSubject.next(null);
     this.clearAuthState();
     this.authService.setCurrentUser(null);
     this.socketService.disconnect();
-    void this.router.navigate(['/login']);
+
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('/dashboard') || currentUrl.includes('/account') || currentUrl.includes('/admin')) {
+      void this.router.navigate(['/login']);
+    }
     return throwError(() => err);
   }
 
   private logoutAndRedirect(err: any): Observable<never> {
-    console.error('[Auth] Token refresh failed, logging out', err);
     this.isRefreshing = false;
     this.refreshTokenSubject.next(null);
     this.clearAuthState();
     this.authService.setCurrentUser(null);
     this.socketService.disconnect();
-    void this.router.navigate(['/login']);
+
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('/dashboard') || currentUrl.includes('/account') || currentUrl.includes('/admin')) {
+      void this.router.navigate(['/login']);
+    }
     return throwError(() => err);
   }
 }

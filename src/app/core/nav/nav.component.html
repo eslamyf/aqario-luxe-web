@@ -113,14 +113,105 @@
   </div>
 </header>
 
-<!-- ── Dynamic Floating Capsule Bottom Navigation Bar (Mobile Only) ── -->
+<!-- ── Dynamic Floating Capsule Bottom Navigation Bar (Mobile & Tablet <= 1024px) ── -->
 <div class="mobile-floating-nav" role="navigation" aria-label="Mobile Navigation">
-  <div class="floating-nav-pill" [class.dashboard-pill]="isDashboardContext">
-    <ng-container *ngFor="let item of floatingBottomNavItems; trackBy: trackByNav">
-      <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }" class="nav-dock-item" [title]="item.labelKey | translate">
-        <i [class]="item.icon" aria-hidden="true"></i>
-        <span class="dock-item-label">{{ item.labelKey | translate }}</span>
-      </a>
+  <div class="floating-nav-pill fixed-five-pill">
+    <ng-container *ngFor="let item of fixedBottomNavItems; trackBy: trackByNav">
+      <ng-container *ngIf="!item.isMenuTrigger">
+        <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }" class="nav-dock-item" [title]="item.labelKey | translate" (click)="closeBottomSheet()">
+          <i [class]="item.icon" aria-hidden="true"></i>
+          <span class="dock-item-label">{{ item.labelKey | translate }}</span>
+        </a>
+      </ng-container>
+
+      <ng-container *ngIf="item.isMenuTrigger">
+        <ng-container *ngIf="auth.currentUser$ | async; else guestFifthItem">
+          <button type="button" class="nav-dock-item menu-trigger-item" [class.active]="isBottomSheetOpen" (click)="toggleBottomSheet($event)" [title]="'NAV.MENU' | translate">
+            <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+            <span class="dock-item-label">{{ 'NAV.MENU' | translate }}</span>
+          </button>
+        </ng-container>
+        <ng-template #guestFifthItem>
+          <button type="button" class="nav-dock-item signin-dock-item" (click)="openLoginAndClose()" [title]="'NAV.SIGN_IN' | translate">
+            <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
+            <span class="dock-item-label">{{ 'NAV.SIGN_IN' | translate }}</span>
+          </button>
+        </ng-template>
+      </ng-container>
     </ng-container>
   </div>
+</div>
+
+<!-- ── Dynamic Role-Based Bottom Sheet Modal ── -->
+<div class="bottom-sheet-backdrop" *ngIf="isBottomSheetOpen" (click)="closeBottomSheet()"></div>
+<div class="bottom-sheet-container" [class.open]="isBottomSheetOpen" role="dialog" aria-label="Dashboard Menu">
+  <!-- Sheet Drag Handle -->
+  <div class="sheet-drag-handle" (click)="closeBottomSheet()"></div>
+
+  <!-- User Profile Header -->
+  <div class="sheet-user-header">
+    <ng-container *ngIf="auth.currentUser$ | async as user; else guestSheetHeader">
+      <div class="sheet-user-info">
+        <img *ngIf="user.photo" [src]="user.photo" [alt]="user.name" class="sheet-user-avatar" />
+        <div *ngIf="!user.photo" class="sheet-user-avatar avatar-initials">{{ user.name[0] | uppercase }}</div>
+        <div class="sheet-user-details">
+          <span class="sheet-user-name">{{ user.name }}</span>
+          <span class="sheet-user-role-badge">{{ 'DASHBOARD.ROLES.' + user.role.toUpperCase() | translate }}</span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #guestSheetHeader>
+      <div class="sheet-user-info">
+        <div class="sheet-user-avatar guest-avatar"><i class="fa-solid fa-user"></i></div>
+        <div class="sheet-user-details">
+          <span class="sheet-user-name">{{ 'NAV.WELCOME' | translate }}</span>
+          <span class="sheet-user-role-badge guest-badge">{{ 'NAV.GUEST' | translate }}</span>
+        </div>
+      </div>
+    </ng-template>
+
+    <button type="button" class="sheet-close-btn" (click)="closeBottomSheet()" aria-label="Close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- Sheet Content: Logged in vs Guest -->
+  <ng-container *ngIf="auth.currentUser$ | async as user; else guestSheetBody">
+    <div class="sheet-menu-body">
+      <div class="sheet-menu-grid">
+        <a *ngFor="let item of bottomSheetItems; trackBy: trackByNav" [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }" class="sheet-menu-item" (click)="closeBottomSheet()">
+          <div class="sheet-item-icon">
+            <i [class]="item.icon"></i>
+          </div>
+          <span class="sheet-item-label">{{ item.labelKey | translate }}</span>
+          <i class="fa-solid fa-chevron-left sheet-arrow-rtl"></i>
+        </a>
+      </div>
+
+      <!-- Action Button (Logout) -->
+      <div class="sheet-footer-action">
+        <button type="button" class="btn-sheet-logout" (click)="logoutAndClose()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>{{ 'DASHBOARD.LOG_OUT' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Guest Template: Auth Required Card -->
+  <ng-template #guestSheetBody>
+    <div class="sheet-menu-body guest-body">
+      <div class="sheet-auth-card">
+        <div class="auth-card-icon">
+          <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <h3 class="auth-card-title">{{ 'NAV.AUTH_REQUIRED_TITLE' | translate }}</h3>
+        <p class="auth-card-desc">{{ 'NAV.AUTH_REQUIRED_DESC' | translate }}</p>
+        <button type="button" class="btn-sheet-login-main" (click)="openLoginAndClose()">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>{{ 'NAV.SIGN_IN' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </ng-template>
 </div>

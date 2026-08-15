@@ -27,7 +27,11 @@
     "ADMIN_CENTER": "مركز الإدارة",
     "FAVOURITES": "المفضلة",
     "MESSAGES": "الرسائل",
-    "MENU": "القائمة"
+    "MENU": "القائمة",
+    "WELCOME": "أهلاً بك",
+    "GUEST": "زائر",
+    "AUTH_REQUIRED_TITLE": "تسجيل الدخول مطلوب",
+    "AUTH_REQUIRED_DESC": "سجل دخولك للوصول إلى لوحة التحكم وإدارة عقاراتك وحجوزاتك"
   },
   "COMMON": {
     "SEARCH": "بحث",
