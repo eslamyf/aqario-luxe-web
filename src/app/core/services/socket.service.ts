@@ -49,7 +49,8 @@ export class SocketService {
     }
     
     if (!this.socketPromise) {
-      this.socketPromise = import('socket.io-client').then(({ io }) => {
+      this.socketPromise = import('socket.io-client').then((socketIoClient: any) => {
+        const io = socketIoClient.io ?? socketIoClient.default?.io ?? socketIoClient.default ?? socketIoClient;
         if (!this.isSocketEnabled) {
           return null;
         }
@@ -63,7 +64,7 @@ export class SocketService {
         });
 
         this.socket.on('connect', () => {
-          console.log('[Socket] connected');
+          // Connected successfully
         });
 
         this.socket.on('connect_error', (error: Error) => {
@@ -108,7 +109,6 @@ export class SocketService {
         socketInstance.auth = { token: newToken };
         socketInstance.disconnect();
         socketInstance.connect();
-        console.log('[Socket] Reconnected with fresh token');
       }
     };
 

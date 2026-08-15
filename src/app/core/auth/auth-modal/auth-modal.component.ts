@@ -9,6 +9,7 @@ import { NotificationService } from '../../../shared/services/notification.servi
 import { environment } from '../../../../environments/environment';
 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
 
 // ─── Custom Validators ───────────────────────────────────
 
@@ -50,7 +51,7 @@ type AuthTab = 'login' | 'register' | 'forgot' | 'verify-otp';
 @Component({
   selector: 'app-auth-modal',
   standalone: true, // Use Standalone Component for lightweight and fast performance
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent],
   templateUrl: './auth-modal.component.html',
   styleUrls: ['./auth-modal.component.scss'],
 })

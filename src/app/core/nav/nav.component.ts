@@ -36,12 +36,17 @@ export class NavComponent implements OnDestroy {
     return url.includes('/dashboard') || url.includes('/account') || url.includes('/admin');
   }
 
+  get isAddPropertyActive(): boolean {
+    const url = this.currentUrl;
+    return url.includes('/kyc') || (url.includes('/dashboard/properties') && url.includes('view=form'));
+  }
+
   // 1. Strictly 5 Fixed Items for Bottom Bar (Zero horizontal scroll)
   get fixedBottomNavItems() {
     return [
       { labelKey: 'NAV.HOME', icon: 'fa-solid fa-house', link: '/', exact: true },
       { labelKey: 'NAV.PROPERTIES', icon: 'fa-solid fa-building', link: '/properties' },
-      { labelKey: 'NAV.AGENTS', icon: 'fa-solid fa-users', link: '/agents' },
+      { labelKey: 'NAV.LIST_PROPERTY', icon: 'fa-solid fa-circle-plus', link: '', isAddProperty: true },
       { labelKey: 'NAV.FAVOURITES', icon: 'fa-solid fa-heart', link: '/dashboard/saved' },
       { labelKey: 'NAV.MENU', icon: 'fa-solid fa-bars-staggered', link: '', isMenuTrigger: true },
     ];
@@ -219,11 +224,6 @@ export class NavComponent implements OnDestroy {
     }
   }
 
-  markAllAsRead(): void {
-    this.notificationsApi.markAllAsRead().subscribe();
-    this.showNotifications = false;
-  }
-
   markAllNotificationsAsRead(): void {
     this.notificationsApi.markAllAsRead().subscribe();
     this.showNotifications = false;
@@ -246,6 +246,11 @@ export class NavComponent implements OnDestroy {
     } else {
       this.router.navigate(['/kyc']);
     }
+  }
+
+  navigateToAddPropertyAndClose(): void {
+    this.closeBottomSheet();
+    this.navigateToAddProperty();
   }
 
   openLogin(): void {

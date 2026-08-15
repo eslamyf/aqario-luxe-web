@@ -72,11 +72,9 @@ export class NotificationsApiService {
           this.notificationsSubject.next([notif, ...current]);
           this.unreadCountSubject.next(this.unreadCountSubject.value + 1);
 
-          // Active Viewport Toast Suppression
+          // Active Viewport Toast Suppression: skip chat notifications when user is already on chat page
           const currentUrl = this.router.url;
-          if (currentUrl.startsWith('/dashboard/chat') && (notif.type === 'inquiry' || notif.type === 'chat')) {
-            console.log('[NotificationsApiService] Toast suppressed for chat path:', currentUrl);
-          } else {
+          if (!currentUrl.startsWith('/dashboard/chat') || (notif.type !== 'inquiry' && notif.type !== 'chat')) {
             this.toastService.show(notif.message, 'info');
           }
         }
@@ -92,9 +90,9 @@ export class NotificationsApiService {
           this.notificationsSubject.next(res.data.notifications);
         }
       }),
-      catchError(err => {
-        console.error('Failed to fetch notifications', err);
-        throw err;
+      catchError(() => {
+        // Silently ignore notification fetch failures (user may not be authenticated)
+        return [];
       })
     );
   }

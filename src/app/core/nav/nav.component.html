@@ -68,10 +68,14 @@
 
       <!-- Auth User / Profile Avatar / Sign-In Button -->
       <ng-template #guestTemplate>
-        <button id="btn-sign-in" class="btn-signin btn-auth-trigger" (click)="openLogin()" data-cursor-hover>
-          <i class="fa-solid fa-user auth-icon" aria-hidden="true"></i>
-          <span class="auth-text">{{ 'NAV.SIGN_IN' | translate }}</span>
-        </button>
+        <app-button
+          id="btn-sign-in"
+          variant="secondary"
+          size="sm"
+          icon="fa-solid fa-user"
+          (btnClick)="openLogin()">
+          {{ 'NAV.SIGN_IN' | translate }}
+        </app-button>
       </ng-template>
 
       <ng-container *ngIf="auth.currentUser$ | async as user; else guestTemplate">
@@ -108,7 +112,14 @@
         </div>
       </ng-container>
 
-      <button id="btn-list-property" class="btn-list" (click)="navigateToAddProperty()" data-cursor-hover>{{ 'NAV.LIST_PROPERTY' | translate }}</button>
+      <app-button
+        id="btn-list-property"
+        variant="primary"
+        size="sm"
+        icon="fa-solid fa-building"
+        (btnClick)="navigateToAddProperty()">
+        {{ 'NAV.LIST_PROPERTY' | translate }}
+      </app-button>
     </div>
   </div>
 </header>
@@ -117,11 +128,18 @@
 <div class="mobile-floating-nav" role="navigation" aria-label="Mobile Navigation">
   <div class="floating-nav-pill fixed-five-pill">
     <ng-container *ngFor="let item of fixedBottomNavItems; trackBy: trackByNav">
-      <ng-container *ngIf="!item.isMenuTrigger">
+      <ng-container *ngIf="!item.isMenuTrigger && !item.isAddProperty">
         <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }" class="nav-dock-item" [title]="item.labelKey | translate" (click)="closeBottomSheet()">
           <i [class]="item.icon" aria-hidden="true"></i>
           <span class="dock-item-label">{{ item.labelKey | translate }}</span>
         </a>
+      </ng-container>
+
+      <ng-container *ngIf="item.isAddProperty">
+        <button type="button" class="nav-dock-item add-prop-dock-item" [class.active]="isAddPropertyActive" (click)="navigateToAddProperty()" [title]="'NAV.LIST_PROPERTY' | translate">
+          <i [class]="item.icon" aria-hidden="true"></i>
+          <span class="dock-item-label">{{ item.labelKey | translate }}</span>
+        </button>
       </ng-container>
 
       <ng-container *ngIf="item.isMenuTrigger">
@@ -178,6 +196,16 @@
   <!-- Sheet Content: Logged in vs Guest -->
   <ng-container *ngIf="auth.currentUser$ | async as user; else guestSheetBody">
     <div class="sheet-menu-body">
+      <!-- Prominent List Property Action Button at top of bottom sheet -->
+      <app-button
+        variant="primary"
+        size="lg"
+        [fullWidth]="true"
+        icon="fa-solid fa-building"
+        (btnClick)="navigateToAddPropertyAndClose()">
+        {{ 'NAV.LIST_PROPERTY' | translate }}
+      </app-button>
+
       <div class="sheet-menu-grid">
         <a *ngFor="let item of bottomSheetItems; trackBy: trackByNav" [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }" class="sheet-menu-item" (click)="closeBottomSheet()">
           <div class="sheet-item-icon">
@@ -201,6 +229,16 @@
   <!-- Guest Template: Auth Required Card -->
   <ng-template #guestSheetBody>
     <div class="sheet-menu-body guest-body">
+      <!-- Prominent List Property Action Button at top of bottom sheet for guests -->
+      <app-button
+        variant="primary"
+        size="lg"
+        [fullWidth]="true"
+        icon="fa-solid fa-building"
+        (btnClick)="navigateToAddPropertyAndClose()">
+        {{ 'NAV.LIST_PROPERTY' | translate }}
+      </app-button>
+
       <div class="sheet-auth-card">
         <div class="auth-card-icon">
           <i class="fa-solid fa-user-lock"></i>

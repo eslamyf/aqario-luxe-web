@@ -63,11 +63,9 @@ export class AdminPropertiesComponent implements OnInit, OnDestroy {
       limit: this.limit
     };
 
-    console.log('[AdminProperties] Loading with filters:', query);
 
     this.adminService.getProperties(query).subscribe({
       next: (res) => {
-        console.log('[AdminProperties] Received:', res);
         this.properties = res.properties;
         this.total = res.total;
         this.pages = res.pages;

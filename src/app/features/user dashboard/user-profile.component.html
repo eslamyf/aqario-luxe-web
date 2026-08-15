@@ -72,9 +72,13 @@
         <textarea formControlName="bio" [placeholder]="'ACCOUNT.BIO_PLACEHOLDER' | translate"></textarea>
       </div>
       <div style="margin-top:1rem">
-        <button class="action-btn primary" (click)="saveProfile()" [disabled]="isSavingProfile">
-          {{ isSavingProfile ? ('DASHBOARD.PROFILE.SAVING' | translate) : ('DASHBOARD.PROFILE.SAVE_CHANGES' | translate) }}
-        </button>
+        <app-button
+          variant="primary"
+          size="md"
+          [loading]="isSavingProfile"
+          (btnClick)="saveProfile()">
+          {{ (isSavingProfile ? 'DASHBOARD.PROFILE.SAVING' : 'DASHBOARD.PROFILE.SAVE_CHANGES') | translate }}
+        </app-button>
       </div>
     </div>
 
@@ -92,9 +96,13 @@
         </div>
       </div>
       <div class="password-action-row">
-        <button class="action-btn primary" (click)="savePassword()" [disabled]="isSavingPassword">
-          {{ isSavingPassword ? ('DASHBOARD.PROFILE.SAVING' | translate) : ('DASHBOARD.PROFILE.UPDATE_PASS' | translate) }}
-        </button>
+        <app-button
+          variant="primary"
+          size="md"
+          [loading]="isSavingPassword"
+          (btnClick)="savePassword()">
+          {{ (isSavingPassword ? 'DASHBOARD.PROFILE.SAVING' : 'DASHBOARD.PROFILE.UPDATE_PASS') | translate }}
+        </app-button>
         <span class="password-note">
           {{ 'DASHBOARD.PROFILE.PASS_NOTE' | translate }}
         </span>

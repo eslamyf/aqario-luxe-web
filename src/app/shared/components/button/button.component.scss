@@ -1,0 +1,198 @@
+@import '../../../../styles/variables';
+
+// ── App Button - Clean, Traditional & Performant Design System ──
+.app-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  border-radius: 10px !important; // Consistent uniform rounded corners across all buttons
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none;
+  outline: none;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-gold);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  // ── Size Variations ───────────────────────────────────────
+  &.btn-sz-sm {
+    padding: 7px 16px;
+    font-size: 13px;
+    height: 36px;
+
+    .btn-icon {
+      font-size: 13px;
+    }
+  }
+
+  &.btn-sz-md {
+    padding: 10px 22px;
+    font-size: 14px;
+    height: 42px;
+
+    .btn-icon {
+      font-size: 15px;
+    }
+  }
+
+  &.btn-sz-lg {
+    padding: 13px 28px;
+    font-size: 15px;
+    height: 48px;
+
+    .btn-icon {
+      font-size: 17px;
+    }
+  }
+
+  &.btn-full-width {
+    width: 100%;
+  }
+
+  // ── Variant: Primary / Gold (Traditional Clean Solid Gold) ──
+  &.btn-var-primary,
+  &.btn-var-gold {
+    background-color: #C8A86B;
+    color: #111827;
+    border-color: #C8A86B;
+
+    &:hover:not(:disabled) {
+      background-color: #B8975B;
+      border-color: #B8975B;
+    }
+  }
+
+  // ── Variant: Secondary (Traditional Dark Slate) ────────────
+  &.btn-var-secondary {
+    background-color: #181F2A;
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.12);
+
+    &:hover:not(:disabled) {
+      background-color: #222B38;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  // ── Variant: Outline (Clean Bordered) ─────────────────────
+  &.btn-var-outline {
+    background-color: transparent;
+    color: #C8A86B;
+    border-color: #C8A86B;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(200, 168, 107, 0.1);
+    }
+  }
+
+  // ── Variant: Ghost (Flat Minimal) ─────────────────────────
+  &.btn-var-ghost {
+    background-color: transparent;
+    color: var(--text-muted);
+    border-color: transparent;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+    }
+  }
+
+  // ── Variant: Danger (Solid Crimson) ───────────────────────
+  &.btn-var-danger {
+    background-color: #C0392B;
+    color: #FFFFFF;
+    border-color: #C0392B;
+
+    &:hover:not(:disabled) {
+      background-color: #A93226;
+      border-color: #A93226;
+    }
+  }
+
+  // ── Layout Inner Structure ────────────────────────────────
+  .btn-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    transition: opacity 0.15s ease;
+
+    &.is-loading-hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-spinner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+    font-size: 16px;
+  }
+}
+
+// ── Light Theme Overrides ────────────────────────────────────
+[data-theme='light'] {
+  .app-btn {
+    &.btn-var-secondary {
+      background-color: #F1F5F9;
+      color: #0F172A;
+      border-color: rgba(15, 23, 42, 0.15);
+
+      &:hover:not(:disabled) {
+        background-color: #E2E8F0;
+      }
+    }
+
+    &.btn-var-ghost {
+      color: #334155;
+
+      &:hover:not(:disabled) {
+        background-color: #F1F5F9;
+        color: #0F172A;
+      }
+    }
+  }
+}
+
+// ── Arabic RTL Adjustments ───────────────────────────────────
+[dir='rtl'],
+:lang(ar),
+[lang='ar'] {
+  .app-btn {
+    letter-spacing: 0 !important;
+  }
+}

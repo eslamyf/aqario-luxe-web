@@ -200,6 +200,19 @@ textarea,
   width: 4px;
 }
 
+/* ── Universal Site-Wide Button Uniformity Rule ── */
+button,
+.btn-primary,
+.btn-secondary,
+.btn-gold,
+.btn-signin,
+.btn-list,
+.action-btn,
+.promo-btn,
+.app-btn {
+  border-radius: 10px !important;
+}
+
 ::-webkit-scrollbar-track {
   background: var(--bg-base);
 }

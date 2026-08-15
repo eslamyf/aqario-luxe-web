@@ -45,10 +45,9 @@
             style="display: block; margin-top: 8px;">{{ 'AUTH.FORGOT_PASSWORD' | translate }}</a>
         </div>
 
-        <button type="submit" class="auth-submit" [disabled]="isLoading">
-          <span *ngIf="!isLoading">{{ 'AUTH.SIGN_IN' | translate }}</span>
-          <span *ngIf="isLoading" class="auth-spinner"></span>
-        </button>
+        <app-button type="submit" variant="primary" size="lg" [fullWidth]="true" [loading]="isLoading">
+          {{ 'AUTH.SIGN_IN' | translate }}
+        </app-button>
 
         <div class="google-btn-wrapper">
           <button type="button" class="auth-google-btn" (click)="onGoogleSignIn()" [disabled]="isGoogleLoading">
@@ -151,8 +150,9 @@
             | translate }}</span>
         </div>
 
-        <button type="submit" class="auth-submit" [disabled]="isLoading">{{ 'AUTH.CREATE_ACCOUNT' | translate
-          }}</button>
+        <app-button type="submit" variant="primary" size="lg" [fullWidth]="true" [loading]="isLoading">
+          {{ 'AUTH.CREATE_ACCOUNT' | translate }}
+        </app-button>
       </form>
 
       <form *ngIf="activeTab === 'forgot'" [formGroup]="forgotForm" (ngSubmit)="onForgotSubmit()" class="auth-form"
@@ -168,10 +168,13 @@
             formControlName="email" [placeholder]="'AUTH.EMAIL_PLACEHOLDER' | translate" />
         </div>
 
-        <button type="submit" class="auth-submit">{{ 'AUTH.SEND_OTP' | translate }}</button>
+        <app-button type="submit" variant="primary" size="lg" [fullWidth]="true" [loading]="isLoading">
+          {{ 'AUTH.SEND_OTP' | translate }}
+        </app-button>
 
-        <button type="button" class="auth-switch-btn" style="margin-top: 15px;" (click)="switchTab('login')">{{
-          'AUTH.BACK_TO_LOGIN' | translate }}</button>
+        <app-button type="button" variant="ghost" size="md" [fullWidth]="true" customClass="mt-3" (btnClick)="switchTab('login')">
+          {{ 'AUTH.BACK_TO_LOGIN' | translate }}
+        </app-button>
       </form>
 
       <form *ngIf="activeTab === 'verify-otp'" [formGroup]="verifyOtpForm" (ngSubmit)="onVerifyOtpSubmit()"

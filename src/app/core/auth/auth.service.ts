@@ -218,8 +218,11 @@ export class AuthService {
     };
     const fullUser: User = normalizedUser;
 
-    localStorage.clear();
-    sessionStorage.clear();
+    // Only clear auth-related keys (don't wipe unrelated data like theme, language settings)
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_KEY);
+    sessionStorage.removeItem(this.TOKEN_KEY);
+    sessionStorage.removeItem(this.USER_KEY);
 
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(fullUser));

@@ -13,12 +13,12 @@
 
 // ---- DARK MODE (Default — :root) ---------------------------
 :root {
-  // ── Semantic Surface Tokens ──────────────────────────────
-  --bg-base: #0F1115; // Deep slate — page bg
-  --bg-surface: #161B22; // GitHub-style dark surface
-  --bg-elevated: #1C2128; // Cards, panels
-  --bg-input: #22272E; // Input fields, selects
-  --bg-deep: #0D1117; // Deep elements
+  // ── Semantic Surface Tokens (Pure Obsidian Dark Black) ────────
+  --bg-base: #0A0B0E; // Deep Obsidian Black — page bg
+  --bg-surface: #121317; // Pure Obsidian Card Surface
+  --bg-elevated: #17181D; // Deep Obsidian Elevated Panel
+  --bg-input: #1B1C22; // Dark Obsidian Input Well
+  --bg-deep: #0B0C0E; // Deep Obsidian Background
 
   // ── Semantic Text Tokens ──────────────────────────────────
   --text-main: #F9FAFB; // Crisp off-white
@@ -28,9 +28,9 @@
   --placeholder-color: #6B7280; // Search/input placeholder
 
   // ── Semantic Border / Overlay ────────────────────────────
-  --border-color: rgba(255, 255, 255, 0.1);
-  --overlay-color: rgba(15, 17, 21, 0.95);
-  --surface-glass: rgba(15, 17, 21, 0.82);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --overlay-color: rgba(10, 11, 14, 0.96);
+  --surface-glass: rgba(10, 11, 14, 0.88);
 
   // ── Brand Gold ───────────────────────────────────────────
   --brand-gold: #C9A96E;
@@ -39,25 +39,25 @@
   --brand-gold-soft: rgba(201, 169, 110, 0.15);
 
   // ── Hero Layer Tokens ─────────────────────────────────────
-  --hero-gradient-start: #0F1115;
-  --hero-gradient-mid: #161B22;
-  --hero-gradient-end: #1C2128;
-  --hero-grid-color: rgba(255, 255, 255, 0.03);
-  --hero-orb-gold: rgba(201, 169, 110, 0.1);
-  --hero-orb-sapphire: rgba(41, 128, 185, 0.08);
-  --ticker-bg: rgba(15, 17, 21, 0.90);
+  --hero-gradient-start: #0A0B0E;
+  --hero-gradient-mid: #121317;
+  --hero-gradient-end: #17181D;
+  --hero-grid-color: rgba(255, 255, 255, 0.02);
+  --hero-orb-gold: rgba(201, 169, 110, 0.08);
+  --hero-orb-sapphire: rgba(201, 169, 110, 0.04);
+  --ticker-bg: rgba(10, 11, 14, 0.92);
   --ticker-border: rgba(255, 255, 255, 0.08);
 
   // ── Shadows ───────────────────────────────────────────────
-  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  --shadow-pop: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-pop: 0 12px 24px rgba(0, 0, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.4);
   --shadow-gold: 0 10px 15px -3px rgba(201, 169, 110, 0.15);
 
   // ── Noise & Misc ─────────────────────────────────────────
   --noise-opacity: 0.015;
 
   // ── RGB Channel Splits (for rgba() in SCSS) ──────────────
-  --bg-surface-rgb: 22, 27, 34;
+  --bg-surface-rgb: 18, 19, 23;
   --text-main-rgb: 249, 250, 251;
   --text-muted-rgb: 156, 163, 175;
 

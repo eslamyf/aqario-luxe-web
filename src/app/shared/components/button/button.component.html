@@ -1,0 +1,26 @@
+<button
+  [type]="type"
+  [class]="buttonClasses"
+  [disabled]="disabled || loading"
+  [attr.aria-label]="ariaLabel || null"
+  (click)="onClick($event)">
+
+  <!-- Spinner Overlay -->
+  <span *ngIf="loading" class="btn-spinner" aria-hidden="true">
+    <i class="fa-solid fa-circle-notch fa-spin"></i>
+  </span>
+
+  <!-- Button Main Content -->
+  <span class="btn-content" [class.is-loading-hidden]="loading">
+    <!-- Left Icon -->
+    <i *ngIf="icon && iconPosition === 'left'" [class]="icon" class="btn-icon btn-icon-left"></i>
+
+    <!-- Projected Label / Slot -->
+    <span class="btn-label">
+      <ng-content></ng-content>
+    </span>
+
+    <!-- Right Icon -->
+    <i *ngIf="icon && iconPosition === 'right'" [class]="icon" class="btn-icon btn-icon-right"></i>
+  </span>
+</button>

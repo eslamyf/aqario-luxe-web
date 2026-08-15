@@ -17,6 +17,7 @@ import { UserOwnerViewingRequestsComponent } from './user-owner-viewing-requests
 import { UserInquiriesComponent } from './user-inquiries.component';
 import { UserChatComponent } from './user-chat.component';
 import { TranslatePropPipe } from './translate-prop.pipe';
+import { ButtonComponent } from '../../shared/components/button/button.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     TranslateModule,
     TranslatePropPipe,
+    ButtonComponent,
   ],
   exports: [
     TranslatePropPipe,

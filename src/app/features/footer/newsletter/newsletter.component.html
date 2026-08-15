@@ -1,43 +1,25 @@
 <!-- ============================================================
      LUXE ESTATES — Newsletter Component Template
-     Reference: Template/index.html .newsletter-section (lines 1743–1757)
-     Rules: §3.1 eyebrow, §3.5 Style A inputs (underline only),
-            §4 scroll reveal, §5.5 NotificationService
+     Clean, single-purpose subscription card
      ============================================================ -->
 
 <section class="newsletter-section" aria-labelledby="newsletter-heading">
 
-  <!-- Left column: eyebrow + title + description ──────────── -->
+  <!-- Left column: eyebrow + title + short description ──────────── -->
   <div class="newsletter-content reveal">
 
-    <!-- Eyebrow: §3.1 — font-mono, gold, letter-spacing 4px, uppercase -->
+    <!-- Eyebrow -->
     <div class="newsletter-eyebrow">{{ 'HOME.NEWSLETTER.EYEBROW' | translate }}</div>
 
-    <!-- Title: font-display weight 300, em → italic gold -->
+    <!-- Title -->
     <h2 class="newsletter-title" id="newsletter-heading">
       {{ 'HOME.NEWSLETTER.TITLE' | translate }} <em>{{ 'HOME.NEWSLETTER.EMPHASIS' | translate }}</em>
     </h2>
 
-    <!-- Description: font-body, var(--mist) -->
+    <!-- Short Description -->
     <p class="newsletter-desc">
       {{ 'HOME.NEWSLETTER.DESC' | translate }}
     </p>
-
-    <!-- 3 Simple Value Benefits Row -->
-    <div class="newsletter-benefits-row">
-      <div class="benefit-chip">
-        <div class="benefit-title">{{ 'HOME.NEWSLETTER.BENEFIT1_TITLE' | translate }}</div>
-        <div class="benefit-desc">{{ 'HOME.NEWSLETTER.BENEFIT1_DESC' | translate }}</div>
-      </div>
-      <div class="benefit-chip">
-        <div class="benefit-title">{{ 'HOME.NEWSLETTER.BENEFIT2_TITLE' | translate }}</div>
-        <div class="benefit-desc">{{ 'HOME.NEWSLETTER.BENEFIT2_DESC' | translate }}</div>
-      </div>
-      <div class="benefit-chip">
-        <div class="benefit-title">{{ 'HOME.NEWSLETTER.BENEFIT3_TITLE' | translate }}</div>
-        <div class="benefit-desc">{{ 'HOME.NEWSLETTER.BENEFIT3_DESC' | translate }}</div>
-      </div>
-    </div>
 
   </div><!-- /newsletter-content -->
 
@@ -51,12 +33,11 @@
       class="newsletter-form"
       id="newsletter-form"
     >
-      <!-- Email input row: input + button inside gold-border wrapper -->
+      <!-- Email input row: input + button inside rounded wrapper -->
       <div
         class="newsletter-input-row"
         [class.has-error]="showError"
       >
-        <!-- Style A input: underline only (§3.5) ── no full border -->
         <input
           id="newsletter-email"
           type="email"
@@ -66,22 +47,19 @@
           autocomplete="email"
           [attr.aria-invalid]="showError ? 'true' : null"
           aria-describedby="newsletter-error"
-          [attr.data-cursor-hover]="true"
         />
 
-        <!-- Submit button: btn-primary, font-mono, "SUBSCRIBE →" -->
-        <button
+        <app-button
           type="submit"
-          class="newsletter-btn"
-          [disabled]="isSubmitting"
-          [attr.data-cursor-hover]="true"
-          aria-label="Subscribe to newsletter"
-        >
+          variant="primary"
+          size="md"
+          [loading]="isSubmitting"
+          ariaLabel="Subscribe to newsletter">
           {{ (isSubmitting ? 'HOME.NEWSLETTER.SUBSCRIBING' : 'HOME.NEWSLETTER.SUBSCRIBE') | translate }}
-        </button>
+        </app-button>
       </div><!-- /newsletter-input-row -->
 
-      <!-- Validation error message (touched + invalid only) ── -->
+      <!-- Validation error message -->
       <p
         *ngIf="showError"
         class="newsletter-error"
@@ -93,7 +71,7 @@
 
     </form><!-- /newsletter-form -->
 
-    <!-- Subscriber count tagline ──────────────────────────── -->
+    <!-- Subscriber count tagline -->
     <p class="newsletter-tagline">
       {{ 'HOME.NEWSLETTER.TAGLINE' | translate }}
     </p>

@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FooterComponent } from './footer.component';
 import { NewsletterComponent } from './newsletter/newsletter.component';
+import { ButtonComponent } from '../../shared/components/button/button.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { NewsletterComponent } from './newsletter/newsletter.component';
     ReactiveFormsModule,               // §5.2 — per-feature import, never at root again
     RouterModule.forChild([]),         // ✅ §5.2 — forChild, empty routes (shell component)
     TranslateModule,
+    ButtonComponent,
   ],
   exports: [
     FooterComponent,                   // re-exported so AppModule can use <app-footer>
