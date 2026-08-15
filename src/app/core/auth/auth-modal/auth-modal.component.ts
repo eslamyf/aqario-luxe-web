@@ -152,8 +152,8 @@ export class AuthModalComponent implements OnInit, OnDestroy {
         client_id: this.effectiveGoogleClientId,
         callback: (response: any) => this.handleGoogleCredentialResponse(response),
         ux_mode: 'popup',
-        itp_support: true,
-        use_fedcm_for_prompt: false
+        auto_select: false,
+        itp_support: true
       });
 
       this.googleAccountsInitialized = true;

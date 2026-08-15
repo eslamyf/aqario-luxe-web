@@ -5,8 +5,8 @@
 
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { SocketService } from '../services/socket.service';
 
@@ -200,10 +200,9 @@ export class AuthService {
 
     // 2. Asynchronously notify the backend to clean up cookies/sessions (fire-and-forget)
     if (hasToken) {
-      this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
-        next: () => {},
-        error: () => {} // Silent ignore
-      });
+      this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).pipe(
+        catchError(() => of(null))
+      ).subscribe();
     }
   }
 

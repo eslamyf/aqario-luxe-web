@@ -240,7 +240,7 @@ interface ConfirmationConfig {
       margin: 0;
     }
 
-    // ── Confirmation Modal ──────────────────────────────
+    /* ── Confirmation Modal ────────────────────────────── */
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.7);
