@@ -8,6 +8,7 @@ import { HeroComponent } from './hero.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { HomeSectionsComponent } from './home-sections/home-sections.component';
 import { PropertyCardModule } from '../properties/components/property-card/property-card.module';
+import { ButtonComponent } from '../../shared/components/button/button.component';
 
 const routes: Routes = [
   { path: '', component: HeroComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     TranslateModule,
     PropertyCardModule,
+    ButtonComponent,
   ],
 })
 export class HeroModule {}

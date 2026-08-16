@@ -15,10 +15,6 @@
         <h2 class="section-title">{{ 'HOME.SECTIONS.POPULAR_TITLE' | translate }} <em>{{
             'HOME.SECTIONS.POPULAR_EMPHASIS' | translate }}</em></h2>
       </div>
-      <div class="section-nav">
-        <button class="nav-arrow" (click)="scrollProps('left')" id="btn-prev-props" aria-label="Previous">‹</button>
-        <button class="nav-arrow" (click)="scrollProps('right')" id="btn-next-props" aria-label="Next">›</button>
-      </div>
     </div>
 
     <!-- Loading skeleton -->
@@ -34,10 +30,18 @@
     </div>
 
     <!-- Properties grid — real data from MongoDB Atlas -->
-    <div class="props-grid home-reveal stagger-container"
+    <div class="props-carousel-wrapper home-reveal"
       *ngIf="!isLoading && !hasError && featuredProperties.length > 0">
-      <app-property-card *ngFor="let prop of featuredProperties; let i = index" [property]="prop" [isFirst]="i === 0">
-      </app-property-card>
+      <button class="nav-arrow nav-arrow-right" (click)="scrollProps('right')" id="btn-next-props" aria-label="Next">
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      </button>
+      <div class="props-grid stagger-container">
+        <app-property-card *ngFor="let prop of featuredProperties; let i = index" [property]="prop" [isFirst]="i === 0">
+        </app-property-card>
+      </div>
+      <button class="nav-arrow nav-arrow-left" (click)="scrollProps('left')" id="btn-prev-props" aria-label="Previous">
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+      </button>
     </div>
 
     <!-- Empty state -->
@@ -161,14 +165,93 @@
   </div>
 </section>
 
-<!-- ── SECTION 5: Newsletter CTA ─────────────────────────────────── -->
+<!-- ── SECTION 5: Add Property CTA ─────────────────────────────────── -->
 <section class="cta-section home-reveal">
   <div class="cta-inner">
     <h2 class="cta-title">{{ 'HOME.SECTIONS.GET_STARTED_TITLE' | translate }} <em>{{
         'HOME.SECTIONS.GET_STARTED_EMPHASIS' | translate }}</em></h2>
     <p class="cta-sub">{{ 'HOME.SECTIONS.GET_STARTED_SUB' | translate }}</p>
-    <button class="cta-btn" (click)="navigateToProperties()" id="btn-get-started">
+    <button class="cta-btn" (click)="openAddPropertyModal()" id="btn-add-property">
       {{ 'HOME.SECTIONS.GET_STARTED_BTN' | translate }}
     </button>
   </div>
 </section>
+
+<!-- ── Add Property Modal ─────────────────────────────────────────── -->
+<div class="add-prop-overlay" *ngIf="showAddPropertyModal" (click)="onModalOverlayClick($event)">
+  <div class="add-prop-modal">
+    <button class="add-prop-close" (click)="closeAddPropertyModal()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+
+    <div class="add-prop-header">
+      <h3 class="add-prop-title">{{ 'ADD_PROPERTY.MODAL_TITLE' | translate }}</h3>
+      <div class="add-prop-divider"></div>
+    </div>
+
+    <form [formGroup]="addPropertyForm" (ngSubmit)="onAddPropertySubmit()" class="add-prop-form" novalidate>
+      <div class="add-prop-scroll">
+
+        <!-- Property Type & Listing Type -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">{{ 'ADD_PROPERTY.PROP_TYPE' | translate }}</label>
+            <select formControlName="propertyType" class="form-select">
+              <option value="شقة">{{ 'ADD_PROPERTY.TYPES.APARTMENT' | translate }}</option>
+              <option value="فيلا">{{ 'ADD_PROPERTY.TYPES.VILLA' | translate }}</option>
+              <option value="أرض">{{ 'ADD_PROPERTY.TYPES.LAND' | translate }}</option>
+              <option value="محل">{{ 'ADD_PROPERTY.TYPES.SHOP' | translate }}</option>
+              <option value="مكتب">{{ 'ADD_PROPERTY.TYPES.OFFICE' | translate }}</option>
+              <option value="أخرى">{{ 'ADD_PROPERTY.TYPES.OTHER' | translate }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">{{ 'ADD_PROPERTY.LISTING_TYPE' | translate }}</label>
+            <select formControlName="listingType" class="form-select">
+              <option value="بيع">{{ 'ADD_PROPERTY.LISTINGS.SALE' | translate }}</option>
+              <option value="إيجار">{{ 'ADD_PROPERTY.LISTINGS.RENT' | translate }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- City / Location -->
+        <div class="form-group full-width">
+          <label class="form-label">{{ 'ADD_PROPERTY.CITY' | translate }}</label>
+          <input type="text" formControlName="city" class="form-input" [class.invalid]="isAddPropFieldInvalid('city')" [placeholder]="'ADD_PROPERTY.CITY_PH' | translate" />
+          <span class="field-error" *ngIf="isAddPropFieldInvalid('city')">{{ 'ADD_PROPERTY.REQ_FIELD' | translate }}</span>
+        </div>
+
+        <!-- Contact Section Header -->
+        <div class="form-section-title">{{ 'ADD_PROPERTY.CONTACT_INFO' | translate }}</div>
+
+        <!-- Name & Phone -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">{{ 'ADD_PROPERTY.NAME' | translate }}</label>
+            <input type="text" formControlName="name" class="form-input" [class.invalid]="isAddPropFieldInvalid('name')" [placeholder]="'ADD_PROPERTY.NAME_PH' | translate" />
+            <span class="field-error" *ngIf="isAddPropFieldInvalid('name')">{{ 'ADD_PROPERTY.REQ_FIELD' | translate }}</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">{{ 'ADD_PROPERTY.PHONE' | translate }}</label>
+            <input type="tel" formControlName="phone" class="form-input" [class.invalid]="isAddPropFieldInvalid('phone')" [placeholder]="'ADD_PROPERTY.PHONE_PH' | translate" maxlength="14" />
+            <span class="field-error" *ngIf="isAddPropFieldInvalid('phone')">{{ 'ADD_PROPERTY.PHONE_INVALID' | translate }}</span>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group full-width">
+          <label class="form-label">{{ 'ADD_PROPERTY.NOTES' | translate }}</label>
+          <textarea formControlName="notes" class="form-textarea" rows="2" [placeholder]="'ADD_PROPERTY.NOTES_PH' | translate"></textarea>
+        </div>
+
+      </div>
+
+      <!-- Submit CTA -->
+      <div class="form-actions">
+        <app-button type="submit" variant="primary" size="md" [fullWidth]="true" [loading]="isSubmittingAddProp">
+          {{ 'ADD_PROPERTY.SUBMIT_BTN' | translate }}
+        </app-button>
+      </div>
+    </form>
+  </div>
+</div>

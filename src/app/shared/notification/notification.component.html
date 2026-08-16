@@ -1,21 +1,23 @@
 <div class="notifications-container">
   <div
     *ngFor="let n of notifications; trackBy: trackById"
-    class="notification"
+    class="notification-toast"
     [class.visible]="n.visible"
     [class.success]="n.type === 'success'"
     [class.error]="n.type === 'error'"
     [class.info]="n.type === 'info'"
     (click)="dismiss(n.id)"
   >
-    <span class="notification-icon">
+    <div class="toast-icon-wrapper">
       <ng-container [ngSwitch]="n.type">
-        <span *ngSwitchCase="'success'">✓</span>
-        <span *ngSwitchCase="'error'">✕</span>
-        <span *ngSwitchDefault>ℹ</span>
+        <i *ngSwitchCase="'success'" class="fa-solid fa-circle-check"></i>
+        <i *ngSwitchCase="'error'" class="fa-solid fa-circle-exclamation"></i>
+        <i *ngSwitchDefault class="fa-solid fa-circle-info"></i>
       </ng-container>
-    </span>
-    <span class="notification-message">{{ n.message }}</span>
-    <button class="notification-close" (click)="dismiss(n.id)">×</button>
+    </div>
+    <span class="toast-message">{{ n.message }}</span>
+    <button type="button" class="toast-close-btn" (click)="dismiss(n.id); $event.stopPropagation()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
   </div>
 </div>

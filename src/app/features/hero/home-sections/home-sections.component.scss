@@ -227,32 +227,90 @@
   flex-wrap: wrap;
 }
 
-.section-nav {
-  display: flex;
-  gap: 12px;
+.props-carousel-wrapper {
+  position: relative;
+  width: 100%;
 }
 
 .nav-arrow {
-  width: 48px;
-  height: 48px;
-  border: 1px solid rgba(201, 169, 110, 0.3);
-  border-radius: 50%;
-  background: transparent;
+  width: 36px;
+  height: 36px;
+  border-radius: 50% !important;
+  border: 1px solid rgba(201, 169, 110, 0.45);
+  background: color-mix(in srgb, var(--obsidian-2) 90%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--gold);
-  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: var(--font-body);
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  padding: 0;
+  margin: 0;
+
+  i {
+    font-size: 12px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
 
   &:hover {
     background: var(--gold);
     color: var(--obsidian);
     border-color: var(--gold);
-    transform: scale(1.1);
-    box-shadow: 0 10px 20px rgba(201, 169, 110, 0.2);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 20px rgba(201, 169, 110, 0.4);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.92);
+  }
+
+  &.nav-arrow-left {
+    left: -18px;
+
+    @media (max-width: 1280px) {
+      left: 6px;
+    }
+  }
+
+  &.nav-arrow-right {
+    right: -18px;
+
+    @media (max-width: 1280px) {
+      right: 6px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+    top: 50%;
+
+    i {
+      font-size: 10px;
+    }
+
+    &.nav-arrow-left {
+      left: 4px;
+    }
+
+    &.nav-arrow-right {
+      right: 4px;
+    }
   }
 }
 
@@ -1200,5 +1258,230 @@
     padding: 14px 32px;
     font-size: 11px;
     letter-spacing: 2px;
+  }
+}
+
+// ─── Add Property Modal Styles ────────────────────────────────────────────────
+.add-prop-overlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, #000 78%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+
+.add-prop-modal {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  background: var(--obsidian-2);
+  border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
+  padding: 24px 22px;
+  border-radius: 8px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  animation: slideUp 0.25s ease;
+
+  @media (max-width: 600px) {
+    padding: 18px 14px;
+    max-height: 96vh;
+    border-radius: 12px;
+  }
+}
+
+.add-prop-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--mist);
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 6px 10px;
+  transition: color 0.2s;
+
+  :host-context([dir='rtl']) &,
+  [dir='rtl'] & {
+    right: auto;
+    left: 14px;
+  }
+
+  &:hover {
+    color: var(--gold);
+  }
+}
+
+.add-prop-header {
+  text-align: center;
+  margin-bottom: 14px;
+
+  .add-prop-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--white);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .add-prop-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+}
+
+.add-prop-form {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.add-prop-scroll {
+  overflow-y: auto;
+  max-height: calc(85vh - 100px);
+  padding-inline: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* Custom Scrollbar */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--obsidian);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--gold) 40%, transparent);
+    border-radius: 10px;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+
+  @media (max-width: 360px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+.form-label {
+  font-size: 10.5px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  background: var(--obsidian-3);
+  border: 1px solid color-mix(in srgb, var(--white) 12%, transparent);
+  color: var(--white);
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: var(--font-body);
+
+  &:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 15%, transparent);
+  }
+
+  &.invalid {
+    border-color: #e74c3c;
+  }
+
+  &::placeholder {
+    color: color-mix(in srgb, var(--mist) 50%, transparent);
+  }
+}
+
+.form-select {
+  cursor: pointer;
+
+  option {
+    background: var(--obsidian-3);
+    color: var(--white);
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 48px;
+  max-height: 90px;
+}
+
+.form-section-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--gold);
+  margin-top: 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid color-mix(in srgb, var(--gold) 20%, transparent);
+}
+
+.field-error {
+  font-size: 10.5px;
+  color: #e74c3c;
+}
+
+.form-actions {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid color-mix(in srgb, var(--white) 8%, transparent);
+
+  app-button {
+    width: 100%;
+  }
+}
+
+// ─── RTL Typography Fixes ───────────────────────────────────────────────────
+:host-context([dir='rtl']),
+[dir='rtl'],
+html[dir='rtl'],
+body[dir='rtl'] {
+  .btn-gold,
+  .cta-btn,
+  .nav-arrow,
+  .prop-action-btn {
+    letter-spacing: 0 !important;
+  }
+
+  .btn-gold .btn-arrow {
+    transform: rotate(180deg);
+  }
+
+  .btn-gold:hover .btn-arrow {
+    transform: rotate(180deg) translateX(8px);
   }
 }

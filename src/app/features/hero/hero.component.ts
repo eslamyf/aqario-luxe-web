@@ -19,6 +19,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SearchPayload } from './search-bar/search-bar.component';
 import { AuthService } from '../../core/auth/auth.service';
+import { QuickPropertyService } from '../../core/services/quick-property.service';
 
 // ─── Shared easing curve (mirrors var(--transition) from _variables.scss) ───
 const EASE = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
@@ -40,13 +41,10 @@ function fadeInUp(triggerName: string, delayMs: number) {
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.scss'],
   animations: [
-    fadeInUp('eyebrow', 200),
-    fadeInUp('headline1', 400),
-    fadeInUp('headline2', 600),
-    fadeInUp('subText', 800),
-    fadeInUp('buttons', 1000),
-    fadeInUp('stats', 1200),
-    // Hero image panel: slightly longer delay for staggered entrance feel
+    fadeInUp('eyebrow', 100),
+    fadeInUp('headline1', 200),
+    fadeInUp('subText', 300),
+    fadeInUp('buttons', 400),
     fadeInUp('heroImage', 500),
   ],
 })
@@ -55,6 +53,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   private cdr = inject(ChangeDetectorRef);
   private ngZone = inject(NgZone);
   private auth = inject(AuthService);
+  private quickPropService = inject(QuickPropertyService);
 
   animState: 'hidden' | 'visible' = 'hidden';
 
@@ -115,15 +114,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   navigateToAddProperty(): void {
-    const currentUser = this.auth.currentUser;
-
-    if (!currentUser) {
-      this.auth.openModal();
-    } else if (currentUser.role === 'owner' || currentUser.role === 'agent' || currentUser.role === 'admin') {
-      this.router.navigate(['/dashboard/properties'], { queryParams: { view: 'form' } });
-    } else {
-      this.router.navigate(['/kyc']);
-    }
+    this.quickPropService.openModal();
   }
 
   /** Graceful fallback if the Unsplash image fails to load */

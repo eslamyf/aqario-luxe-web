@@ -1,5 +1,75 @@
 {
   "BRAND_NAME": "عقاريو • لوكس",
+  "NOTIFICATION": {
+    "NEW_KYC_SUBMISSION": "طلب تحقق من الهوية جديد",
+    "NEW_KYC_SUBMISSION_MSG": "قام المستخدم \"{{name}}\" بتقديم مستندات التحقق من الهوية الخاصة به.",
+    "NEW_INQUIRY": "استفسار جديد",
+    "NEW_INQUIRY_MSG": "{{name}} أرسل استفساراً حول عقارك \"{{property}}\"",
+    "INQUIRY_REPLY": "رد على استفسارك",
+    "INQUIRY_REPLY_MSG": "لقد تلقيت رداً على استفسارك",
+    "NEW_BOOKING": "طلب حجز جديد",
+    "NEW_BOOKING_MSG": "{{name}} طلب حجز عقارك \"{{property}}\"",
+    "BOOKING_APPROVED": "تم قبول حجزك",
+    "BOOKING_APPROVED_MSG": "تم قبول حجزك للعقار \"{{property}}\"",
+    "BOOKING_REJECTED": "تم رفض طلب حجزك",
+    "BOOKING_REJECTED_MSG": "للأسف تم رفض طلب حجزك، يمكنك البحث عن عقار آخر",
+    "NEW_VIEWING": "طلب معاينة جديد",
+    "NEW_VIEWING_MSG": "{{name}} يريد معاينة عقارك \"{{property}}\"",
+    "VIEWING_APPROVED": "تمت الموافقة على طلب المعاينة",
+    "VIEWING_APPROVED_MSG": "تمت الموافقة على طلب معاينة \"{{property}}\"",
+    "VIEWING_REJECTED": "تم رفض طلب المعاينة",
+    "VIEWING_REJECTED_MSG": "تم رفض طلب معاينة \"{{property}}\"",
+    "NEW_REVIEW": "تقييم جديد على عقارك",
+    "NEW_REVIEW_MSG": "{{name}} قيّم عقارك \"{{property}}\" بـ {{rating}} نجوم",
+    "REPORT_REVIEWED": "تم مراجعة بلاغك",
+    "REPORT_REVIEWED_MSG": "تم مراجعة بلاغك",
+    "NEW_BID": "عطاء جديد في مزادك",
+    "NEW_BID_MSG": "{{name}} قدم عطاءً بقيمة {{amount}}",
+    "AUCTION_WON": "🎉 مبروك! لقد فزت في المزاد",
+    "AUCTION_WON_MSG": "فزت في مزاد \"{{property}}\" بقيمة {{amount}}",
+    "AUCTION_APPROVED_TITLE": "تمت الموافقة على مزادك",
+    "AUCTION_APPROVED_MSG": "تمت الموافقة على مزاد \"{{property}}\" وسيبدأ في موعده"
+  },
+  "ADD_PROPERTY": {
+    "MODAL_TITLE": "تفاصيل العقار",
+    "PROP_TYPE": "نوع العقار",
+    "LISTING_TYPE": "نوع العرض",
+    "GOVERNORATE": "المحافظة",
+    "CITY": "المدينة / المنطقة",
+    "PRICE": "السعر",
+    "AREA": "المساحة (م²)",
+    "BEDROOMS": "عدد الغرف",
+    "BATHROOMS": "عدد الحمامات",
+    "CONTACT_INFO": "بيانات التواصل",
+    "NAME": "الاسم",
+    "PHONE": "رقم الهاتف",
+    "NOTES": "ملاحظات إضافية (اختياري)",
+    "SUBMIT_BTN": "إرسال العقار",
+    "REQ_FIELD": "هذا الحقل مطلوب",
+    "PHONE_INVALID": "أدخل رقم هاتف صحيح",
+    "GOVERNORATE_PH": "مثال: قنا...",
+    "CITY_PH": "مثال: قنا الجديدة، نجع حمادي، قوص...",
+    "PRICE_PH": "مثال: 1500000",
+    "AREA_PH": "مثال: 150",
+    "BEDROOMS_PH": "عدد الغرف",
+    "BATHROOMS_PH": "عدد الحمامات",
+    "NAME_PH": "أدخل اسمك الكريم",
+    "PHONE_PH": "01xxxxxxxxx",
+    "NOTES_PH": "أية تفاصيل إضافية تحب تذكرها...",
+    "SUCCESS_MSG": "تم استلام بيانات عقارك بنجاح، وسيتواصل معك فريق AQARIO قريبًا.",
+    "TYPES": {
+      "APARTMENT": "شقة",
+      "VILLA": "فيلا",
+      "LAND": "أرض",
+      "SHOP": "محل",
+      "OFFICE": "مكتب",
+      "OTHER": "أخرى"
+    },
+    "LISTINGS": {
+      "SALE": "بيع",
+      "RENT": "إيجار"
+    }
+  },
   "NAV": {
     "HOME": "الرئيسية",
     "PROPERTIES": "العقارات",
@@ -157,10 +227,10 @@
       "PREMIUM_PROPERTIES": "عقارات فاخرة",
       "HAPPY_CLIENTS": "عملاء سعداء",
       "AWARDS_WON": "جوائز فزنا بها",
-      "GET_STARTED_TITLE": "ابدأ مع",
-      "GET_STARTED_EMPHASIS": "عقاريو لوكس",
-      "GET_STARTED_SUB": "اشترك للحصول على وصول حصري للعقارات الفاخرة المضافة حديثاً لدينا. ابحث عن منزلك المثالي الآن.",
-      "GET_STARTED_BTN": "ابدأ الآن"
+      "GET_STARTED_TITLE": "أضف",
+      "GET_STARTED_EMPHASIS": "عقارك",
+      "GET_STARTED_SUB": "لديك عقار للبيع أو للإيجار؟ أرسل بياناته وسنتواصل معك.",
+      "GET_STARTED_BTN": "أضف عقارك الآن"
     },
     "VALUES": {
       "INTEREST_RATES": {
@@ -240,9 +310,13 @@
     "LABEL_PROP_TYPE": "نوع العقار",
     "LABEL_LOCATION": "المنطقة",
     "LABEL_LIST_TYPE": "للبيع / للإيجار",
-    "LABEL_BUDGET": "السعر",
+    "LABEL_BUDGET": "نطاق السعر",
     "BTN_EXPLORE": "بحث",
-    "OWN_LUXURY": "هل لديك عقار تريد عرضه للبيع أو الإيجار؟",
+    "SELECT_PROP_TYPE": "اختر نوع العقار",
+    "SELECT_LOCATION": "اختر المدينة أو المركز",
+    "SELECT_LIST_TYPE": "اختر نوع العرض",
+    "SELECT_BUDGET": "اختر الميزانية / السعر",
+    "OWN_LUXURY": "هل لديك عقار ترغب في بيعه أو تأجيره؟",
     "BTN_LIST": "أضف عقارك الآن"
   },
   "FOOTER": {
@@ -960,6 +1034,7 @@
       "USERS": "المستخدمين",
       "KYC_CENTER": "مركز KYC",
       "PROPERTIES": "العقارات",
+      "PROPERTY_REQUESTS": "طلبات العقارات",
       "BOOKINGS": "الحجوزات",
       "GOVERNANCE": "الحوكمة",
       "AUDIT_TRAIL": "سجل العمليات",
@@ -1017,7 +1092,8 @@
     },
     "PROPERTIES": {
       "TITLE": "إدارة العقارات",
-      "SUBTITLE": "إدارة ومراجعة والإشراف على العقارات الفاخرة في المحفظة العالمية.",
+      "SUBTITLE": "مراجعة وإدارة كافة العروض والوحدات العقارية المعروضة على المنصة",
+      "CREATE_BTN": "إضافة عقار جديد",
       "TABS": {
         "PENDING": "قيد المراجعة",
         "APPROVED": "مقبول",
@@ -1245,6 +1321,98 @@
           "REJECT": "الرفض مع ذكر السبب"
         }
       }
+    },
+    "PROPERTY_REQUESTS": {
+      "BADGE": "إدارة طلبات الإدراج",
+      "TITLE": "طلبات إضافة العقارات",
+      "SUBTITLE": "مراجعة وإدارة كافة طلبات إضافة العقارات الواردة من العملاء",
+      "TOTAL_REQUESTS": "إجمالي الطلبات",
+      "SEARCH_PLACEHOLDER": "...ابحث باسم صاحب الطلب، الهاتف، أو المدينة",
+      "LOADING": "جاري تحميل طلبات العقارات...",
+      "FILTERS": {
+        "ALL": "الكل",
+        "PENDING": "قيد المراجعة",
+        "APPROVED": "مقبول",
+        "REJECTED": "مرفوض"
+      },
+      "TABLE": {
+        "APPLICANT": "صاحب الطلب",
+        "PHONE": "رقم الهاتف",
+        "PROPERTY_TYPE": "نوع العقار",
+        "LISTING_TYPE": "نوع العرض",
+        "CITY": "المدينة / المنطقة",
+        "STATUS": "الحالة",
+        "DATE": "تاريخ الإرسال",
+        "ACTIONS": "الإجراءات"
+      },
+      "TYPES": {
+        "APARTMENT": "شقة",
+        "VILLA": "فيلا",
+        "DUPLEX": "دوبلكس",
+        "PENTHOUSE": "بنتهاوس",
+        "TOWNHOUSE": "تاون هاوس",
+        "CHALET": "شاليه",
+        "LAND": "أرض",
+        "COMMERCIAL_STORE": "محل تجاري",
+        "OFFICE": "مكتب",
+        "BUILDING": "عمارة",
+        "PROPERTY": "عقار",
+        "SALE": "بيع",
+        "RENT": "إيجار"
+      },
+      "DEFAULTS": {
+        "UNREGISTERED_LEAD": "عميل غير مسجل",
+        "NOT_AVAILABLE": "غير متوفر",
+        "DEFAULT_CITY": "قنا الجديدة"
+      },
+      "STATUS": {
+        "PENDING": "قيد المراجعة",
+        "APPROVED": "مقبول",
+        "REJECTED": "مرفوض"
+      },
+      "ACTIONS": {
+        "DETAILS": "التفاصيل",
+        "APPROVE": "قبول",
+        "REJECT": "رفض",
+        "DELETE": "حذف",
+        "REVIEW": "مراجعة"
+      },
+      "MODAL": {
+        "TITLE": "تفاصيل طلب العقار",
+        "SUBTITLE": "بيانات وملاحظات الطلب المرسل من العميل",
+        "APPLICANT_NAME": "اسم صاحب الطلب",
+        "PHONE": "رقم الهاتف",
+        "PROPERTY_TYPE": "نوع العقار",
+        "LISTING_TYPE": "نوع العرض",
+        "CITY": "المدينة / المنطقة",
+        "SUBMISSION_DATE": "تاريخ الطلب",
+        "STATUS": "حالة الطلب الحالية",
+        "NOTES": "التفاصيل والملاحظات",
+        "APPROVE_BTN": "قبول الطلب",
+        "REJECT_BTN": "رفض الطلب",
+        "REVIEW_BTN": "مراجعة",
+        "CLOSE": "إغلاق",
+        "WHATSAPP_TITLE": "مراسلة عبر واتساب",
+        "CALL_TITLE": "الاتصال مباشرة"
+      },
+      "PAGINATION": {
+        "PAGE_INFO": "صفحة {{page}} من {{pages}} (إجمالي {{total}} طلب)",
+        "PREVIOUS": "السابق",
+        "NEXT": "التالي"
+      },
+      "CONFIRM_DELETE": {
+        "TITLE": "تأكيد حذف الطلب",
+        "DESC": "هل أنت تأكد من رغبتك في حذف طلب العقار الخاص بـ {{name}} نهائياً؟ لا يمكن التراجع عن هذا الإجراء.",
+        "CANCEL": "إلغاء",
+        "CONFIRM": "تأكيد الحذف"
+      },
+      "MESSAGES": {
+        "STATUS_UPDATED": "تم تحديث حالة الطلب بنجاح",
+        "STATUS_UPDATE_FAILED": "حدث خطأ أثناء تحديث حالة الطلب",
+        "DELETE_SUCCESS": "تم حذف الطلب بنجاح",
+        "DELETE_FAILED": "حدث خطأ أثناء حذف الطلب"
+      },
+      "EMPTY": "لا توجد طلبات عقارات تطابق خيارات البحث."
     },
     "AUDIT": {
       "TITLE": "سجل التدقيق",

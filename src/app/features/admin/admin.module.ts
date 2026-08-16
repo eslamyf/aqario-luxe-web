@@ -8,6 +8,7 @@ import { AdminComponent }            from './admin.component';
 import { AdminDashboardComponent }   from './admin-dashboard.component';
 import { AdminUsersComponent }       from './admin-users.component';
 import { AdminPropertiesComponent }  from './admin-properties.component';
+import { AdminPropertyRequestsComponent } from './admin-property-requests.component';
 import { AdminBookingsComponent }    from './admin-bookings.component';
 import { AdminKycComponent }         from './kyc/admin-kyc/admin-kyc.component';
 import { AdminAuditComponent }       from './admin-audit.component';
@@ -33,6 +34,7 @@ const routes: Routes = [
       { path: 'overview',   component: AdminDashboardComponent  },
       { path: 'dashboard',  redirectTo: 'overview', pathMatch: 'full' },
       { path: 'users',      component: AdminUsersComponent      },
+      { path: 'requests',   component: AdminPropertyRequestsComponent },
       { path: 'properties', component: AdminPropertiesComponent },
       { path: 'bookings',   component: AdminBookingsComponent   },
       { path: 'kyc',        component: AdminKycComponent        },
@@ -46,6 +48,7 @@ const routes: Routes = [
     AdminComponent,
     AdminDashboardComponent,
     AdminUsersComponent,
+    AdminPropertyRequestsComponent,
     AdminPropertiesComponent,
     AdminBookingsComponent,
     AdminAuditComponent,

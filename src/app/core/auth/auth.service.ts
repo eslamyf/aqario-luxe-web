@@ -21,6 +21,7 @@ export interface User {
   token?: string;
   password?: string;
   isVerified?: boolean;
+  kycStatus?: 'not_submitted' | 'pending' | 'approved' | 'rejected';
   otp?: string;
   resetToken?: string;
 }

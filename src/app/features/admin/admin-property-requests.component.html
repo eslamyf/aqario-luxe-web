@@ -1,0 +1,330 @@
+<div class="admin-requests-container">
+
+  <!-- Header Section -->
+  <header class="requests-header">
+    <div class="header-titles">
+      <div class="eyebrow"><i class="fa-solid fa-clipboard-list"></i> إدارة طلبات الإدراج</div>
+      <h1>طلبات إضافة العقارات</h1>
+      <p>مراجعة وإدارة كافة طلبات إضافة العقارات الواردة من العملاء</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill">
+        <span class="stat-num">{{ total }}</span>
+        <span class="stat-lbl">إجمالي الطلبات</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filter & Search Toolbar -->
+  <div class="requests-toolbar">
+
+    <!-- Status Tabs -->
+    <div class="status-tabs" role="tablist">
+      <button type="button" class="tab-btn" [class.active]="filters.status === 'all'" (click)="setStatusTab('all')">
+        الكل <span class="count-badge">{{ total }}</span>
+      </button>
+      <button type="button" class="tab-btn pending" [class.active]="filters.status === 'pending'"
+        (click)="setStatusTab('pending')">
+        <i class="fa-solid fa-clock"></i> قيد المراجعة
+      </button>
+      <button type="button" class="tab-btn approved" [class.active]="filters.status === 'approved'"
+        (click)="setStatusTab('approved')">
+        <i class="fa-solid fa-circle-check"></i> مقبول
+      </button>
+      <button type="button" class="tab-btn rejected" [class.active]="filters.status === 'rejected'"
+        (click)="setStatusTab('rejected')">
+        <i class="fa-solid fa-circle-xmark"></i> مرفوض
+      </button>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input type="text" class="search-input" placeholder="ابحث باسم صاحب الطلب، الهاتف، أو المدينة..."
+        [value]="filters.search" (input)="onSearch($event)" />
+    </div>
+
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <i class="fa-solid fa-spinner fa-spin spin-icon"></i>
+    <span>جاري تحميل طلبات العقارات...</span>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && requests.length === 0" class="empty-state">
+    <div class="empty-icon"><i class="fa-solid fa-folder-open"></i></div>
+    <h3>لا توجد طلبات عقارات</h3>
+    <p>لم يتم العثور على أية طلبات إدراج مطابقة للفلتر المحدد.</p>
+  </div>
+
+  <!-- Main Content Area -->
+  <div *ngIf="!isLoading && requests.length > 0">
+
+    <!-- ── DESKTOP TABLE VIEW (Screens >= 768px) ── -->
+    <div class="table-card desktop-table-view">
+      <div class="table-responsive">
+        <table class="requests-table">
+          <thead>
+            <tr>
+              <th>صاحب الطلب</th>
+              <th>رقم الهاتف</th>
+              <th>نوع العقار</th>
+              <th>نوع العرض</th>
+              <th>المدينة / المنطقة</th>
+              <th>الحالة</th>
+              <th>تاريخ الإرسال</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of requests" [class.row-active]="selectedRequest?._id === r._id">
+              <td class="cell-user">
+                <div class="user-cell-wrapper">
+                  <div class="user-avatar-small"><i class="fa-solid fa-user"></i></div>
+                  <div class="user-meta">
+                    <span class="user-name">{{ extractContactName(r) }}</span>
+                    <span class="user-sub" *ngIf="r.sender?.email">{{ r.sender?.email }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <td class="cell-phone">
+                <span class="phone-tag"><i class="fa-solid fa-phone"></i> {{ extractContactPhone(r) }}</span>
+              </td>
+
+              <td>
+                <span class="type-badge"><i class="fa-solid fa-building"></i> {{ extractPropertyType(r) }}</span>
+              </td>
+
+              <td>
+                <span class="listing-badge" [class.rent]="extractListingType(r) === 'إيجار'">
+                  {{ extractListingType(r) }}
+                </span>
+              </td>
+
+              <td class="cell-city">
+                <i class="fa-solid fa-location-dot"></i> {{ extractCity(r) }}
+              </td>
+
+              <td>
+                <span class="status-pill" [ngClass]="getStatusClass(r.status)">
+                  {{ getStatusLabel(r.status) }}
+                </span>
+              </td>
+
+              <td class="cell-date">
+                {{ r.createdAt | date:'shortDate' }}
+              </td>
+
+              <td class="cell-actions">
+                <div class="action-buttons">
+                  <button type="button" class="btn-icon view-btn" (click)="selectRequest(r)" title="معاينة التفاصيل">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                  <button type="button" class="btn-icon approve-btn" [disabled]="activeRequestId === r._id"
+                    (click)="updateStatus(r, 'approved')" title="قبول الطلب">
+                    <i class="fa-solid fa-check"></i>
+                  </button>
+                  <button type="button" class="btn-icon reject-btn" [disabled]="activeRequestId === r._id"
+                    (click)="updateStatus(r, 'rejected')" title="رفض الطلب">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                  <button type="button" class="btn-icon delete-btn" [disabled]="activeRequestId === r._id"
+                    (click)="deleteRequest(r)" title="حذف الطلب">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── MOBILE CARDS VIEW (Screens < 768px) ── -->
+    <div class="mobile-cards-view">
+      <div class="request-card-mobile" *ngFor="let r of requests" [class.active]="selectedRequest?._id === r._id">
+        <div class="card-mobile-header">
+          <div class="user-info">
+            <div class="avatar-mob"><i class="fa-solid fa-user"></i></div>
+            <div class="meta">
+              <span class="name">{{ extractContactName(r) }}</span>
+              <span class="date">{{ r.createdAt | date:'mediumDate' }}</span>
+            </div>
+          </div>
+          <span class="status-pill" [ngClass]="getStatusClass(r.status)">
+            {{ getStatusLabel(r.status) }}
+          </span>
+        </div>
+
+        <div class="card-mobile-body">
+          <div class="info-row">
+            <span class="lbl"><i class="fa-solid fa-phone"></i> الهاتف:</span>
+            <a [href]="getTelUrl(extractContactPhone(r))" class="val phone-link">{{ extractContactPhone(r) }}</a>
+          </div>
+          <div class="info-row">
+            <span class="lbl"><i class="fa-solid fa-building"></i> نوع العقار:</span>
+            <span class="val">{{ extractPropertyType(r) }} ({{ extractListingType(r) }})</span>
+          </div>
+          <div class="info-row">
+            <span class="lbl"><i class="fa-solid fa-location-dot"></i> المدينة:</span>
+            <span class="val">{{ extractCity(r) }}</span>
+          </div>
+          <div class="info-row notes" *ngIf="extractNotes(r)">
+            <span class="lbl"><i class="fa-solid fa-comment-dots"></i> الملاحظات:</span>
+            <p class="notes-preview">{{ extractNotes(r) }}</p>
+          </div>
+        </div>
+
+        <div class="card-mobile-actions">
+          <button type="button" class="btn-mob view" (click)="selectRequest(r)">
+            <i class="fa-solid fa-eye"></i> التفاصيل
+          </button>
+          <button type="button" class="btn-mob approve" [disabled]="activeRequestId === r._id"
+            (click)="updateStatus(r, 'approved')">
+            <i class="fa-solid fa-check"></i> قبول
+          </button>
+          <button type="button" class="btn-mob reject" [disabled]="activeRequestId === r._id"
+            (click)="updateStatus(r, 'rejected')">
+            <i class="fa-solid fa-xmark"></i> رفض
+          </button>
+          <button type="button" class="btn-mob delete" [disabled]="activeRequestId === r._id"
+            (click)="deleteRequest(r)">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Footer -->
+    <div class="pagination-footer" *ngIf="pages > 1">
+      <span class="page-info">{{ 'ADMIN.PROPERTY_REQUESTS.PAGINATION.PAGE_INFO' | translate:{ page: page, pages: pages, total: total } }}</span>
+      <div class="page-btns">
+        <button type="button" class="page-btn" [disabled]="page <= 1" (click)="setPage(page - 1)">
+          <i class="fa-solid fa-chevron-right" *ngIf="translate.currentLang === 'ar'"></i>
+          <i class="fa-solid fa-chevron-left" *ngIf="translate.currentLang !== 'ar'"></i>
+          {{ 'ADMIN.PROPERTY_REQUESTS.PAGINATION.PREVIOUS' | translate }}
+        </button>
+        <button type="button" class="page-btn" [disabled]="page >= pages" (click)="setPage(page + 1)">
+          {{ 'ADMIN.PROPERTY_REQUESTS.PAGINATION.NEXT' | translate }}
+          <i class="fa-solid fa-chevron-left" *ngIf="translate.currentLang === 'ar'"></i>
+          <i class="fa-solid fa-chevron-right" *ngIf="translate.currentLang !== 'ar'"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ── DETAIL MODAL POPUP ────────────────────────────────────────────────── -->
+<div class="modal-backdrop" *ngIf="selectedRequest" (click)="closeModal()"></div>
+<div class="modal-card" *ngIf="selectedRequest" role="dialog" aria-labelledby="modal-title">
+
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">تفاصيل طلب إدراج عقار</div>
+      <h2 id="modal-title">{{ extractContactName(selectedRequest) }}</h2>
+    </div>
+    <button type="button" class="modal-close-btn" (click)="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="detail-grid">
+
+      <div class="detail-item">
+        <span class="detail-label">صاحب الطلب</span>
+        <span class="detail-val bold">{{ extractContactName(selectedRequest) }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">رقم الهاتف</span>
+        <div class="phone-action-group">
+          <span class="detail-val phone-val">{{ extractContactPhone(selectedRequest) }}</span>
+          <a [href]="getWhatsAppUrl(extractContactPhone(selectedRequest))" target="_blank" class="quick-contact-btn wa"
+            title="مراسلة عبر واتساب">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+          <a [href]="getTelUrl(extractContactPhone(selectedRequest))" class="quick-contact-btn tel"
+            title="الاتصال مباشرة">
+            <i class="fa-solid fa-phone"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">نوع العقار</span>
+        <span class="detail-val"><i class="fa-solid fa-building"></i> {{ extractPropertyType(selectedRequest) }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">نوع العرض</span>
+        <span class="detail-val">{{ extractListingType(selectedRequest) }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">المدينة / المنطقة</span>
+        <span class="detail-val"><i class="fa-solid fa-location-dot"></i> {{ extractCity(selectedRequest) }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">حالة الطلب الحالية</span>
+        <span class="detail-val">
+          <span class="status-pill" [ngClass]="getStatusClass(selectedRequest.status)">
+            {{ getStatusLabel(selectedRequest.status) }}
+          </span>
+        </span>
+      </div>
+
+    </div>
+
+    <div class="detail-notes-box" *ngIf="extractNotes(selectedRequest)">
+      <span class="notes-label"><i class="fa-solid fa-comment-dots"></i> التفاصيل والملاحظات:</span>
+      <p class="notes-text">{{ extractNotes(selectedRequest) }}</p>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div class="footer-actions">
+      <button type="button" class="btn-status approve" (click)="updateStatus(selectedRequest, 'approved')">
+        <i class="fa-solid fa-circle-check"></i> قبول الطلب
+      </button>
+      <button type="button" class="btn-status reject" (click)="updateStatus(selectedRequest, 'rejected')">
+        <i class="fa-solid fa-circle-xmark"></i> رفض الطلب
+      </button>
+      <button type="button" class="btn-status pending" (click)="updateStatus(selectedRequest, 'pending')">
+        <i class="fa-solid fa-rotate-left"></i> مراجعة
+      </button>
+    </div>
+    <button type="button" class="btn-close" (click)="closeModal()">إغلاق</button>
+  </div>
+
+</div>
+
+<!-- Custom AQARIO Luxe Delete Confirmation Modal -->
+<div class="confirm-modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+  <div class="confirm-modal-box" (click)="$event.stopPropagation()">
+    <div class="confirm-icon-pill">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h3 class="confirm-title">تأكيد حذف الطلب</h3>
+    <p class="confirm-description">
+      هل أنت تأكد من رغبتك في حذف طلب العقار الخاص بـ
+      <strong>{{ requestToDelete?.details?.contactName || requestToDelete?.sender?.name || 'صاحب الطلب' }}</strong>
+      نهائياً؟ لا يمكن التراجع عن هذا الإجراء.
+    </p>
+    <div class="confirm-actions">
+      <button type="button" class="confirm-btn cancel" (click)="closeDeleteModal()">
+        إلغاء
+      </button>
+      <button type="button" class="confirm-btn danger" [disabled]="activeRequestId === requestToDelete?._id"
+        (click)="executeDelete()">
+        <i class="fa-solid fa-trash-can" *ngIf="activeRequestId !== requestToDelete?._id"></i>
+        <i class="fa-solid fa-circle-notch fa-spin" *ngIf="activeRequestId === requestToDelete?._id"></i>
+        تأكيد الحذف
+      </button>
+    </div>
+  </div>
+</div>

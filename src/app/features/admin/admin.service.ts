@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { NotificationService } from '../../shared/services/notification.service';
@@ -468,6 +468,62 @@ export class AdminService {
     return this.http.patch<ApiResponse<any>>(`${this.base}/subscriptions/admin/${subscriptionId}/hard-cancel`, data).pipe(
       map(res => res.data),
       catchError(this.handleError('Failed to hard cancel subscription'))
+    );
+  }
+
+  // ── Property Requests Management ───────────────────────────
+
+  getPropertyRequests(filters: any = {}): Observable<any> {
+    const params: Record<string, any> = { limit: 15, ...filters };
+    Object.keys(params).forEach(k => {
+      if (params[k] === '' || params[k] === null || params[k] === undefined || params[k] === 'all') {
+        delete params[k];
+      }
+    });
+
+    return this.http.get<any>(`${this.base}/dashboard/admin/requests`, { params }).pipe(
+      catchError(() => this.http.get<any>(`${this.base}/inquiries/admin/requests`, { params })),
+      map((res) => ({
+        requests: res.data?.requests || [],
+        total: res.total || 0,
+        page: res.page || 1,
+        pages: res.pages || 1,
+      })),
+      catchError(this.handleError('Failed to load property requests'))
+    );
+  }
+
+  updateRequestStatus(requestId: string, status: string): Observable<any> {
+    return this.http.patch<ApiResponse<any>>(`${this.base}/inquiries/${requestId}/status`, { status }).pipe(
+      map(res => res.data),
+      catchError(this.handleError('Failed to update request status'))
+    );
+  }
+
+  deletePropertyRequest(requestId: string): Observable<any> {
+    return this.http.delete<ApiResponse<any>>(`${this.base}/inquiries/${requestId}`).pipe(
+      map(res => res?.data || res),
+      catchError((err) => {
+        if (err?.status === 404) {
+          return of(true);
+        }
+        this.notificationService.show('Failed to delete property request', 'error');
+        return throwError(() => err);
+      })
+    );
+  }
+
+  createPropertyByAdmin(formData: FormData): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.base}/properties`, formData).pipe(
+      map(res => res.data),
+      catchError(this.handleError('Failed to create property'))
+    );
+  }
+
+  deletePropertyByAdmin(propertyId: string): Observable<any> {
+    return this.http.delete<ApiResponse<any>>(`${this.base}/properties/${propertyId}`).pipe(
+      map(res => res.data),
+      catchError(this.handleError('Failed to delete property'))
     );
   }
 }

@@ -1,5 +1,75 @@
 {
   "BRAND_NAME": "AQARIO • LUXE",
+  "NOTIFICATION": {
+    "NEW_KYC_SUBMISSION": "New KYC Submission",
+    "NEW_KYC_SUBMISSION_MSG": "User \"{{name}}\" has submitted their KYC verification documents.",
+    "NEW_INQUIRY": "New Property Inquiry",
+    "NEW_INQUIRY_MSG": "{{name}} sent an inquiry about your property \"{{property}}\"",
+    "INQUIRY_REPLY": "Reply to Your Inquiry",
+    "INQUIRY_REPLY_MSG": "You received a reply to your inquiry",
+    "NEW_BOOKING": "New Booking Request",
+    "NEW_BOOKING_MSG": "{{name}} requested to book your property \"{{property}}\"",
+    "BOOKING_APPROVED": "Booking Approved",
+    "BOOKING_APPROVED_MSG": "Your booking for \"{{property}}\" has been approved",
+    "BOOKING_REJECTED": "Booking Rejected",
+    "BOOKING_REJECTED_MSG": "Unfortunately, your booking request was rejected",
+    "NEW_VIEWING": "New Viewing Request",
+    "NEW_VIEWING_MSG": "{{name}} requested a viewing for \"{{property}}\"",
+    "VIEWING_APPROVED": "Viewing Request Approved",
+    "VIEWING_APPROVED_MSG": "Viewing request for \"{{property}}\" has been approved",
+    "VIEWING_REJECTED": "Viewing Request Rejected",
+    "VIEWING_REJECTED_MSG": "Viewing request for \"{{property}}\" was rejected",
+    "NEW_REVIEW": "New Review on Your Property",
+    "NEW_REVIEW_MSG": "{{name}} rated your property \"{{property}}\" {{rating}} stars",
+    "REPORT_REVIEWED": "Report Reviewed",
+    "REPORT_REVIEWED_MSG": "Your report has been reviewed",
+    "NEW_BID": "New Bid on Your Auction",
+    "NEW_BID_MSG": "{{name}} placed a bid of {{amount}}",
+    "AUCTION_WON": "🎉 Congratulations! You Won the Auction",
+    "AUCTION_WON_MSG": "You won the auction for \"{{property}}\" with {{amount}}",
+    "AUCTION_APPROVED_TITLE": "Auction Approved",
+    "AUCTION_APPROVED_MSG": "Auction for \"{{property}}\" has been approved"
+  },
+  "ADD_PROPERTY": {
+    "MODAL_TITLE": "Property Details",
+    "PROP_TYPE": "Property Type",
+    "LISTING_TYPE": "Listing Type",
+    "GOVERNORATE": "Governorate",
+    "CITY": "City / Area",
+    "PRICE": "Price",
+    "AREA": "Area (m²)",
+    "BEDROOMS": "Bedrooms",
+    "BATHROOMS": "Bathrooms",
+    "CONTACT_INFO": "Contact Information",
+    "NAME": "Full Name",
+    "PHONE": "Phone Number",
+    "NOTES": "Additional Notes (Optional)",
+    "SUBMIT_BTN": "Submit Property",
+    "REQ_FIELD": "Required field",
+    "PHONE_INVALID": "Enter a valid phone number",
+    "GOVERNORATE_PH": "e.g. Qena...",
+    "CITY_PH": "e.g. New Qena, Nag Hammadi, Qus...",
+    "PRICE_PH": "e.g. 1500000",
+    "AREA_PH": "e.g. 150",
+    "BEDROOMS_PH": "Bedrooms count",
+    "BATHROOMS_PH": "Bathrooms count",
+    "NAME_PH": "Enter your full name",
+    "PHONE_PH": "01xxxxxxxxx",
+    "NOTES_PH": "Any additional details...",
+    "SUCCESS_MSG": "Your property details have been received successfully. The AQARIO team will contact you soon.",
+    "TYPES": {
+      "APARTMENT": "Apartment",
+      "VILLA": "Villa",
+      "LAND": "Land",
+      "SHOP": "Shop",
+      "OFFICE": "Office",
+      "OTHER": "Other"
+    },
+    "LISTINGS": {
+      "SALE": "For Sale",
+      "RENT": "For Rent"
+    }
+  },
   "NAV": {
     "HOME": "Home",
     "PROPERTIES": "Properties",
@@ -157,10 +227,10 @@
       "PREMIUM_PROPERTIES": "Premium Properties",
       "HAPPY_CLIENTS": "Happy Clients",
       "AWARDS_WON": "Awards Won",
-      "GET_STARTED_TITLE": "Get Started with",
-      "GET_STARTED_EMPHASIS": "Aqario Luxe",
-      "GET_STARTED_SUB": "Subscribe to get first access to ultra-premium listings from us. Find your perfect home now.",
-      "GET_STARTED_BTN": "GET STARTED"
+      "GET_STARTED_TITLE": "List Your",
+      "GET_STARTED_EMPHASIS": "Property",
+      "GET_STARTED_SUB": "Have a property for sale or rent? Send its details and we will contact you.",
+      "GET_STARTED_BTN": "Add Your Property Now"
     },
     "VALUES": {
       "INTEREST_RATES": {
@@ -242,6 +312,10 @@
     "LABEL_LIST_TYPE": "For Sale / For Rent",
     "LABEL_BUDGET": "Price Range",
     "BTN_EXPLORE": "SEARCH",
+    "SELECT_PROP_TYPE": "Select Property Type",
+    "SELECT_LOCATION": "Select Region / City",
+    "SELECT_LIST_TYPE": "Select Listing Type",
+    "SELECT_BUDGET": "Select Price Range",
     "OWN_LUXURY": "Have a property to sell or rent out?",
     "BTN_LIST": "LIST PROPERTY NOW"
   },
@@ -960,6 +1034,7 @@
       "USERS": "Users",
       "KYC_CENTER": "KYC Center",
       "PROPERTIES": "Properties",
+      "PROPERTY_REQUESTS": "Property Requests",
       "BOOKINGS": "Bookings",
       "GOVERNANCE": "GOVERNANCE",
       "AUDIT_TRAIL": "Audit Trail",
@@ -1018,6 +1093,7 @@
     "PROPERTIES": {
       "TITLE": "Property Management",
       "SUBTITLE": "Manage, review, and moderate luxury listings across the global portfolio.",
+      "CREATE_BTN": "Add New Property",
       "TABS": {
         "PENDING": "Pending Review",
         "APPROVED": "Approved",
@@ -1245,6 +1321,98 @@
           "REJECT": "REJECT WITH REASON"
         }
       }
+    },
+    "PROPERTY_REQUESTS": {
+      "BADGE": "Listing Requests Management",
+      "TITLE": "Property Addition Requests",
+      "SUBTITLE": "Review and manage all property addition requests received from clients",
+      "TOTAL_REQUESTS": "Total Requests",
+      "SEARCH_PLACEHOLDER": "Search by applicant name, phone, or city...",
+      "LOADING": "Loading property requests...",
+      "FILTERS": {
+        "ALL": "All",
+        "PENDING": "Pending Review",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "TABLE": {
+        "APPLICANT": "Applicant",
+        "PHONE": "Phone",
+        "PROPERTY_TYPE": "Property Type",
+        "LISTING_TYPE": "Listing Type",
+        "CITY": "City / Area",
+        "STATUS": "Status",
+        "DATE": "Submission Date",
+        "ACTIONS": "Actions"
+      },
+      "TYPES": {
+        "APARTMENT": "Apartment",
+        "VILLA": "Villa",
+        "DUPLEX": "Duplex",
+        "PENTHOUSE": "Penthouse",
+        "TOWNHOUSE": "Townhouse",
+        "CHALET": "Chalet",
+        "LAND": "Land",
+        "COMMERCIAL_STORE": "Commercial Store",
+        "OFFICE": "Office",
+        "BUILDING": "Building",
+        "PROPERTY": "Property",
+        "SALE": "Sale",
+        "RENT": "Rent"
+      },
+      "DEFAULTS": {
+        "UNREGISTERED_LEAD": "Unregistered Lead",
+        "NOT_AVAILABLE": "N/A",
+        "DEFAULT_CITY": "New Qena"
+      },
+      "STATUS": {
+        "PENDING": "Pending Review",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "ACTIONS": {
+        "DETAILS": "Details",
+        "APPROVE": "Approve",
+        "REJECT": "Reject",
+        "DELETE": "Delete",
+        "REVIEW": "Review"
+      },
+      "MODAL": {
+        "TITLE": "Property Request Details",
+        "SUBTITLE": "Full submission lead information",
+        "APPLICANT_NAME": "Applicant Name",
+        "PHONE": "Phone Number",
+        "PROPERTY_TYPE": "Property Type",
+        "LISTING_TYPE": "Listing Type",
+        "CITY": "City / Area",
+        "SUBMISSION_DATE": "Submission Date",
+        "STATUS": "Current Request Status",
+        "NOTES": "Details & Notes",
+        "APPROVE_BTN": "Approve Request",
+        "REJECT_BTN": "Reject Request",
+        "REVIEW_BTN": "Mark Pending",
+        "CLOSE": "Close",
+        "WHATSAPP_TITLE": "Message via WhatsApp",
+        "CALL_TITLE": "Call directly"
+      },
+      "PAGINATION": {
+        "PAGE_INFO": "Page {{page}} of {{pages}} (Total {{total}} requests)",
+        "PREVIOUS": "Previous",
+        "NEXT": "Next"
+      },
+      "CONFIRM_DELETE": {
+        "TITLE": "Confirm Request Deletion",
+        "DESC": "Are you sure you want to permanently delete the property request from {{name}}? This action cannot be undone.",
+        "CANCEL": "Cancel",
+        "CONFIRM": "Confirm Delete"
+      },
+      "MESSAGES": {
+        "STATUS_UPDATED": "Property request status updated successfully",
+        "STATUS_UPDATE_FAILED": "Error updating property request status",
+        "DELETE_SUCCESS": "Property request deleted successfully",
+        "DELETE_FAILED": "Error deleting property request"
+      },
+      "EMPTY": "No property requests found matching your filters."
     },
     "AUDIT": {
       "TITLE": "Audit Trail",
@@ -1524,6 +1692,30 @@
     "FREE_BANNER_TITLE": "Free Listing Limit Reached",
     "FREE_BANNER_DESC": "You've used all 3 free property listings. Choose a plan to unlock unlimited publishing.",
     "LIMIT_BANNER_TITLE": "Monthly Limit Reached",
-    "LIMIT_BANNER_DESC": "You've used all your listings for this month. Upgrade to a higher plan for more."
+    "LIMIT_BANNER_DESC": "You've used all your listings for this month. Upgrade to a higher plan for more.",
+    "LOAD_FAILED": "Failed to load plan details. Please try again.",
+    "PAYMENT_CREATED": "Payment session created. Check your dashboard.",
+    "INITIATE_FAILED": "Failed to initiate payment. Please try again.",
+    "PENDING_PAYMENT": "You have a pending payment session. Please complete it first.",
+    "BACK_TO_DASHBOARD": "Back to Dashboard",
+    "ACTIVATE_PLAN": "Activate Your Plan",
+    "ONE_STEP_AWAY": "One step away from featuring your properties on Aqario Luxe",
+    "LOADING_DETAILS": "Loading plan details...",
+    "RETURN_TO_DASHBOARD": "Return to Dashboard",
+    "PLAN_PRICE": "Plan Price",
+    "PLATFORM_FEE": "Platform Fee (2.5%)",
+    "TOTAL": "Total",
+    "CHOOSE_PAYMENT": "Choose Payment Method",
+    "PAYMOB_NAME": "Paymob",
+    "PAYMOB_SUB": "Egyptian Cards & Mobile Wallets",
+    "PAYPAL_NAME": "PayPal",
+    "PAYPAL_SUB": "International Payments (USD)",
+    "SECURITY_NOTICE": "🔒 Your payments are secured with 256-bit SSL encryption. We never store your card details.",
+    "PROCEED_PAYMENT": "Proceed to Payment",
+    "PROCESSING": "Processing...",
+    "REDIRECTING": "Redirecting to Payment...",
+    "REDIRECT_TO": "You will be redirected to {{method}} to complete your payment.",
+    "REDIRECT_NOTE": "Do not close this window. Your subscription will be activated automatically after payment.",
+    "DAYS": "Days"
   }
 }

@@ -28,7 +28,7 @@
 
       <div class="custom-dropdown-menu" *ngIf="openDropdown === 'propertyType'">
         <div class="dropdown-header">
-          <span>{{ currentLang === 'ar' ? 'اختر نوع العقار' : 'Select Property Type' }}</span>
+          <span>{{ 'SEARCH.SELECT_PROP_TYPE' | translate }}</span>
         </div>
         <div class="dropdown-list">
           <div *ngFor="let t of propertyTypes" class="dropdown-item"
@@ -56,7 +56,7 @@
 
       <div class="custom-dropdown-menu" *ngIf="openDropdown === 'location'">
         <div class="dropdown-header">
-          <span>{{ currentLang === 'ar' ? 'اختر المدينة أو المركز' : 'Select City or District' }}</span>
+          <span>{{ 'SEARCH.SELECT_LOCATION' | translate }}</span>
         </div>
         <div class="dropdown-list">
           <div *ngFor="let loc of locations" class="dropdown-item"
@@ -85,7 +85,7 @@
 
       <div class="custom-dropdown-menu" *ngIf="openDropdown === 'listingType'">
         <div class="dropdown-header">
-          <span>{{ currentLang === 'ar' ? 'اختر نوع العرض' : 'Select Listing Type' }}</span>
+          <span>{{ 'SEARCH.SELECT_LIST_TYPE' | translate }}</span>
         </div>
         <div class="dropdown-list">
           <div *ngFor="let lt of listingTypes" class="dropdown-item"
@@ -113,7 +113,7 @@
 
       <div class="custom-dropdown-menu" *ngIf="openDropdown === 'budget'">
         <div class="dropdown-header">
-          <span>{{ currentLang === 'ar' ? 'اختر الميزانية / السعر' : 'Select Budget / Price' }}</span>
+          <span>{{ 'SEARCH.SELECT_BUDGET' | translate }}</span>
         </div>
         <div class="dropdown-list">
           <div *ngFor="let b of budgets" class="dropdown-item" [class.selected]="searchForm.value.budget === b.value"

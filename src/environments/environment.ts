@@ -6,6 +6,9 @@
 
 const getApiUrl = (): string => {
   const host = window.location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1') {
+    return 'http://localhost:5002/api/v1';
+  }
   if (host.includes('loca.lt')) {
     return 'https://aqario-luxe-eslam.loca.lt/api/v1';
   }

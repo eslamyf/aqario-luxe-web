@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, timer } from 'rxjs';
+import { BehaviorSubject, Observable, timer, of } from 'rxjs';
 import { map, switchMap, tap, shareReplay, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
@@ -83,17 +83,19 @@ export class NotificationsApiService {
   }
 
   fetchNotifications(limit: number = 5): Observable<NotificationsResponse> {
+    const hasToken = typeof localStorage !== 'undefined' && !!localStorage.getItem('aqario_token');
+    if (!hasToken && !this.authService.currentUser) {
+      return of({ status: 'success', unreadCount: 0, data: { notifications: [] } } as any);
+    }
+
     return this.http.get<NotificationsResponse>(`${this.base}/notifications?limit=${limit}`).pipe(
       tap(res => {
-        if (res.status === 'success') {
-          this.unreadCountSubject.next(res.unreadCount);
-          this.notificationsSubject.next(res.data.notifications);
+        if (res?.status === 'success') {
+          this.unreadCountSubject.next(res.unreadCount || 0);
+          this.notificationsSubject.next(res.data?.notifications || []);
         }
       }),
-      catchError(() => {
-        // Silently ignore notification fetch failures (user may not be authenticated)
-        return [];
-      })
+      catchError(() => of({ status: 'success', unreadCount: 0, data: { notifications: [] } } as any))
     );
   }
 

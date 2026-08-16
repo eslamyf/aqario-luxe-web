@@ -7,19 +7,23 @@ import {
   NgZone,
   ChangeDetectorRef,
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { takeUntil, catchError, finalize } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { PropertiesService } from '../../properties/services/properties.service';
 import { Property } from '../../properties/models/property.model';
 import { environment } from '../../../../environments/environment';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 interface FeaturedProperty extends Property {
   formattedPrice: string;
   primaryImage: string;
 }
+
+import { QuickPropertyService } from '../../../core/services/quick-property.service';
 
 @Component({
   selector: 'app-home-sections',
@@ -33,6 +37,9 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   private ngZone             = inject(NgZone);
   private cdr                = inject(ChangeDetectorRef);
   private translateService   = inject(TranslateService);
+  private fb                 = inject(FormBuilder);
+  private notif              = inject(NotificationService);
+  private quickPropService   = inject(QuickPropertyService);
 
   // ── Lifecycle management ────────────────────────────────────────────────────
   private destroy$ = new Subject<void>();
@@ -42,6 +49,18 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   isLoading = true;
   hasError  = false;
   openAccordion: number | null = 0;
+
+  showAddPropertyModal = false;
+  isSubmittingAddProp  = false;
+
+  addPropertyForm: FormGroup = this.fb.group({
+    propertyType: ['شقة', Validators.required],
+    listingType:  ['بيع', Validators.required],
+    city:         ['', Validators.required],
+    name:         ['', Validators.required],
+    phone:        ['', [Validators.required, Validators.maxLength(14), Validators.pattern(/^[0-9+\s-]{8,14}$/)]],
+    notes:        [''],
+  });
 
   // ── Static data ────────────────────────────────────────────────────────────
   valueFeatures = [
@@ -72,6 +91,13 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   // ── Lifecycle ──────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.loadFeaturedProperties();
+
+    this.quickPropService.modalOpen$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((open) => {
+        this.showAddPropertyModal = open;
+        this.cdr.detectChanges();
+      });
 
     // Listen for language changes reactively to translate featured properties in place
     this.translateService.onLangChange
@@ -179,6 +205,63 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   retry(): void {
     this.loadFeaturedProperties();
+  }
+
+  // ── Add Property Modal Handlers ───────────────────────────────────────────
+  openAddPropertyModal(): void {
+    this.quickPropService.openModal();
+  }
+
+  closeAddPropertyModal(): void {
+    this.quickPropService.closeModal();
+  }
+
+  onModalOverlayClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement).classList.contains('add-prop-overlay')) {
+      this.closeAddPropertyModal();
+    }
+  }
+
+  isAddPropFieldInvalid(field: string): boolean {
+    const ctrl = this.addPropertyForm.get(field);
+    return !!(ctrl && ctrl.invalid && (ctrl.dirty || ctrl.touched));
+  }
+
+  onAddPropertySubmit(): void {
+    if (this.addPropertyForm.invalid) {
+      this.addPropertyForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmittingAddProp = true;
+    const val = this.addPropertyForm.value;
+
+    const payload = {
+      title: `طلب إضافة عقار (${val.propertyType} - ${val.listingType}) في ${val.city}`,
+      propertyType: val.propertyType,
+      listingType: val.listingType,
+      city: val.city,
+      contactName: val.name,
+      contactPhone: val.phone,
+      notes: val.notes || '',
+      submittedAt: new Date(),
+    };
+
+    this.http.post(`${environment.apiUrl}/inquiries`, payload).pipe(
+      catchError(() => of(null)),
+      finalize(() => {
+        this.isSubmittingAddProp = false;
+        this.showAddPropertyModal = false;
+        this.addPropertyForm.reset({
+          propertyType: 'شقة',
+          listingType: 'بيع',
+        });
+        this.cdr.detectChanges();
+      })
+    ).subscribe(() => {
+      const msg = this.translateService.instant('ADD_PROPERTY.SUCCESS_MSG');
+      this.notif.show(msg, 'success');
+    });
   }
 
   // ── Scroll reveal (IntersectionObserver) ───────────────────────────────────

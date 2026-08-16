@@ -5,6 +5,7 @@ import { ThemeService } from '../services/theme.service';
 import { NotificationsApiService } from '../services/notifications-api.service';
 import { DashboardUiService } from '../../shared/services/dashboard-ui.service';
 import { LanguageService } from '../services/language.service';
+import { QuickPropertyService } from '../services/quick-property.service';
 
 @Component({
   selector: 'app-nav',
@@ -108,7 +109,8 @@ export class NavComponent implements OnDestroy {
     private themeService: ThemeService,
     public notificationsApi: NotificationsApiService,
     public dashboardUi: DashboardUiService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private quickPropService: QuickPropertyService
   ) {}
 
   toggleDashboardSidebar(): void {
@@ -237,15 +239,7 @@ export class NavComponent implements OnDestroy {
   }
 
   navigateToAddProperty(): void {
-    const currentUser = this.auth.currentUser;
-
-    if (!currentUser) {
-      this.auth.openModal();
-    } else if (currentUser.role === 'owner' || currentUser.role === 'agent' || currentUser.role === 'admin') {
-      this.router.navigate(['/dashboard/properties'], { queryParams: { view: 'form' } });
-    } else {
-      this.router.navigate(['/kyc']);
-    }
+    this.quickPropService.openModal();
   }
 
   navigateToAddPropertyAndClose(): void {

@@ -114,13 +114,31 @@
     background: var(--bg-elevated);
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 576px) {
     flex-direction: column;
-    padding: 8px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: 12px;
     align-items: stretch;
+
+    .newsletter-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+
+      &:focus {
+        border-color: var(--brand-gold);
+        background: var(--bg-elevated);
+      }
+    }
 
     app-button {
       width: 100%;
+      display: block;
     }
   }
 }

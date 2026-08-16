@@ -43,7 +43,7 @@
         <div class="notifications-dropdown" *ngIf="showNotifications" role="menu">
           <div class="notifications-header">
             <span class="notifications-title">{{ 'NAV.NOTIFICATIONS' | translate }}</span>
-            <button class="mark-all-btn" (click)="markAllNotificationsAsRead()">{{ ('NAV.MARK_ALL_AS_READ' | translate) !== 'NAV.MARK_ALL_AS_READ' ? ('NAV.MARK_ALL_AS_READ' | translate) : 'Mark all as read' }}</button>
+            <button class="mark-all-btn" (click)="markAllNotificationsAsRead()">{{ 'NAV.MARK_ALL_READ' | translate }}</button>
           </div>
           <div class="notifications-body">
             <ng-container *ngIf="(notificationsApi.notifications$ | async) as notifications; else noNotifications">
@@ -52,8 +52,8 @@
               </div>
               <div class="notification-item" *ngFor="let n of notifications" (click)="onNotificationClick(n)" [class.unread]="!n.isRead" role="menuitem">
                 <div class="notification-content">
-                  <span class="notification-title">{{ n.title }}</span>
-                  <span class="notification-desc">{{ n.message }}</span>
+                  <span class="notification-title">{{ n.title | notifTranslate }}</span>
+                  <span class="notification-desc">{{ n.message | notifTranslate:true }}</span>
                 </div>
               </div>
             </ng-container>

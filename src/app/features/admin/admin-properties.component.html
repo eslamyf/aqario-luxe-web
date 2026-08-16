@@ -1,10 +1,15 @@
 <div class="admin-properties-container">
   <!-- Header & Filters -->
   <div class="admin-header-actions">
-    <div class="header-main">
-      <h1 style="font-family: var(--font-display); font-size: 2.5rem; color: var(--white); margin-bottom: 0.5rem;">
-        {{ 'ADMIN.PROPERTIES.TITLE' | translate }}</h1>
-      <p style="color: rgba(255,255,255,0.5); font-family: var(--font-body);">{{ 'ADMIN.PROPERTIES.SUBTITLE' | translate }}</p>
+    <div class="header-main" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <div>
+        <h1 style="font-family: var(--font-display); font-size: 2.5rem; color: var(--white); margin-bottom: 0.5rem;">
+          {{ 'ADMIN.PROPERTIES.TITLE' | translate }}</h1>
+        <p style="color: rgba(255,255,255,0.5); font-family: var(--font-body);">{{ 'ADMIN.PROPERTIES.SUBTITLE' | translate }}</p>
+      </div>
+      <button type="button" (click)="openCreateModal()" style="padding: 0.75rem 1.25rem; font-weight: 700; background: var(--color-gold, #c5a059); color: #000; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);">
+        <i class="fa-solid fa-plus"></i> {{ 'ADMIN.PROPERTIES.CREATE_BTN' | translate }}
+      </button>
     </div>
 
     <!-- Tabs -->
@@ -188,16 +193,140 @@
         </div>
       </div>
 
-      <footer class="drawer-footer">
-        <button class="reject-btn" [disabled]="activePropertyId === selectedProperty._id"
-          (click)="updateApproval(selectedProperty, 'reject')">
-          {{ 'ADMIN.PROPERTIES.DRAWER.REJECT' | translate }}
+      <footer class="drawer-footer" style="display: flex; gap: 0.5rem; justify-content: space-between;">
+        <button type="button" class="reject-btn" style="background: rgba(239, 68, 68, 0.2); color: #f87171;" [disabled]="activePropertyId === selectedProperty._id" (click)="deleteProperty(selectedProperty)">
+          <i class="fa-solid fa-trash-can"></i> حذف العقار
         </button>
-        <button class="approve-btn" [disabled]="activePropertyId === selectedProperty._id"
-          (click)="updateApproval(selectedProperty, 'approve')">
-          {{ 'ADMIN.PROPERTIES.DRAWER.APPROVE' | translate }}
-        </button>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="reject-btn" [disabled]="activePropertyId === selectedProperty._id" (click)="updateApproval(selectedProperty, 'reject')">
+            {{ 'ADMIN.PROPERTIES.DRAWER.REJECT' | translate }}
+          </button>
+          <button class="approve-btn" [disabled]="activePropertyId === selectedProperty._id" (click)="updateApproval(selectedProperty, 'approve')">
+            {{ 'ADMIN.PROPERTIES.DRAWER.APPROVE' | translate }}
+          </button>
+        </div>
       </footer>
     </div>
   </div>
+</div>
+
+<!-- ── MANUAL PROPERTY CREATION MODAL (ADMIN) ────────────────────────────── -->
+<div class="modal-backdrop" *ngIf="showCreateModal" (click)="closeCreateModal()"></div>
+<div class="modal-card-admin" *ngIf="showCreateModal" role="dialog" aria-labelledby="create-modal-title">
+  <div class="modal-header">
+    <h2>إضافة عقار جديد بواسطة الأدمن</h2>
+    <button type="button" class="close-btn" (click)="closeCreateModal()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <form [formGroup]="createForm" (ngSubmit)="submitCreateProperty()" class="admin-create-form">
+    <div class="form-grid-2">
+      <div class="form-group" formGroupName="title">
+        <label>عنوان العقار (بالعربية) *</label>
+        <input type="text" formControlName="ar" class="form-control" placeholder="مثال: فيلا فاخرة للبيع بقنا الجديدة..." />
+      </div>
+      <div class="form-group" formGroupName="title">
+        <label>Title (English) *</label>
+        <input type="text" formControlName="en" class="form-control" placeholder="e.g. Luxury Villa in New Qena..." />
+      </div>
+    </div>
+
+    <div class="form-grid-2">
+      <div class="form-group" formGroupName="description">
+        <label>الوصف التفصيلي (بالعربية) *</label>
+        <textarea formControlName="ar" rows="3" class="form-control" placeholder="ادخل كافة مواصفات وتفاصيل العقار..."></textarea>
+      </div>
+      <div class="form-group" formGroupName="description">
+        <label>Description (English) *</label>
+        <textarea formControlName="en" rows="3" class="form-control" placeholder="Detailed description of the property..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-grid-3">
+      <div class="form-group">
+        <label>السعر (ج.م) *</label>
+        <input type="number" formControlName="price" class="form-control" placeholder="2500000" />
+      </div>
+      <div class="form-group">
+        <label>نوع العقار *</label>
+        <select formControlName="type" class="form-control">
+          <option value="apartment">شقة (Apartment)</option>
+          <option value="villa">فيلا (Villa)</option>
+          <option value="land">أرض (Land)</option>
+          <option value="commercial">محل تجاري (Commercial/Shop)</option>
+          <option value="office">مكتب (Office)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>نوع العرض *</label>
+        <select formControlName="listingType" class="form-control">
+          <option value="sale">بيع (For Sale)</option>
+          <option value="rent">إيجار (For Rent)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-grid-3">
+      <div class="form-group" formGroupName="city">
+        <label>المدينة (بالعربية) *</label>
+        <input type="text" formControlName="ar" class="form-control" placeholder="قنا الجديدة" />
+      </div>
+      <div class="form-group" formGroupName="district">
+        <label>الحي / المنطقة (بالعربية) *</label>
+        <input type="text" formControlName="ar" class="form-control" placeholder="الحي الأول" />
+      </div>
+      <div class="form-group">
+        <label>العنوان / الشارع</label>
+        <input type="text" formControlName="address" class="form-control" placeholder="شارع التسعين..." />
+      </div>
+    </div>
+
+    <div class="form-grid-4">
+      <div class="form-group">
+        <label>المساحة (م²)</label>
+        <input type="number" formControlName="area" class="form-control" placeholder="300" />
+      </div>
+      <div class="form-group">
+        <label>عدد الغرف</label>
+        <input type="number" formControlName="rooms" class="form-control" placeholder="6" />
+      </div>
+      <div class="form-group">
+        <label>غرف النوم</label>
+        <input type="number" formControlName="bedrooms" class="form-control" placeholder="4" />
+      </div>
+      <div class="form-group">
+        <label>الحمامات</label>
+        <input type="number" formControlName="bathrooms" class="form-control" placeholder="3" />
+      </div>
+    </div>
+
+    <!-- Image Upload Dropzone -->
+    <div class="form-group">
+      <label>صور العقار (يمكنك اختيار أكثر من صورة)</label>
+      <div class="image-upload-zone">
+        <input type="file" #fileInput multiple accept="image/*" (change)="onFilesSelected($event)" style="display: none;" />
+        <button type="button" class="btn-upload" (click)="fileInput.click()">
+          <i class="fa-solid fa-cloud-arrow-up"></i> اختر صور العقار
+        </button>
+        <span class="file-hint" *ngIf="selectedFiles.length === 0">لم يتم اختيار صور بعد</span>
+        <span class="file-hint count" *ngIf="selectedFiles.length > 0">تم اختيار {{ selectedFiles.length }} صورة</span>
+      </div>
+
+      <!-- Image Previews -->
+      <div class="preview-grid" *ngIf="imagePreviews.length > 0">
+        <div class="preview-card" *ngFor="let prev of imagePreviews; let i = index">
+          <img [src]="prev" alt="Property Preview" />
+          <button type="button" class="remove-img-btn" (click)="removeImage(i)"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-form-footer">
+      <button type="button" class="btn-cancel" (click)="closeCreateModal()">إلغاء</button>
+      <button type="submit" class="btn-submit-property" [disabled]="isSubmittingForm">
+        <i class="fa-solid fa-paper-plane" *ngIf="!isSubmittingForm"></i>
+        <i class="fa-solid fa-spinner fa-spin" *ngIf="isSubmittingForm"></i>
+        {{ isSubmittingForm ? 'جاري نشر العقار...' : 'نشر العقار الآن' }}
+      </button>
+    </div>
+  </form>
 </div>
