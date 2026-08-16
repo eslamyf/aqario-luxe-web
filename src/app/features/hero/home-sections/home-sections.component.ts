@@ -81,12 +81,45 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
     },
   ];
 
-  contactOptions = [
-    { id: 'call',    titleKey: 'HOME.CONTACT.CALL',    detail: '+201028103634' },
-    { id: 'chat',    titleKey: 'HOME.CONTACT.CHAT',    detail: '+201028103634' },
-    { id: 'video',   titleKey: 'HOME.CONTACT.VIDEO',   detail: '+201028103634' },
-    { id: 'message', titleKey: 'HOME.CONTACT.MESSAGE', detail: '+201028103634' },
-  ];
+  phoneNumber = '01028103634';
+  emailAddress = 'eslam9076460@gmail.com';
+  copiedType: 'phone' | 'email' | null = null;
+
+  openWhatsApp(): void {
+    window.open('https://wa.me/201028103634', '_blank');
+  }
+
+  openMailto(): void {
+    window.location.href = 'mailto:eslam9076460@gmail.com';
+  }
+
+  copyPhone(event: MouseEvent): void {
+    event.stopPropagation();
+    navigator.clipboard.writeText(this.phoneNumber).then(() => {
+      this.copiedType = 'phone';
+      const msg = this.translateService.instant('HOME.CONTACT.PHONE_COPIED');
+      this.notif.show(msg, 'success');
+      setTimeout(() => {
+        if (this.copiedType === 'phone') this.copiedType = null;
+        this.cdr.detectChanges();
+      }, 2500);
+      this.cdr.detectChanges();
+    });
+  }
+
+  copyEmail(event: MouseEvent): void {
+    event.stopPropagation();
+    navigator.clipboard.writeText(this.emailAddress).then(() => {
+      this.copiedType = 'email';
+      const msg = this.translateService.instant('HOME.CONTACT.EMAIL_COPIED');
+      this.notif.show(msg, 'success');
+      setTimeout(() => {
+        if (this.copiedType === 'email') this.copiedType = null;
+        this.cdr.detectChanges();
+      }, 2500);
+      this.cdr.detectChanges();
+    });
+  }
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
   ngOnInit(): void {

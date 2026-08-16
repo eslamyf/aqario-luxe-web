@@ -267,4 +267,15 @@ export class AdminPropertyRequestsComponent implements OnInit, OnDestroy {
   extractNotes(r: any): string {
     return r?.details?.notes || r?.content || '';
   }
+
+  getPropertyTypeIcon(r: any): string {
+    const rawType = (r?.details?.propertyType || '').toLowerCase();
+    if (rawType.includes('فيلا') || rawType.includes('villa')) return 'fa-house-chimney';
+    if (rawType.includes('أرض') || rawType.includes('land')) return 'fa-map-location-dot';
+    if (rawType.includes('محل') || rawType.includes('store') || rawType.includes('commercial')) return 'fa-store';
+    if (rawType.includes('مكتب') || rawType.includes('office')) return 'fa-briefcase';
+    if (rawType.includes('شاليه') || rawType.includes('chalet')) return 'fa-umbrella-beach';
+    if (rawType.includes('بنتهاوس') || rawType.includes('penthouse')) return 'fa-building-circle-arrow-right';
+    return 'fa-building';
+  }
 }

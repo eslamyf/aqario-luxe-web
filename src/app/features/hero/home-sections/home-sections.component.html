@@ -105,67 +105,7 @@
   </div>
 </section>
 
-<!-- ── SECTION 4: Contact / Get in Touch ─────────────────────────── -->
-<section class="contact-section">
-  <div class="section-container contact-inner">
-
-    <!-- Left: Options grid -->
-    <div class="contact-content home-reveal">
-      <div class="section-eyebrow">{{ 'HOME.SECTIONS.OUR_CONTACT' | translate }}</div>
-      <h2 class="section-title">{{ 'HOME.SECTIONS.CONTACT_TITLE' | translate }} <em>{{ 'HOME.SECTIONS.CONTACT_EMPHASIS'
-          | translate }}</em></h2>
-      <p class="contact-sub">
-        {{ 'HOME.SECTIONS.CONTACT_SUB' | translate }}
-      </p>
-
-      <div class="contact-grid stagger-container">
-        <div *ngFor="let opt of contactOptions; let i = index" class="contact-card stagger-item" [id]="'contact-' + i">
-          <span class="contact-icon" [ngSwitch]="opt.id">
-            <!-- Call Icon -->
-            <i *ngSwitchCase="'call'" class="fa-solid fa-phone" aria-hidden="true"></i>
-            <!-- Chat Icon -->
-            <i *ngSwitchCase="'chat'" class="fa-solid fa-comments" aria-hidden="true"></i>
-            <!-- Video Icon -->
-            <i *ngSwitchCase="'video'" class="fa-solid fa-video" aria-hidden="true"></i>
-            <!-- Message Icon -->
-            <i *ngSwitchCase="'message'" class="fa-solid fa-envelope" aria-hidden="true"></i>
-          </span>
-          <div class="contact-info">
-            <div class="contact-title">{{ opt.titleKey | translate }}</div>
-            <div class="contact-detail">{{ opt.detail }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right: Decorative visual -->
-    <div class="contact-image home-reveal">
-      <div class="contact-img-frame">
-        <div class="contact-img-inner">
-          <div class="contact-orb"></div>
-          <div class="contact-building-icon">🏙</div>
-          <div class="contact-stats-card">
-            <div class="cs-item">
-              <div class="cs-num">9,000+</div>
-              <div class="cs-label">{{ 'HOME.SECTIONS.PREMIUM_PROPERTIES' | translate }}</div>
-            </div>
-            <div class="cs-item">
-              <div class="cs-num">2,000+</div>
-              <div class="cs-label">{{ 'HOME.SECTIONS.HAPPY_CLIENTS' | translate }}</div>
-            </div>
-            <div class="cs-item">
-              <div class="cs-num">28+</div>
-              <div class="cs-label">{{ 'HOME.SECTIONS.AWARDS_WON' | translate }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ── SECTION 5: Add Property CTA ─────────────────────────────────── -->
+<!-- ── SECTION 4: Add Property CTA ─────────────────────────────────── -->
 <section class="cta-section home-reveal">
   <div class="cta-inner">
     <h2 class="cta-title">{{ 'HOME.SECTIONS.GET_STARTED_TITLE' | translate }} <em>{{
@@ -174,6 +114,72 @@
     <button class="cta-btn" (click)="openAddPropertyModal()" id="btn-add-property">
       {{ 'HOME.SECTIONS.GET_STARTED_BTN' | translate }}
     </button>
+  </div>
+</section>
+
+<!-- ── SECTION 5: Direct Inquiries & Contact (Last Section Before Footer) ── -->
+<section class="contact-section">
+  <div class="section-container contact-inner">
+    <div class="contact-header home-reveal">
+      <div class="section-eyebrow">{{ 'HOME.SECTIONS.OUR_CONTACT' | translate }}</div>
+      <h2 class="section-title">
+        {{ 'HOME.SECTIONS.CONTACT_TITLE' | translate }}
+        <em>{{ 'HOME.SECTIONS.CONTACT_EMPHASIS' | translate }}</em>
+      </h2>
+      <p class="contact-sub">
+        {{ 'HOME.SECTIONS.CONTACT_SUB' | translate }}
+      </p>
+    </div>
+
+    <div class="contact-grid home-reveal">
+      <!-- Card 1: WhatsApp / Phone -->
+      <div class="contact-card" (click)="openWhatsApp()" id="contact-whatsapp">
+        <div class="card-top-row">
+          <div class="card-icon-wrap whatsapp-icon">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <button type="button" class="btn-copy" (click)="copyPhone($event)" [title]="'HOME.CONTACT.COPY_PHONE' | translate">
+            <i class="fa-solid" [ngClass]="copiedType === 'phone' ? 'fa-check' : 'fa-copy'"></i>
+            <span class="copy-text">{{ (copiedType === 'phone' ? 'HOME.CONTACT.PHONE_COPIED' : 'HOME.CONTACT.COPY_PHONE') | translate }}</span>
+          </button>
+        </div>
+
+        <div class="contact-info">
+          <h3 class="contact-title">{{ 'HOME.CONTACT.WHATSAPP_TITLE' | translate }}</h3>
+          <p class="contact-desc">{{ 'HOME.CONTACT.WHATSAPP_DESC' | translate }}</p>
+          <div class="contact-value phone-value">{{ phoneNumber }}</div>
+        </div>
+
+        <div class="card-action-prompt whatsapp-prompt">
+          <span>{{ 'HOME.CONTACT.ACTION_WHATSAPP' | translate }}</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </div>
+      </div>
+
+      <!-- Card 2: Email -->
+      <div class="contact-card" (click)="openMailto()" id="contact-email">
+        <div class="card-top-row">
+          <div class="card-icon-wrap email-icon">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <button type="button" class="btn-copy" (click)="copyEmail($event)" [title]="'HOME.CONTACT.COPY_EMAIL' | translate">
+            <i class="fa-solid" [ngClass]="copiedType === 'email' ? 'fa-check' : 'fa-copy'"></i>
+            <span class="copy-text">{{ (copiedType === 'email' ? 'HOME.CONTACT.EMAIL_COPIED' : 'HOME.CONTACT.COPY_EMAIL') | translate }}</span>
+          </button>
+        </div>
+
+        <div class="contact-info">
+          <h3 class="contact-title">{{ 'HOME.CONTACT.EMAIL_TITLE' | translate }}</h3>
+          <p class="contact-desc">{{ 'HOME.CONTACT.EMAIL_DESC' | translate }}</p>
+          <div class="contact-value email-value">{{ emailAddress }}</div>
+        </div>
+
+        <div class="card-action-prompt email-prompt">
+          <span>{{ 'HOME.CONTACT.ACTION_EMAIL' | translate }}</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 

@@ -95,7 +95,7 @@
               </td>
 
               <td>
-                <span class="type-badge"><i class="fa-solid fa-building"></i> {{ extractPropertyType(r) }}</span>
+                <span class="type-badge"><i class="fa-solid" [ngClass]="getPropertyTypeIcon(r)"></i> {{ extractPropertyType(r) }}</span>
               </td>
 
               <td>

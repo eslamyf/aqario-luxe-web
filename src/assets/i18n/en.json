@@ -223,7 +223,7 @@
       "OUR_CONTACT": "OUR CONTACT US",
       "CONTACT_TITLE": "Easy to",
       "CONTACT_EMPHASIS": "Contact Us",
-      "CONTACT_SUB": "We are always ready to help by providing the best service for you. We believe a good place is where you call home.",
+      "CONTACT_SUB": "We are always ready to answer all your real estate inquiries. Contact us directly via WhatsApp or Email.",
       "PREMIUM_PROPERTIES": "Premium Properties",
       "HAPPY_CLIENTS": "Happy Clients",
       "AWARDS_WON": "Awards Won",
@@ -234,23 +234,29 @@
     },
     "VALUES": {
       "INTEREST_RATES": {
-        "TITLE": "Clear Pricing from the Start",
-        "DESC": "See the property's price and details clearly, so you can make the right decision for your budget with no surprises."
+        "TITLE": "We Make Finding the Right Property",
+        "DESC": "We provide clear property options that fit your needs and budget."
       },
       "UNSTABLE_PRICES": {
-        "TITLE": "Options That Fit Your Needs",
-        "DESC": "Apartments, homes, land, and shops in different locations, making it easier to find what you're looking for."
+        "TITLE": "Options Suited to Your Needs",
+        "DESC": "Apartments, houses, lands, and shops in different prime locations."
       },
       "BEST_PRICE": {
-        "TITLE": "Everything You Need to Know",
-        "DESC": "See the property's location, price, and details before visiting, so you can make your decision with confidence."
+        "TITLE": "Everything Transparent",
+        "DESC": "View property location, price, and specs before booking a tour."
       }
     },
     "CONTACT": {
-      "CALL": "Call",
-      "CHAT": "Chat",
-      "VIDEO": "Video Call",
-      "MESSAGE": "Message"
+      "WHATSAPP_TITLE": "WhatsApp / Phone",
+      "WHATSAPP_DESC": "Click anywhere on the card to open WhatsApp chat immediately",
+      "EMAIL_TITLE": "Email Address",
+      "EMAIL_DESC": "Click anywhere on the card to open your email client directly",
+      "COPY_PHONE": "Copy Number",
+      "COPY_EMAIL": "Copy Email",
+      "PHONE_COPIED": "Phone number copied successfully! ✓",
+      "EMAIL_COPIED": "Email address copied successfully! ✓",
+      "ACTION_WHATSAPP": "Click to open WhatsApp ↗",
+      "ACTION_EMAIL": "Click to open Email app ↗"
     },
     "NEWSLETTER": {
       "EYEBROW": "STAY INFORMED",

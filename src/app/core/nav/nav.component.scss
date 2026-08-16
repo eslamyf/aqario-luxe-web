@@ -152,24 +152,23 @@
   }
 
   a {
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 2px;
+    font-family: 'Cairo', var(--font-body), sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     color: var(--text-muted);
     text-decoration: none;
     position: relative;
-    transition:
-      color 0.3s var(--transition);
+    transition: color 0.3s var(--transition);
 
     &::after {
       content: '';
       position: absolute;
       inset-inline-start: 0;
-      bottom: -4px;
+      bottom: -5px;
       width: 100%;
-      height: 1px;
+      height: 2px;
       background: var(--brand-gold);
       transform: scaleX(0);
       transform-origin: left;
