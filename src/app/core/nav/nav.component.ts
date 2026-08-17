@@ -111,7 +111,7 @@ export class NavComponent implements OnDestroy {
     public dashboardUi: DashboardUiService,
     private languageService: LanguageService,
     private quickPropService: QuickPropertyService
-  ) {}
+  ) { }
 
   toggleDashboardSidebar(): void {
     this.dashboardUi.toggleSidebar();
@@ -121,7 +121,7 @@ export class NavComponent implements OnDestroy {
     this.isMobileMenuOpen = false;
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
@@ -135,7 +135,7 @@ export class NavComponent implements OnDestroy {
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent): void {
     if (!this.showDropdown && !this.showNotifications) return;
-    
+
     const target = event.target as HTMLElement;
     const userWrapper = document.querySelector('.user-dropdown-container');
     const notifWrapper = document.querySelector('.notifications-dropdown-container');

@@ -30,18 +30,27 @@
     </div>
 
     <!-- Properties grid — real data from MongoDB Atlas -->
-    <div class="props-carousel-wrapper home-reveal"
-      *ngIf="!isLoading && !hasError && featuredProperties.length > 0">
-      <button class="nav-arrow nav-arrow-right" (click)="scrollProps('right')" id="btn-next-props" aria-label="Next">
-        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-      </button>
-      <div class="props-grid stagger-container">
+    <div class="props-carousel-wrapper home-reveal" *ngIf="!isLoading && !hasError && featuredProperties.length > 0">
+      <div class="props-grid stagger-container"
+           (scroll)="onPropsScroll()"
+           (mousedown)="onMouseDown($event)"
+           (mousemove)="onMouseMove($event)"
+           (mouseup)="onMouseUp($event)"
+           (mouseleave)="onMouseLeave($event)">
         <app-property-card *ngFor="let prop of featuredProperties; let i = index" [property]="prop" [isFirst]="i === 0">
         </app-property-card>
       </div>
-      <button class="nav-arrow nav-arrow-left" (click)="scrollProps('left')" id="btn-prev-props" aria-label="Previous">
-        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-      </button>
+
+      <!-- Pagination Dots (Universal across all screens) -->
+      <div class="carousel-dots" *ngIf="featuredProperties.length > 1">
+        <button *ngFor="let prop of featuredProperties; let i = index"
+                type="button"
+                class="dot-btn"
+                [class.active]="activeCardIndex === i"
+                (click)="scrollToCard(i)"
+                [attr.aria-label]="'Go to property ' + (i + 1)">
+        </button>
+      </div>
     </div>
 
     <!-- Empty state -->
@@ -138,9 +147,11 @@
           <div class="card-icon-wrap whatsapp-icon">
             <i class="fa-brands fa-whatsapp"></i>
           </div>
-          <button type="button" class="btn-copy" (click)="copyPhone($event)" [title]="'HOME.CONTACT.COPY_PHONE' | translate">
+          <button type="button" class="btn-copy" (click)="copyPhone($event)"
+            [title]="'HOME.CONTACT.COPY_PHONE' | translate">
             <i class="fa-solid" [ngClass]="copiedType === 'phone' ? 'fa-check' : 'fa-copy'"></i>
-            <span class="copy-text">{{ (copiedType === 'phone' ? 'HOME.CONTACT.PHONE_COPIED' : 'HOME.CONTACT.COPY_PHONE') | translate }}</span>
+            <span class="copy-text">{{ (copiedType === 'phone' ? 'HOME.CONTACT.PHONE_COPIED' :
+              'HOME.CONTACT.COPY_PHONE') | translate }}</span>
           </button>
         </div>
 
@@ -162,9 +173,11 @@
           <div class="card-icon-wrap email-icon">
             <i class="fa-solid fa-envelope"></i>
           </div>
-          <button type="button" class="btn-copy" (click)="copyEmail($event)" [title]="'HOME.CONTACT.COPY_EMAIL' | translate">
+          <button type="button" class="btn-copy" (click)="copyEmail($event)"
+            [title]="'HOME.CONTACT.COPY_EMAIL' | translate">
             <i class="fa-solid" [ngClass]="copiedType === 'email' ? 'fa-check' : 'fa-copy'"></i>
-            <span class="copy-text">{{ (copiedType === 'email' ? 'HOME.CONTACT.EMAIL_COPIED' : 'HOME.CONTACT.COPY_EMAIL') | translate }}</span>
+            <span class="copy-text">{{ (copiedType === 'email' ? 'HOME.CONTACT.EMAIL_COPIED' :
+              'HOME.CONTACT.COPY_EMAIL') | translate }}</span>
           </button>
         </div>
 
@@ -186,7 +199,8 @@
 <!-- ── Add Property Modal ─────────────────────────────────────────── -->
 <div class="add-prop-overlay" *ngIf="showAddPropertyModal" (click)="onModalOverlayClick($event)">
   <div class="add-prop-modal">
-    <button class="add-prop-close" (click)="closeAddPropertyModal()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <button class="add-prop-close" (click)="closeAddPropertyModal()" aria-label="Close"><i
+        class="fa-solid fa-xmark"></i></button>
 
     <div class="add-prop-header">
       <h3 class="add-prop-title">{{ 'ADD_PROPERTY.MODAL_TITLE' | translate }}</h3>
@@ -222,8 +236,10 @@
         <!-- City / Location -->
         <div class="form-group full-width">
           <label class="form-label">{{ 'ADD_PROPERTY.CITY' | translate }}</label>
-          <input type="text" formControlName="city" class="form-input" [class.invalid]="isAddPropFieldInvalid('city')" [placeholder]="'ADD_PROPERTY.CITY_PH' | translate" />
-          <span class="field-error" *ngIf="isAddPropFieldInvalid('city')">{{ 'ADD_PROPERTY.REQ_FIELD' | translate }}</span>
+          <input type="text" formControlName="city" class="form-input" [class.invalid]="isAddPropFieldInvalid('city')"
+            [placeholder]="'ADD_PROPERTY.CITY_PH' | translate" />
+          <span class="field-error" *ngIf="isAddPropFieldInvalid('city')">{{ 'ADD_PROPERTY.REQ_FIELD' | translate
+            }}</span>
         </div>
 
         <!-- Contact Section Header -->
@@ -233,21 +249,27 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">{{ 'ADD_PROPERTY.NAME' | translate }}</label>
-            <input type="text" formControlName="name" class="form-input" [class.invalid]="isAddPropFieldInvalid('name')" [placeholder]="'ADD_PROPERTY.NAME_PH' | translate" />
-            <span class="field-error" *ngIf="isAddPropFieldInvalid('name')">{{ 'ADD_PROPERTY.REQ_FIELD' | translate }}</span>
+            <input type="text" formControlName="name" class="form-input" [class.invalid]="isAddPropFieldInvalid('name')"
+              [placeholder]="'ADD_PROPERTY.NAME_PH' | translate" />
+            <span class="field-error" *ngIf="isAddPropFieldInvalid('name')">{{ 'ADD_PROPERTY.REQ_FIELD' | translate
+              }}</span>
           </div>
 
           <div class="form-group">
             <label class="form-label">{{ 'ADD_PROPERTY.PHONE' | translate }}</label>
-            <input type="tel" formControlName="phone" class="form-input" [class.invalid]="isAddPropFieldInvalid('phone')" [placeholder]="'ADD_PROPERTY.PHONE_PH' | translate" maxlength="14" />
-            <span class="field-error" *ngIf="isAddPropFieldInvalid('phone')">{{ 'ADD_PROPERTY.PHONE_INVALID' | translate }}</span>
+            <input type="tel" formControlName="phone" class="form-input"
+              [class.invalid]="isAddPropFieldInvalid('phone')" [placeholder]="'ADD_PROPERTY.PHONE_PH' | translate"
+              maxlength="14" />
+            <span class="field-error" *ngIf="isAddPropFieldInvalid('phone')">{{ 'ADD_PROPERTY.PHONE_INVALID' | translate
+              }}</span>
           </div>
         </div>
 
         <!-- Notes -->
         <div class="form-group full-width">
           <label class="form-label">{{ 'ADD_PROPERTY.NOTES' | translate }}</label>
-          <textarea formControlName="notes" class="form-textarea" rows="2" [placeholder]="'ADD_PROPERTY.NOTES_PH' | translate"></textarea>
+          <textarea formControlName="notes" class="form-textarea" rows="2"
+            [placeholder]="'ADD_PROPERTY.NOTES_PH' | translate"></textarea>
         </div>
 
       </div>

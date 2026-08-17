@@ -7,7 +7,8 @@
 
     <!-- Desktop Navigation Links (Hidden on Mobile) -->
     <ul class="nav-links" role="list">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'NAV.HOME' | translate }}</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'NAV.HOME' |
+          translate }}</a></li>
       <li><a routerLink="/properties" routerLinkActive="active">{{ 'NAV.PROPERTIES' | translate }}</a></li>
       <li><a routerLink="/agents" routerLinkActive="active">{{ 'NAV.AGENTS' | translate }}</a></li>
       <li><a routerLink="/dashboard/saved" routerLinkActive="active">{{ 'NAV.FAVOURITES' | translate }}</a></li>
@@ -18,7 +19,8 @@
       <!-- Language Switcher -->
       <button id="btn-lang-toggle" type="button" class="btn-lang-toggle" (click)="toggleLanguage()"
         [attr.aria-label]="(lang$ | async) === 'en' ? 'Switch to Arabic' : 'Switch to English'" data-cursor-hover>
-        <span class="lang-text"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR' : 'EN' }}</span>
+        <span class="lang-text"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{ (lang$ | async) === 'en' ? 'AR'
+          : 'EN' }}</span>
       </button>
 
       <!-- Theme Switcher (Light / Dark) -->
@@ -33,7 +35,8 @@
 
       <!-- Notifications Bell -->
       <div class="notifications-wrapper notifications-dropdown-container">
-        <button type="button" class="btn-notification" (click)="toggleNotifications($event)" data-cursor-hover aria-label="Notifications">
+        <button type="button" class="btn-notification" (click)="toggleNotifications($event)" data-cursor-hover
+          aria-label="Notifications">
           <i class="fa-solid fa-bell"></i>
           <span class="notification-badge" *ngIf="((notificationsApi.unreadCount$ | async) || 0) > 0">
             {{ (notificationsApi.unreadCount$ | async) }}
@@ -43,14 +46,16 @@
         <div class="notifications-dropdown" *ngIf="showNotifications" role="menu">
           <div class="notifications-header">
             <span class="notifications-title">{{ 'NAV.NOTIFICATIONS' | translate }}</span>
-            <button class="mark-all-btn" (click)="markAllNotificationsAsRead()">{{ 'NAV.MARK_ALL_READ' | translate }}</button>
+            <button class="mark-all-btn" (click)="markAllNotificationsAsRead()">{{ 'NAV.MARK_ALL_READ' | translate
+              }}</button>
           </div>
           <div class="notifications-body">
             <ng-container *ngIf="(notificationsApi.notifications$ | async) as notifications; else noNotifications">
               <div *ngIf="notifications.length === 0" class="empty-notifications">
                 {{ 'NAV.NO_NOTIFICATIONS' | translate }}
               </div>
-              <div class="notification-item" *ngFor="let n of notifications" (click)="onNotificationClick(n)" [class.unread]="!n.isRead" role="menuitem">
+              <div class="notification-item" *ngFor="let n of notifications" (click)="onNotificationClick(n)"
+                [class.unread]="!n.isRead" role="menuitem">
                 <div class="notification-content">
                   <span class="notification-title">{{ n.title | notifTranslate }}</span>
                   <span class="notification-desc">{{ n.message | notifTranslate:true }}</span>
@@ -68,12 +73,7 @@
 
       <!-- Auth User / Profile Avatar / Sign-In Button -->
       <ng-template #guestTemplate>
-        <app-button
-          id="btn-sign-in"
-          variant="secondary"
-          size="sm"
-          icon="fa-solid fa-user"
-          (btnClick)="openLogin()">
+        <app-button id="btn-sign-in" variant="secondary" size="sm" icon="fa-solid fa-user" (btnClick)="openLogin()">
           {{ 'NAV.SIGN_IN' | translate }}
         </app-button>
       </ng-template>
@@ -95,11 +95,13 @@
               <i class="fa-solid fa-user dropdown-icon" aria-hidden="true"></i>
               <span>{{ 'NAV.MY_ACCOUNT' | translate }}</span>
             </a>
-            <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview" (click)="showDropdown = false" role="menuitem">
+            <a class="dropdown-item" *ngIf="user.role !== 'admin'" routerLink="/dashboard/overview"
+              (click)="showDropdown = false" role="menuitem">
               <i class="fa-solid fa-table-cells-large dropdown-icon" aria-hidden="true"></i>
               <span>{{ 'NAV.MY_DASHBOARD' | translate }}</span>
             </a>
-            <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false" role="menuitem">
+            <a class="dropdown-item" *ngIf="user.role === 'admin'" routerLink="/admin" (click)="showDropdown = false"
+              role="menuitem">
               <i class="fa-solid fa-shield-halved dropdown-icon" aria-hidden="true"></i>
               <span>{{ 'NAV.ADMIN_PANEL' | translate }}</span>
             </a>
@@ -112,11 +114,7 @@
         </div>
       </ng-container>
 
-      <app-button
-        id="btn-list-property"
-        variant="primary"
-        size="sm"
-        icon="fa-solid fa-building"
+      <app-button id="btn-list-property" variant="primary" size="sm" icon="fa-solid fa-building"
         (btnClick)="navigateToAddProperty()">
         {{ 'NAV.LIST_PROPERTY' | translate }}
       </app-button>
@@ -129,14 +127,16 @@
   <div class="floating-nav-pill fixed-five-pill">
     <ng-container *ngFor="let item of fixedBottomNavItems; trackBy: trackByNav">
       <ng-container *ngIf="!item.isMenuTrigger && !item.isAddProperty">
-        <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }" class="nav-dock-item" [title]="item.labelKey | translate" (click)="closeBottomSheet()">
+        <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }"
+          class="nav-dock-item" [title]="item.labelKey | translate" (click)="closeBottomSheet()">
           <i [class]="item.icon" aria-hidden="true"></i>
           <span class="dock-item-label">{{ item.labelKey | translate }}</span>
         </a>
       </ng-container>
 
       <ng-container *ngIf="item.isAddProperty">
-        <button type="button" class="nav-dock-item add-prop-dock-item" [class.active]="isAddPropertyActive" (click)="navigateToAddProperty()" [title]="'NAV.LIST_PROPERTY' | translate">
+        <button type="button" class="nav-dock-item add-prop-dock-item" [class.active]="isAddPropertyActive"
+          (click)="navigateToAddProperty()" [title]="'NAV.LIST_PROPERTY' | translate">
           <i [class]="item.icon" aria-hidden="true"></i>
           <span class="dock-item-label">{{ item.labelKey | translate }}</span>
         </button>
@@ -144,13 +144,15 @@
 
       <ng-container *ngIf="item.isMenuTrigger">
         <ng-container *ngIf="auth.currentUser$ | async; else guestFifthItem">
-          <button type="button" class="nav-dock-item menu-trigger-item" [class.active]="isBottomSheetOpen" (click)="toggleBottomSheet($event)" [title]="'NAV.MENU' | translate">
+          <button type="button" class="nav-dock-item menu-trigger-item" [class.active]="isBottomSheetOpen"
+            (click)="toggleBottomSheet($event)" [title]="'NAV.MENU' | translate">
             <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
             <span class="dock-item-label">{{ 'NAV.MENU' | translate }}</span>
           </button>
         </ng-container>
         <ng-template #guestFifthItem>
-          <button type="button" class="nav-dock-item signin-dock-item" (click)="openLoginAndClose()" [title]="'NAV.SIGN_IN' | translate">
+          <button type="button" class="nav-dock-item signin-dock-item" (click)="openLoginAndClose()"
+            [title]="'NAV.SIGN_IN' | translate">
             <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
             <span class="dock-item-label">{{ 'NAV.SIGN_IN' | translate }}</span>
           </button>
@@ -197,17 +199,15 @@
   <ng-container *ngIf="auth.currentUser$ | async as user; else guestSheetBody">
     <div class="sheet-menu-body">
       <!-- Prominent List Property Action Button at top of bottom sheet -->
-      <app-button
-        variant="primary"
-        size="lg"
-        [fullWidth]="true"
-        icon="fa-solid fa-building"
+      <app-button variant="primary" size="lg" [fullWidth]="true" icon="fa-solid fa-building"
         (btnClick)="navigateToAddPropertyAndClose()">
         {{ 'NAV.LIST_PROPERTY' | translate }}
       </app-button>
 
       <div class="sheet-menu-grid">
-        <a *ngFor="let item of bottomSheetItems; trackBy: trackByNav" [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.exact || false }" class="sheet-menu-item" (click)="closeBottomSheet()">
+        <a *ngFor="let item of bottomSheetItems; trackBy: trackByNav" [routerLink]="item.link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact || false }" class="sheet-menu-item"
+          (click)="closeBottomSheet()">
           <div class="sheet-item-icon">
             <i [class]="item.icon"></i>
           </div>
@@ -230,11 +230,7 @@
   <ng-template #guestSheetBody>
     <div class="sheet-menu-body guest-body">
       <!-- Prominent List Property Action Button at top of bottom sheet for guests -->
-      <app-button
-        variant="primary"
-        size="lg"
-        [fullWidth]="true"
-        icon="fa-solid fa-building"
+      <app-button variant="primary" size="lg" [fullWidth]="true" icon="fa-solid fa-building"
         (btnClick)="navigateToAddPropertyAndClose()">
         {{ 'NAV.LIST_PROPERTY' | translate }}
       </app-button>

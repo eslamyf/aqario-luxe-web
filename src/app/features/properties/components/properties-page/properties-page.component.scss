@@ -74,39 +74,43 @@
   margin-top: 8px;
 }
 
-// Category Tabs Bar
+// Category Tabs Bar — Always 100% visible on mobile & desktop (Flex Wrap)
 .properties-tabs {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  overflow-x: auto;
-  white-space: nowrap;
-  margin-bottom: 32px;
-  padding: 6px 4px 12px 4px;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-
-  @media (min-width: 769px) {
-    flex-wrap: wrap;
-    overflow-x: visible;
-    white-space: normal;
-  }
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 4px 0;
+  width: 100%;
 }
 
 .prop-tab {
-  padding: 10px 22px;
+  padding: 8px 16px;
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--text-muted);
-  border-radius: 30px;
+  border-radius: 20px;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
   transition: all 0.3s var(--transition);
   cursor: pointer;
+  white-space: nowrap;
+
+  @media (max-width: 480px) {
+    padding: 7px 12px;
+    font-size: 10.5px;
+  }
+
+  @media (max-width: 360px) {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
 
   &:hover {
     color: var(--text-main);
@@ -265,9 +269,11 @@
             &::-webkit-scrollbar {
               width: 5px;
             }
+
             &::-webkit-scrollbar-track {
               background: transparent;
             }
+
             &::-webkit-scrollbar-thumb {
               background: var(--brand-gold);
               border-radius: 4px;
@@ -727,6 +733,7 @@
     opacity: 0;
     transform: translateY(-6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

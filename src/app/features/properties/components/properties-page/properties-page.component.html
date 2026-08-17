@@ -44,25 +44,15 @@
           <span class="input-icon">
             <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
           </span>
-          <input
-            type="text"
-            formControlName="city"
-            [placeholder]="'PROPERTIES.CITY_PLACEHOLDER' | translate"
-            (focus)="openCityDropdown()"
-            (input)="onCityInput($event)"
-            (keydown.escape)="closeCityDropdown()"
-            autocomplete="off"
-          />
-          <button
-            type="button"
-            class="btn-clear-city"
-            *ngIf="filterForm.value.city"
-            (click)="clearCityInput($event)"
-            [title]="'PROPERTIES.CLEAR_ALL' | translate"
-          >
+          <input type="text" formControlName="city" [placeholder]="'PROPERTIES.CITY_PLACEHOLDER' | translate"
+            (focus)="openCityDropdown()" (input)="onCityInput($event)" (keydown.escape)="closeCityDropdown()"
+            autocomplete="off" />
+          <button type="button" class="btn-clear-city" *ngIf="filterForm.value.city" (click)="clearCityInput($event)"
+            [title]="'PROPERTIES.CLEAR_ALL' | translate">
             <i class="fa-solid fa-xmark"></i>
           </button>
-          <button type="button" class="btn-toggle-city-dropdown" (click)="toggleCityDropdown($event)" aria-label="Toggle city menu">
+          <button type="button" class="btn-toggle-city-dropdown" (click)="toggleCityDropdown($event)"
+            aria-label="Toggle city menu">
             <i class="fa-solid fa-chevron-down" [class.rotated]="isCityDropdownOpen"></i>
           </button>
 
@@ -71,23 +61,15 @@
             <div class="city-dropdown-header" *ngIf="filteredLocations.length > 0">
               <span>{{ currentLang === 'ar' ? 'اختر المدينة أو المركز' : 'Select City or District' }}</span>
             </div>
-            
+
             <div class="city-dropdown-list">
-              <div
-                class="city-dropdown-item"
-                [class.selected]="!filterForm.value.city"
-                (click)="selectCity(null)"
-              >
+              <div class="city-dropdown-item" [class.selected]="!filterForm.value.city" (click)="selectCity(null)">
                 <span class="city-name-primary">{{ currentLang === 'ar' ? 'جميع المناطق' : 'All Locations' }}</span>
                 <i class="fa-solid fa-check check-icon" *ngIf="!filterForm.value.city"></i>
               </div>
 
-              <div
-                class="city-dropdown-item"
-                *ngFor="let loc of filteredLocations"
-                [class.selected]="isCitySelected(loc)"
-                (click)="selectCity(loc)"
-              >
+              <div class="city-dropdown-item" *ngFor="let loc of filteredLocations"
+                [class.selected]="isCitySelected(loc)" (click)="selectCity(loc)">
                 <div class="city-name-wrapper">
                   <span class="city-name-primary">{{ currentLang === 'ar' ? loc.nameAr : loc.nameEn }}</span>
                   <span class="city-name-secondary">({{ currentLang === 'ar' ? loc.nameEn : loc.nameAr }})</span>
@@ -146,7 +128,8 @@
             </select>
           </div>
           <div class="filter-actions">
-            <button type="button" class="btn-secondary" (click)="clearFilters()">{{ 'PROPERTIES.CLEAR_ALL' | translate }}</button>
+            <button type="button" class="btn-secondary" (click)="clearFilters()">{{ 'PROPERTIES.CLEAR_ALL' | translate
+              }}</button>
           </div>
         </div>
       </div>
@@ -195,10 +178,12 @@
       </p>
 
       <div class="error-actions">
-        <button *ngIf="errKey === 'NETWORK_ERROR' || errKey === 'SERVER_ERROR'" class="btn-gold" (click)="retryLoad()" data-cursor-hover>
+        <button *ngIf="errKey === 'NETWORK_ERROR' || errKey === 'SERVER_ERROR'" class="btn-gold" (click)="retryLoad()"
+          data-cursor-hover>
           <i class="fa-solid fa-rotate-right" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.RETRY' | translate }}
         </button>
-        <button *ngIf="errKey === 'INVALID_FILTER' || errKey === 'CAST_ERROR'" class="btn-gold" (click)="onModifyFilters()" data-cursor-hover>
+        <button *ngIf="errKey === 'INVALID_FILTER' || errKey === 'CAST_ERROR'" class="btn-gold"
+          (click)="onModifyFilters()" data-cursor-hover>
           <i class="fa-solid fa-sliders" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.MODIFY_FILTERS' | translate }}
         </button>
         <button class="btn-secondary" (click)="clearFilters()" data-cursor-hover>
@@ -229,7 +214,8 @@
             <i class="fa-solid fa-sliders" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.MODIFY_FILTERS' | translate }}
           </button>
           <button class="btn-secondary" (click)="clearFilters()" data-cursor-hover>
-            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.RESET_FILTERS' | translate }}
+            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {{ 'PROPERTIES.ERRORS.RESET_FILTERS' | translate
+            }}
           </button>
         </div>
       </div>

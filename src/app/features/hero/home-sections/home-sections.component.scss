@@ -57,6 +57,10 @@
   @media (max-width: 768px) {
     padding: 0 20px;
   }
+
+  @media (max-width: 360px) {
+    padding: 0 16px;
+  }
 }
 
 .section-eyebrow {
@@ -212,6 +216,7 @@
 .featured-section {
   padding: 100px 0;
   background: var(--obsidian);
+  overflow: hidden;
 
   @media (max-width: 768px) {
     padding: 44px 0;
@@ -233,8 +238,8 @@
 }
 
 .nav-arrow {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50% !important;
   border: 1px solid rgba(201, 169, 110, 0.45);
   background: color-mix(in srgb, var(--obsidian-2) 90%, transparent);
@@ -248,7 +253,7 @@
   text-align: center;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: absolute;
-  top: 50%;
+  top: calc(50% - 20px);
   transform: translateY(-50%);
   z-index: 20;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
@@ -256,7 +261,7 @@
   margin: 0;
 
   i {
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1;
     display: flex;
     align-items: center;
@@ -280,54 +285,49 @@
   }
 
   &.nav-arrow-left {
-    left: -18px;
-
-    @media (max-width: 1280px) {
-      left: 6px;
-    }
+    left: -20px;
   }
 
   &.nav-arrow-right {
-    right: -18px;
-
-    @media (max-width: 1280px) {
-      right: 6px;
-    }
+    right: -20px;
   }
 
   @media (max-width: 768px) {
-    width: 30px;
-    height: 30px;
-    top: 50%;
-
-    i {
-      font-size: 10px;
-    }
-
-    &.nav-arrow-left {
-      left: 4px;
-    }
-
-    &.nav-arrow-right {
-      right: 4px;
-    }
+    display: none !important;
   }
 }
 
 .props-grid {
   display: flex;
   gap: 24px;
-  margin-bottom: 48px;
+  margin-bottom: 24px;
   align-items: stretch;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding: 8px 4px 16px;
   -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+
+  &.is-dragging {
+    cursor: grabbing !important;
+    scroll-snap-type: none !important;
+    scroll-behavior: auto !important;
+
+    * {
+      user-select: none !important;
+      pointer-events: none !important;
+    }
+  }
 
   /* Hide scrollbar for clean luxury design */
   scrollbar-width: none;
   -ms-overflow-style: none;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -335,18 +335,67 @@
   > app-property-card,
   > .prop-skeleton {
     flex: 0 0 calc(33.333% - 16px);
-    min-width: 320px;
+    min-width: calc(33.333% - 16px);
+    max-width: calc(33.333% - 16px);
     scroll-snap-align: start;
 
-    @media (max-width: 1100px) {
-      flex: 0 0 calc(50% - 12px);
-      min-width: 280px;
+    @media (min-width: 1440px) {
+      flex: 0 0 calc(25% - 18px);
+      min-width: calc(25% - 18px);
+      max-width: calc(25% - 18px);
     }
 
-    @media (max-width: 600px) {
-      flex: 0 0 calc(85% - 10px);
-      min-width: 260px;
-      scroll-snap-align: center;
+    @media (max-width: 1024px) {
+      flex: 0 0 calc(50% - 10px);
+      min-width: calc(50% - 10px);
+      max-width: calc(50% - 10px);
+    }
+
+    @media (max-width: 768px) {
+      flex: 0 0 100%;
+      min-width: 100%;
+      max-width: 100%;
+      width: 100%;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+  }
+
+  @media (max-width: 768px) {
+    gap: 0;
+    padding: 4px 0 12px;
+    margin-bottom: 8px;
+  }
+}
+
+// ── Universal Pagination Dots ─────────────────────────────────────────────
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+
+  .dot-btn {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(201, 169, 110, 0.3);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+      background: rgba(201, 169, 110, 0.6);
+    }
+
+    &.active {
+      width: 24px;
+      background: var(--brand-gold, #C9A96E);
+      box-shadow: 0 0 10px rgba(201, 169, 110, 0.5);
     }
   }
 }
@@ -1437,9 +1486,11 @@
   &::-webkit-scrollbar {
     width: 4px;
   }
+
   &::-webkit-scrollbar-track {
     background: var(--obsidian);
   }
+
   &::-webkit-scrollbar-thumb {
     background: color-mix(in srgb, var(--gold) 40%, transparent);
     border-radius: 10px;
@@ -1546,6 +1597,7 @@
 [dir='rtl'],
 html[dir='rtl'],
 body[dir='rtl'] {
+
   .btn-gold,
   .cta-btn,
   .nav-arrow,

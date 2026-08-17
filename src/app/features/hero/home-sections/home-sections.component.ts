@@ -6,6 +6,7 @@ import {
   AfterViewInit,
   NgZone,
   ChangeDetectorRef,
+  HostListener,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -31,15 +32,15 @@ import { QuickPropertyService } from '../../../core/services/quick-property.serv
   styleUrls: ['./home-sections.component.scss'],
 })
 export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
-  private router             = inject(Router);
-  private propertiesService  = inject(PropertiesService);
-  private http               = inject(HttpClient);
-  private ngZone             = inject(NgZone);
-  private cdr                = inject(ChangeDetectorRef);
-  private translateService   = inject(TranslateService);
-  private fb                 = inject(FormBuilder);
-  private notif              = inject(NotificationService);
-  private quickPropService   = inject(QuickPropertyService);
+  private router = inject(Router);
+  private propertiesService = inject(PropertiesService);
+  private http = inject(HttpClient);
+  private ngZone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
+  private translateService = inject(TranslateService);
+  private fb = inject(FormBuilder);
+  private notif = inject(NotificationService);
+  private quickPropService = inject(QuickPropertyService);
 
   // ── Lifecycle management ────────────────────────────────────────────────────
   private destroy$ = new Subject<void>();
@@ -47,19 +48,28 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   // ── State ──────────────────────────────────────────────────────────────────
   featuredProperties: FeaturedProperty[] = [];
   isLoading = true;
-  hasError  = false;
+  hasError = false;
   openAccordion: number | null = 0;
 
+  activeCardIndex = 0;
+  canScrollLeft = false;
+  canScrollRight = true;
+
+  isDragging = false;
+  startX = 0;
+  scrollLeftStart = 0;
+  hasDraggedFar = false;
+
   showAddPropertyModal = false;
-  isSubmittingAddProp  = false;
+  isSubmittingAddProp = false;
 
   addPropertyForm: FormGroup = this.fb.group({
     propertyType: ['شقة', Validators.required],
-    listingType:  ['بيع', Validators.required],
-    city:         ['', Validators.required],
-    name:         ['', Validators.required],
-    phone:        ['', [Validators.required, Validators.maxLength(14), Validators.pattern(/^[0-9+\s-]{8,14}$/)]],
-    notes:        [''],
+    listingType: ['بيع', Validators.required],
+    city: ['', Validators.required],
+    name: ['', Validators.required],
+    phone: ['', [Validators.required, Validators.maxLength(14), Validators.pattern(/^[0-9+\s-]{8,14}$/)]],
+    notes: [''],
   });
 
   // ── Static data ────────────────────────────────────────────────────────────
@@ -156,7 +166,7 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   // ── Data fetching: isolated call — DOES NOT touch shared properties$ state ──
   private loadFeaturedProperties(): void {
     this.isLoading = true;
-    this.hasError  = false;
+    this.hasError = false;
 
     // Fetch featured properties list (limit: 10) for horizontal property slider
     this.propertiesService
@@ -168,14 +178,133 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isLoading = false;
           this.cdr.detectChanges();
           // Re-observe new DOM elements after data arrives
-          setTimeout(() => this.initScrollReveal(), 100);
+          setTimeout(() => {
+            this.initScrollReveal();
+            this.updateScrollState();
+          }, 100);
         },
         error: () => {
           this.isLoading = false;
-          this.hasError  = true;
+          this.hasError = true;
           this.cdr.detectChanges();
         },
       });
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.updateScrollState();
+  }
+
+  onPropsScroll(): void {
+    this.updateScrollState();
+  }
+
+  onMouseDown(event: MouseEvent): void {
+    if (event.button !== 0) return;
+    const grid = event.currentTarget as HTMLElement;
+    if (!grid) return;
+
+    this.isDragging = true;
+    this.hasDraggedFar = false;
+    this.startX = event.pageX - grid.offsetLeft;
+    this.scrollLeftStart = grid.scrollLeft;
+    grid.classList.add('is-dragging');
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    if (!this.isDragging) return;
+    const grid = event.currentTarget as HTMLElement;
+    if (!grid) return;
+
+    const x = event.pageX - grid.offsetLeft;
+    const walk = (x - this.startX) * 1.5;
+
+    if (Math.abs(walk) > 5) {
+      this.hasDraggedFar = true;
+      event.preventDefault();
+    }
+
+    const isRtl = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl' || document.dir === 'rtl';
+    if (isRtl) {
+      grid.scrollLeft = this.scrollLeftStart + walk;
+    } else {
+      grid.scrollLeft = this.scrollLeftStart - walk;
+    }
+
+    this.updateScrollState();
+  }
+
+  onMouseUp(event: MouseEvent): void {
+    if (!this.isDragging) return;
+    this.stopDragging(event.currentTarget as HTMLElement);
+  }
+
+  onMouseLeave(event: MouseEvent): void {
+    if (!this.isDragging) return;
+    this.stopDragging(event.currentTarget as HTMLElement);
+  }
+
+  private stopDragging(grid: HTMLElement): void {
+    if (!grid) return;
+    this.isDragging = false;
+    grid.classList.remove('is-dragging');
+    this.updateScrollState();
+    setTimeout(() => {
+      this.hasDraggedFar = false;
+    }, 50);
+  }
+
+  scrollToCard(index: number): void {
+    const grid = document.querySelector('.featured-section .props-grid') as HTMLElement;
+    if (!grid) return;
+
+    const cards = grid.querySelectorAll('app-property-card, .prop-skeleton');
+    if (!cards[index]) return;
+
+    const targetCard = cards[index] as HTMLElement;
+    const cardLeft = targetCard.offsetLeft;
+    grid.scrollTo({ left: cardLeft, behavior: 'smooth' });
+    this.activeCardIndex = index;
+    setTimeout(() => this.updateScrollState(), 350);
+  }
+
+  updateScrollState(): void {
+    const grid = document.querySelector('.featured-section .props-grid') as HTMLElement;
+    if (!grid) return;
+
+    const scrollLeft = grid.scrollLeft;
+    const maxScroll = grid.scrollWidth - grid.clientWidth;
+
+    if (maxScroll <= 5) {
+      this.canScrollLeft = false;
+      this.canScrollRight = false;
+      this.activeCardIndex = 0;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const isRtl = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl' || document.dir === 'rtl';
+    const absScroll = Math.abs(scrollLeft);
+
+    if (isRtl) {
+      this.canScrollRight = absScroll > 10;
+      this.canScrollLeft = absScroll < maxScroll - 10;
+    } else {
+      this.canScrollLeft = absScroll > 10;
+      this.canScrollRight = absScroll < maxScroll - 10;
+    }
+
+    const firstCard = grid.querySelector('app-property-card, .prop-skeleton') as HTMLElement;
+    if (firstCard && firstCard.offsetWidth > 0) {
+      const cardWidth = firstCard.offsetWidth;
+      let index = Math.round(absScroll / cardWidth);
+      if (index < 0) index = 0;
+      if (index >= this.featuredProperties.length) index = this.featuredProperties.length - 1;
+      this.activeCardIndex = index;
+    }
+
+    this.cdr.detectChanges();
   }
 
   // ── Enrich property with formatted price and resolved image URL ─────────────
@@ -226,6 +355,7 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    setTimeout(() => this.updateScrollState(), 350);
   }
 
   navigateToProperties(): void {
