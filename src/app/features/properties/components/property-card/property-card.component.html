@@ -3,7 +3,7 @@
   Modern luxury design system card implementation
 ───────────────────────────────────────────────────────────────────────────── -->
 
-<div class="property-card" [class.property-card--first]="isFirst" [routerLink]="['/properties', property._id]"
+<div class="property-card" [class.property-card--first]="isFirst" [routerLink]="['/properties', propertyId]" (click)="onCardClick($event)"
   data-cursor-hover>
 
   <!-- Image & Badges Media Container -->
@@ -89,8 +89,7 @@
 
     <!-- Action Button: Book Now (احجز الآن) -->
     <div class="property-actions">
-      <button class="property-action-btn btn-book-now" [routerLink]="['/properties', property._id]"
-        (click)="$event.stopPropagation()" data-cursor-hover>
+      <button class="property-action-btn btn-book-now" type="button" [routerLink]="['/properties', propertyId]" (click)="onBookNowClick($event)" data-cursor-hover>
         <span>{{ 'REAL_ESTATE.BOOK_NOW' | translate }}</span>
         <i class="fa-solid fa-arrow-left arrow-icon" aria-hidden="true"></i>
       </button>

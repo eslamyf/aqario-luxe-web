@@ -18,6 +18,8 @@ import { UserInquiriesComponent } from './user-inquiries.component';
 import { UserChatComponent } from './user-chat.component';
 import { TranslatePropPipe } from './translate-prop.pipe';
 import { ButtonComponent } from '../../shared/components/button/button.component';
+import { PropertyCardModule } from '../properties/components/property-card/property-card.module';
+import { PropertyCardComponent } from '../properties/components/property-card/property-card.component';
 
 const routes: Routes = [
   {
@@ -47,7 +49,6 @@ const routes: Routes = [
     UserOverviewComponent,
     UserBookingsComponent,
     UserPropertiesComponent,
-    UserSavedComponent,
     UserPaymentsComponent,
     UserProfileComponent,
     UserOwnerBookingsComponent,
@@ -61,9 +62,12 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    TranslateModule,
+    TranslateModule.forChild(),
     TranslatePropPipe,
     ButtonComponent,
+    PropertyCardModule,
+    PropertyCardComponent,
+    UserSavedComponent,
   ],
   exports: [
     TranslatePropPipe,

@@ -14,6 +14,7 @@ import {
   ChangeDetectorRef,
   inject,
 } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -22,15 +23,19 @@ import { PropertiesService } from '../../services/properties.service';
 import { FavoritesService } from '../../services/favorites.service';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-property-card',
   templateUrl: './property-card.component.html',
   styleUrls: ['./property-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CommonModule, RouterModule, TranslateModule],
 })
 export class PropertyCardComponent implements OnInit, OnDestroy {
+  private router             = inject(Router);
   private propertiesService  = inject(PropertiesService);
   private favoritesService   = inject(FavoritesService);
   private authService        = inject(AuthService);
@@ -51,14 +56,21 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  get propertyId(): string {
+    return this.property?._id || (this.property as any)?.id || '';
+  }
+
   ngOnInit(): void {
-    // Reactive favorite state
-    this.favoritesService.isFavorited$(this.property._id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(fav => {
-        this.isFavorited = fav;
-        this.cdr.markForCheck();
-      });
+    const id = this.propertyId;
+    if (id) {
+      // Reactive favorite state
+      this.favoritesService.isFavorited$(id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(fav => {
+          this.isFavorited = fav;
+          this.cdr.markForCheck();
+        });
+    }
   }
 
   ngOnDestroy(): void {
@@ -90,6 +102,27 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
     return this.property.status === 'for-rent' ? 'For Rent' : 'For Sale';
   }
 
+  onCardClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.closest('.property-favorite')) {
+      return;
+    }
+    const id = this.propertyId;
+    if (id) {
+      this.router.navigate(['/properties', id]);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  onBookNowClick(event: MouseEvent): void {
+    event.stopPropagation();
+    const id = this.propertyId;
+    if (id) {
+      this.router.navigate(['/properties', id]);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
   onFavoriteClick(event: MouseEvent): void {
     event.stopPropagation();
 
@@ -102,7 +135,10 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.favoritesService.toggleFavorite(this.property._id).subscribe({
+    const id = this.propertyId;
+    if (!id) return;
+
+    this.favoritesService.toggleFavorite(id).subscribe({
       next: (isFav) => {
         this.notificationService.show(
           this.translateService.instant(
@@ -119,7 +155,7 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.favoriteToggled.emit(this.property._id);
+    this.favoriteToggled.emit(id);
   }
 
   onImageError(): void {
@@ -143,7 +179,7 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
     }
 
     let hash = 0;
-    const id = this.property._id || '1001';
+    const id = this.propertyId || '1001';
     for (let i = 0; i < id.length; i++) {
       hash = (hash * 31 + id.charCodeAt(i)) % 8999;
     }
@@ -153,7 +189,7 @@ export class PropertyCardComponent implements OnInit, OnDestroy {
       ? 'https://aqario-luxe.vercel.app'
       : window.location.origin;
 
-    const propertyUrl = `${baseUrl}/properties/${this.property._id}`;
+    const propertyUrl = `${baseUrl}/properties/${this.propertyId}`;
 
     const message = `مرحباً، أرغب في الاستفسار عن / حجز العقار:\n*${this.property.title}*\n(كود: ${propertyCode})\n\n🔗 الرابط:\n${propertyUrl}`;
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');

@@ -309,21 +309,6 @@
   -webkit-overflow-scrolling: touch;
   width: 100%;
   box-sizing: border-box;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
-
-  &.is-dragging {
-    cursor: grabbing !important;
-    scroll-snap-type: none !important;
-    scroll-behavior: auto !important;
-
-    * {
-      user-select: none !important;
-      pointer-events: none !important;
-    }
-  }
-
   /* Hide scrollbar for clean luxury design */
   scrollbar-width: none;
   -ms-overflow-style: none;

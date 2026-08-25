@@ -1,50 +1,37 @@
-<div>
+<div class="saved-page">
   <div class="page-header">
     <div class="section-eyebrow">{{ 'DASHBOARD.WISHLIST' | translate }}</div>
     <h1>{{ 'DASHBOARD.SAVED_TITLE' | translate }}</h1>
     <p>{{ 'DASHBOARD.SAVED_SUB' | translate }}</p>
   </div>
 
-  <div class="panel-card">
-    <div *ngIf="isLoading" class="loading-state">{{ 'DASHBOARD.LOADING_SAVED' | translate }}</div>
-    <div *ngIf="!isLoading && saved.length === 0" class="empty-state">
-      <strong>{{ 'DASHBOARD.NO_SAVED' | translate }}</strong>
-      <p>{{ 'DASHBOARD.NO_SAVED_SUB' | translate }}</p>
+  <div class="saved-container">
+    <!-- Loading Skeleton Grid -->
+    <div *ngIf="isLoading" class="saved-skeleton-grid">
+      <div class="skeleton-card" *ngFor="let item of [1,2,3]"></div>
     </div>
-    <div class="table-wrap" *ngIf="!isLoading && saved.length > 0">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ 'DASHBOARD.TABLE.PROPERTY' | translate }}</th>
-            <th>{{ 'DASHBOARD.FORM.CITY' | translate }}</th>
-            <th>{{ 'DASHBOARD.TABLE.PRICE' | translate }}</th>
-            <th>{{ 'DASHBOARD.TABLE.ACTIONS' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of saved">
-            <td>{{ propertyTitle(item) | translateProp }}</td>
-            <td>{{ propertyCity(item) | translateProp }}</td>
-            <td>{{ propertyPrice(item) | currency:'EGP':'symbol':'1.0-0' }}</td>
-            <td>
-              <div class="action-group">
-                <a
-                  class="action-btn view"
-                  [routerLink]="['/properties', propertyId(item)]"
-                  [title]="'DASHBOARD.VIEW_BTN' | translate">
-                  {{ 'DASHBOARD.VIEW_BTN' | translate }}
-                </a>
-                <button
-                  class="action-btn danger"
-                  [disabled]="activeId !== null"
-                  (click)="remove(item)">
-                  {{ 'DASHBOARD.REMOVE_BTN' | translate }}
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && properties.length === 0" class="empty-state-card">
+      <div class="empty-icon-wrap">
+        <i class="fa-solid fa-heart-crack"></i>
+      </div>
+      <h2>{{ 'DASHBOARD.NO_SAVED' | translate }}</h2>
+      <p>{{ 'DASHBOARD.NO_SAVED_SUB' | translate }}</p>
+      <button class="btn-gold-browse" (click)="navigateToBrowse()">
+        <i class="fa-solid fa-compass"></i>
+        <span>{{ 'HOME.SECTIONS.BROWSE_ALL' | translate }}</span>
+      </button>
+    </div>
+
+    <!-- Properties Grid using Luxury Property Cards -->
+    <div class="saved-grid" *ngIf="!isLoading && properties.length > 0">
+      <app-property-card
+        *ngFor="let prop of properties; let i = index"
+        [property]="prop"
+        [isFirst]="i === 0"
+        (favoriteToggled)="onFavoriteToggled($any($event))">
+      </app-property-card>
     </div>
   </div>
 </div>

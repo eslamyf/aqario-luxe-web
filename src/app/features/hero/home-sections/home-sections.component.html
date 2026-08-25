@@ -31,12 +31,7 @@
 
     <!-- Properties grid — real data from MongoDB Atlas -->
     <div class="props-carousel-wrapper home-reveal" *ngIf="!isLoading && !hasError && featuredProperties.length > 0">
-      <div class="props-grid stagger-container"
-           (scroll)="onPropsScroll()"
-           (mousedown)="onMouseDown($event)"
-           (mousemove)="onMouseMove($event)"
-           (mouseup)="onMouseUp($event)"
-           (mouseleave)="onMouseLeave($event)">
+      <div class="props-grid stagger-container" (scroll)="onPropsScroll()">
         <app-property-card *ngFor="let prop of featuredProperties; let i = index" [property]="prop" [isFirst]="i === 0">
         </app-property-card>
       </div>

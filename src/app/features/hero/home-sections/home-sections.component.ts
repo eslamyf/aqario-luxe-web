@@ -205,15 +205,14 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
     const grid = event.currentTarget as HTMLElement;
     if (!grid) return;
 
-    this.isDragging = true;
+    this.isDragging = false;
     this.hasDraggedFar = false;
     this.startX = event.pageX - grid.offsetLeft;
     this.scrollLeftStart = grid.scrollLeft;
-    grid.classList.add('is-dragging');
   }
 
   onMouseMove(event: MouseEvent): void {
-    if (!this.isDragging) return;
+    if (!this.startX) return;
     const grid = event.currentTarget as HTMLElement;
     if (!grid) return;
 
@@ -221,31 +220,34 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
     const walk = (x - this.startX) * 1.5;
 
     if (Math.abs(walk) > 5) {
-      this.hasDraggedFar = true;
+      if (!this.isDragging) {
+        this.isDragging = true;
+        this.hasDraggedFar = true;
+        grid.classList.add('is-dragging');
+      }
       event.preventDefault();
-    }
 
-    const isRtl = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl' || document.dir === 'rtl';
-    if (isRtl) {
-      grid.scrollLeft = this.scrollLeftStart + walk;
-    } else {
-      grid.scrollLeft = this.scrollLeftStart - walk;
-    }
+      const isRtl = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl' || document.dir === 'rtl';
+      if (isRtl) {
+        grid.scrollLeft = this.scrollLeftStart + walk;
+      } else {
+        grid.scrollLeft = this.scrollLeftStart - walk;
+      }
 
-    this.updateScrollState();
+      this.updateScrollState();
+    }
   }
 
   onMouseUp(event: MouseEvent): void {
-    if (!this.isDragging) return;
     this.stopDragging(event.currentTarget as HTMLElement);
   }
 
   onMouseLeave(event: MouseEvent): void {
-    if (!this.isDragging) return;
     this.stopDragging(event.currentTarget as HTMLElement);
   }
 
   private stopDragging(grid: HTMLElement): void {
+    this.startX = 0;
     if (!grid) return;
     this.isDragging = false;
     grid.classList.remove('is-dragging');
