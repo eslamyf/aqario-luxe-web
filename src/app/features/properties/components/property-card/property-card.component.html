@@ -8,7 +8,7 @@
 
   <!-- Image & Badges Media Container -->
   <div class="property-card-media">
-    <img *ngIf="property.images.length && !imageError" class="property-img" [src]="property.images[0]"
+    <img *ngIf="property.images.length && !imageError" class="property-img" [src]="property.images[0] | cloudImage: 600"
       [alt]="property.title" loading="lazy" (error)="onImageError()" />
 
     <!-- Placeholder when no image or image failed to load -->

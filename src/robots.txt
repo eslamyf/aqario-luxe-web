@@ -1,0 +1,9 @@
+# AQARIO Luxe Robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /account/
+
+Sitemap: https://aqario.app/sitemap.xml

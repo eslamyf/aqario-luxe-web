@@ -25,6 +25,7 @@ import { AuthService } from '../../../../core/auth/auth.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { CloudImagePipe } from '../../../../shared/pipes/cloud-image.pipe';
 
 @Component({
   selector: 'app-property-card',
@@ -32,7 +33,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./property-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, CloudImagePipe],
 })
 export class PropertyCardComponent implements OnInit, OnDestroy {
   private router             = inject(Router);

@@ -17,6 +17,7 @@ import { NotificationComponent } from './shared/notification/notification.compon
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { TokenRefreshInterceptor } from './core/interceptors/token-refresh.interceptor';
 import { KycInterceptor } from './core/interceptors/kyc.interceptor';
+import { HttpCacheInterceptor } from './core/interceptors/http-cache.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', `.json?v=${Date.now()}`);
@@ -117,6 +118,11 @@ export class GlobalErrorHandler implements ErrorHandler {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: KycInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpCacheInterceptor,
       multi: true,
     },
     // Task 1.4 — Google OAuth provider config

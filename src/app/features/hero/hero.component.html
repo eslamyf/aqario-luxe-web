@@ -15,8 +15,8 @@
     <div class="hero-visual-frame">
       <!-- Primary: high-quality luxury villa photograph -->
       <img class="hero-visual-img"
-        src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85"
-        [alt]="'HOME.HERO.IMAGE_ALT' | translate" loading="eager" decoding="async" (error)="onImageError($event)" />
+        src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80"
+        [alt]="'HOME.HERO.IMAGE_ALT' | translate" loading="eager" fetchpriority="high" decoding="async" (error)="onImageError($event)" />
       <!-- Gradient fade mask — blends image into the hero background -->
       <div class="hero-visual-mask"></div>
     </div>

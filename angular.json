@@ -26,6 +26,7 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
+              "src/robots.txt",
               "src/assets"
             ],
             "styles": [
@@ -69,6 +70,10 @@
                   "inline": false
                 }
               },
+              "sourceMap": {
+                "scripts": true,
+                "hidden": true
+              },
               "outputHashing": "all"
             },
             "development": {
@@ -104,6 +109,7 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               "src/favicon.ico",
+              "src/robots.txt",
               "src/assets"
             ],
             "styles": [
