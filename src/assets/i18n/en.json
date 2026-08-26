@@ -585,8 +585,15 @@
     "CHECK_IN": "Check-in",
     "CHECK_OUT": "Check-out",
     "OFFER_PRICE": "Offer Price",
-    "CANCEL_SUPPORT_PREFIX": "To cancel,",
-    "CANCEL_SUPPORT_LINK": "contact support",
+    "CANCEL_BOOKING": "Cancel Booking",
+    "CANCEL_APPROVED_SUB": "Are you sure you want to cancel this approved booking? Please provide a reason.",
+    "CANCEL_DIALOG_SUB": "Are you sure you want to cancel this booking? Please provide a reason.",
+    "CANCEL_MODAL": {
+      "TITLE": "Cancel Booking",
+      "PLACEHOLDER": "Please provide a reason for cancellation...",
+      "CLOSE": "Close",
+      "CONFIRM": "Confirm Cancellation"
+    },
     "DECLINE_PLACEHOLDER": "e.g. Already booked for that date...",
     "NOTIF_BOOKING_APPROVED": "Booking approved successfully!",
     "NOTIF_BOOKING_APPROVE_FAILED": "Failed to approve booking.",

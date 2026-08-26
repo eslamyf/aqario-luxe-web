@@ -83,8 +83,7 @@ export class NotificationsApiService {
   }
 
   fetchNotifications(limit: number = 5): Observable<NotificationsResponse> {
-    const hasToken = typeof localStorage !== 'undefined' && !!localStorage.getItem('aqario_token');
-    if (!hasToken && !this.authService.currentUser) {
+    if (!this.authService.isAuthenticated()) {
       return of({ status: 'success', unreadCount: 0, data: { notifications: [] } } as any);
     }
 

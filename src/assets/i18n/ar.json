@@ -585,8 +585,15 @@
     "CHECK_IN": "تسجيل الوصول",
     "CHECK_OUT": "تسجيل المغادرة",
     "OFFER_PRICE": "السعر المعروض",
-    "CANCEL_SUPPORT_PREFIX": "للإلغاء،",
-    "CANCEL_SUPPORT_LINK": "اتصل بالدعم",
+    "CANCEL_BOOKING": "إلغاء الحجز",
+    "CANCEL_APPROVED_SUB": "هل أنت متأكد أنك تريد إلغاء هذا الحجز المعتمد؟ يرجى تقديم سبب الإلغاء.",
+    "CANCEL_DIALOG_SUB": "هل أنت متأكد أنك تريد إلغاء هذا الحجز؟ يرجى تقديم سبب الإلغاء.",
+    "CANCEL_MODAL": {
+      "TITLE": "إلغاء الحجز",
+      "PLACEHOLDER": "يرجى تقديم سبب الإلغاء هنا...",
+      "CLOSE": "تراجع",
+      "CONFIRM": "تأكيد الإلغاء"
+    },
     "DECLINE_PLACEHOLDER": "مثال: محجوز بالفعل في هذا التاريخ...",
     "NOTIF_BOOKING_APPROVED": "تم قبول الحجز بنجاح!",
     "NOTIF_BOOKING_APPROVE_FAILED": "فشل قبول الحجز.",

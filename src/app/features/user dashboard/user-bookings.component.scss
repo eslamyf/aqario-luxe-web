@@ -84,82 +84,108 @@
   animation: fadeIn 0.3s ease;
 
   .dialog-box {
-    background: #1a1a1a;
-    border: 1px solid color-mix(in srgb, #c9a96e 30%, transparent);
+    background: var(--bg-elevated, #1a1a1a);
+    border: 1px solid var(--border-color, rgba(201, 169, 110, 0.3));
     width: 90%;
     max-width: 450px;
-    border-radius: 8px;
-    padding: 32px;
+    box-sizing: border-box;
+    border-radius: 16px;
+    padding: 28px;
     position: relative;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    box-shadow: var(--shadow-pop, 0 20px 40px rgba(0,0,0,0.5));
 
     h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      color: #c9a96e;
-      margin-bottom: 12px;
+      font-family: var(--font-display, 'Cormorant Garamond', serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main, #ffffff);
+      margin-bottom: 8px;
       margin-top: 0;
     }
 
     p {
       font-size: 14px;
-      color: #aaa;
-      margin-bottom: 24px;
-      line-height: 1.5;
+      color: var(--text-muted, #9ca3af);
+      margin-bottom: 20px;
+      line-height: 1.6;
     }
 
     .reject-reason-input {
       width: 100%;
-      background: #111;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      padding: 12px;
-      color: #fff;
-      font-family: 'DM Sans', sans-serif;
+      box-sizing: border-box;
+      background: var(--bg-input, #111111);
+      border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--text-main, #ffffff);
+      font-family: var(--font-body, 'DM Sans', sans-serif);
       font-size: 14px;
       resize: vertical;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       
       &:focus {
         outline: none;
-        border-color: #c9a96e;
+        border-color: var(--brand-gold, #c9a96e);
       }
     }
 
     .dialog-actions {
       display: flex;
+      align-items: center;
       justify-content: flex-end;
       gap: 12px;
 
       button {
         padding: 10px 20px;
-        border-radius: 4px;
+        border-radius: 8px;
         font-weight: 600;
-        font-size: 13px;
+        font-size: 14px;
         cursor: pointer;
         transition: all 0.3s;
         border: none;
-        display: flex;
+        display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
+        white-space: nowrap;
 
         &.btn-ghost {
           background: transparent;
-          color: #aaa;
-          &:hover { color: #fff; background: rgba(255,255,255,0.05); }
+          color: var(--text-muted, #aaa);
+          border: 1px solid var(--border-color, rgba(255,255,255,0.15));
+          &:hover { color: var(--text-main, #fff); background: rgba(255,255,255,0.05); }
         }
 
         &.btn-danger {
-          background: rgba(239, 68, 68, 0.1);
-          color: #ef4444;
-          border: 1px solid rgba(239, 68, 68, 0.3);
+          background: #ef4444;
+          color: #ffffff;
+          border: 1px solid #ef4444;
           &:hover:not(:disabled) {
-            background: #ef4444;
-            color: #fff;
+            background: #dc2626;
           }
           &:disabled { opacity: 0.5; cursor: not-allowed; }
         }
       }
+    }
+  }
+
+  [data-theme='light'] & .dialog-box {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(15, 23, 42, 0.14) !important;
+
+    h3 { color: #0F172A !important; }
+    p { color: #334155 !important; }
+
+    .reject-reason-input {
+      background: #F8FAFC !important;
+      border: 1px solid rgba(15, 23, 42, 0.15) !important;
+      color: #0F172A !important;
+    }
+
+    .dialog-actions button.btn-ghost {
+      color: #334155 !important;
+      border-color: rgba(15, 23, 42, 0.2) !important;
+      &:hover { background: rgba(15, 23, 42, 0.05) !important; }
     }
   }
 }
