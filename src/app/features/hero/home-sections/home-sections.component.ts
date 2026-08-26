@@ -75,17 +75,17 @@ export class HomeSectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   // ── Static data ────────────────────────────────────────────────────────────
   valueFeatures = [
     {
-      icon: '◈',
+      icon: 'fa-solid fa-file-invoice-dollar',
       titleKey: 'HOME.VALUES.INTEREST_RATES.TITLE',
       descKey: 'HOME.VALUES.INTEREST_RATES.DESC',
     },
     {
-      icon: '◆',
+      icon: 'fa-solid fa-sliders',
       titleKey: 'HOME.VALUES.UNSTABLE_PRICES.TITLE',
       descKey: 'HOME.VALUES.UNSTABLE_PRICES.DESC',
     },
     {
-      icon: '◇',
+      icon: 'fa-solid fa-eye',
       titleKey: 'HOME.VALUES.BEST_PRICE.TITLE',
       descKey: 'HOME.VALUES.BEST_PRICE.DESC',
     },

@@ -95,9 +95,13 @@
         <div class="accordion-item" *ngFor="let feat of valueFeatures; let i = index" [class.open]="openAccordion === i"
           [id]="'accordion-' + i">
           <button class="accordion-trigger" (click)="toggleAccordion(i)" [attr.aria-expanded]="openAccordion === i">
-            <span class="accordion-icon">{{ feat.icon }}</span>
+            <span class="accordion-icon">
+              <i [class]="feat.icon" aria-hidden="true"></i>
+            </span>
             <span class="accordion-title">{{ feat.titleKey | translate }}</span>
-            <span class="accordion-arrow">{{ openAccordion === i ? '−' : '+' }}</span>
+            <span class="accordion-arrow" aria-hidden="true">
+              <i class="fa-solid fa-chevron-down"></i>
+            </span>
           </button>
           <div class="accordion-body" [style.maxHeight]="openAccordion === i ? '300px' : '0'">
             <p class="accordion-desc">{{ feat.descKey | translate }}</p>
