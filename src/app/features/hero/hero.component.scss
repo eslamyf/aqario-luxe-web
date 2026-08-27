@@ -65,7 +65,6 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  animation: orbFloat 8s ease-in-out infinite;
   z-index: 2;
   pointer-events: none;
 }
@@ -84,7 +83,6 @@
   background: radial-gradient(circle, var(--hero-orb-sapphire) 0%, transparent 70%);
   bottom: 0;
   inset-inline-start: -50px;
-  animation-delay: -4s;
 }
 
 // ── Hero Body — Content Container Overlay ─────────────────────
@@ -361,7 +359,6 @@
   display: block;
   // Fallback: if image fails, the gradient bg shows
   background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-deep) 100%);
-  animation: kenBurns 30s ease-in-out infinite;
 }
 
 // Gradient mask — always dark so white/gold text stays legible
