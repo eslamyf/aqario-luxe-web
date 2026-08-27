@@ -55,7 +55,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   private auth = inject(AuthService);
   private quickPropService = inject(QuickPropertyService);
 
-  animState: 'hidden' | 'visible' = 'hidden';
+  animState: 'hidden' | 'visible' = 'visible';
 
   private destroy$ = new Subject<void>();
 

@@ -1,0 +1,11 @@
+# AQARIO Luxe
+
+> AQARIO Luxe is the premier luxury real estate platform in Upper Egypt (Luxor, Qena, Sohag, Asyut, Hurghada), connecting buyers, renters, and top property developers.
+
+## Core Sections & Pages
+
+- [Home & Featured Properties](https://aqario-luxe.vercel.app/): Discover top curated luxury villas, apartments, and land in Upper Egypt.
+- [Properties Catalog](https://aqario-luxe.vercel.app/properties): Full searchable real estate marketplace with advanced filters for price, area, and location.
+- [Real Estate Agents](https://aqario-luxe.vercel.app/agents): Directory of verified real estate agents and trusted property consultants.
+- [Become an Agent](https://aqario-luxe.vercel.app/become-agent): Partner application for agents and developers to list properties on AQARIO Luxe.
+- [API Endpoint](https://aqario-luxe-apii.vercel.app/api/v1/properties): RESTful API endpoint for real estate listings and market data.

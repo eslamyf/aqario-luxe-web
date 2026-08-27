@@ -217,9 +217,11 @@
   padding: 100px 0;
   background: var(--obsidian);
   overflow: hidden;
+  min-height: 580px;
 
   @media (max-width: 768px) {
     padding: 44px 0;
+    min-height: 440px;
   }
 }
 
@@ -235,6 +237,7 @@
 .props-carousel-wrapper {
   position: relative;
   width: 100%;
+  min-height: 480px;
 }
 
 .nav-arrow {
@@ -423,7 +426,8 @@
   background: linear-gradient(90deg, var(--obsidian-3) 25%, var(--obsidian-4) 50%, var(--obsidian-3) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
-  height: 380px;
+  height: 480px;
+  border-radius: 16px;
 }
 
 @keyframes shimmer {
@@ -705,7 +709,7 @@
 .value-img-bg {
   position: absolute;
   inset: 0;
-  background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80') center/cover;
+  background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80') center/cover;
   border: 1px solid rgba(201, 169, 110, 0.2);
   border-radius: 4px;
 
