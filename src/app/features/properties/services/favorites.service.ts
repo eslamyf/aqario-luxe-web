@@ -36,7 +36,7 @@ export class FavoritesService {
 
   // ── Sync with backend ──────────────────────────────────────────────────────
   loadUserFavorites(): void {
-    if (!this.authService.isAuthenticated()) return;
+    if (!this.authService.isAuthenticated() || !this.authService.getToken()) return;
 
     this.getFavorites().subscribe({
       next: (favorites) => {

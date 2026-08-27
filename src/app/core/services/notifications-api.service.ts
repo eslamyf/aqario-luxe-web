@@ -83,7 +83,7 @@ export class NotificationsApiService {
   }
 
   fetchNotifications(limit: number = 5): Observable<NotificationsResponse> {
-    if (!this.authService.isAuthenticated()) {
+    if (!this.authService.isAuthenticated() || !this.authService.getToken()) {
       return of({ status: 'success', unreadCount: 0, data: { notifications: [] } } as any);
     }
 

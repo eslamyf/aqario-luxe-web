@@ -48,10 +48,11 @@ export class AuthService {
 
   setCurrentUser(user: User | null): void {
     this._currentUser$.next(user);
+    this._isAuthenticated$.next(!!user && !!localStorage.getItem(this.TOKEN_KEY));
   }
 
   // Team Compatibility: Observable for auth status
-  private readonly _isAuthenticated$ = new BehaviorSubject<boolean>(!!localStorage.getItem(this.TOKEN_KEY));
+  private readonly _isAuthenticated$ = new BehaviorSubject<boolean>(!!localStorage.getItem(this.TOKEN_KEY) && !!this._currentUser$.value);
   readonly isAuthenticated$ = this._isAuthenticated$.asObservable();
 
   // ─── Modal State ──────────────────────────────────────────────────────────
@@ -110,7 +111,12 @@ export class AuthService {
         this.socketService.connect(token);
       } catch {
         this.clearStorage();
+        this._currentUser$.next(null);
+        this._isAuthenticated$.next(false);
       }
+    } else {
+      this._currentUser$.next(null);
+      this._isAuthenticated$.next(false);
     }
   }
 
