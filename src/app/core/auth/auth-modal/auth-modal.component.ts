@@ -13,17 +13,14 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 
 // ─── Custom Validators ───────────────────────────────────
 
-// 1. Password strength validation (8 characters, uppercase, lowercase, number, and symbol)
+// 1. Password validation (Minimum 8 characters)
 export function strongPasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
     if (!value) return null;
 
-    const isStrong = value.length >= 8 &&
-      /[A-Z]/.test(value) && /[a-z]/.test(value) &&
-      /[0-9]/.test(value) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
+    const isStrong = value.length >= 8;
 
-    // If password is weak, return 'strongPassword' error; otherwise return null (valid)
     return !isStrong ? { strongPassword: true } : null;
   };
 }
@@ -447,7 +444,10 @@ export class AuthModalComponent implements OnInit, OnDestroy {
 
   onRegister(): void {
     this.isFormSubmitted = true;
-    if (this.registerForm.invalid) return;
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
     this.isLoading = true;
     this.errorMsg = '';
 
@@ -458,13 +458,13 @@ export class AuthModalComponent implements OnInit, OnDestroy {
     this.auth.register(name, email, password).pipe(takeUntil(this.destroy$)).subscribe({
       next: (user: any) => {
         this.isLoading = false;
-        this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.REGISTRATION_INFO'), 'info');
-        this.registeredEmail = email; // Save email for verification
+        const msg = this.translateService.instant('AUTH.NOTIF.REGISTRATION_SUCCESS') || 'Registration successful! You can now log in.';
+        this.notificationSvc.show(msg, 'success');
         this.registerForm.reset();
 
-        // Navigate to OTP verification page
-        this.close();
-        this.router.navigate(['/verify-otp'], { queryParams: { email } });
+        // OTP verification is disabled — switch directly to login tab
+        this.switchTab('login');
+        this.loginForm.patchValue({ email });
       },
       error: (err: any) => {
         this.isLoading = false;

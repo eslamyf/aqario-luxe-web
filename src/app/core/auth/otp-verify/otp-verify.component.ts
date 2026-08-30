@@ -35,16 +35,8 @@ export class OtpVerifyComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.email = params['email'] || '';
-      if (!this.email) {
-        this.notificationService.show(this.translateService.instant('AUTH.OTP_PAGE.INVALID_ACCESS'), 'error');
-        this.router.navigate(['/']);
-      }
-    });
-
-    this.buildForm();
-    this.startCooldown(60);
+    this.notificationService.show('Email verification is not required. Your account is active.', 'info');
+    this.router.navigate(['/']);
   }
 
   ngOnDestroy(): void {

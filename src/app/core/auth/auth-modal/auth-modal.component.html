@@ -105,6 +105,7 @@
               <i *ngIf="showRegisterPassword" class="fa-solid fa-eye-slash" aria-hidden="true"></i>
             </button>
           </div>
+          <span class="auth-validation" *ngIf="isFieldInvalid(registerForm, 'password')">{{ 'AUTH.PASSWORD_MIN' | translate }}</span>
 
           <div class="strength-bars">
             <div class="bar"
