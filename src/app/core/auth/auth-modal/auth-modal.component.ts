@@ -162,24 +162,30 @@ export class AuthModalComponent implements OnInit, OnDestroy {
   private renderGoogleButton(): void {
     const google = (window as any).google;
     const container = document.getElementById('google-signin-button-container');
-    if (!google?.accounts?.id || !container || this.googleButtonRendered) {
+    if (!google?.accounts?.id || !container) {
       return;
     }
 
-    google.accounts.id.renderButton(container, {
-      theme: 'outline',
-      size: 'large',
-      width: 280,
-      text: 'signin_with',
-      shape: 'rectangular',
-    });
+    if (container.children.length > 0) {
+      return;
+    }
 
-    this.googleButtonRendered = true;
+    try {
+      google.accounts.id.renderButton(container, {
+        theme: 'outline',
+        size: 'large',
+        width: 280,
+        text: 'signin_with',
+        shape: 'rectangular',
+      });
+      this.googleButtonRendered = true;
+    } catch (err) {
+      console.warn('[GoogleAuth] renderButton failed:', err);
+    }
   }
 
   private handleGoogleCredentialResponse(response: any): void {
     this.zone.run(() => {
-      if (this.isGoogleLoading) return; // Prevent multiple calls
       if (!response?.credential) {
         this.isGoogleLoading = false;
         this.notificationSvc.show(this.translateService.instant('AUTH.NOTIF.GOOGLE_INVALID_CRED'), 'error');
@@ -366,6 +372,9 @@ export class AuthModalComponent implements OnInit, OnDestroy {
       this.registerForm.reset();
       this.registerForm.markAsPristine();
       this.registerForm.markAsUntouched();
+      setTimeout(() => {
+        this.preloadGoogleAuth();
+      }, 50);
     } else if (tab === 'register') {
       this.loginForm.reset();
       this.loginForm.markAsPristine();
@@ -584,7 +593,7 @@ export class AuthModalComponent implements OnInit, OnDestroy {
 
         this.renderGoogleButton();
 
-        // Prompt Google Account Chooser immediately on single click
+        // Prompt Google Account Chooser / One Tap popup immediately
         google.accounts.id.prompt((notification: any) => {
           if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
             const container = document.getElementById('google-signin-button-container');
@@ -595,7 +604,9 @@ export class AuthModalComponent implements OnInit, OnDestroy {
           }
         });
 
-        this.isGoogleLoading = false;
+        setTimeout(() => {
+          this.isGoogleLoading = false;
+        }, 1500);
       })
       .catch((err: any) => {
         this.isGoogleLoading = false;
