@@ -2082,3 +2082,83 @@
     transform: scale(1);
   }
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RTL & MOBILE RESPONSIVENESS ENHANCEMENTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Fix Arabic letter spacing disconnecting Arabic characters
+:host-context([dir="rtl"]),
+[dir="rtl"] {
+  .step-title,
+  .liveness-hint,
+  .error-msg,
+  .btn-camera-action,
+  .eyebrow,
+  .field-label,
+  .field-hint,
+  .status-badge,
+  .btn-back,
+  .queue-status-text,
+  .file-type-badge,
+  .retry-btn,
+  .btn-primary-gold,
+  .btn-ghost,
+  p,
+  span,
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: normal !important;
+  }
+}
+
+// Responsive mobile refinements
+@media (max-width: 576px) {
+  .kyc-container {
+    padding: 16px 10px;
+  }
+
+  .kyc-card {
+    padding: 16px 12px;
+  }
+
+  .workflow-step {
+    .step-label {
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .step-title {
+        font-size: 13px;
+        word-break: break-word;
+      }
+    }
+  }
+
+  .liveness-error {
+    .camera-error-box {
+      padding: 20px 14px;
+      width: 100%;
+      box-sizing: border-box;
+
+      .error-msg {
+        font-size: 13px;
+        max-width: 100%;
+        word-break: normal;
+        overflow-wrap: break-word;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  .btn-camera-action {
+    width: 100%;
+    white-space: normal;
+    padding: 12px 16px;
+    box-sizing: border-box;
+  }
+
+  .camera-viewport {
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+  }
+}
