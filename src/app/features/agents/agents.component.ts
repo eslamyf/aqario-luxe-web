@@ -16,7 +16,6 @@ import {
   QueryList,
 } from '@angular/core';
 import { NotificationService }      from '../../shared/services/notification.service';
-import { MockDataService }          from '../../shared/services/mock-data.service';
 import { AgentService, Agent }      from './agent.service';
 import { TranslateService }         from '@ngx-translate/core';
 import { environment }              from '../../../environments/environment';
@@ -38,7 +37,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private notificationService: NotificationService,
-    private mockDataService:     MockDataService,
     private agentService:        AgentService,
     private translateService:    TranslateService,
   ) {}
