@@ -102,8 +102,7 @@ const routes: Routes = [
   // Wildcard route to catch all invalid links (must always remain at the end)
   {
     path: '**',
-    redirectTo: '',
-    pathMatch: 'full',
+    loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent),
   },
 ];
 
