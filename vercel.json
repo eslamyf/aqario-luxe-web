@@ -6,7 +6,7 @@
       "destination": "https://aqario-luxe-apii.vercel.app/api/:path*"
     },
     {
-      "source": "/((?!api|assets|robots.txt|sitemap.xml|.*\\.[a-zA-Z0-9]+$).*)",
+      "source": "/((?!api|assets|robots.txt|sitemap.xml|wp-admin|wp-login|cpanel|administrator|kibana|grafana|sidekiq|bull-board|pgadmin|phpmyadmin|actuator|telescope|horizon|swagger-ui\\.html|.*\\.[a-zA-Z0-9]+$).*)",
       "destination": "/index.html"
     }
   ],
