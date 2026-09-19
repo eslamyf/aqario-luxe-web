@@ -6,7 +6,11 @@
       "destination": "https://aqario-luxe-apii.vercel.app/api/:path*"
     },
     {
-      "source": "/((?!api|assets|robots.txt|sitemap.xml|.*\\.[a-zA-Z0-9]+$).*)",
+      "source": "/(properties|agents|become-agent|account|dashboard|profile|checkout|payment|subscribe|reset-password|verify-otp|kyc|admin)(/.*)?",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
       "destination": "/index.html"
     }
   ],
