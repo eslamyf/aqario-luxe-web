@@ -1,5 +1,12 @@
 {
   "BRAND_NAME": "AQARIO • LUXE",
+  "NOT_FOUND": {
+    "BADGE": "404 • Route Not Found",
+    "TITLE": "Page or Route Not Found",
+    "DESC_PREFIX": "The path",
+    "DESC_SUFFIX": "does not match any recognized page on AQARIO LUXE.",
+    "BACK_HOME": "Back to Home Page"
+  },
   "NOTIFICATION": {
     "NEW_KYC_SUBMISSION": "New KYC Submission",
     "NEW_KYC_SUBMISSION_MSG": "User \"{{name}}\" has submitted their KYC verification documents.",

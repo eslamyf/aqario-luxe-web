@@ -12,23 +12,25 @@ import { TranslateModule } from '@ngx-translate/core';
       <div class="not-found-container">
         <div class="gold-badge">
           <span class="warning-icon">⚠️</span>
-          <span>404 • خطأ في المسار</span>
+          <span>{{ 'NOT_FOUND.BADGE' | translate }}</span>
         </div>
 
         <div class="brand-logo-wrap">
           <img src="assets/images/logo.png" alt="AQARIO LUXE" class="brand-logo" />
         </div>
 
-        <h1 class="not-found-title">الصفحة أو المسار غير موجود</h1>
+        <h1 class="not-found-title">{{ 'NOT_FOUND.TITLE' | translate }}</h1>
 
         <p class="not-found-desc">
-          المسار <code class="attempted-path">{{ currentPath }}</code> لا يطابق أي صفحة معتمدة داخل منصة عقاريو لوكس.
+          {{ 'NOT_FOUND.DESC_PREFIX' | translate }}
+          <code class="attempted-path">{{ currentPath }}</code>
+          {{ 'NOT_FOUND.DESC_SUFFIX' | translate }}
         </p>
 
         <div class="actions-wrap">
           <a routerLink="/" class="btn-home-action">
             <i class="fa-solid fa-house"></i>
-            <span>العودة إلى الصفحة الرئيسية</span>
+            <span>{{ 'NOT_FOUND.BACK_HOME' | translate }}</span>
           </a>
         </div>
       </div>
