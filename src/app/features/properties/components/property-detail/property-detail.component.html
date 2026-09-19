@@ -8,9 +8,18 @@
   <!-- Error State -->
   <div *ngIf="error" class="error-container">
     <div class="error-card">
-      <h2>{{ 'PROPERTIES.DETAIL.ERROR_TITLE' | translate }}</h2>
-      <p>{{ error }}</p>
-      <button class="btn-primary" routerLink="/properties">{{ 'PROPERTIES.DETAIL.BACK_LISTINGS' | translate }}</button>
+      <div class="gold-badge">
+        <span class="warning-icon">⚠️</span>
+        <span>تنبيه • غير متوفر</span>
+      </div>
+      <h2 class="error-title">{{ 'PROPERTIES.DETAIL.ERROR_TITLE' | translate }}</h2>
+      <p class="error-desc">{{ error }}</p>
+      <div class="error-actions">
+        <a class="btn-gold-action" routerLink="/properties">
+          <i class="fa-solid fa-building"></i>
+          <span>{{ 'PROPERTIES.DETAIL.BACK_LISTINGS' | translate }}</span>
+        </a>
+      </div>
     </div>
   </div>
 

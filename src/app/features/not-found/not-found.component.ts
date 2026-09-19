@@ -25,22 +25,10 @@ import { TranslateModule } from '@ngx-translate/core';
           المسار <code class="attempted-path">{{ currentPath }}</code> لا يطابق أي صفحة معتمدة داخل منصة عقاريو لوكس.
         </p>
 
-        <div class="nav-links-grid">
-          <a routerLink="/" class="nav-card primary-card">
+        <div class="actions-wrap">
+          <a routerLink="/" class="btn-home-action">
             <i class="fa-solid fa-house"></i>
-            <span>الرئيسية</span>
-          </a>
-          <a routerLink="/properties" class="nav-card">
-            <i class="fa-solid fa-building"></i>
-            <span>تصفح العقارات</span>
-          </a>
-          <a routerLink="/agents" class="nav-card">
-            <i class="fa-solid fa-user-tie"></i>
-            <span>الوكلاء</span>
-          </a>
-          <a routerLink="/dashboard" class="nav-card">
-            <i class="fa-solid fa-gauge-high"></i>
-            <span>لوحة التحكم</span>
+            <span>العودة إلى الصفحة الرئيسية</span>
           </a>
         </div>
       </div>
@@ -60,7 +48,7 @@ import { TranslateModule } from '@ngx-translate/core';
     }
 
     .not-found-container {
-      max-width: 680px;
+      max-width: 580px;
       width: 100%;
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
@@ -130,53 +118,44 @@ import { TranslateModule } from '@ngx-translate/core';
       word-break: break-all;
     }
 
-    .nav-links-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 1rem;
+    .actions-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.5rem;
     }
 
-    .nav-card {
-      display: flex;
-      flex-direction: column;
+    .btn-home-action {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.6rem;
-      padding: 1.25rem 0.75rem;
-      background: var(--bg-elevated, var(--bg-input));
-      border: 1px solid var(--border-color);
+      gap: 0.75rem;
+      padding: 0.9rem 2.2rem;
+      background: linear-gradient(135deg, var(--brand-gold, #C9A96E) 0%, var(--brand-gold-dark, #8B6914) 100%);
+      color: #0A0B0E;
+      border: none;
       border-radius: 14px;
-      color: var(--text-main);
+      font-size: 1.05rem;
+      font-weight: 700;
       text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
+      box-shadow: 0 8px 24px rgba(201, 169, 110, 0.25);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
     }
 
-    .nav-card i {
-      font-size: 1.35rem;
-      color: var(--brand-gold);
+    .btn-home-action i {
+      font-size: 1.15rem;
+      color: #0A0B0E;
       transition: transform 0.2s;
     }
 
-    .nav-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--brand-gold);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    .btn-home-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(201, 169, 110, 0.4);
     }
 
-    .nav-card:hover i {
+    .btn-home-action:hover i {
       transform: scale(1.15);
-    }
-
-    .nav-card.primary-card {
-      background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-gold-dark, #8B6914) 100%);
-      color: #0A0B0E;
-      border-color: transparent;
-    }
-
-    .nav-card.primary-card i {
-      color: #0A0B0E;
     }
 
     @media (max-width: 600px) {
@@ -186,8 +165,8 @@ import { TranslateModule } from '@ngx-translate/core';
       .not-found-title {
         font-size: 1.4rem;
       }
-      .nav-links-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .btn-home-action {
+        width: 100%;
       }
     }
   `]
