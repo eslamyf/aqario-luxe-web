@@ -98,7 +98,12 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
         }
         return this.propertiesService.getPropertyById(id).pipe(
           catchError(err => {
-            this.error = this.translateService.instant('PROPERTIES.DETAIL.NOTIF.FAILED_LOAD');
+            const notFoundMsg = this.translateService.currentLang === 'en'
+              ? 'No property found with this specification. Redirected to available listings.'
+              : 'لا توجد عقارات بهذه المواصفات أو قد تم حذف الإعلان، تم نقلك إلى قائمة العقارات المتاحة.';
+
+            this.notificationService.show(notFoundMsg, 'info');
+            this.router.navigate(['/properties'], { replaceUrl: true });
             this.isLoading = false;
             return of(null);
           })

@@ -5,19 +5,19 @@
     <p>{{ 'PROPERTIES.DETAIL.CURATING' | translate }}</p>
   </div>
 
-  <!-- Error State -->
+  <!-- Property Not Found / Fallback State -->
   <div *ngIf="error" class="error-container">
     <div class="error-card">
       <div class="gold-badge">
-        <span class="warning-icon">⚠️</span>
-        <span>تنبيه • غير متوفر</span>
+        <i class="fa-solid fa-building-circle-exclamation"></i>
+        <span>عقارات • عقاريو لوكس</span>
       </div>
-      <h2 class="error-title">{{ 'PROPERTIES.DETAIL.ERROR_TITLE' | translate }}</h2>
-      <p class="error-desc">{{ error }}</p>
+      <h2 class="error-title">العقار غير متوفر حالياً</h2>
+      <p class="error-desc">لا توجد عقارات بهذه المواصفات أو قد تم حجز الإعلان وحذفه من المنصة.</p>
       <div class="error-actions">
         <a class="btn-gold-action" routerLink="/properties">
           <i class="fa-solid fa-building"></i>
-          <span>{{ 'PROPERTIES.DETAIL.BACK_LISTINGS' | translate }}</span>
+          <span>تصفح كافة العقارات المتاحة</span>
         </a>
       </div>
     </div>
