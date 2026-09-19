@@ -1,78 +1,58 @@
 {
   "version": 2,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "https://aqario-luxe-apii.vercel.app/api/:path*"
+      "src": "^/api/(.*)",
+      "dest": "https://aqario-luxe-apii.vercel.app/api/$1"
     },
     {
-      "source": "/(properties|agents|become-agent|account|dashboard|profile|checkout|payment|subscribe|reset-password|verify-otp|kyc|admin)(/.*)?",
-      "destination": "/index.html"
+      "src": "^/assets/(.*)",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "continue": true
     },
     {
-      "source": "/",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'none'; script-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://accounts.google.com https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://unpkg.com; img-src 'self' data: blob: https: res.cloudinary.com images.unsplash.com https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https: wss: https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://aqario-luxe-apii.vercel.app wss://aqario-luxe-apii.vercel.app; frame-src 'self' https://accounts.google.com https://content-autofill.googleapis.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; manifest-src 'self'; upgrade-insecure-requests;"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(self), microphone=(self), geolocation=(self), payment=(self), usb=()"
-        },
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=63072000; includeSubDomains; preload"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Cross-Origin-Resource-Policy",
-          "value": "cross-origin"
-        },
-        {
-          "key": "Cross-Origin-Opener-Policy",
-          "value": "same-origin-allow-popups"
-        }
-      ]
+      "src": "^/(.*)\\.(js|css|woff2|woff|ttf|png|jpg|jpeg|svg|ico|webp|avif|txt|xml|html)$",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "continue": true
     },
     {
-      "source": "/assets/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
+      "src": "^/(properties|agents|become-agent|account|dashboard|profile|checkout|payment|subscribe|reset-password|verify-otp|kyc|admin)(/.*)?$",
+      "headers": {
+        "Content-Security-Policy": "default-src 'none'; script-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://accounts.google.com https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://unpkg.com; img-src 'self' data: blob: https: res.cloudinary.com images.unsplash.com https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https: wss: https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://aqario-luxe-apii.vercel.app wss://aqario-luxe-apii.vercel.app; frame-src 'self' https://accounts.google.com https://content-autofill.googleapis.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; manifest-src 'self'; upgrade-insecure-requests;",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(self), microphone=(self), geolocation=(self), payment=(self), usb=()",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-XSS-Protection": "1; mode=block",
+        "Cross-Origin-Resource-Policy": "cross-origin",
+        "Cross-Origin-Opener-Policy": "same-origin-allow-popups"
+      },
+      "dest": "/index.html"
     },
     {
-      "source": "/(.*)\\.(js|css|woff2|woff|ttf|png|jpg|jpeg|svg|ico|webp|avif)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
+      "src": "^/$",
+      "headers": {
+        "Content-Security-Policy": "default-src 'none'; script-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://accounts.google.com https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://unpkg.com; img-src 'self' data: blob: https: res.cloudinary.com images.unsplash.com https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https: wss: https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://aqario-luxe-apii.vercel.app wss://aqario-luxe-apii.vercel.app; frame-src 'self' https://accounts.google.com https://content-autofill.googleapis.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; manifest-src 'self'; upgrade-insecure-requests;",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(self), microphone=(self), geolocation=(self), payment=(self), usb=()",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-XSS-Protection": "1; mode=block",
+        "Cross-Origin-Resource-Policy": "cross-origin",
+        "Cross-Origin-Opener-Policy": "same-origin-allow-popups"
+      },
+      "dest": "/index.html"
+    },
+    {
+      "src": "^/.*",
+      "status": 404,
+      "dest": "/404.html"
     }
   ]
 }
